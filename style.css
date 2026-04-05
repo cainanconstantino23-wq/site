@@ -137,14 +137,29 @@ nav a {
 }
 nav a:hover { color: var(--gold); }
 
-/* --- SEÇÃO HERO (Imagem 1) --- */
+/* --- SEÇÃO HERO --- */
 .hero-section {
-    /* Usei uma imagem de floresta escura genérica do Unsplash para simular o fundo background:  */
+    /* Mantemos a imagem como "fallback" (Plano B) caso a internet do usuário seja lenta e o vídeo demore a carregar */
     background: url('https://raw.githubusercontent.com/cainanconstantino23-wq/site/main/Gemini_Generated_Image_7bumw77bumw77bum.png') no-repeat center center/cover;
     height: 90vh;
     position: relative;
     display: flex;
     align-items: center;
+    overflow: hidden; /* ADICIONADO: Impede que o vídeo "vaze" para fora da área da seção */
+}
+
+/* NOVO: Estilos exclusivos para o vídeo de fundo */
+.video-background {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: 0; /* Coloca o vídeo no fundo absoluto */
+    transform: translateX(-50%) translateY(-50%); /* Centraliza o vídeo perfeitamente */
+    object-fit: cover; /* Garante que o vídeo preencha toda a tela sem esticar ou achatar */
 }
 
 .overlay {
@@ -152,11 +167,12 @@ nav a:hover { color: var(--gold); }
     top: 0; left: 0; width: 100%; height: 100%;
     /* Gradiente escuro para o texto ficar legível */
     background: linear-gradient(to right, rgba(15, 20, 18, 0.9), rgba(15, 20, 18, 0.6));
+    z-index: 1; /* ADICIONADO: Garante que o degradê escuro fique exatamente por cima do vídeo */
 }
 
 .hero-content {
     position: relative;
-    z-index: 2;
+    z-index: 2; /* ADICIONADO: Garante que o texto e os botões fiquem por cima do degradê e do vídeo */
     color: #fff;
     text-align: center;
     max-width: 800px;
@@ -192,7 +208,7 @@ nav a:hover { color: var(--gold); }
     gap: 2rem;
 }
 
-/* --- METODOLOGIA (Imagem 4) --- */
+/* --- METODOLOGIA --- */
 .video-placeholder {
     background-color: #000;
     height: 400px;
@@ -229,7 +245,7 @@ nav a:hover { color: var(--gold); }
 .card-dark p { color: #aaa; font-size: 0.95rem; }
 
 
-/* --- PACOTES (Imagem 2) --- */
+/* --- PACOTES --- */
 .pricing-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -291,7 +307,7 @@ nav a:hover { color: var(--gold); }
 .btn-pricing.secondary { background-color: var(--primary-dark); color: #fff; }
 .btn-pricing.secondary:hover { background-color: var(--gold); }
 
-/* --- SOBRE & DIFERENCIAIS (Imagem 3) --- */
+/* --- SOBRE & DIFERENCIAIS --- */
 .award-box {
     background-color: var(--primary-dark);
     color: #fff;
