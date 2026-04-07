@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daime Filmes | Audiovisual Estratégico</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@300;400;700&family=Syne:wght@400;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@300;400;700&family=Syne:wght@400;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --acid-green: #d4ff00;
@@ -13,6 +13,8 @@
             --hot-pink: #ff007f;
             --deep-void: #05000a;
             --cyan-bright: #00f2ff;
+            --brand-gold: #d4af37;
+            --accent-red: #e50914;
         }
 
         body {
@@ -25,24 +27,9 @@
 
         .font-header { font-family: 'Syne', sans-serif; }
         .font-heavy { font-family: 'Archivo Black', sans-serif; }
+        .font-inter { font-family: 'Inter', sans-serif; }
 
-        /* Estilo Customizado */
-        .chromatic-aberration {
-            text-shadow: 2px 0 var(--hot-pink), -2px 0 var(--cyan-bright);
-        }
-
-        .acid-gradient {
-            background: linear-gradient(-45deg, #d4ff00, #8a2be2, #ff007f, #00f2ff);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-        }
-
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
+        /* Grão de Filme e Efeitos */
         .noise-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -50,13 +37,13 @@
             opacity: 0.08;
             mix-blend-mode: overlay;
             pointer-events: none;
-            z-index: 999;
+            z-index: 9999;
         }
 
         .reveal {
             opacity: 0;
             transform: translateY(30px);
-            transition: all 0.8s ease-out;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .reveal.active {
@@ -64,7 +51,7 @@
             transform: translateY(0);
         }
 
-        /* Hero Video Background */
+        /* Hero Video Background - COR ORIGINAL RESTAURADA */
         .video-background-container {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -74,20 +61,21 @@
 
         .video-background-container iframe {
             width: 100vw;
-            height: 56.25vw; /* Aspect ratio 16:9 */
+            height: 56.25vw;
             min-height: 100vh;
-            min-width: 177.77vh; /* Aspect ratio 16:9 */
+            min-width: 177.77vh;
             position: absolute;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
             pointer-events: none;
-            filter: grayscale(1) contrast(1.2);
+            /* Filtro de grayscale removido para voltar a cor original */
+            filter: contrast(1.1) brightness(0.7);
         }
 
         .hero-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to bottom, rgba(5,0,10,0.4), var(--deep-void));
+            background: linear-gradient(to bottom, rgba(5,0,10,0.2), var(--deep-void));
             z-index: 0;
         }
 
@@ -115,38 +103,79 @@
             transition: 0.4s;
         }
 
-        .card-glass:hover {
-            border-color: var(--acid-green);
-            background: rgba(255, 255, 255, 0.06);
-        }
-
-        .pricing-featured {
-            border: 2px solid var(--acid-green);
-            box-shadow: 0 0 30px rgba(212, 255, 0, 0.2);
-            transform: scale(1.05);
-            z-index: 10;
-        }
-
         .marquee {
             white-space: nowrap;
             overflow: hidden;
             background: var(--acid-green);
             color: black;
             padding: 12px 0;
-            font-weight: 800;
             font-family: 'Archivo Black';
             text-transform: uppercase;
         }
 
         .marquee-content {
             display: inline-block;
-            animation: marquee 20s linear infinite;
+            animation: marquee 30s linear infinite;
         }
 
         @keyframes marquee {
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
         }
+
+        /* Tabela de Preços Customizada */
+        .pricing-section {
+            background-color: #ffffff;
+            color: #111;
+            padding: 100px 0;
+        }
+
+        .pricing-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .pricing-table th, .pricing-table td {
+            padding: 24px 15px;
+            border-bottom: 1px solid #f0f0f0;
+            text-align: center;
+        }
+
+        .pricing-table td:first-child {
+            text-align: left;
+            font-weight: 600;
+            color: #666;
+            width: 30%;
+        }
+
+        .plan-header-card {
+            width: 100%;
+            padding: 24px;
+            border-radius: 12px;
+            color: white;
+            font-family: 'Archivo Black';
+            margin-bottom: 15px;
+        }
+
+        .bg-semente { background: linear-gradient(135deg, #444, #111); }
+        .bg-raiz { background: linear-gradient(135deg, var(--brand-gold), #b8860b); }
+        .bg-planta { background: linear-gradient(135deg, var(--accent-red), #900); }
+
+        .col-highlight { background-color: rgba(212, 175, 55, 0.04); }
+        
+        .btn-plan {
+            width: 100%;
+            padding: 14px;
+            border-radius: 8px;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            transition: 0.3s;
+        }
+        .btn-semente { border: 2px solid #111; color: #111; }
+        .btn-raiz { background: var(--brand-gold); color: white; }
+        .btn-planta { background: var(--accent-red); color: white; }
     </style>
 </head>
 <body>
@@ -161,8 +190,8 @@
                 <ul class="flex gap-8 font-bold uppercase text-[10px] tracking-widest">
                     <li><a href="#hero" class="hover:text-[--acid-green]">Início</a></li>
                     <li><a href="#metodologia" class="hover:text-[--acid-green]">Metodologia</a></li>
-                    <li><a href="#pacotes" class="hover:text-[--acid-green]">Pacotes</a></li>
                     <li><a href="#sobre" class="hover:text-[--acid-green]">A Produtora</a></li>
+                    <li><a href="#pacotes" class="hover:text-[--acid-green]">Pacotes</a></li>
                 </ul>
             </nav>
             <a href="https://wa.me/5573991524222" target="_blank" class="bg-white text-black px-4 py-2 text-[10px] font-heavy uppercase tracking-widest hover:bg-[--acid-green] transition-colors">WhatsApp</a>
@@ -177,10 +206,11 @@
         <div class="hero-overlay"></div>
 
         <div class="container mx-auto px-6 relative z-10 text-center">
-            <span class="font-bold text-[--acid-green] tracking-[0.4em] text-[10px] block mb-6">AUDIOVISUAL ESTRATÉGICO & PERFORMANCE</span>
-            <h1 class="font-heavy text-6xl md:text-8xl leading-none mb-8 chromatic-aberration">Beleza que atrai. <br><span class="italic text-transparent" style="-webkit-text-stroke: 1.5px white">Estratégia que converte.</span></h1>
-            <p class="max-w-2xl mx-auto text-lg opacity-70 mb-10 font-light">Unimos a estética do cinema com a inteligência do marketing digital para criar ativos visuais que vendem e posicionam sua marca.</p>
-            <a href="#pacotes" class="btn-acid">Conhecer Soluções</a>
+            <span class="font-bold text-[--acid-green] tracking-[0.4em] text-[10px] block mb-6 reveal">AUDIOVISUAL ESTRATÉGICO & PERFORMANCE</span>
+            <!-- H1 Reduzido para maior harmonia com o vídeo ao fundo -->
+            <h1 class="font-heavy text-4xl md:text-3xl leading-tight mb-8 reveal uppercase">Beleza que atrai. <br><span class="italic text-transparent" style="-webkit-text-stroke: 1px white">Estratégia que converte.</span></h1>
+            <p class="max-w-xl mx-auto text-base md:text-lg opacity-70 mb-10 font-light reveal">Criação de ativos visuais que vendem e posicionam sua marca através da inteligência do marketing digital.</p>
+            <a href="#pacotes" class="btn-acid reveal">Conhecer Soluções</a>
         </div>
     </section>
 
@@ -191,8 +221,8 @@
         </div>
     </div>
 
-    <!-- METODOLOGIA -->
-    <section id="metodologia" class="py-24 bg-zinc-950">
+    <!-- METODOLOGIA / SOLUÇÕES -->
+    <section id="metodologia" class="py-32 bg-zinc-950">
         <div class="container mx-auto px-6">
             <div class="grid md:grid-cols-2 gap-20 items-center mb-32 reveal">
                 <div>
@@ -231,85 +261,15 @@
         </div>
     </section>
 
-    <!-- PACOTES MENSAIS -->
-    <section id="pacotes" class="py-24 bg-white text-black">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-20 reveal">
-                <span class="text-black/40 font-bold text-xs tracking-[0.5em] block mb-4">NOSSAS SOLUÇÕES</span>
-                <h2 class="font-heavy text-6xl italic leading-none mb-6">PACOTES MENSAIS</h2>
-                <p class="max-w-2xl mx-auto opacity-70">Mantendo a qualidade cinematográfica, estruturamos pacotes recorrentes para manter a sua marca relevante, com conteúdo constante e estratégico.</p>
-            </div>
-
-            <div class="grid lg:grid-cols-3 gap-8 items-start">
-                <!-- Semente -->
-                <div class="p-10 border-2 border-black/5 hover:border-black transition-all reveal">
-                    <h3 class="font-heavy text-3xl mb-1">SEMENTE</h3>
-                    <span class="text-[10px] font-bold tracking-widest opacity-40 uppercase">Presença Digital</span>
-                    <p class="my-6 text-sm opacity-60">Ideal para manutenção de redes sociais com qualidade profissional.</p>
-                    <ul class="space-y-4 mb-10 text-sm font-bold">
-                        <li>✓ 1/2 Diária de Captação (3-4h)</li>
-                        <li>✓ 04 - 06 Reels/Shorts (até 40s)</li>
-                        <li>✓ 2 Fotos Tratadas (High-End)</li>
-                        <li>✓ Edição Dinâmica</li>
-                    </ul>
-                    <div class="mb-8">
-                        <small class="block text-[10px] uppercase font-bold opacity-40">Investimento Mensal</small>
-                        <span class="text-4xl font-heavy">R$ 1.199,00</span>
-                    </div>
-                    <a href="#" class="block w-full text-center py-4 border-2 border-black font-heavy text-xs uppercase hover:bg-black hover:text-white transition-all">Contratar Essência</a>
-                </div>
-
-                <!-- Raiz -->
-                <div class="p-10 bg-black text-white shadow-2xl relative reveal">
-                    <div class="absolute top-0 right-10 -translate-y-1/2 bg-[--acid-green] text-black text-[10px] font-heavy px-4 py-1">MAIS POPULAR</div>
-                    <h3 class="font-heavy text-3xl mb-1 text-[--acid-green]">RAIZ</h3>
-                    <span class="text-[10px] font-bold tracking-widest opacity-40 uppercase">Crescimento & Autoridade</span>
-                    <p class="my-6 text-sm opacity-60">Para marcas que querem se posicionar como líderes através da imagem.</p>
-                    <ul class="space-y-4 mb-10 text-sm font-bold">
-                        <li>✓ 1/2 Diária de Captação (3-4h)</li>
-                        <li>✓ 06 a 08 Reels/Shorts (até 40s)</li>
-                        <li>✓ 4 Fotos Profissionais</li>
-                        <li>✓ Reunião de Pauta Mensal</li>
-                        <li class="text-[--acid-green]">★ BÔNUS EXCLUSIVO</li>
-                    </ul>
-                    <div class="mb-8">
-                        <small class="block text-[10px] uppercase font-bold opacity-40 text-white/40">Investimento Mensal</small>
-                        <span class="text-4xl font-heavy">R$ 1.500,00</span>
-                    </div>
-                    <a href="#" class="block w-full text-center py-4 bg-[--acid-green] text-black font-heavy text-xs uppercase hover:scale-105 transition-all">Contratar Identidade</a>
-                </div>
-
-                <!-- Planta -->
-                <div class="p-10 border-2 border-black/5 hover:border-black transition-all reveal">
-                    <h3 class="font-heavy text-3xl mb-1">PLANTA</h3>
-                    <span class="text-[10px] font-bold tracking-widest opacity-40 uppercase">Expansão Total</span>
-                    <p class="my-6 text-sm opacity-60">Cobertura completa e narrativa documental para grandes projetos.</p>
-                    <ul class="space-y-4 mb-10 text-sm font-bold">
-                        <li>✓ 1 Diária de Captação</li>
-                        <li>✓ 8 a 12 Reels/Shorts</li>
-                        <li>✓ 01 Mini-Doc (Storytelling)</li>
-                        <li>✓ Banco de Imagens Ilimitado</li>
-                        <li>✓ Cobertura de Eventos Inclusa</li>
-                    </ul>
-                    <div class="mb-8">
-                        <small class="block text-[10px] uppercase font-bold opacity-40">Investimento Mensal</small>
-                        <span class="text-4xl font-heavy italic">Sob Consulta</span>
-                    </div>
-                    <a href="#" class="block w-full text-center py-4 border-2 border-black font-heavy text-xs uppercase hover:bg-black hover:text-white transition-all">Falar com Consultor</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- SOBRE A PRODUTORA -->
     <section id="sobre" class="py-32 bg-black overflow-hidden">
         <div class="container mx-auto px-6">
-            <div class="grid md:grid-cols-2 gap-24 items-center reveal">
+            <div class="grid md:grid-cols-2 gap-24 items-center mb-40 reveal">
                 <div class="relative">
                     <div class="absolute -top-10 -left-10 text-[200px] font-heavy opacity-5 select-none">DAIME</div>
                     <span class="text-[--acid-green] font-bold text-xs tracking-widest block mb-4">A PRODUTORA</span>
                     <h2 class="font-header text-6xl font-extrabold mb-8 italic">Narrativas que Marcam</h2>
-                    <div class="space-y-6 opacity-60 leading-relaxed text-lg">
+                    <div class="space-y-6 opacity-60 leading-relaxed text-lg font-light">
                         <p>A Daime Filmes não apenas aperta o botão de gravar. Nós criamos universos visuais. Com mais de 10 anos de experiência em audivisual, somos especializados em transformar briefings complexos em filmes publicitários de alto impacto.</p>
                         <p>Nossa equipe é formada por diretores premiados, diretores de fotografia obcecados por luz e editores que entendem o ritmo da internet.</p>
                     </div>
@@ -324,25 +284,25 @@
                 </div>
 
                 <div class="grid grid-cols-2 gap-4 h-[600px]">
-                    <div class="bg-zinc-800 rounded-2xl h-full flex items-center justify-center text-[10px] uppercase tracking-widest font-bold opacity-30 border border-white/5 rotate-3 hover:rotate-0 transition-transform">Organic Festival</div>
-                    <div class="bg-zinc-800 rounded-2xl h-full translate-y-12 flex items-center justify-center text-[10px] uppercase tracking-widest font-bold opacity-30 border border-white/5 -rotate-3 hover:rotate-0 transition-transform">Pataxó (Doc)</div>
+                    <div class="bg-zinc-800 rounded-2xl h-full flex items-center justify-center text-center p-4 text-[10px] uppercase tracking-widest font-bold opacity-30 border border-white/5 rotate-3 hover:rotate-0 transition-transform">Organic Festival (Ref)</div>
+                    <div class="bg-zinc-800 rounded-2xl h-full translate-y-12 flex items-center justify-center text-center p-4 text-[10px] uppercase tracking-widest font-bold opacity-30 border border-white/5 -rotate-3 hover:rotate-0 transition-transform">Pataxó (Projeto)</div>
                 </div>
             </div>
             
-            <div class="mt-40 reveal">
+            <div class="reveal">
                 <h3 class="font-heavy text-center text-4xl mb-20 italic">POR QUE ESCOLHER A <span class="text-[--acid-green]">DAIME FILMES?</span></h3>
                 <div class="grid md:grid-cols-3 gap-12">
-                    <div class="text-center p-8 bg-zinc-950 border border-white/5">
+                    <div class="text-center p-12 bg-zinc-950 border border-white/5 hover:border-[--acid-green]/20 transition-all">
                         <div class="text-5xl mb-6">🛡️</div>
                         <h4 class="font-header text-xl font-bold mb-4">Segurança Técnica</h4>
                         <p class="opacity-50 text-sm">Experiência comprovada em editais públicos, garantindo cumprimento rigoroso de cronogramas.</p>
                     </div>
-                    <div class="text-center p-8 bg-zinc-950 border border-white/5">
+                    <div class="text-center p-12 bg-zinc-950 border border-white/5 hover:border-[--acid-green]/20 transition-all">
                         <div class="text-5xl mb-6">👁️</div>
                         <h4 class="font-header text-xl font-bold mb-4">Olhar Identitário</h4>
                         <p class="opacity-50 text-sm">Fugimos do genérico. Criamos imagens com identidade, conectadas à cultura local e brasileira.</p>
                     </div>
-                    <div class="text-center p-8 bg-zinc-950 border border-white/5">
+                    <div class="text-center p-12 bg-zinc-950 border border-white/5 hover:border-[--acid-green]/20 transition-all">
                         <div class="text-5xl mb-6">🤝</div>
                         <h4 class="font-header text-xl font-bold mb-4">Parceria Real</h4>
                         <p class="opacity-50 text-sm">Atuamos como parceiros estratégicos, da concepção do roteiro à entrega final.</p>
@@ -352,27 +312,123 @@
         </div>
     </section>
 
+    <!-- PACOTES E PREÇOS (O FECHAMENTO SÉRIO) -->
+    <section id="pacotes" class="pricing-section">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-20 reveal">
+                <span class="text-black/40 font-bold text-xs tracking-[0.5em] block mb-4">TABELA COMPARATIVA</span>
+                <h2 class="font-header text-5xl font-extrabold italic mb-6">Planos de Posicionamento</h2>
+                <p class="max-w-2xl mx-auto text-gray-500 font-inter">Escolha a intensidade da sua presença digital e escale sua autoridade através de conteúdos estratégicos.</p>
+            </div>
+
+            <div class="overflow-x-auto reveal">
+                <table class="pricing-table font-inter">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>
+                                <div class="plan-header-card bg-semente">SEMENTE</div>
+                                <span class="text-[10px] font-bold uppercase opacity-40">Presença Digital</span>
+                            </th>
+                            <th class="col-highlight relative">
+                                <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black text-white text-[9px] px-4 py-1 rounded-full uppercase tracking-widest font-bold">Mais Popular</div>
+                                <div class="plan-header-card bg-raiz">RAIZ</div>
+                                <span class="text-[10px] font-bold uppercase text-[--brand-gold]">Crescimento</span>
+                            </th>
+                            <th>
+                                <div class="plan-header-card bg-planta">PLANTA</div>
+                                <span class="text-[10px] font-bold uppercase opacity-40">Expansão Total</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Investimento Mensal</td>
+                            <td><span class="font-bold text-xl">R$ 1.199</span></td>
+                            <td class="col-highlight"><span class="font-bold text-2xl text-[--brand-gold]">R$ 1.500</span></td>
+                            <td><span class="font-bold text-xl italic">Sob Consulta</span></td>
+                        </tr>
+                        <tr>
+                            <td>Captação (Presencial)</td>
+                            <td>1/2 Diária (3-4h)</td>
+                            <td class="col-highlight">1/2 Diária (3-4h)</td>
+                            <td>1 Diária Completa</td>
+                        </tr>
+                        <tr>
+                            <td>Reels / Shorts</td>
+                            <td>Até 06 vídeos</td>
+                            <td class="col-highlight">Até 08 vídeos</td>
+                            <td>Até 12 vídeos</td>
+                        </tr>
+                        <tr>
+                            <td>Fotografia</td>
+                            <td>2 Fotos High-End</td>
+                            <td class="col-highlight">4 Fotos Profissionais</td>
+                            <td>Banco Ilimitado</td>
+                        </tr>
+                        <tr>
+                            <td>Pós-Produção</td>
+                            <td>Edição Dinâmica</td>
+                            <td class="col-highlight">Edição Premium</td>
+                            <td>Narrativa / Mini-Doc</td>
+                        </tr>
+                        <tr>
+                            <td>Estratégia Mensal</td>
+                            <td class="text-gray-300">—</td>
+                            <td class="col-highlight text-[--brand-gold] font-bold text-xl">✓</td>
+                            <td class="text-green-600 font-bold text-xl">✓</td>
+                        </tr>
+                        <tr>
+                            <td>Eventos Inclusos</td>
+                            <td class="text-gray-300">—</td>
+                            <td class="col-highlight text-gray-300">—</td>
+                            <td class="text-green-600 font-bold text-xl">✓</td>
+                        </tr>
+                        <tr>
+                            <td class="border-none"></td>
+                            <td class="border-none py-10">
+                                <button class="btn-plan btn-semente hover:bg-black hover:text-white">Assinar Semente</button>
+                            </td>
+                            <td class="col-highlight border-none py-10">
+                                <button class="btn-plan btn-raiz hover:scale-105">Assinar Raiz</button>
+                            </td>
+                            <td class="border-none py-10">
+                                <button class="btn-plan btn-planta hover:scale-105">Falar com Consultor</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt-16 p-8 bg-zinc-50 rounded-2xl text-center border border-zinc-200 reveal">
+                <p class="text-sm text-gray-600 font-inter">
+                    <strong>Precisa de algo personalizado?</strong> Entre em contato para projetos específicos de cobertura documental ou lançamentos.
+                </p>
+            </div>
+        </div>
+    </section>
+
     <!-- FOOTER -->
-    <footer id="contato" class="py-20 acid-gradient text-black">
+    <footer class="py-20 bg-black text-white">
         <div class="container mx-auto px-6 text-center">
-            <div class="font-heavy text-5xl mb-6 tracking-tighter">DAIME FILMES</div>
-            <p class="font-bold text-xl mb-12 italic opacity-80">Transformando sua visão em legado audiovisual.</p>
+            <div class="font-heavy text-4xl mb-6 tracking-tighter">DAIME FILMES</div>
+            <p class="opacity-40 text-sm mb-12">Transformando sua visão em legado audiovisual.</p>
             
-            <div class="w-full h-[1px] bg-black/20 mb-12"></div>
+            <div class="w-full h-[1px] bg-white/10 mb-12"></div>
             
-            <div class="flex flex-col md:flex-row justify-between items-center gap-8">
-                <p class="text-[10px] font-heavy tracking-widest uppercase">&copy; 2026 Daime Filmes. Todos os direitos reservados.</p>
-                <div class="flex gap-6 font-heavy text-[10px] uppercase tracking-widest">
-                    <a href="#" class="hover:underline">Instagram</a>
-                    <a href="#" class="hover:underline">Vimeo</a>
-                    <a href="#" class="hover:underline">LinkedIn</a>
+            <div class="flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] font-bold uppercase tracking-widest opacity-40">
+                <p>&copy; 2026 Daime Filmes. Todos os direitos reservados.</p>
+                <div class="flex gap-8">
+                    <a href="#">Instagram</a>
+                    <a href="#">Vimeo</a>
+                    <a href="#">WhatsApp</a>
                 </div>
             </div>
         </div>
     </footer>
 
     <script>
-        // Reveal Animations on Scroll
+        // Reveal Animations
         const observerOptions = { threshold: 0.1 };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
