@@ -3,419 +3,213 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daime Filmes | Audiovisual de Alto Padrão</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-    <style>
-        /* --- VARIÁVEIS E CORES --- */
-        :root {
-            --bg-dark: #000000;
-            --bg-light: #ffffff;
-            --accent-gold: #c5a367;
-            --brand-gold-vivid: #d4af37;
-            --accent-red: #e50914;
-            --text-main: #1a1a1a;
-            --text-muted: #666666;
-            --text-white: #ffffff;
-            --font-serif: 'Cormorant Garamond', serif;
-            --font-sans: 'Inter', sans-serif;
-            --transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* --- ESTILOS BASE --- */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-        body {
-            font-family: var(--font-sans);
-            color: var(--text-main);
-            background-color: var(--bg-light);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        .serif { font-family: var(--font-serif); }
-        .serif-alt { font-family: 'Playfair Display', serif; }
-        .text-gold { color: var(--accent-gold); }
-        
-        section { padding: 100px 0; }
-
-        /* --- HEADER --- */
-        header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 25px 0;
-            background: transparent;
-            z-index: 1000;
-            transition: var(--transition);
-        }
-
-        header.scrolled {
-            background: rgba(0, 0, 0, 0.95);
-            padding: 15px 0;
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 90%;
-            max-width: 1300px;
-            margin: 0 auto;
-        }
-
-        .logo {
-            font-family: var(--font-serif);
-            font-size: 1.8rem;
-            font-weight: 700;
-            letter-spacing: -1px;
-            text-decoration: none;
-            color: var(--text-white);
-        }
-
-        .logo span { color: var(--accent-gold); }
-
-        nav ul { display: flex; gap: 40px; list-style: none; }
-        nav a {
-            text-decoration: none;
-            color: var(--text-white);
-            font-size: 0.85rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            transition: var(--transition);
-        }
-        nav a:hover { color: var(--accent-gold); }
-
-        /* --- HERO FULL SCREEN --- */
-        .hero {
-            position: relative;
-            height: 100vh;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            color: var(--text-white);
-            text-align: center;
-        }
-
-        .video-background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-
-        /* Mantém o vídeo cobrindo toda a área sem barras pretas */
-        .video-background iframe {
-            width: 100vw;
-            height: 56.25vw;
-            min-height: 100vh;
-            min-width: 177.77vh;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(1.1);
-            pointer-events: none;
-        }
-
-        .hero-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.3), rgba(0,0,0,0.8));
-            z-index: 0;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 1;
-            max-width: 950px;
-            padding: 0 20px;
-        }
-
-        .hero-content h1 {
-            font-family: var(--font-serif);
-            font-size: clamp(2.5rem, 7vw, 5.5rem);
-            line-height: 1.1;
-            margin-bottom: 25px;
-            font-weight: 400;
-        }
-
-        /* --- TABELA DE PREÇOS --- */
-        .pricing-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-        }
-        .pricing-table th {
-            padding: 24px 10px;
-            text-align: center;
-            vertical-align: bottom;
-            border-bottom: 2px solid #eee;
-        }
-        .pricing-table td {
-            padding: 20px 10px;
-            border-bottom: 1px solid #f0f0f0;
-            text-align: center;
-            font-size: 1rem;
-        }
-        .pricing-table td:first-child {
-            text-align: left;
-            color: #555;
-            font-weight: 500;
-            width: 35%;
-        }
-
-        .plan-selector {
-            width: 140px;
-            height: 140px;
-            margin: 0 auto 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border-radius: 8px;
-            font-weight: 800;
-            color: white;
-            position: relative;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .plan-semente { background: linear-gradient(135deg, #444, #222); }
-        .plan-raiz { background: linear-gradient(135deg, var(--brand-gold-vivid), #b8860b); }
-        .plan-planta { background: linear-gradient(135deg, var(--accent-red), #b20710); }
-
-        .featured-tag {
-            position: absolute;
-            top: -12px;
-            background: #000;
-            color: #fff;
-            font-size: 0.7rem;
-            padding: 4px 12px;
-            border-radius: 20px;
-            text-transform: uppercase;
-        }
-
-        .btn-plan {
-            width: 100%;
-            padding: 12px 15px;
-            border-radius: 6px;
-            font-weight: 700;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            transition: all 0.2s;
-            margin-top: 10px;
-            display: inline-block;
-            text-align: center;
-        }
-        .btn-semente { border: 2px solid #444; color: #444; }
-        .btn-semente:hover { background: #444; color: white; }
-        .btn-raiz { background: var(--brand-gold-vivid); color: white; border: 2px solid var(--brand-gold-vivid); }
-        .btn-planta { background: var(--accent-red); color: white; border: 2px solid var(--accent-red); }
-
-        .check-icon { color: var(--brand-gold-vivid); font-size: 1.4rem; font-weight: bold; }
-        .active-price { font-size: 1.25rem; font-weight: 800; color: #000; }
-        .col-highlight { background-color: rgba(212, 175, 55, 0.03); }
-
-        /* --- WHATSAPP --- */
-        .whatsapp-float {
-            position: fixed;
-            bottom: 40px;
-            right: 40px;
-            background: #25d366;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: var(--transition);
-        }
-
-        @media (max-width: 768px) {
-            .pricing-table td:first-child { width: 40%; font-size: 0.8rem; }
-            .plan-selector { width: 95px; height: 95px; font-size: 0.7rem; }
-            .active-price { font-size: 1rem; }
-            nav { display: none; }
-        }
-    </style>
+    <title>Daime Filmes | Audiovisual Estratégico</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <a href="https://wa.me/5573991524222" target="_blank" class="whatsapp-float">
-        <span>Falar com um especialista</span>
-    </a>
-
-    <header id="main-header">
-        <div class="header-content">
-            <a href="#" class="logo">Daime <span>Filmes.</span></a>
+    <header>
+        <div class="container header-content">
+            <div class="logo">Daime <span>Filmes</span></div>
             <nav>
                 <ul>
                     <li><a href="#hero">Início</a></li>
-                    <li><a href="#solucoes">Soluções</a></li>
                     <li><a href="#metodologia">Metodologia</a></li>
-                    <li><a href="#pacotes">Planos</a></li>
+                    <li><a href="#pacotes">Pacotes</a></li>
+                    <li><a href="#sobre">A Produtora</a></li>
                 </ul>
             </nav>
-            <a href="https://wa.me/5573991524222" class="px-6 py-2 bg-[#c5a367] text-white rounded-full text-xs font-bold uppercase tracking-wider">Contato</a>
+   <a href="https://wa.me/5573991524222" target="_blank" rel="noopener noreferrer" class="btn-whatsapp">WhatsApp</a>
         </div>
     </header>
 
-    <section id="hero" class="hero">
-        <div class="video-background">
-            <iframe 
-                src="https://www.youtube.com/embed/TApYMTVyw7Q?autoplay=1&mute=1&loop=1&playlist=TApYMTVyw7Q&controls=0&showinfo=0&autohide=1&background=1" 
-                frameborder="0" 
-                allow="autoplay; fullscreen">
-            </iframe>
-        </div>
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <h1 class="serif">Beleza que <span class="text-gold">atrai</span>, estratégia que <span class="text-gold">vende</span>.</h1>
-            <p class="text-lg opacity-90 mb-10 max-w-2xl mx-auto font-light">Unimos a estética do cinema com a inteligência do marketing digital para criar ativos visuais que vendem e escalam a sua marca.</p>
-            <a href="#pacotes" class="px-10 py-5 bg-[#c5a367] text-white uppercase tracking-widest text-sm font-bold rounded-sm hover:bg-[#b08d50] transition-all inline-block">Ver Soluções</a>
-        </div>
-    </section>
+    <section id="hero" class="hero-section">
+    <div class="video-background-container">
+        <iframe 
+            src="https://player.vimeo.com/video/1180343067?autoplay=1&loop=1&background=1&muted=1&autopause=0#t=12s" 
+            frameborder="0" 
+            allow="autoplay; fullscreen" 
+            allowfullscreen>
+        </iframe>
+    </div>
 
-    <section id="solucoes" class="bg-white">
-        <div class="max-w-[1300px] mx-auto px-4">
-            <div class="text-center mb-20">
-                <span class="block uppercase tracking-[5px] text-xs text-[#c5a367] mb-4">O que fazemos</span>
-                <h2 class="serif text-5xl">Ativos Visuais de Alto Impacto</h2>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="p-10 border border-gray-100 rounded-2xl hover:border-[#c5a367] hover:-translate-y-2 transition-all">
-                    <span class="text-3xl mb-6 block">🎬</span>
-                    <h3 class="serif text-2xl mb-4">Produção de Autoridade</h3>
-                    <p class="text-gray-500 text-sm">Vídeos institucionais e podcasts com direção de arte voltada para líderes e marcas premium.</p>
+    <div class="overlay"></div>
+
+    <div class="container hero-content">
+        <span class="subtitle-gold">AUDIOVISUAL ESTRATÉGICO & PERFORMANCE</span>
+        <h1>Beleza que atrai. <br><span class="text-gold">Estratégia que converte.</span></h1>
+        <p>Unimos a estética do cinema com a inteligência do marketing digital para criar ativos visuais que vendem e posicionam sua marca.</p>
+        <a href="#pacotes" class="btn-main">Conhecer Soluções</a>
+    </div>
+</section>
+    
+    <section id="metodologia" class="section-dark">
+        <div class="container">
+            <div class="split-layout">
+                <div class="text-block">
+                    <span class="subtitle-gold">SOLUÇÕES</span>
+                    <h2 class="title-serif text-light">Narrativas que Marcam</h2>
+                    <p class="text-light">Não apenas apertamos o botão de gravar. Criamos universos visuais. Somos especializados em transformar briefings complexos em filmes publicitários de alto impacto, entendendo o ritmo da internet.</p>
                 </div>
-                <div class="p-10 border border-gray-100 rounded-2xl hover:border-[#c5a367] hover:-translate-y-2 transition-all">
-                    <span class="text-3xl mb-6 block">💎</span>
-                    <h3 class="serif text-2xl mb-4">Criativos High-End</h3>
-                    <p class="text-gray-500 text-sm">Reels e Ads pensados para retenção, unindo estética cinematográfica com estratégias de conversão.</p>
+             <div class="video-block" style="display: flex; justify-content: center; align-items: center;">
+                    <iframe 
+                        width="315" 
+                        height="560" 
+                        src="https://www.youtube.com/embed/TApYMTVyw7Q" 
+                        title="Showreel Daime Filmes" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                        allowfullscreen
+                        style="border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); max-width: 100%;">
+                    </iframe>
                 </div>
-                <div class="p-10 border border-gray-100 rounded-2xl hover:border-[#c5a367] hover:-translate-y-2 transition-all">
-                    <span class="text-3xl mb-6 block">🏛️</span>
-                    <h3 class="serif text-2xl mb-4">Assessoria de Imagem</h3>
-                    <p class="text-gray-500 text-sm">Curadoria completa do seu posicionamento audiovisual para garantir consistência e sofisticação.</p>
+
+            <div class="methodology-grid">
+                <div class="title-center mb-50">
+                    <span class="subtitle-gold">NOSSA METODOLOGIA</span>
+                    <h2 class="title-serif text-light">Soluções que Escalamos</h2>
+                </div>
+                <div class="grid-3">
+                    <div class="card-dark">
+                        <div class="icon-gold">📷</div> <h3>Produção de Autoridade</h3>
+                        <p>Vídeos institucionais e podcasts com estética de cinema para elevar o valor percebido da sua marca.</p>
+                    </div>
+                    <div class="card-dark">
+                        <div class="icon-gold">🎯</div> <h3>Criativos para Tráfego</h3>
+                        <p>Produção em escala de vídeos curtos (Reels/Ads) pensados com ganchos de retenção para diminuir seu custo por lead.</p>
+                    </div>
+                    <div class="card-dark">
+                        <div class="icon-gold">📈</div> <h3>Assessoria Estratégica</h3>
+                        <p>Não entregamos só o arquivo. Orientamos onde postar, qual formato usar e como distribuir para atingir seu público.</p>
+                    </div>
+                </div>
+             </div>
+        </div>
+    </section>
+
+    <section id="pacotes" class="section-light">
+        <div class="container">
+            <div class="title-center">
+                <span class="subtitle-gold">NOSSAS SOLUÇÕES</span>
+                <h2 class="title-serif">PACOTES MENSAIS</h2>
+                <p style="max-width: 700px; margin: 0 auto;">Mantendo a qualidade cinematográfica, estruturamos pacotes recorrentes para manter a sua marca relevante, com conteúdo constante e estratégico.</p>
+            </div>
+
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>SEMENTE</h3>
+                    <span class="plan-subtitle">PRESENÇA DIGITAL</span>
+                    <p class="plan-desc">Ideal para manutenção de redes sociais com qualidade profissional.</p>
+                    <ul class="plan-features">
+                        <li>✓ 1/2 Diária de Captação (3-4h)</li>
+                        <li>✓ 04 - 06 Reels/Shorts (até 40s)</li>
+                        <li>✓ 2 Fotos Tratadas (High-End)</li>
+                        <li>✓ Edição Dinâmica</li>
+                    </ul>
+                    <div class="price-tag">
+                        <small>Investimento Mensal</small>
+                        R$ 1.199<span>,00</span>
+                    </div>
+                    <a href="#" class="btn-pricing secondary">Contratar Essência</a>
+                </div>
+
+                <div class="pricing-card featured">
+                    <div class="popular-tag">MAIS POPULAR</div>
+                    <h3>RAIZ</h3>
+                    <span class="plan-subtitle text-gold">CRESCIMENTO & AUTORIDADE</span>
+                    <p class="plan-desc text-light">Para marcas que querem se posicionar como líderes através da imagem.</p>
+                    <ul class="plan-features text-light">
+                        <li>✓ 1/2 Diária de Captação (3-4h)</li>
+                        <li>✓ 06 a 08 Reels/Shorts (até 40s)</li>
+                       
+                        <li>✓ 4 Fotos Profissionais</li>
+                        <li>✓ Reunião de Pauta Mensal</li>
+                                  <li> BONUS </li>
+                        <li>✓ </li>
+                    </ul>
+                    <div class="price-tag text-light">
+                        <small>Investimento Mensal</small>
+                        R$ 1.500<span>,00</span>
+                    </div>
+                    <a href="#" class="btn-pricing primary">Contratar Identidade</a>
+                </div>
+
+                 <div class="pricing-card">
+                    <h3>PLANTA</h3>
+                    <span class="plan-subtitle">EXPANSÃO TOTAL</span>
+                    <p class="plan-desc">Cobertura completa e narrativa documental para grandes projetos.</p>
+                    <ul class="plan-features">
+                        <li>✓ 1 Diária de Captação</li>
+                        <li>✓ 8 a 12 Reels/Shorts</li>
+                        <li>✓ 01 Mini-Doc (3-5 min) - Storytelling</li>
+                        <li>✓ Banco de Imagens Ilimitado</li>
+                        <li>✓ Cobertura de Eventos Inclusa</li>
+                    </ul>
+                    <div class="price-tag">
+                        <small>Investimento Mensal</small>
+                        Sob Consulta
+                    </div>
+                    <a href="#" class="btn-pricing secondary">Falar com Consultor</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="metodologia" class="bg-black text-white text-center">
-        <div class="max-w-[800px] mx-auto px-4">
-            <div class="mb-16">
-                <span class="block uppercase tracking-[5px] text-xs text-[#c5a367] mb-4">Metodologia</span>
-                <h2 class="serif text-5xl">A Arte da Estratégia</h2>
+    <section id="sobre" class="section-default">
+        <div class="container">
+             <div class="split-layout mb-50">
+                <div class="text-block">
+                    <span class="subtitle-gold">A PRODUTORA</span>
+                    <h2 class="title-serif"> NARRATIVAS QUE MARCAM</h2>
+                    <p>A Daime Filmes não apenas aperta o botão de gravar. Nós criamos universos visuais. Com mais de 10 anos de experiência em audivisual, somos especializados em transformar briefings complexos em filmes publicitários de alto impacto.</p>
+                    <p>Nossa equipe é formada por diretores premiados, diretores de fotografia obcecados por luz e editores que entendem o ritmo da internet.</p>
+                    
+                    <div class="award-box">
+                        <span class="award-number">2</span>
+                        <div>
+                            <strong>Premiação Lei Aldir Blanc</strong>
+                            <p><small>Em nosso ano de fundação (2020), fomos duplamente premiados, consolidando nossa capacidade técnica e artística no cenário cultural.</small></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="image-collage">
+                    <div style="background-color: #ccc; height: 200px; margin-bottom: 10px;">Organic Festival (Placeholder)</div>
+                    <div style="background-color: #ccc; height: 200px;">Pataxó (Placeholder)</div>
+                </div>
             </div>
-            <p class="text-gray-400 text-lg mb-10 leading-relaxed">Não apenas apertamos o botão de gravar. Criamos universos visuais. Somos especializados em transformar briefings complexos em filmes publicitários de alto impacto, entendendo o ritmo da internet.</p>
-            <div class="border-l-2 border-[#c5a367] pl-5 inline-block text-left">
-                <p class="serif text-2xl">"Transformamos a sua visão em legado audiovisual."</p>
-            </div>
+
+            <div class="title-center">
+                 <h2 class="title-serif">POR QUE ESCOLHER A DAIME FILMES?</h2>
+             </div>
+             <div class="grid-3 why-us-grid">
+                 <div class="reason-item">
+                     <div class="reason-icon">🛡️</div>
+                     <h3>Segurança Técnica</h3>
+                     <p>Experiência comprovada em editais públicos, garantindo cumprimento rigoroso de cronogramas.</p>
+                 </div>
+                 <div class="reason-item">
+                    <div class="reason-icon">👁️</div>
+                    <h3>Olhar Identitário</h3>
+                    <p>Fugimos do genérico. Criamos imagens com identidade, conectadas à cultura local e brasileira.</p>
+                </div>
+                <div class="reason-item">
+                    <div class="reason-icon">🤝</div>
+                    <h3>Parceria Real</h3>
+                    <p>Atuamos como parceiros estratégicos, da concepção do roteiro à entrega final.</p>
+                </div>
+             </div>
         </div>
     </section>
 
-    <section id="pacotes" class="bg-[#fafafa]">
-        <div class="max-w-[1100px] mx-auto px-4">
-            <div class="text-center mb-16">
-                <h1 class="serif-alt text-4xl mb-4">Planos de Posicionamento</h1>
-                <p class="text-gray-500 max-w-2xl mx-auto">Escolha a intensidade da sua presença digital e escale sua autoridade através de conteúdos estratégicos.</p>
-            </div>
-
-            <div class="overflow-x-auto bg-white p-4 rounded-3xl border border-gray-100">
-                <table class="pricing-table">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th><div class="plan-selector plan-semente">SEMENTE</div></th>
-                            <th class="col-highlight">
-                                <div class="plan-selector plan-raiz">
-                                    <span class="featured-tag">Mais Popular</span>
-                                    RAIZ
-                                </div>
-                            </th>
-                            <th><div class="plan-selector plan-planta">PLANTA</div></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Investimento Mensal</td>
-                            <td><span class="active-price">R$ 1.199</span></td>
-                            <td class="col-highlight"><span class="active-price" style="color: var(--brand-gold-vivid)">R$ 1.500</span></td>
-                            <td><span class="active-price">Sob Consulta</span></td>
-                        </tr>
-                        <tr>
-                            <td>Captação (Presencial)</td>
-                            <td>1/2 Diária (3-4h)</td>
-                            <td class="col-highlight">1/2 Diária (3-4h)</td>
-                            <td>1 Diária Completa</td>
-                        </tr>
-                        <tr>
-                            <td>Reels / Shorts</td>
-                            <td>Até 06 vídeos</td>
-                            <td class="col-highlight">Até 08 vídeos</td>
-                            <td>Até 12 vídeos</td>
-                        </tr>
-                        <tr>
-                            <td>Fotografia</td>
-                            <td>2 Fotos High-End</td>
-                            <td class="col-highlight">4 Fotos Profissionais</td>
-                            <td>Banco Ilimitado</td>
-                        </tr>
-                        <tr>
-                            <td>Pós-Produção</td>
-                            <td>Edição Dinâmica</td>
-                            <td class="col-highlight">Edição Premium</td>
-                            <td>Narrativa / Mini-Doc</td>
-                        </tr>
-                        <tr>
-                            <td>Estratégia Mensal</td>
-                            <td><span class="text-gray-300">—</span></td>
-                            <td class="col-highlight"><span class="check-icon">✓</span></td>
-                            <td><span class="check-icon">✓</span></td>
-                        </tr>
-                        <tr>
-                            <td style="border-bottom: none;"></td>
-                            <td style="border-bottom: none;"><a href="https://wa.me/5573991524222" class="btn-plan btn-semente">Assinar Semente</a></td>
-                            <td class="col-highlight" style="border-bottom: none;"><a href="https://wa.me/5573991524222" class="btn-plan btn-raiz">Assinar Raiz</a></td>
-                            <td style="border-bottom: none;"><a href="https://wa.me/5573991524222" class="btn-plan btn-planta">Falar com Consultor</a></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </section>
-
-    <footer class="py-20 text-center bg-white border-t border-gray-100">
-        <div class="max-w-[1300px] mx-auto px-4">
-            <div class="serif text-4xl mb-6">Daime <span class="text-gold">Filmes.</span></div>
-            <p class="text-gray-400 mb-8">Transformando a sua visão em legado audiovisual.</p>
-            <p class="text-xs text-gray-400 tracking-widest uppercase">&copy; 2026 Daime Filmes. Todos os direitos reservados.</p>
+    <footer id="contato">
+        <div class="container">
+            <div class="logo" style="color: #fff; margin-bottom: 20px;">Daime <span>Filmes</span></div>
+            <p>Transformando sua visão em legado audiovisual.</p>
+            <br>
+            <p>&copy; 2026 Daime Filmes. Todos os direitos reservados.</p>
         </div>
     </footer>
 
-    <script>
-        window.addEventListener('scroll', function() {
-            const header = document.getElementById('main-header');
-            if (window.scrollY > 100) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-        });
-    </script>
 </body>
 </html>
