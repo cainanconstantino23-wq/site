@@ -13,7 +13,7 @@
             /* Nova paleta baseada na imagem enviada */
             --ref-yellow: #f2d027;
             --ref-blue: #2b65ec;
-            --ref-cyan: #33b1d4; /* Azul atualizado conforme anexo */
+            --ref-cyan: #00bcd4;
             --ref-coral: #ff4d4d;
             --ref-pink: #ffb3b3;
         }
@@ -104,7 +104,7 @@
         .marquee {
             white-space: nowrap;
             overflow: hidden;
-            background: var(--ref-cyan); /* Cor atualizada para o azul solicitado */
+            background: var(--acid-green);
             color: black;
             padding: 12px 0;
             font-family: 'Archivo Black';
@@ -121,7 +121,7 @@
             100% { transform: translateX(-50%); }
         }
 
-        /* Tabela de Preços */
+        /* Tabela de Preços com Nova Paleta */
         .pricing-section {
             background-color: #ffffff;
             color: #111;
@@ -161,7 +161,7 @@
         .bg-ideal { background: #1a1a1a; color: var(--ref-cyan); border: 2px solid var(--ref-cyan); }
         .bg-pro { background: var(--ref-coral); color: var(--ref-pink); }
 
-        .col-highlight { background-color: rgba(51, 177, 212, 0.05); }
+        .col-highlight { background-color: rgba(0, 188, 212, 0.05); }
         
         .btn-plan {
             width: 100%;
@@ -217,17 +217,17 @@
 
     <!-- HEADER -->
     <header class="fixed top-0 w-full z-[1000] p-6 mix-blend-difference">
-        <div class="container mx-auto flex justify-between items-center text-white">
-            <div class="font-heavy text-3xl tracking-tighter">DAIME <span class="text-xs font-light opacity-60">FILMES</span></div>
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="font-heavy text-3xl tracking-tighter text-white">DAIME <span class="text-xs font-light opacity-60">FILMES</span></div>
             <nav class="hidden md:block">
-                <ul class="flex gap-8 font-bold uppercase text-[16px] tracking-widest">
-                    <li><a href="#hero" class="hover:text-[--ref-cyan]">Início</a></li>
-                    <li><a href="#metodologia" class="hover:text-[--ref-cyan]">Metodologia</a></li>
-                    <li><a href="#sobre" class="hover:text-[--ref-cyan]">A Produtora</a></li>
-                    <li><a href="#pacotes" class="hover:text-[--ref-cyan]">Pacotes</a></li>
+                <ul class="flex gap-8 font-bold uppercase text-[10px] tracking-widest text-white">
+                    <li><a href="#hero" class="hover:text-[--acid-green]">Início</a></li>
+                    <li><a href="#metodologia" class="hover:text-[--acid-green]">Metodologia</a></li>
+                    <li><a href="#sobre" class="hover:text-[--acid-green]">A Produtora</a></li>
+                    <li><a href="#pacotes" class="hover:text-[--acid-green]">Pacotes</a></li>
                 </ul>
             </nav>
-            <a href="https://wa.me/5573991524222" target="_blank" class="bg-white text-black px-4 py-2 text-[10px] font-heavy uppercase tracking-widest hover:bg-[--ref-cyan] transition-colors">WhatsApp</a>
+            <a href="https://wa.me/5573991524222" target="_blank" class="bg-white text-black px-4 py-2 text-[10px] font-heavy uppercase tracking-widest hover:bg-[--acid-green] transition-colors">WhatsApp</a>
         </div>
     </header>
 
@@ -239,14 +239,14 @@
         <div class="hero-overlay"></div>
 
         <div class="container mx-auto px-6 relative z-10 text-center">
-            <span class="font-bold text-[--ref-cyan] tracking-[0.4em] text-[10px] block mb-6 reveal uppercase">AUDIOVISUAL ESTRATÉGICO & PERFORMANCE</span>
+            <span class="font-bold text-[--acid-green] tracking-[0.4em] text-[10px] block mb-6 reveal">AUDIOVISUAL ESTRATÉGICO & PERFORMANCE</span>
             <h1 class="font-heavy text-4xl md:text-6xl leading-tight mb-8 reveal uppercase">Beleza que atrai. <br><span class="italic text-transparent" style="-webkit-text-stroke: 1px white">Estratégia que converte.</span></h1>
             <p class="max-w-xl mx-auto text-base md:text-lg opacity-70 mb-10 font-light reveal">Criação de ativos visuais que vendem e posicionam sua marca através da inteligência do marketing digital.</p>
             <a href="#pacotes" class="btn-acid reveal">Conhecer Soluções</a>
         </div>
     </section>
 
-    <!-- MARQUEE BAR (ATUALIZADO COM O AZUL DO ANEXO) -->
+    <!-- MARQUEE BAR -->
     <div class="marquee text-sm">
         <div class="marquee-content">
             ESTRATÉGIA • PERFORMANCE • CINEMA • IMPACTO VISUAL • CONVERSÃO • DAIME FILMES • ESTRATÉGIA • PERFORMANCE • CINEMA • IMPACTO VISUAL • CONVERSÃO • DAIME FILMES • 
@@ -257,59 +257,60 @@
     <section id="metodologia" class="py-32 bg-zinc-950">
         <div class="container mx-auto px-6">
             <div class="grid md:grid-cols-2 gap-20 items-center mb-32 reveal">
-                <div class="text-white">
-                    <span class="text-hot-pink font-bold text-xs tracking-widest block mb-4">SOLUÇÕES</span>
-                    <h2 class="font-header text-6xl font-extrabold mb-8 italic">Narrativas que Marcam</h2>
-                    <p class="text-xl opacity-60 leading-relaxed">Não apenas apertamos o botão de gravar. Criamos universos visuais. Somos especializados em transformar briefings complexos em filmes publicitários de alto impacto, entendendo o ritmo da internet.</p>
+                <div>
+                    <span class="text-hot-pink font-bold text-xs tracking-widest block mb-4 text-white">SOLUÇÕES</span>
+                    <h2 class="font-header text-6xl font-extrabold mb-5 italic text-white">Narrativas que Marcam</h2>
+                    <p class="text-xl opacity-60 leading-relaxed text-white">Não apenas apertamos o botão de gravar. Criamos universos visuais. Somos especializados em transformar briefings complexos em filmes publicitários de alto impacto, entendendo o ritmo da internet.</p>
                 </div>
                 <div class="relative group">
-                    <div class="absolute -inset-4 bg-gradient-to-tr from-[--ref-cyan] to-transparent opacity-20 blur-2xl group-hover:opacity-40 transition-opacity"></div>
+                    <div class="absolute -inset-4 bg-gradient-to-tr from-[--acid-green] to-transparent opacity-20 blur-2xl group-hover:opacity-40 transition-opacity"></div>
                     <iframe class="w-full aspect-[9/16] rounded-2xl relative z-10 shadow-2xl" src="https://www.youtube.com/embed/TApYMTVyw7Q" title="Showreel Daime Filmes" frameborder="0" allowfullscreen></iframe>
                 </div>
             </div>
 
             <div class="text-center mb-20 reveal">
-                <span class="text-[--ref-cyan] font-bold text-xs tracking-[0.5em] block mb-4 uppercase">Nossa Metodologia</span>
+                <span class="text-[--acid-green] font-bold text-xs tracking-[0.5em] block mb-4 uppercase">Nossa Metodologia</span>
                 <h2 class="font-heavy text-5xl italic text-white">Soluções que Escalamos</h2>
             </div>
 
-            <div class="grid md:grid-cols-3 gap-8 reveal text-white">
+            <div class="grid md:grid-cols-3 gap-8 reveal">
                 <div class="card-glass group">
                     <div class="text-4xl mb-6 group-hover:scale-125 transition-transform origin-left">📷</div>
-                    <h3 class="font-header text-2xl font-bold mb-4">Produção de Autoridade</h3>
-                    <p class="opacity-50 text-sm">Vídeos institucionais e podcasts com estética de cinema para elevar o valor percebido da sua marca.</p>
+                    <h3 class="font-header text-2xl font-bold mb-4 text-white">Produção de Autoridade</h3>
+                    <p class="opacity-50 text-sm text-white">Vídeos institucionais e podcasts com estética de cinema para elevar o valor percebido da sua marca.</p>
                 </div>
                 <div class="card-glass group">
                     <div class="text-4xl mb-6 group-hover:scale-125 transition-transform origin-left">🎯</div>
-                    <h3 class="font-header text-2xl font-bold mb-4">Criativos para Tráfego</h3>
-                    <p class="opacity-50 text-sm">Produção em escala de vídeos curtos (Reels/Ads) pensados com ganchos de retenção para diminuir seu custo por lead.</p>
+                    <h3 class="font-header text-2xl font-bold mb-4 text-white">Criativos para Tráfego</h3>
+                    <p class="opacity-50 text-sm text-white">Produção em escala de vídeos curtos (Reels/Ads) pensados com ganchos de retenção para diminuir seu custo por lead.</p>
                 </div>
                 <div class="card-glass group">
                     <div class="text-4xl mb-6 group-hover:scale-125 transition-transform origin-left">📈</div>
-                    <h3 class="font-header text-2xl font-bold mb-4">Assessoria Estratégica</h3>
-                    <p class="opacity-50 text-sm">Não entregamos só o arquivo. Orientamos onde postar, qual formato usar e como distribuir para atingir seu público.</p>
+                    <h3 class="font-header text-2xl font-bold mb-4 text-white">Assessoria Estratégica</h3>
+                    <p class="opacity-50 text-sm text-white">Não entregamos só o arquivo. Orientamos onde postar, qual formato usar e como distribuir para atingir seu público.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- SOBRE A PRODUTORA -->
-    <section id="sobre" class="py-32 bg-black overflow-hidden text-white">
+    <section id="sobre" class="py-32 bg-black overflow-hidden">
         <div class="container mx-auto px-6">
-            <div class="grid md:grid-cols-2 gap-24 items-center mb-40 reveal">
+            <div class="grid md:grid-cols-2 gap-24 items-center mb-40 reveal text-white">
                 <div class="relative">
                     <div class="absolute -top-10 -left-10 text-[200px] font-heavy opacity-5 select-none">DAIME</div>
-                    <span class="text-[--ref-cyan] font-bold text-xs tracking-widest block mb-4">A PRODUTORA</span>
+                    <span class="text-[--acid-green] font-bold text-xs tracking-widest block mb-4">A PRODUTORA</span>
                     <h2 class="font-header text-6xl font-extrabold mb-8 italic">Narrativas que Marcam</h2>
                     <div class="space-y-6 opacity-60 leading-relaxed text-lg font-light">
                         <p>A Daime Filmes não apenas aperta o botão de gravar. Nós criamos universos visuais. Com mais de 10 anos de experiência em audivisual, somos especializados em transformar briefings complexos em filmes publicitários de alto impacto.</p>
+                        <p>Nossa equipe é formada por diretores premiados, diretores de fotografia obcecados por luz e editores que entendem o ritmo da internet.</p>
                     </div>
 
                     <div class="mt-12 p-8 border-l-4 border-hot-pink bg-zinc-900 flex items-start gap-6">
                         <span class="font-heavy text-6xl text-hot-pink">2</span>
                         <div>
                             <strong class="block text-xl mb-2">Premiação Lei Aldir Blanc</strong>
-                            <p class="text-sm opacity-50">Em nosso ano de fundação (2020), fomos duplamente premiados, consolidando nossa capacidade técnica e artística.</p>
+                            <p class="text-sm opacity-50">Em nosso ano de fundação (2020), fomos duplamente premiados, consolidando nossa capacidade técnica e artística no cenário cultural.</p>
                         </div>
                     </div>
                 </div>
@@ -322,7 +323,7 @@
         </div>
     </section>
 
-    <!-- PACOTES E PREÇOS -->
+    <!-- PACOTES E PREÇOS (ATUALIZADOS COM NOMES E CORES NOVAS) -->
     <section id="pacotes" class="pricing-section">
         <div class="container mx-auto px-6">
             <div class="text-center mb-20 reveal">
@@ -407,7 +408,7 @@
     </section>
 
     <!-- FOOTER -->
-    <footer class="py-20 bg-black text-white border-t border-white/5">
+    <footer class="py-20 bg-black text-white">
         <div class="container mx-auto px-6 text-center">
             <div class="font-heavy text-4xl mb-6 tracking-tighter">DAIME FILMES</div>
             <p class="opacity-40 text-sm mb-12">Transformando sua visão em legado audiovisual.</p>
