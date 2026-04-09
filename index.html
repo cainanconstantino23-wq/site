@@ -11,7 +11,7 @@
             --acid-green: #d4ff00;
             --deep-void: #05000a;
             --ref-yellow: #f2d027;
-            --ref-blue: #2b65ec;
+            --ref-blue: #004a7c; 
             --ref-cyan: #00bcd4;
             --ref-coral: #ff4d4d;
             --ref-pink: #ffb3b3;
@@ -89,14 +89,17 @@
             overflow: hidden;
             background: var(--ref-blue);
             color: white;
-            padding: 12px 0;
+            padding: 14px 0;
             font-family: 'Archivo Black';
             text-transform: uppercase;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            letter-spacing: 1px;
         }
 
         .marquee-content {
             display: inline-block;
-            animation: marquee 30s linear infinite;
+            animation: marquee 35s linear infinite;
         }
 
         @keyframes marquee {
@@ -138,7 +141,7 @@
             text-align: center;
         }
 
-        .bg-start { background: var(--ref-yellow); color: var(--ref-blue); }
+        .bg-start { background: var(--ref-yellow); color: #004a7c; }
         .bg-ideal { background: #1a1a1a; color: var(--ref-cyan); border: 2px solid var(--ref-cyan); }
         .bg-pro { background: var(--ref-coral); color: var(--ref-pink); }
 
@@ -155,7 +158,7 @@
             display: block;
             text-align: center;
         }
-        .btn-start { background: var(--ref-blue); color: white; }
+        .btn-start { background: #004a7c; color: white; }
         .btn-ideal { background: var(--ref-cyan); color: black; }
         .btn-pro { background: black; color: white; }
 
@@ -179,55 +182,38 @@
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .header-nav a {
-            font-size: 10.35px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            opacity: 0.7;
-            color: #000;
-            transition: all 0.3s;
-        }
-        .header-nav a:hover {
-            opacity: 1;
-            color: var(--ref-blue);
-        }
-
-        /* Header Ajustado: Branco com 10% de opacidade (90% de transparência) */
+        /* Header Ajustado: Sem Blur */
         .header-film-strip {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             z-index: 1000;
-            background: rgba(255, 255, 255, 0.1); /* Opacidade de 10% conforme solicitado */
-            backdrop-filter: blur(8px);
+            background: rgba(255, 255, 255, 0.1);
+            /* Backdrop-filter removido para eliminar o blur */
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             overflow: hidden;
-            transition: background 0.3s ease;
         }
 
         .header-logo-text {
-            color: #fff; /* Alterado para branco para legibilidade em fundo transparente/escuro do vídeo */
+            color: #fff;
             font-family: 'Archivo Black', sans-serif;
             text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
 
-        /* Links do Nav agora em branco para contrastar com o vídeo do hero */
         .header-nav a {
+            font-size: 10.35px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.8;
             color: #fff;
+            transition: all 0.3s;
             text-shadow: 0 1px 2px rgba(0,0,0,0.5);
         }
-
-        /* Textura de grão cinematográfico */
-        .header-film-strip::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url('https://www.transparenttextures.com/patterns/pinstripe-light.png');
-            opacity: 0.05;
-            pointer-events: none;
-            z-index: -1;
+        .header-nav a:hover {
+            opacity: 1;
+            color: var(--ref-cyan);
         }
 
         .header-film-strip::after {
@@ -304,7 +290,7 @@
     <!-- MARQUEE BAR -->
     <div class="marquee text-xs">
         <div class="marquee-content">
-            ESTRATÉGIA • PERFORMANCE • CINEMA • IMPACTO VISUAL • CONVERSÃO • DAIME FILMES • ESTRATÉGIA • PERFORMANCE • CINEMA • IMPACTO VISUAL • CONVERSÃO • DAIME FILMES • 
+            ESTRATÉGIA • PERFORMANCE • CINEMA • IMPACTO VISUAL • CONVERSÃO • DAIME FILMES • ESTRATÉGIA • PERFORMANCE • CINEMA • IMPACTO VISUAL • CONVERSÃO • DAIME FILMES • CONVERSÃO • DAIME FILMES • ESTRATÉGIA • PERFORMANCE • CINEMA • IMPACTO VISUAL • CONVERSÃO • DAIME FILMES • 
         </div>
     </div>
 
