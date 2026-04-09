@@ -10,7 +10,6 @@
         :root {
             --acid-green: #d4ff00;
             --deep-void: #05000a;
-            /* Nova paleta baseada na imagem enviada */
             --ref-yellow: #f2d027;
             --ref-blue: #2b65ec;
             --ref-cyan: #00bcd4;
@@ -42,7 +41,7 @@
 
         .reveal {
             opacity: 0;
-            transform: translateY(30px);
+            transform: translateY(20px);
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -67,30 +66,14 @@
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
             pointer-events: none;
-            filter: contrast(1.1) brightness(0.7);
+            filter: contrast(1.1) brightness(0.8);
         }
 
         .hero-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to bottom, rgba(5,0,10,0.2), var(--deep-void));
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 30%);
             z-index: 0;
-        }
-
-        .btn-acid {
-            background: var(--acid-green);
-            color: black;
-            font-family: 'Archivo Black', sans-serif;
-            padding: 1rem 2.5rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s;
-            display: inline-block;
-        }
-
-        .btn-acid:hover {
-            transform: scale(1.05) rotate(-2deg);
-            box-shadow: 0 0 20px var(--acid-green);
         }
 
         .card-glass {
@@ -121,7 +104,6 @@
             100% { transform: translateX(-50%); }
         }
 
-        /* Tabela de Preços com Nova Paleta */
         .pricing-section {
             background-color: #ffffff;
             color: #111;
@@ -156,7 +138,6 @@
             text-align: center;
         }
 
-        /* Cores baseadas na referência da imagem */
         .bg-start { background: var(--ref-yellow); color: var(--ref-blue); }
         .bg-ideal { background: #1a1a1a; color: var(--ref-cyan); border: 2px solid var(--ref-cyan); }
         .bg-pro { background: var(--ref-coral); color: var(--ref-pink); }
@@ -178,7 +159,6 @@
         .btn-ideal { background: var(--ref-cyan); color: black; }
         .btn-pro { background: black; color: white; }
 
-        /* Botão Flutuante */
         .float-btn {
             position: fixed;
             bottom: 30px;
@@ -199,9 +179,66 @@
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .float-btn:hover {
-            transform: scale(1.1) translateY(-5px);
-            box-shadow: 0 15px 35px rgba(37, 211, 102, 0.5);
+        .header-nav a {
+            font-size: 9px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+        .header-nav a:hover {
+            opacity: 1;
+            color: var(--acid-green);
+        }
+
+        /* Header com largura reduzida (90%) e efeito de película */
+        .header-film-strip {
+            position: fixed;
+            top: 20px; /* Pequeno espaçamento do topo para parecer flutuante */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        /* Textura de grão cinematográfico / película inspirada no TimeSet */
+        .header-film-strip::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('https://www.transparenttextures.com/patterns/pinstripe-dark.png'), 
+                            linear-gradient(rgba(255,255,255,0.05), rgba(255,255,255,0));
+            opacity: 0.3;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Efeito de "sujeira" de filme animado */
+        .header-film-strip::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/7/76/16mm_film_grain_texture.jpg');
+            background-size: 300px;
+            opacity: 0.1;
+            mix-blend-mode: overlay;
+            animation: grain-shift 0.8s steps(6) infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes grain-shift {
+            0% { background-position: 0 0; }
+            20% { background-position: 20px 50px; }
+            40% { background-position: -30px 10px; }
+            60% { background-position: 50px -20px; }
+            80% { background-position: -10px -50px; }
+            100% { background-position: 15px 30px; }
         }
     </style>
 </head>
@@ -215,87 +252,94 @@
         Fale Conosco
     </a>
 
-    <!-- HEADER -->
-    <header class="fixed top-0 w-full z-[1000] p-6 mix-blend-difference">
+    <!-- HEADER ATUALIZADO (Largura 90% e Efeito Película) -->
+    <header class="header-film-strip py-3 px-8">
         <div class="container mx-auto flex justify-between items-center">
-            <div class="font-heavy text-3xl tracking-tighter text-white">DAIME <span class="text-xs font-light opacity-60">FILMES</span></div>
-            <nav class="hidden md:block">
-                <ul class="flex gap-8 font-bold uppercase text-[10px] tracking-widest text-white">
-                    <li><a href="#hero" class="hover:text-[--acid-green]">Início</a></li>
-                    <li><a href="#metodologia" class="hover:text-[--acid-green]">Metodologia</a></li>
-                    <li><a href="#sobre" class="hover:text-[--acid-green]">A Produtora</a></li>
-                    <li><a href="#pacotes" class="hover:text-[--acid-green]">Pacotes</a></li>
-                </ul>
+            <div class="font-heavy text-xl tracking-tighter text-white">DAIME FILMES</div>
+            
+            <nav class="header-nav flex items-center gap-10">
+                <a href="#hero">Início</a>
+                <a href="#metodologia">Metodologia</a>
+                <a href="#sobre">A Produtora</a>
+                <a href="#pacotes">Pacotes</a>
             </nav>
-            <a href="https://wa.me/5573991524222" target="_blank" class="bg-white text-black px-4 py-2 text-[10px] font-heavy uppercase tracking-widest hover:bg-[--acid-green] transition-colors">WhatsApp</a>
+
+            <!-- Espaçador invisível para manter o alinhamento central do menu -->
+            <div class="w-24 md:block hidden"></div>
         </div>
     </header>
 
     <!-- HERO SECTION -->
-    <section id="hero" class="relative h-screen flex items-center justify-center overflow-hidden">
+    <section id="hero" class="relative h-screen flex items-end justify-start overflow-hidden pb-8 md:pb-12">
         <div class="video-background-container">
             <iframe src="https://player.vimeo.com/video/1180343067?autoplay=1&loop=1&background=1&muted=1&autopause=0#t=12s" frameborder="0" allow="autoplay; fullscreen"></iframe>
         </div>
         <div class="hero-overlay"></div>
 
-        <div class="container mx-auto px-6 relative z-10 text-center">
-            <span class="font-bold text-[--acid-green] tracking-[0.4em] text-[10px] block mb-6 reveal">AUDIOVISUAL ESTRATÉGICO & PERFORMANCE</span>
-            <h1 class="font-heavy text-4xl md:text-6xl leading-tight mb-8 reveal uppercase">Beleza que atrai. <br><span class="italic text-transparent" style="-webkit-text-stroke: 1px white">Estratégia que converte.</span></h1>
-            <p class="max-w-xl mx-auto text-base md:text-lg opacity-70 mb-10 font-light reveal">Criação de ativos visuais que vendem e posicionam sua marca através da inteligência do marketing digital.</p>
-            <a href="#pacotes" class="btn-acid reveal">Conhecer Soluções</a>
+        <div class="container mx-auto px-8 relative z-10">
+            <div class="max-w-xl reveal">
+                <span class="text-[--acid-green] font-bold text-[9px] tracking-[0.3em] block mb-2 uppercase">AudioVisual Estratégico</span>
+                
+                <h1 class="font-heavy text-2xl md:text-3xl leading-tight mb-3 uppercase">
+                    Beleza que atrai. <br>
+                    Estratégia que converte.
+                </h1>
+                
+                <p class="text-[10px] md:text-xs opacity-50 font-light max-w-sm leading-relaxed">
+                    Criação de ativos visuais que vendem e posicionam sua marca através da inteligência do marketing digital.
+                </p>
+            </div>
         </div>
     </section>
 
     <!-- MARQUEE BAR -->
-    <div class="marquee text-sm">
+    <div class="marquee text-xs">
         <div class="marquee-content">
             ESTRATÉGIA • PERFORMANCE • CINEMA • IMPACTO VISUAL • CONVERSÃO • DAIME FILMES • ESTRATÉGIA • PERFORMANCE • CINEMA • IMPACTO VISUAL • CONVERSÃO • DAIME FILMES • 
         </div>
     </div>
 
     <!-- METODOLOGIA / SOLUÇÕES -->
- <section id="metodologia" class="py-32 bg-zinc-950">
-    <div class="container mx-auto px-6">
-        <div class="grid md:grid-cols-2 gap-20 items-center mb-32 reveal">
-            <div>
-                <span class="text-hot-pink font-bold text-xs tracking-widest block mb-4 text-white">SOLUÇÕES</span>
-                <h2 class="font-header text-6xl font-extrabold mb-5 italic text-white">Narrativas que Marcam</h2>
-                <p class="text-xl opacity-60 leading-relaxed text-white">Não apenas apertamos o botão de gravar. Criamos universos visuais. Somos especializados em transformar briefings complexos em filmes publicitários de alto impacto, entendendo o ritmo da internet.</p>
-            </div>
+    <section id="metodologia" class="py-32 bg-zinc-950">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-20 items-center mb-32 reveal">
+                <div>
+                    <span class="text-white/40 font-bold text-xs tracking-widest block mb-4 uppercase">Soluções</span>
+                    <h2 class="font-header text-6xl font-extrabold mb-5 italic text-white">Narrativas que Marcam</h2>
+                    <p class="text-xl opacity-60 leading-relaxed text-white">Não apenas apertamos o botão de gravar. Criamos universos visuais. Somos especializados em transformar briefings complexos em filmes publicitários de alto impacto, entendendo o ritmo da internet.</p>
+                </div>
 
-            <div class="relative group max-w-[350px] mx-auto w-full">
-                
-                <div class="absolute -inset-4 bg-gradient-to-tr from-[--acid-green] to-transparent opacity-20 blur-2xl group-hover:opacity-40 transition-opacity rounded-2xl"></div>
-                
-                <iframe 
-                    class="w-full aspect-[9/16] rounded-2xl relative z-10 shadow-2xl" 
-                    src="https://www.youtube.com/embed/TApYMTVyw7Q" 
-                    title="Showreel Daime Filmes" 
-                    frameborder="0" 
-                    allowfullscreen>
-                </iframe>
+                <div class="relative group max-w-[350px] mx-auto w-full">
+                    <div class="absolute -inset-4 bg-gradient-to-tr from-[--acid-green] to-transparent opacity-20 blur-2xl group-hover:opacity-40 transition-opacity rounded-2xl"></div>
+                    <iframe 
+                        class="w-full aspect-[9/16] rounded-2xl relative z-10 shadow-2xl" 
+                        src="https://www.youtube.com/embed/TApYMTVyw7Q" 
+                        title="Showreel Daime Filmes" 
+                        frameborder="0" 
+                        allowfullscreen>
+                    </iframe>
                 </div>
             </div>
 
             <div class="text-center mb-20 reveal">
                 <span class="text-[--acid-green] font-bold text-xs tracking-[0.5em] block mb-4 uppercase">Nossa Metodologia</span>
-                <h2 class="font-heavy text-5xl italic text-white">Soluções que Escalamos</h2>
+                <h2 class="font-heavy text-5xl italic text-white uppercase">Soluções que Escalamos</h2>
             </div>
 
             <div class="grid md:grid-cols-3 gap-8 reveal">
                 <div class="card-glass group">
                     <div class="text-4xl mb-6 group-hover:scale-125 transition-transform origin-left">📷</div>
-                    <h3 class="font-header text-2xl font-bold mb-4 text-white">Produção de Autoridade</h3>
+                    <h3 class="font-header text-2xl font-bold mb-4 text-white uppercase">Produção de Autoridade</h3>
                     <p class="opacity-50 text-sm text-white">Vídeos institucionais e podcasts com estética de cinema para elevar o valor percebido da sua marca.</p>
                 </div>
                 <div class="card-glass group">
                     <div class="text-4xl mb-6 group-hover:scale-125 transition-transform origin-left">🎯</div>
-                    <h3 class="font-header text-2xl font-bold mb-4 text-white">Criativos para Tráfego</h3>
+                    <h3 class="font-header text-2xl font-bold mb-4 text-white uppercase">Criativos para Tráfego</h3>
                     <p class="opacity-50 text-sm text-white">Produção em escala de vídeos curtos (Reels/Ads) pensados com ganchos de retenção para diminuir seu custo por lead.</p>
                 </div>
                 <div class="card-glass group">
                     <div class="text-4xl mb-6 group-hover:scale-125 transition-transform origin-left">📈</div>
-                    <h3 class="font-header text-2xl font-bold mb-4 text-white">Assessoria Estratégica</h3>
+                    <h3 class="font-header text-2xl font-bold mb-4 text-white uppercase">Assessoria Estratégica</h3>
                     <p class="opacity-50 text-sm text-white">Não entregamos só o arquivo. Orientamos onde postar, qual formato usar e como distribuir para atingir seu público.</p>
                 </div>
             </div>
@@ -308,35 +352,35 @@
             <div class="grid md:grid-cols-2 gap-24 items-center mb-40 reveal text-white">
                 <div class="relative">
                     <div class="absolute -top-10 -left-10 text-[200px] font-heavy opacity-5 select-none">DAIME</div>
-                    <span class="text-[--acid-green] font-bold text-xs tracking-widest block mb-4">A PRODUTORA</span>
-                    <h2 class="font-header text-6xl font-extrabold mb-8 italic">Narrativas que Marcam</h2>
+                    <span class="text-[--acid-green] font-bold text-xs tracking-widest block mb-4 uppercase">A Produtora</span>
+                    <h2 class="font-header text-6xl font-extrabold mb-8 italic">Referência Técnica</h2>
                     <div class="space-y-6 opacity-60 leading-relaxed text-lg font-light">
                         <p>A Daime Filmes não apenas aperta o botão de gravar. Nós criamos universos visuais. Com mais de 10 anos de experiência em audivisual, somos especializados em transformar briefings complexos em filmes publicitários de alto impacto.</p>
-                        <p>Nossa equipe é formada por diretores premiados, diretores de fotografia obcecados por luz e editores que entendem o ritmo da internet.</p>
+                        <p>Nossa equipe é formada por diretores experientes e obcecados por luz e editores que entendem o ritmo da internet.</p>
                     </div>
 
-                    <div class="mt-12 p-8 border-l-4 border-hot-pink bg-zinc-900 flex items-start gap-6">
-                        <span class="font-heavy text-6xl text-hot-pink">2</span>
+                    <div class="mt-12 p-8 border-l-4 border-[--acid-green] bg-zinc-900 flex items-start gap-6">
+                        <span class="font-heavy text-6xl text-[--acid-green]">2</span>
                         <div>
-                            <strong class="block text-xl mb-2">Premiação Lei Aldir Blanc</strong>
+                            <strong class="block text-xl mb-2 text-white">Premiação Lei Aldir Blanc</strong>
                             <p class="text-sm opacity-50">Em nosso ano de fundação (2020), fomos duplamente premiados, consolidando nossa capacidade técnica e artística no cenário cultural.</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-4 h-[600px]">
-                    <div class="bg-zinc-800 rounded-2xl h-full flex items-center justify-center text-center p-4 text-[10px] uppercase tracking-widest font-bold opacity-30 border border-white/5 rotate-3 hover:rotate-0 transition-transform">Organic Festival (Ref)</div>
+                    <div class="bg-zinc-800 rounded-2xl h-full flex items-center justify-center text-center p-4 text-[10px] uppercase tracking-widest font-bold opacity-30 border border-white/5 rotate-3 hover:rotate-0 transition-transform">Organic Festival</div>
                     <div class="bg-zinc-800 rounded-2xl h-full translate-y-12 flex items-center justify-center text-center p-4 text-[10px] uppercase tracking-widest font-bold opacity-30 border border-white/5 -rotate-3 hover:rotate-0 transition-transform">Pataxó (Projeto)</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- PACOTES E PREÇOS (ATUALIZADOS COM NOMES E CORES NOVAS) -->
+    <!-- PACOTES E PREÇOS -->
     <section id="pacotes" class="pricing-section">
         <div class="container mx-auto px-6">
             <div class="text-center mb-20 reveal">
-                <span class="text-black/40 font-bold text-xs tracking-[0.5em] block mb-4">TABELA COMPARATIVA</span>
+                <span class="text-black/40 font-bold text-xs tracking-[0.5em] block mb-4 uppercase">Tabela Comparativa</span>
                 <h2 class="font-header text-5xl font-extrabold italic mb-6">Planos de Posicionamento</h2>
                 <p class="max-w-2xl mx-auto text-gray-500 font-inter">Escolha a intensidade da sua presença digital e escale sua autoridade através de conteúdos estratégicos.</p>
             </div>
@@ -401,13 +445,13 @@
                         <tr>
                             <td class="border-none"></td>
                             <td class="border-none py-10">
-                                <a href="https://wa.me/5573991524222" target="_blank" class="btn-plan btn-start hover:opacity-80">Assinar Start</a>
+                                <a href="https://wa.me/5573991524222" target="_blank" class="btn-plan btn-start">Assinar Start</a>
                             </td>
                             <td class="col-highlight border-none py-10">
-                                <a href="https://wa.me/5573991524222" target="_blank" class="btn-plan btn-ideal hover:opacity-80">Assinar Ideal</a>
+                                <a href="https://wa.me/5573991524222" target="_blank" class="btn-plan btn-ideal">Assinar Ideal</a>
                             </td>
                             <td class="border-none py-10">
-                                <a href="https://wa.me/5573991524222" target="_blank" class="btn-plan btn-pro hover:opacity-80">Falar com Consultor</a>
+                                <a href="https://wa.me/5573991524222" target="_blank" class="btn-plan btn-pro">Falar com Consultor</a>
                             </td>
                         </tr>
                     </tbody>
