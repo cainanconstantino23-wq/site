@@ -5,8 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daime Filmes | Audiovisual Estratégico</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@300;400;700&family=Syne:wght@400;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@300;400;700&family=Syne:wght@400;800&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Lenis CSS para Scroll Suave -->
     <style>
+        html.lenis {
+            height: auto;
+        }
+        .lenis.lenis-smooth {
+            scroll-behavior: auto;
+        }
+        .lenis.lenis-smooth [data-lenis-prevent] {
+            overscroll-behavior: contain;
+        }
+        .lenis.lenis-stopped {
+            overflow: hidden;
+        }
+        .lenis.lenis-scrolling iframe {
+            pointer-events: none;
+        }
+
         :root {
             --acid-green: #d4ff00;
             --deep-void: #05000a;
@@ -22,10 +40,10 @@
             color: #fff;
             font-family: 'Space Grotesk', sans-serif;
             overflow-x: hidden;
-            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
         }
 
-        .font-header { font-family: 'Syne', sans-serif; }
+        .font-header { font-family: 'Inter', sans-serif; }
         .font-heavy { font-family: 'Archivo Black', sans-serif; }
         .font-inter { font-family: 'Inter', sans-serif; }
 
@@ -39,10 +57,11 @@
             z-index: 9999;
         }
 
+        /* Animações de Revelação da Versão 1 */
         .reveal {
             opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .reveal.active {
@@ -50,6 +69,7 @@
             transform: translateY(0);
         }
 
+        /* Video Background */
         .video-background-container {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -76,12 +96,18 @@
             z-index: 0;
         }
 
-        .card-glass {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 2.5rem;
-            transition: 0.4s;
+        /* Cards Metodologia Estilo Versão 1 */
+        .card-methodology {
+            background: #f8f9fa;
+            border: 1px solid #eee;
+            padding: 3rem;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            border-radius: 8px;
+        }
+        .card-methodology:hover {
+            border-color: #111;
+            transform: translateY(-8px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.08);
         }
 
         .marquee {
@@ -111,25 +137,7 @@
             background-color: #ffffff;
             color: #111;
             padding: 100px 0;
-        }
-
-        .pricing-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-        }
-
-        .pricing-table th, .pricing-table td {
-            padding: 24px 15px;
-            border-bottom: 1px solid #f0f0f0;
-            text-align: center;
-        }
-
-        .pricing-table td:first-child {
-            text-align: left;
-            font-weight: 600;
-            color: #666;
-            width: 30%;
+            border-top: 1px solid #eee;
         }
 
         .plan-header-card {
@@ -145,8 +153,6 @@
         .bg-ideal { background: #1a1a1a; color: var(--ref-cyan); border: 2px solid var(--ref-cyan); }
         .bg-pro { background: var(--ref-coral); color: var(--ref-pink); }
 
-        .col-highlight { background-color: rgba(0, 188, 212, 0.05); }
-        
         .btn-plan {
             width: 100%;
             padding: 14px;
@@ -182,7 +188,6 @@
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* Header Ajustado: Sem Blur */
         .header-film-strip {
             position: fixed;
             top: 0;
@@ -190,15 +195,19 @@
             width: 100%;
             z-index: 1000;
             background: rgba(255, 255, 255, 0.1);
-            /* Backdrop-filter removido para eliminar o blur */
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             overflow: hidden;
+            transition: background 0.3s;
+        }
+
+        .header-film-strip.scrolled {
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
         }
 
         .header-logo-text {
             color: #fff;
             font-family: 'Archivo Black', sans-serif;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
 
         .header-nav a {
@@ -206,36 +215,11 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 2px;
-            opacity: 0.8;
             color: #fff;
             transition: all 0.3s;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
         }
         .header-nav a:hover {
-            opacity: 1;
             color: var(--ref-cyan);
-        }
-
-        .header-film-strip::after {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: url('https://upload.wikimedia.org/wikipedia/commons/7/76/16mm_film_grain_texture.jpg');
-            background-size: 300px;
-            opacity: 0.03;
-            mix-blend-mode: screen;
-            animation: grain-shift 0.8s steps(6) infinite;
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        @keyframes grain-shift {
-            0% { background-position: 0 0; }
-            20% { background-position: 20px 50px; }
-            40% { background-position: -30px 10px; }
-            60% { background-position: 50px -20px; }
-            80% { background-position: -10px -50px; }
-            100% { background-position: 15px 30px; }
         }
     </style>
 </head>
@@ -248,23 +232,23 @@
         Fale Conosco
     </a>
 
-    <!-- HEADER -->
-    <header class="header-film-strip py-4 px-8">
+    <!-- CABEÇALHO -->
+    <header class="header-film-strip py-4 px-8" id="mainHeader">
         <div class="container mx-auto flex justify-between items-center">
             <div class="header-logo-text text-xl tracking-tighter">DAIME FILMES</div>
             
             <nav class="header-nav flex items-center gap-10">
-                <a href="#hero">Início</a>
-                <a href="#metodologia">Metodologia</a>
-                <a href="#sobre">A Produtora</a>
-                <a href="#pacotes">Pacotes</a>
+                <a href="#hero" class="scroll-link">Início</a>
+                <a href="#metodologia" class="scroll-link">Metodologia</a>
+                <a href="#sobre" class="scroll-link">A Produtora</a>
+                <a href="#pacotes" class="scroll-link">Pacotes</a>
             </nav>
 
             <div class="w-24 md:block hidden"></div>
         </div>
     </header>
 
-    <!-- HERO SECTION -->
+    <!-- SECÇÃO HERO -->
     <section id="hero" class="relative h-screen flex items-end justify-start overflow-hidden pb-8 md:pb-12">
         <div class="video-background-container">
             <iframe src="https://player.vimeo.com/video/1180343067?autoplay=1&loop=1&background=1&muted=1&autopause=0#t=12s" frameborder="0" allow="autoplay; fullscreen"></iframe>
@@ -281,33 +265,33 @@
                 </h1>
                 
                 <p class="text-[10px] md:text-xs opacity-50 font-light max-w-sm leading-relaxed">
-                    Criação de ativos visuais que vendem e posicionam sua marca através da inteligência do marketing digital.
+                    Criação de ativos visuais que vendem e posicionam a sua marca através da inteligência do marketing digital.
                 </p>
             </div>
         </div>
     </section>
 
-    <!-- MARQUEE BAR -->
+    <!-- BARRA MARQUEE -->
     <div class="marquee text-xs">
         <div class="marquee-content">
-            ESTRATÉGIA • PERFORMANCE • CINEMA • IMPACTO VISUAL • CONVERSÃO • DAIME FILMES • ESTRATÉGIA • PERFORMANCE • CINEMA • IMPACTO VISUAL • CONVERSÃO • DAIME FILMES • CONVERSÃO • DAIME FILMES • ESTRATÉGIA • PERFORMANCE • CINEMA • IMPACTO VISUAL • CONVERSÃO • DAIME FILMES • 
+            ESTRATÉGIA • PERFORMANCE • CINEMA • IMPACTO VISUAL • CONVERSÃO • DAIME FILMES • ESTRATÉGIA • PERFORMANCE • CINEMA • IMPACTO VISUAL • CONVERSÃO • DAIME FILMES • 
         </div>
     </div>
 
     <!-- METODOLOGIA -->
-    <section id="metodologia" class="py-32 bg-zinc-950">
+    <section id="metodologia" class="py-32 bg-white text-[#111]">
         <div class="container mx-auto px-6">
             <div class="grid md:grid-cols-2 gap-20 items-center mb-32 reveal">
                 <div>
-                    <span class="text-white/40 font-bold text-xs tracking-widest block mb-4 uppercase">Soluções</span>
-                    <h2 class="font-header text-6xl font-extrabold mb-5 italic text-white">Narrativas que Marcam</h2>
-                    <p class="text-xl opacity-60 leading-relaxed text-white">Não apenas apertamos o botão de gravar. Criamos universos visuais. Somos especializados em transformar briefings complexos em filmes publicitários de alto impacto, entendendo o ritmo da internet.</p>
+                    <span class="text-[#004a7c]/40 font-bold text-sm tracking-widest block mb-4 uppercase">Soluções</span>
+                    <h2 class="font-header text-6xl font-[800] mb-8 tracking-[-0.04em] leading-[0.95] text-[#111]">Narrativas que Marcam</h2>
+                    <p class="text-xl text-gray-600 leading-relaxed font-inter">Não apenas carregamos no botão de gravar. Criamos universos visuais. Somos especializados em transformar briefings complexos em filmes publicitários de alto impacto, entendendo o ritmo da internet.</p>
                 </div>
 
-                <div class="relative group max-w-[350px] mx-auto w-full">
-                    <div class="absolute -inset-4 bg-gradient-to-tr from-[--acid-green] to-transparent opacity-20 blur-2xl group-hover:opacity-40 transition-opacity rounded-2xl"></div>
+                <div class="relative group max-w-[400px] mx-auto w-full">
+                    <div class="absolute -inset-4 bg-gradient-to-tr from-[#004a7c] to-transparent opacity-10 blur-2xl transition-opacity rounded-2xl"></div>
                     <iframe 
-                        class="w-full aspect-[9/16] rounded-2xl relative z-10 shadow-2xl" 
+                        class="w-full aspect-[9/16] rounded-2xl relative z-10 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)]" 
                         src="https://www.youtube.com/embed/TApYMTVyw7Q" 
                         title="Showreel Daime Filmes" 
                         frameborder="0" 
@@ -317,25 +301,25 @@
             </div>
 
             <div class="text-center mb-20 reveal">
-                <span class="text-[--acid-green] font-bold text-xs tracking-[0.5em] block mb-4 uppercase">Nossa Metodologia</span>
-                <h2 class="font-heavy text-5xl italic text-white uppercase">Soluções que Escalamos</h2>
+                <span class="text-[#004a7c] font-bold text-xs tracking-[0.6em] block mb-4 uppercase">Nossa Metodologia</span>
+                <h2 class="font-header text-5xl font-[800] tracking-[-0.03em] text-[#111] uppercase">Soluções que Escalamos</h2>
             </div>
 
             <div class="grid md:grid-cols-3 gap-8 reveal">
-                <div class="card-glass group">
-                    <div class="text-4xl mb-6 group-hover:scale-125 transition-transform origin-left">📷</div>
-                    <h3 class="font-header text-2xl font-bold mb-4 text-white uppercase">Produção de Autoridade</h3>
-                    <p class="opacity-50 text-sm text-white">Vídeos institucionais e podcasts com estética de cinema para elevar o valor percebido da sua marca.</p>
+                <div class="card-methodology">
+                    <div class="text-5xl mb-8">📷</div>
+                    <h3 class="font-header text-2xl font-[800] tracking-tight mb-6 text-[#111] uppercase">Produção de Autoridade</h3>
+                    <p class="text-gray-500 leading-relaxed text-sm font-inter">Vídeos institucionais e podcasts com estética de cinema para elevar o valor percebido da sua marca.</p>
                 </div>
-                <div class="card-glass group">
-                    <div class="text-4xl mb-6 group-hover:scale-125 transition-transform origin-left">🎯</div>
-                    <h3 class="font-header text-2xl font-bold mb-4 text-white uppercase">Criativos para Tráfego</h3>
-                    <p class="opacity-50 text-sm text-white">Produção em escala de vídeos curtos (Reels/Ads) pensados com ganchos de retenção para diminuir seu custo por lead.</p>
+                <div class="card-methodology">
+                    <div class="text-5xl mb-8">🎯</div>
+                    <h3 class="font-header text-2xl font-[800] tracking-tight mb-6 text-[#111] uppercase">Criativos para Tráfego</h3>
+                    <p class="text-gray-500 leading-relaxed text-sm font-inter">Produção em escala de vídeos curtos (Reels/Ads) pensados com ganchos de retenção para diminuir o seu custo por lead.</p>
                 </div>
-                <div class="card-glass group">
-                    <div class="text-4xl mb-6 group-hover:scale-125 transition-transform origin-left">📈</div>
-                    <h3 class="font-header text-2xl font-bold mb-4 text-white uppercase">Assessoria Estratégica</h3>
-                    <p class="opacity-50 text-sm text-white">Não entregamos só o arquivo. Orientamos onde postar, qual formato usar e como distribuir para atingir seu público.</p>
+                <div class="card-methodology">
+                    <div class="text-5xl mb-8">📈</div>
+                    <h3 class="font-header text-2xl font-[800] tracking-tight mb-6 text-[#111] uppercase">Assessoria Estratégica</h3>
+                    <p class="text-gray-500 leading-relaxed text-sm font-inter">Não entregamos apenas o ficheiro. Orientamos onde publicar, qual formato usar e como distribuir para atingir o seu público.</p>
                 </div>
             </div>
         </div>
@@ -350,15 +334,15 @@
                     <span class="text-[--acid-green] font-bold text-xs tracking-widest block mb-4 uppercase">A Produtora</span>
                     <h2 class="font-header text-6xl font-extrabold mb-8 italic">Referência Técnica</h2>
                     <div class="space-y-6 opacity-60 leading-relaxed text-lg font-light">
-                        <p>A Daime Filmes não apenas aperta o botão de gravar. Nós criamos universos visuais. Com mais de 10 anos de experiência em audivisual, somos especializados em transformar briefings complexos em filmes publicitários de alto impacto.</p>
-                        <p>Nossa equipe é formada por diretores experientes e obcecados por luz e editores que entendem o ritmo da internet.</p>
+                        <p>A Daime Filmes não apenas carrega no botão de gravar. Nós criamos universos visuais. Com mais de 10 anos de experiência em audivisual, somos especializados em transformar briefings complexos em filmes publicitários de alto impacto.</p>
+                        <p>A nossa equipa é formada por diretores experientes e obcecados por luz e editores que entendem o ritmo da internet.</p>
                     </div>
 
                     <div class="mt-12 p-8 border-l-4 border-[--acid-green] bg-zinc-900 flex items-start gap-6">
                         <span class="font-heavy text-6xl text-[--acid-green]">2</span>
                         <div>
                             <strong class="block text-xl mb-2 text-white">Premiação Lei Aldir Blanc</strong>
-                            <p class="text-sm opacity-50">Em nosso ano de fundação (2020), fomos duplamente premiados, consolidando nossa capacidade técnica e artística no cenário cultural.</p>
+                            <p class="text-sm opacity-50">No nosso ano de fundação (2020), fomos duplamente premiados, consolidando a nossa capacidade técnica e artística no cenário cultural.</p>
                         </div>
                     </div>
                 </div>
@@ -375,79 +359,63 @@
     <section id="pacotes" class="pricing-section">
         <div class="container mx-auto px-6">
             <div class="text-center mb-20 reveal">
-                <span class="text-black/40 font-bold text-xs tracking-[0.5em] block mb-4 uppercase">Tabela Comparativa</span>
+                <span class="text-[#004a7c]/40 font-bold text-xs tracking-[0.5em] block mb-4 uppercase">Tabela Comparativa</span>
                 <h2 class="font-header text-5xl font-extrabold italic mb-6">Planos de Posicionamento</h2>
-                <p class="max-w-2xl mx-auto text-gray-500 font-inter">Escolha a intensidade da sua presença digital e escale sua autoridade através de conteúdos estratégicos.</p>
+                <p class="max-w-2xl mx-auto text-gray-500 font-inter">Escolha a intensidade da sua presença digital e escale a sua autoridade através de conteúdos estratégicos.</p>
             </div>
 
             <div class="overflow-x-auto reveal">
-                <table class="pricing-table font-inter">
+                <table class="w-full font-inter">
                     <thead>
                         <tr>
-                            <th></th>
-                            <th>
+                            <th class="text-left py-6"></th>
+                            <th class="px-4">
                                 <div class="plan-header-card bg-start">START</div>
-                                <span class="text-[10px] font-bold uppercase opacity-40">Presença Digital</span>
                             </th>
-                            <th class="col-highlight relative">
-                                <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black text-white text-[9px] px-4 py-1 rounded-full uppercase tracking-widest font-bold">Mais Popular</div>
+                            <th class="px-4 bg-gray-50/50">
                                 <div class="plan-header-card bg-ideal">IDEAL</div>
-                                <span class="text-[10px] font-bold uppercase opacity-60">Crescimento</span>
                             </th>
-                            <th>
+                            <th class="px-4">
                                 <div class="plan-header-card bg-pro">PRO</div>
-                                <span class="text-[10px] font-bold uppercase opacity-40">Expansão Total</span>
                             </th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>Investimento Mensal</td>
-                            <td><span class="font-bold text-xl">R$ 1.199</span></td>
-                            <td class="col-highlight"><span class="font-bold text-2xl" style="color: var(--ref-cyan)">R$ 1.500</span></td>
-                            <td><span class="font-bold text-xl italic">Sob Consulta</span></td>
+                    <tbody class="text-sm text-center">
+                        <tr class="border-b border-gray-100">
+                            <td class="text-left font-bold text-gray-400 py-8 uppercase tracking-tighter">Investimento</td>
+                            <td class="font-bold text-xl">R$ 1.199</td>
+                            <td class="bg-gray-50/50 font-bold text-2xl text-[#00bcd4]">R$ 1.500</td>
+                            <td class="font-bold text-xl italic">Consultar</td>
+                        </tr>
+                        <tr class="border-b border-gray-100">
+                            <td class="text-left font-bold text-gray-400 py-8 uppercase tracking-tighter">Diária</td>
+                            <td>1/2 Diária</td>
+                            <td class="bg-gray-50/50">1/2 Diária</td>
+                            <td>1 Diária</td>
+                        </tr>
+                        <tr class="border-b border-gray-100">
+                            <td class="text-left font-bold text-gray-400 py-8 uppercase tracking-tighter">Vídeos</td>
+                            <td>06 Filmes</td>
+                            <td class="bg-gray-50/50 font-bold">08 Filmes</td>
+                            <td>12 Filmes</td>
+                        </tr>
+                        <tr class="border-b border-gray-100">
+                            <td class="text-left font-bold text-gray-400 py-8 uppercase tracking-tighter">Fotos</td>
+                            <td>02 High-End</td>
+                            <td class="bg-gray-50/50 font-bold">04 High-End</td>
+                            <td>Ilimitado</td>
+                        </tr>
+                        <tr class="border-b border-gray-100">
+                            <td class="text-left font-bold text-gray-400 py-8 uppercase tracking-tighter">Estratégia</td>
+                            <td class="text-gray-200">—</td>
+                            <td class="bg-gray-50/50 text-[#00bcd4] font-bold text-xl">✓</td>
+                            <td class="text-black font-bold text-xl">✓</td>
                         </tr>
                         <tr>
-                            <td>Captação (Presencial)</td>
-                            <td>1/2 Diária (3-4h)</td>
-                            <td class="col-highlight">1/2 Diária (3-4h)</td>
-                            <td>1 Diária Completa</td>
-                        </tr>
-                        <tr>
-                            <td>Reels / Shorts</td>
-                            <td>Até 06 vídeos</td>
-                            <td class="col-highlight font-bold">Até 08 vídeos</td>
-                            <td>Até 12 vídeos</td>
-                        </tr>
-                        <tr>
-                            <td>Fotografia</td>
-                            <td>2 Fotos High-End</td>
-                            <td class="col-highlight font-bold">4 Fotos Profissionais</td>
-                            <td>Banco Ilimitado</td>
-                        </tr>
-                        <tr>
-                            <td>Pós-Produção</td>
-                            <td>Edição Dinâmica</td>
-                            <td class="col-highlight">Edição Premium</td>
-                            <td>Narrativa / Mini-Doc</td>
-                        </tr>
-                        <tr>
-                            <td>Estratégia Mensal</td>
-                            <td class="text-gray-300">—</td>
-                            <td class="col-highlight font-bold text-xl" style="color: var(--ref-cyan)">✓</td>
-                            <td class="text-green-600 font-bold text-xl">✓</td>
-                        </tr>
-                        <tr>
-                            <td class="border-none"></td>
-                            <td class="border-none py-10">
-                                <a href="https://wa.me/5573991524222" target="_blank" class="btn-plan btn-start">Assinar Start</a>
-                            </td>
-                            <td class="col-highlight border-none py-10">
-                                <a href="https://wa.me/5573991524222" target="_blank" class="btn-plan btn-ideal">Assinar Ideal</a>
-                            </td>
-                            <td class="border-none py-10">
-                                <a href="https://wa.me/5573991524222" target="_blank" class="btn-plan btn-pro">Falar com Consultor</a>
-                            </td>
+                            <td></td>
+                            <td class="py-12"><a href="https://wa.me/5573991524222" class="btn-plan btn-start">Assinar</a></td>
+                            <td class="py-12 bg-gray-50/50"><a href="https://wa.me/5573991524222" class="btn-plan btn-ideal">Assinar</a></td>
+                            <td class="py-12"><a href="https://wa.me/5573991524222" class="btn-plan btn-pro">Consultar</a></td>
                         </tr>
                     </tbody>
                 </table>
@@ -455,26 +423,54 @@
         </div>
     </section>
 
-    <!-- FOOTER -->
-    <footer class="py-20 bg-black text-white">
+    <!-- RODAPÉ -->
+    <footer class="py-24 bg-black text-white border-t border-white/5">
         <div class="container mx-auto px-6 text-center">
             <div class="font-heavy text-4xl mb-6 tracking-tighter">DAIME FILMES</div>
-            <p class="opacity-40 text-sm mb-12">Transformando sua visão em legado audiovisual.</p>
-            
+            <p class="opacity-40 text-sm mb-12">Transformando a sua visão em legado audiovisual.</p>
             <div class="w-full h-[1px] bg-white/10 mb-12"></div>
-            
-            <div class="flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] font-bold uppercase tracking-widest opacity-40">
-                <p>&copy; 2026 Daime Filmes. Todos os direitos reservados.</p>
-                <div class="flex gap-8">
-                    <a href="https://wa.me/5573991524222" target="_blank">Instagram</a>
-                    <a href="https://wa.me/5573991524222" target="_blank">Vimeo</a>
-                    <a href="https://wa.me/5573991524222" target="_blank">WhatsApp</a>
-                </div>
-            </div>
+            <p class="text-[10px] font-bold uppercase tracking-widest opacity-40">&copy; 2026 Daime Filmes. Todos os direitos reservados.</p>
         </div>
     </footer>
 
+    <!-- Scripts Externos para Smooth Scroll -->
+    <script src="https://unpkg.com/lenis@1.1.9/dist/lenis.min.js"></script>
+
     <script>
+        /** * LÓGICA DE LENIS SCROLL (VERSÃO 2)
+         * Equilíbrio entre fluidez e controlo.
+         */
+        const lenis = new Lenis({
+            duration: 1.2, 
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            smoothWheel: true,
+            wheelMultiplier: 0.9, 
+            touchMultiplier: 1.5,
+            infinite: false,
+        })
+
+        function raf(time) {
+            lenis.raf(time)
+            requestAnimationFrame(raf)
+        }
+
+        requestAnimationFrame(raf)
+
+        // Navegação interna integrada ao Lenis
+        document.querySelectorAll('.scroll-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const target = document.querySelector(link.getAttribute('href'));
+                lenis.scrollTo(target, {
+                    offset: 0,
+                    immediate: false,
+                    duration: 1.2,
+                    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+                });
+            });
+        });
+
+        // REVELAÇÃO AO FAZER SCROLL
         const observerOptions = { threshold: 0.1 };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -485,6 +481,16 @@
         }, observerOptions);
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // EFEITO DO CABEÇALHO NO SCROLL
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('mainHeader');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
     </script>
 </body>
 </html>
