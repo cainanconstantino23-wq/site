@@ -7,7 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@300;400;700&family=Syne:wght@400;800&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Lenis CSS para Scroll Suave -->
     <style>
         html.lenis {
             height: auto;
@@ -57,7 +56,6 @@
             z-index: 9999;
         }
 
-        /* Animações de Revelação */
         .reveal {
             opacity: 0;
             transform: translateY(30px);
@@ -69,14 +67,12 @@
             transform: translateY(0);
         }
 
-        /* Video Background Otimizado */
         .video-background-container {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
             overflow: hidden;
             background-color: #000;
-            /* Placeholder: Imagem que aparece enquanto o vídeo não carrega */
             background-image: url('https://images.unsplash.com/photo-1492691523567-617210295eb2?auto=format&fit=crop&q=80&w=2000');
             background-size: cover;
             background-position: center;
@@ -84,19 +80,18 @@
 
         .video-background-container iframe {
             width: 100vw;
-            height: 56.25vw; /* 16:9 ratio */
+            height: 56.25vw;
             min-height: 100vh;
-            min-width: 177.77vh; /* 16:9 ratio */
+            min-width: 177.77vh;
             position: absolute;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
             pointer-events: none;
             filter: contrast(1.1) brightness(0.6);
-            opacity: 0; /* Começa invisível para não mostrar o loading do player */
+            opacity: 0;
             transition: opacity 1.5s ease;
         }
 
-        /* Classe para mostrar o vídeo suavemente quando pronto */
         .video-loaded iframe {
             opacity: 1;
         }
@@ -108,7 +103,6 @@
             z-index: 0;
         }
 
-        /* Cards Metodologia */
         .card-methodology {
             background: #f8f9fa;
             border: 1px solid #eee;
@@ -245,7 +239,6 @@
         Fale Conosco
     </a>
 
-    <!-- CABEÇALHO -->
     <header class="header-film-strip py-4 px-8" id="mainHeader">
         <div class="container mx-auto flex justify-between items-center">
             <div class="header-logo-text text-xl tracking-tighter">DAIME FILMES</div>
@@ -261,10 +254,8 @@
         </div>
     </header>
 
-    <!-- SECÇÃO HERO -->
     <section id="hero" class="relative h-screen flex items-end justify-start overflow-hidden pb-8 md:pb-12">
         <div class="video-background-container" id="videoContainer">
-            <!-- Adicionado script do Vimeo para detetar quando o vídeo está pronto -->
           <iframe 
     src="https://player.vimeo.com/video/1180343067?autoplay=1&loop=1&background=1&muted=1&autopause=0&quality=720p#t=11s" 
     frameborder="0" 
@@ -290,14 +281,12 @@
         </div>
     </section>
 
-    <!-- BARRA MARQUEE -->
     <div class="marquee text-xs">
         <div class="marquee-content">
             ESTRATÉGIA • PERFORMANCE • CINEMA • IMPACTO VISUAL • CONVERSÃO • DAIME FILMES • ESTRATÉGIA • PERFORMANCE • CINEMA • IMPACTO VISUAL • CONVERSÃO • DAIME FILMES • 
         </div>
     </div>
 
-    <!-- METODOLOGIA -->
     <section id="metodologia" class="py-32 bg-white text-[#111]">
         <div class="container mx-auto px-6">
             <div class="grid md:grid-cols-2 gap-20 items-center mb-32 reveal">
@@ -344,7 +333,6 @@
         </div>
     </section>
 
-    <!-- SOBRE A PRODUTORA -->
     <section id="sobre" class="py-32 bg-black overflow-hidden">
         <div class="container mx-auto px-6">
             <div class="grid md:grid-cols-2 gap-24 items-center mb-40 reveal text-white">
@@ -354,7 +342,6 @@
                     <h2 class="font-header text-6xl font-extrabold mb-8 italic">Referência Técnica</h2>
                     <div class="space-y-6 opacity-60 leading-relaxed text-lg font-light">
                         <p>A Daime Filmes não apenas carrega no botão de gravar. Nós criamos universos visuais. Com mais de 10 anos de experiência em audivisual, somos especializados em transformar briefings complexos em filmes publicitários de alto impacto.</p>
-                        <p>A nossa equipa é formada por diretores experientes e obcecados por luz e editores que entendem o ritmo da internet.</p>
                     </div>
 
                     <div class="mt-12 p-8 border-l-4 border-[--acid-green] bg-zinc-900 flex items-start gap-6">
@@ -366,24 +353,22 @@
                     </div>
                 </div>
 
-               <div class="grid grid-cols-2 gap-4 h-[600px]">
-    <div class="bg-zinc-800 rounded-2xl h-full overflow-hidden border border-white/5 rotate-3 hover:rotate-0 transition-transform duration-500">
-        <video autoplay muted loop playsinline class="w-full h-full object-cover">
-            <source src="https://raw.githubusercontent.com/cainanconstantino23-wq/site/main/v2%20FINAL.mp4" type="video/mp4">
-        </video>
-    </div>
-
-    <div class="bg-zinc-800 rounded-2xl h-full translate-y-12 overflow-hidden border border-white/5 -rotate-3 hover:rotate-0 transition-transform duration-500">
-        <video autoplay muted loop playsinline class="w-full h-full object-cover">
-            <source src="https://raw.githubusercontent.com/cainanconstantino23-wq/site/main/sofa%CC%81%202.mp4" type="video/mp4">
-        </video>
-
-</div>
+                <div class="grid grid-cols-2 gap-4 h-[600px]">
+                    <div class="bg-zinc-800 rounded-2xl h-full overflow-hidden border border-white/5 rotate-3 hover:rotate-0 transition-transform duration-500">
+                        <video autoplay muted loop playsinline class="w-full h-full object-cover">
+                            <source src="https://raw.githubusercontent.com/cainanconstantino23-wq/site/main/v2%20FINAL.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="bg-zinc-800 rounded-2xl h-full translate-y-12 overflow-hidden border border-white/5 -rotate-3 hover:rotate-0 transition-transform duration-500">
+                        <video autoplay muted loop playsinline class="w-full h-full object-cover">
+                            <source src="https://raw.githubusercontent.com/cainanconstantino23-wq/site/main/sofa%CC%81%202.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- PACOTES -->
     <section id="pacotes" class="pricing-section">
         <div class="container mx-auto px-6">
             <div class="text-center mb-20 reveal">
@@ -411,9 +396,9 @@
                     <tbody class="text-sm text-center">
                         <tr class="border-b border-gray-100">
                             <td class="text-left font-bold text-gray-400 py-8 uppercase tracking-tighter">Investimento</td>
-                            <td class="font-bold text-xl">R$ 1.199</td>
-                            <td class="bg-gray-50/50 font-bold text-2xl text-[#00bcd4]">R$ 1.500</td>
-                            <td class="font-bold text-xl italic">Consultar</td>
+                            <td class="font-bold text-xl italic text-gray-500">Consultar</td>
+                            <td class="bg-gray-50/50 font-bold text-xl italic text-[#00bcd4]">Consultar</td>
+                            <td class="font-bold text-xl italic text-gray-500">Consultar</td>
                         </tr>
                         <tr class="border-b border-gray-100">
                             <td class="text-left font-bold text-gray-400 py-8 uppercase tracking-tighter">Diária</td>
@@ -441,9 +426,9 @@
                         </tr>
                         <tr>
                             <td></td>
-                            <td class="py-12"><a href="https://wa.me/5573991524222" class="btn-plan btn-start">Assinar</a></td>
-                            <td class="py-12 bg-gray-50/50"><a href="https://wa.me/5573991524222" class="btn-plan btn-ideal">Assinar</a></td>
-                            <td class="py-12"><a href="https://wa.me/5573991524222" class="btn-plan btn-pro">Consultar</a></td>
+                            <td class="py-12"><a href="https://wa.me/5573991524222" class="btn-plan btn-start">Falar com Consultor</a></td>
+                            <td class="py-12 bg-gray-50/50"><a href="https://wa.me/5573991524222" class="btn-plan btn-ideal">Falar com Consultor</a></td>
+                            <td class="py-12"><a href="https://wa.me/5573991524222" class="btn-plan btn-pro">Consultar Agora</a></td>
                         </tr>
                     </tbody>
                 </table>
@@ -451,7 +436,6 @@
         </div>
     </section>
 
-    <!-- RODAPÉ -->
     <footer class="py-24 bg-black text-white border-t border-white/5">
         <div class="container mx-auto px-6 text-center">
             <div class="font-heavy text-4xl mb-6 tracking-tighter">DAIME FILMES</div>
@@ -461,20 +445,14 @@
         </div>
     </footer>
 
-    <!-- Scripts Externos -->
     <script src="https://unpkg.com/lenis@1.1.9/dist/lenis.min.js"></script>
     <script src="https://player.vimeo.com/api/player.js"></script>
 
     <script>
-        /** * LÓGICA DE LENIS SCROLL (VERSÃO 2)
-         */
         const lenis = new Lenis({
             duration: 1.2, 
             easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
             smoothWheel: true,
-            wheelMultiplier: 0.9, 
-            touchMultiplier: 1.5,
-            infinite: false,
         })
 
         function raf(time) {
@@ -483,7 +461,6 @@
         }
         requestAnimationFrame(raf)
 
-        // Navegação interna
         document.querySelectorAll('.scroll-link').forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -492,7 +469,6 @@
             });
         });
 
-        // REVELAÇÃO AO FAZER SCROLL
         const observerOptions = { threshold: 0.1 };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -503,24 +479,20 @@
         }, observerOptions);
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // CONTROLO DO VÍDEO HERO
         window.addEventListener('load', () => {
             const iframe = document.querySelector('#heroVideo');
             const container = document.querySelector('#videoContainer');
             const player = new Vimeo.Player(iframe);
 
-            // Quando o vídeo começa a ser reproduzido, removemos o placeholder
             player.on('play', function() {
                 container.classList.add('video-loaded');
             });
 
-            // Fallback: Se em 4 segundos o vídeo não der sinal de vida, mostramos o que houver
             setTimeout(() => {
                 container.classList.add('video-loaded');
             }, 4000);
         });
 
-        // EFEITO DO CABEÇALHO NO SCROLL
         window.addEventListener('scroll', () => {
             const header = document.getElementById('mainHeader');
             if (window.scrollY > 50) {
