@@ -78,22 +78,10 @@
             background-position: center;
         }
 
-        .video-background-container iframe {
-            width: 100vw;
-            height: 56.25vw;
-            min-height: 100vh;
-            min-width: 177.77vh;
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-            filter: contrast(1.1) brightness(0.6);
-            opacity: 0;
-            transition: opacity 1.5s ease;
-        }
-
-        .video-loaded iframe {
-            opacity: 1;
+        .video-background-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .hero-overlay {
@@ -138,41 +126,6 @@
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
         }
-
-        .pricing-section {
-            background-color: #ffffff;
-            color: #111;
-            padding: 100px 0;
-            border-top: 1px solid #eee;
-        }
-
-        .plan-header-card {
-            width: 100%;
-            padding: 24px;
-            border-radius: 12px;
-            font-family: 'Archivo Black';
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        .bg-start { background: var(--ref-yellow); color: #004a7c; }
-        .bg-ideal { background: #1a1a1a; color: var(--ref-cyan); border: 2px solid var(--ref-cyan); }
-        .bg-pro { background: var(--ref-coral); color: var(--ref-pink); }
-
-        .btn-plan {
-            width: 100%;
-            padding: 14px;
-            border-radius: 8px;
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            transition: 0.3s;
-            display: block;
-            text-align: center;
-        }
-        .btn-start { background: #004a7c; color: white; }
-        .btn-ideal { background: var(--ref-cyan); color: black; }
-        .btn-pro { background: black; color: white; }
 
         .float-btn {
             position: fixed;
@@ -255,31 +208,31 @@
     </header>
 
     <section id="hero" class="relative h-screen flex items-end justify-start overflow-hidden pb-8 md:pb-12">
-    <div class="video-background-container video-loaded" id="videoContainer">
-        <video autoplay muted loop playsinline class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 min-w-full min-h-full object-cover w-auto h-auto filter brightness-[0.8] contrast-[1.1]">
-            <source src="https://raw.githubusercontent.com/cainanconstantino23-wq/site/main/para%20site.mp4" type="video/mp4">
-        </video>
-    </div>
-    
-    <div class="absolute top-0 left-0 w-full h-full z-0" 
-         style="background: linear-gradient(to top, rgba(5, 0, 10, 0.9) 0%, rgba(5, 0, 10, 0.2) 50%, rgba(5, 0, 10, 0.4) 100%);">
-    </div>
-
-    <div class="container mx-auto px-8 relative z-10">
-        <div class="max-w-xl reveal">
-            <span class="text-[--acid-green] font-bold text-[9px] tracking-[0.3em] block mb-2 uppercase">AudioVisual Estratégico</span>
-            
-            <h1 class="font-heavy text-2xl md:text-3xl leading-tight mb-3 uppercase">
-                Beleza que atrai. <br>
-                Estratégia que converte.
-            </h1>
-            
-            <p class="text-[10px] md:text-xs opacity-50 font-light max-w-sm leading-relaxed">
-                Criação de ativos visuais que vendem e posicionam a sua marca através da inteligência do marketing digital.
-            </p>
+        <div class="video-background-container" id="videoContainer">
+            <video autoplay muted loop playsinline class="filter brightness-[0.8] contrast-[1.1]">
+                <source src="https://raw.githubusercontent.com/cainanconstantino23-wq/site/main/para%20site.mp4" type="video/mp4">
+            </video>
         </div>
-    </div>
-</section>
+        
+        <div class="absolute top-0 left-0 w-full h-full z-0" 
+             style="background: linear-gradient(to top, rgba(5, 0, 10, 0.9) 0%, rgba(5, 0, 10, 0.2) 50%, rgba(5, 0, 10, 0.4) 100%);">
+        </div>
+
+        <div class="container mx-auto px-8 relative z-10">
+            <div class="max-w-xl reveal">
+                <span class="text-[--acid-green] font-bold text-[9px] tracking-[0.3em] block mb-2 uppercase">AudioVisual Estratégico</span>
+                
+                <h1 class="font-heavy text-2xl md:text-3xl leading-tight mb-3 uppercase">
+                    Beleza que atrai. <br>
+                    Estratégia que converte.
+                </h1>
+                
+                <p class="text-[10px] md:text-xs opacity-50 font-light max-w-sm leading-relaxed">
+                    Criação de ativos visuais que vendem e posicionam a sua marca através da inteligência do marketing digital.
+                </p>
+            </div>
+        </div>
+    </section>
 
     <div class="marquee text-xs">
         <div class="marquee-content">
@@ -341,7 +294,7 @@
                     <span class="text-[--acid-green] font-bold text-xs tracking-widest block mb-4 uppercase">A Produtora</span>
                     <h2 class="font-header text-6xl font-extrabold mb-8 italic">Referência Técnica</h2>
                     <div class="space-y-6 opacity-60 leading-relaxed text-lg font-light">
-                        <p>A Daime Filmes não apenas carrega no botão de gravar. Nós criamos universos visuais. Com mais de 10 anos de experiência em audivisual, somos especializados em transformar briefings complexos em filmes publicitários de alto impacto.</p>
+                        <p>A Daime Filmes não apenas carrega no botão de gravar. Nós criamos universos visuais. Com mais de 10 anos de experiência em audiovisual, somos especializados em transformar briefings complexos em filmes publicitários de alto impacto.</p>
                     </div>
 
                     <div class="mt-12 p-8 border-l-4 border-[--acid-green] bg-zinc-900 flex items-start gap-6">
@@ -369,96 +322,113 @@
         </div>
     </section>
 
-<section id="pacotes" class="py-24 bg-[#F5F5F4] text-[#1C1917] antialiased">
-    <div class="container mx-auto px-4 md:px-8">
-        
-        <div class="text-center mb-16 mt-8 reveal">
-            <h2 class="text-[10px] font-bold uppercase tracking-[0.3em] text-[#D4AF37] mb-3">Valor do Investimento</h2>
-            <h1 class="font-header text-4xl md:text-5xl font-black mb-6 tracking-tight text-stone-900">Escolha o seu plano</h1>
-            <div class="h-1.5 w-20 bg-[#D4AF37] mx-auto rounded-full"></div>
-        </div>
-
-        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 items-start reveal">
+   <section id="pacotes" class="py-24 bg-[#F5F5F4] text-[#1C1917] antialiased">
+        <div class="container mx-auto px-4 md:px-8">
             
-            <div class="p-10 rounded-[2.5rem] border-2 border-transparent bg-white shadow-sm flex flex-col transition-all duration-300 hover:shadow-xl">
-                <div class="text-center mb-10">
-                    <h3 class="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400 mb-4">Plano Start</h3>
-                    <div class="flex items-center justify-center gap-1">
-                        <span class="text-4xl md:text-5xl font-heavy tracking-tighter text-stone-900">R$1600</span>
-                        <span class="text-sm opacity-40 ml-1 font-bold">/mês</span>
-                    </div>
-                </div>
-
-                <div class="space-y-5 mb-12 flex-grow font-inter">
-                    <div class="flex items-start gap-4"><i class="fa-solid fa-check text-emerald-500 mt-1"></i><span class="text-sm font-medium">Estratégia e planejamento</span></div>
-                    <div class="flex items-start gap-4"><i class="fa-solid fa-check text-emerald-500 mt-1"></i><span class="text-sm font-medium">Captação: <b>Meia diária</b></span></div>
-                    <div class="flex items-start gap-4"><i class="fa-solid fa-check text-emerald-500 mt-1"></i><span class="text-sm font-medium">Vídeos entregues: <b>04</b></span></div>
-                    <div class="flex items-start gap-4 opacity-25"><span class="w-5 text-center font-bold text-stone-400">—</span><span class="text-sm font-medium">Fotos</span></div>
-                    <div class="flex items-start gap-4 opacity-25"><span class="w-5 text-center font-bold text-stone-400">—</span><span class="text-sm font-medium">Tráfego pago</span></div>
-                    <div class="flex items-start gap-4 opacity-25"><span class="w-5 text-center font-bold text-stone-400">—</span><span class="text-sm font-medium">Carrossel - Feed</span></div>
-                    <div class="flex items-start gap-4 opacity-25"><span class="w-5 text-center font-bold text-stone-400">—</span><span class="text-sm font-medium">Institucional / Mentoria / Site</span></div>
-                </div>
-
-                <a href="https://wa.me/5573991524222" target="_blank" class="w-full py-4 text-center rounded-2xl font-black text-[10px] uppercase tracking-widest border-2 border-stone-900 text-stone-900 hover:bg-stone-900 hover:text-white transition-all duration-200">
-                    Começar agora
-                </a>
+            <div class="text-center mb-16 mt-8 reveal">
+                <h2 class="text-[10px] font-bold uppercase tracking-[0.3em] text-[#D4AF37] mb-3">Valor do Investimento</h2>
+                <h1 class="font-header text-4xl md:text-5xl font-black mb-6 tracking-tight text-stone-900">Escolha o seu plano</h1>
+                <div class="h-1.5 w-20 bg-[#D4AF37] mx-auto rounded-full"></div>
             </div>
 
-            <div class="p-10 rounded-[2.5rem] border-2 border-[#D4AF37] bg-white shadow-[0_30px_60px_rgba(0,0,0,0.1)] relative flex flex-col md:scale-105 z-10 transition-all duration-300">
-                <div class="absolute -top-4 left-1/2 -translate-x-1/2 px-6 py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] bg-[#D4AF37] text-white shadow-lg">
-                    Mais Popular
-                </div>
+            <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 items-start reveal">
                 
-                <div class="text-center mb-10">
-                    <h3 class="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400 mb-4">Plano Ideal</h3>
-                    <div class="flex items-center justify-center gap-1">
-                        <span class="text-4xl md:text-5xl font-heavy tracking-tighter text-stone-900">R$1980</span>
-                        <span class="text-sm opacity-40 ml-1 font-bold">/mês</span>
+                <div class="p-10 rounded-[2.5rem] border-2 border-transparent bg-white shadow-sm flex flex-col transition-all duration-300 hover:shadow-xl">
+                    <div class="text-center mb-10">
+                        <h3 class="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400 mb-4">Plano Start</h3>
+                        <div class="flex items-center justify-center gap-1">
+                            <span class="font-heavy text-stone-900 flex items-baseline gap-1">
+                                <span class="text-xl">R$</span>
+                                <span class="text-4xl md:text-5xl tracking-tighter">1600</span>
+                            </span>
+                            <span class="text-sm opacity-40 ml-1 font-bold">/mês</span>
+                        </div>
                     </div>
+
+                    <div class="space-y-5 mb-12 flex-grow font-inter">
+                        <div class="flex items-start gap-4"><i class="fa-solid fa-check text-emerald-500 mt-1"></i><span class="text-sm font-medium">Estratégia e planejamento</span></div>
+                        <div class="flex items-start gap-4"><i class="fa-solid fa-check text-emerald-500 mt-1"></i><span class="text-sm font-medium">Captação: <b>Meia diária</b></span></div>
+                        <div class="flex items-start gap-4"><i class="fa-solid fa-check text-emerald-500 mt-1"></i><span class="text-sm font-medium">Vídeos entregues: <b>04</b></span></div>
+                        <div class="flex items-start gap-4 opacity-25"><span class="w-5 text-center font-bold text-stone-400">—</span><span class="text-sm font-medium">Fotos</span></div>
+                        <div class="flex items-start gap-4 opacity-25"><span class="w-5 text-center font-bold text-stone-400">—</span><span class="text-sm font-medium">Tráfego pago</span></div>
+                        <div class="flex items-start gap-4 opacity-25"><span class="w-5 text-center font-bold text-stone-400">—</span><span class="text-sm font-medium">Carrossel - Feed</span></div>
+                        <div class="flex items-start gap-4 opacity-25"><span class="w-5 text-center font-bold text-stone-400">—</span><span class="text-sm font-medium">Institucional / Mentoria / Site</span></div>
+                    </div>
+
+                    <a href="https://wa.me/5573991524222" target="_blank" class="w-full py-4 text-center rounded-2xl font-black text-[10px] uppercase tracking-widest border-2 border-stone-900 text-stone-900 hover:bg-stone-900 hover:text-white transition-all duration-200">
+                        Começar agora
+                    </a>
                 </div>
 
-                <div class="space-y-5 mb-12 flex-grow font-inter">
-                    <div class="flex items-start gap-4"><i class="fa-solid fa-check text-emerald-500 mt-1"></i><span class="text-sm font-medium">Estratégia e planejamento</span></div>
-                    <div class="flex items-start gap-4"><i class="fa-solid fa-check text-emerald-500 mt-1"></i><span class="text-sm font-medium">Captação: <b>Meia diária</b></span></div>
-                    <div class="flex items-start gap-4"><i class="fa-solid fa-check text-emerald-500 mt-1"></i><span class="text-sm font-medium">Vídeos entregues: <b>04 a 06</b></span></div>
-                    <div class="flex items-start gap-4"><i class="fa-solid fa-check text-emerald-500 mt-1"></i><span class="text-sm font-medium text-stone-900">Fotos: <b>02</b></span></div>
-                    <div class="flex items-start gap-4"><i class="fa-solid fa-check text-emerald-500 mt-1"></i><span class="text-sm font-medium">Tráfego pago: <b>Sim</b></span></div>
-                    <div class="flex items-start gap-4"><i class="fa-solid fa-check text-emerald-500 mt-1"></i><span class="text-sm font-medium">Carrossel - Feed: <b>02</b></span></div>
-                    <div class="flex items-start gap-4 opacity-25"><span class="w-5 text-center font-bold text-stone-400">—</span><span class="text-sm font-medium">Institucional / Mentoria / Site</span></div>
+                <div class="p-10 rounded-[2.5rem] border-2 border-[#D4AF37] bg-white shadow-[0_30px_60px_rgba(0,0,0,0.1)] relative flex flex-col md:scale-105 z-10 transition-all duration-300">
+                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 px-6 py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] bg-[#D4AF37] text-white shadow-lg">
+                        Mais Popular
+                    </div>
+                    
+                    <div class="text-center mb-10">
+                        <h3 class="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400 mb-4">Plano Ideal</h3>
+                        <div class="flex items-center justify-center gap-1">
+                            <span class="font-heavy text-stone-900 flex items-baseline gap-1">
+                                <span class="text-xl">R$</span>
+                                <span class="text-4xl md:text-5xl tracking-tighter">1980</span>
+                            </span>
+                            <span class="text-sm opacity-40 ml-1 font-bold">/mês</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-5 mb-12 flex-grow font-inter">
+                        <div class="flex items-start gap-4"><i class="fa-solid fa-check text-emerald-500 mt-1"></i><span class="text-sm font-medium">Estratégia e planejamento</span></div>
+                        <div class="flex items-start gap-4"><i class="fa-solid fa-check text-emerald-500 mt-1"></i><span class="text-sm font-medium">Captação: <b>Meia diária</b></span></div>
+                        <div class="flex items-start gap-4"><i class="fa-solid fa-check text-emerald-500 mt-1"></i><span class="text-sm font-medium">Vídeos entregues: <b>04 a 06</b></span></div>
+                        <div class="flex items-start gap-4"><i class="fa-solid fa-check text-emerald-500 mt-1"></i><span class="text-sm font-medium text-stone-900">Fotos: <b>02</b></span></div>
+                        <div class="flex items-start gap-4"><i class="fa-solid fa-check text-emerald-500 mt-1"></i><span class="text-sm font-medium">Tráfego pago: <b>Sim</b></span></div>
+                        <div class="flex items-start gap-4"><i class="fa-solid fa-check text-emerald-500 mt-1"></i><span class="text-sm font-medium">Carrossel - Feed: <b>02</b></span></div>
+                        <div class="flex items-start gap-4 opacity-25"><span class="w-5 text-center font-bold text-stone-400">—</span><span class="text-sm font-medium">Institucional / Mentoria / Site</span></div>
+                    </div>
+
+                    <a href="https://wa.me/5573991524222" target="_blank" class="w-full py-4 text-center rounded-2xl font-black text-[10px] uppercase tracking-widest bg-stone-900 text-white border-stone-900 hover:bg-stone-800 shadow-xl transition-all duration-200">
+                        Começar agora
+                    </a>
                 </div>
 
-                <a href="https://wa.me/5573991524222" target="_blank" class="w-full py-4 text-center rounded-2xl font-black text-[10px] uppercase tracking-widest bg-stone-900 text-white border-stone-900 hover:bg-stone-800 shadow-xl transition-all duration-200">
-                    Começar agora
-                </a>
+                <div class="p-10 rounded-[2.5rem] border-2 border-transparent bg-white shadow-sm flex flex-col transition-all duration-300 hover:shadow-xl">
+                    <div class="text-center mb-10">
+                        <h3 class="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400 mb-4">Plano Pro</h3>
+                        <div class="flex items-center justify-center gap-1">
+                            <span class="font-heavy text-stone-900 flex items-baseline gap-1">
+                                <span class="text-xl">R$</span>
+                                <span class="text-4xl md:text-5xl tracking-tighter">3500</span>
+                            </span>
+                            <span class="text-sm opacity-40 ml-1 font-bold">/mês</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-5 mb-12 flex-grow font-inter">
+                        <div class="flex items-start gap-4"><i class="fa-solid fa-check text-emerald-500 mt-1"></i><span class="text-sm font-medium">Estratégia e planejamento</span></div>
+                        <div class="flex items-start gap-4"><i class="fa-solid fa-check text-emerald-500 mt-1"></i><span class="text-sm font-medium">Captação: <b>1 diária</b></span></div>
+                        <div class="flex items-start gap-4"><i class="fa-solid fa-check text-emerald-500 mt-1"></i><span class="text-sm font-medium">Vídeos entregues: <b>06 a 08</b></span></div>
+                        <div class="flex items-start gap-4"><i class="fa-solid fa-check text-emerald-500 mt-1"></i><span class="text-sm font-medium text-stone-900">Fotos: <b>06</b></span></div>
+                        <div class="flex items-start gap-4"><i class="fa-solid fa-check text-emerald-500 mt-1"></i><span class="text-sm font-medium">Tráfego pago: <b>Sim</b></span></div>
+                        <div class="flex items-start gap-4"><i class="fa-solid fa-check text-emerald-500 mt-1"></i><span class="text-sm font-medium">Carrossel - Feed: <b>06</b></span></div>
+                        <div class="flex items-start gap-4 opacity-25"><span class="w-5 text-center font-bold text-stone-400">—</span><span class="text-sm font-medium">Institucional / Mentoria / Site</span></div>
+                    </div>
+
+                    <a href="https://wa.me/5573991524222" target="_blank" class="w-full py-4 text-center rounded-2xl font-black text-[10px] uppercase tracking-widest border-2 border-stone-900 text-stone-900 hover:bg-stone-900 hover:text-white transition-all duration-200">
+                        Começar agora
+                    </a>
+                </div>
+
             </div>
 
-            <div class="p-10 rounded-[2.5rem] border-2 border-transparent bg-white shadow-sm flex flex-col transition-all duration-300 hover:shadow-xl">
-                <div class="text-center mb-10">
-                    <h3 class="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400 mb-4">Plano Pro</h3>
-                    <div class="flex items-center justify-center gap-1">
-                        <span class="text-4xl md:text-5xl font-heavy tracking-tighter text-stone-900">R$3500</span>
-                        <span class="text-sm opacity-40 ml-1 font-bold">/mês</span>
-                    </div>
-                </div>
-
-                <div class="space-y-5 mb-12 flex-grow font-inter">
-                    <div class="flex items-start gap-4"><i class="fa-solid fa-check text-emerald-500 mt-1"></i><span class="text-sm font-medium">Estratégia e planejamento</span></div>
-                    <div class="flex items-start gap-4"><i class="fa-solid fa-check text-emerald-500 mt-1"></i><span class="text-sm font-medium">Captação: <b>1 diária</b></span></div>
-                    <div class="flex items-start gap-4"><i class="fa-solid fa-check text-emerald-500 mt-1"></i><span class="text-sm font-medium">Vídeos entregues: <b>06 a 08</b></span></div>
-                    <div class="flex items-start gap-4"><i class="fa-solid fa-check text-emerald-500 mt-1"></i><span class="text-sm font-medium text-stone-900">Fotos: <b>06</b></span></div>
-                    <div class="flex items-start gap-4"><i class="fa-solid fa-check text-emerald-500 mt-1"></i><span class="text-sm font-medium">Tráfego pago: <b>Sim</b></span></div>
-                    <div class="flex items-start gap-4"><i class="fa-solid fa-check text-emerald-500 mt-1"></i><span class="text-sm font-medium">Carrossel - Feed: <b>06</b></span></div>
-                    <div class="flex items-start gap-4 opacity-25"><span class="w-5 text-center font-bold text-stone-400">—</span><span class="text-sm font-medium">Institucional / Mentoria / Site</span></div>
-                </div>
-
-                <a href="https://wa.me/5573991524222" target="_blank" class="w-full py-4 text-center rounded-2xl font-black text-[10px] uppercase tracking-widest border-2 border-stone-900 text-stone-900 hover:bg-stone-900 hover:text-white transition-all duration-200">
-                    Começar agora
-                </a>
+            <div class="mt-20 text-center max-w-2xl mx-auto border-t border-stone-200 pt-8">
+                <p class="text-[9px] uppercase tracking-[0.15em] text-stone-400 font-bold leading-loose font-inter">
+                    * Edição profissional, trilha sonora e color grading incluídos. <br />
+                    Design focado em autoridade e conversão.
+                </p>
             </div>
-
         </div>
-    </div>
-</section>
+    </section>
+
     <footer class="py-24 bg-black text-white border-t border-white/5">
         <div class="container mx-auto px-6 text-center">
             <div class="font-heavy text-4xl mb-6 tracking-tighter">DAIME FILMES</div>
@@ -469,7 +439,6 @@
     </footer>
 
     <script src="https://unpkg.com/lenis@1.1.9/dist/lenis.min.js"></script>
-    <script src="https://player.vimeo.com/api/player.js"></script>
 
     <script>
         const lenis = new Lenis({
@@ -501,20 +470,6 @@
             });
         }, observerOptions);
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-        window.addEventListener('load', () => {
-            const iframe = document.querySelector('#heroVideo');
-            const container = document.querySelector('#videoContainer');
-            const player = new Vimeo.Player(iframe);
-
-            player.on('play', function() {
-                container.classList.add('video-loaded');
-            });
-
-            setTimeout(() => {
-                container.classList.add('video-loaded');
-            }, 4000);
-        });
 
         window.addEventListener('scroll', () => {
             const header = document.getElementById('mainHeader');
