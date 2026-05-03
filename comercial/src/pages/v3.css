@@ -1,0 +1,126 @@
+/* Daime Filmes — V3 · Paleta viva e leve
+   Estratégia: sálvia + terracota suave sobre creme quente.
+   Sobrescreve os tokens HSL da v1 dentro de .v3-scope. */
+
+.v3-scope {
+  /* Base — creme quente */
+  --background: 38 32% 95%;
+  --foreground: 165 25% 14%;
+
+  --card: 38 28% 92%;
+  --card-foreground: 165 25% 14%;
+
+  --popover: 38 32% 95%;
+  --popover-foreground: 165 25% 14%;
+
+  /* Primary — terracota suave (vivo, mas acolhedor) */
+  --primary: 14 62% 54%;
+  --primary-foreground: 38 32% 96%;
+
+  --secondary: 38 22% 88%;
+  --secondary-foreground: 165 25% 18%;
+
+  --muted: 38 18% 86%;
+  --muted-foreground: 165 12% 40%;
+
+  /* Accent — sálvia */
+  --accent: 158 24% 48%;
+  --accent-foreground: 38 32% 96%;
+
+  --destructive: 0 70% 50%;
+  --destructive-foreground: 38 32% 96%;
+
+  --border: 165 12% 78%;
+  --input: 165 12% 78%;
+  --ring: 14 62% 54%;
+
+  /* Brand tokens reciclados — agora claros */
+  --cream: 165 25% 14%;   /* "cream" passa a ser o ink: usado como texto principal */
+  --gold: 14 62% 54%;
+  --ember: 14 70% 50%;
+  --ink: 38 32% 95%;      /* "ink" agora é o fundo claro */
+
+  /* Gradientes refeitos — leves */
+  --gradient-hero: linear-gradient(
+    135deg,
+    hsl(38 32% 95%) 0%,
+    hsl(38 26% 90%) 50%,
+    hsl(158 18% 88%) 100%
+  );
+  --gradient-ember: linear-gradient(
+    135deg,
+    hsl(14 62% 54%) 0%,
+    hsl(158 30% 45%) 100%
+  );
+  --gradient-fade-down: linear-gradient(
+    180deg,
+    transparent 0%,
+    hsl(38 32% 95% / 0.4) 40%,
+    hsl(38 32% 95%) 100%
+  );
+  --gradient-fade-up: linear-gradient(
+    0deg,
+    transparent 0%,
+    hsl(38 32% 95% / 0.6) 50%,
+    hsl(38 32% 95%) 100%
+  );
+
+  --shadow-glow: 0 0 80px hsl(14 62% 54% / 0.18);
+  --shadow-deep: 0 30px 80px -20px hsl(165 30% 20% / 0.18);
+
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+/* Hero: a v1 usa overlays escuros sobre a imagem (from-ink, to-ink) — no v3
+   queremos manter contraste para o título permanecer legível, então
+   reforçamos um overlay sutil dark-warm SOMENTE no hero. */
+.v3-scope #hero {
+  background: hsl(165 30% 18%);
+}
+.v3-scope #hero .vignette {
+  box-shadow: inset 0 0 220px 80px hsl(165 35% 10% / 0.7);
+}
+
+/* Vignette padrão (fora do hero) — neutralizar para não escurecer seções claras */
+.v3-scope section:not(#hero) .vignette {
+  box-shadow: none;
+}
+
+/* Contato: a v1 também é dark. Convertemos para um cartão claro com leve
+   gradiente sálvia. */
+.v3-scope #contato {
+  background: linear-gradient(
+    135deg,
+    hsl(158 22% 92%) 0%,
+    hsl(38 28% 94%) 60%,
+    hsl(14 40% 92%) 100%
+  );
+}
+.v3-scope #contato .bg-grain {
+  opacity: 0.4;
+}
+
+/* Method block tem imagem com gradient-to-t from-ink — em v3 isso vira um
+   gradient claro (legível em qualquer contexto). Já é tratado pelos tokens. */
+
+/* Nav: quando scrolled vira bg-ink/80 — em v3 fica creme translúcido com borda */
+.v3-scope header.fixed {
+  /* Não há como reescrever a classe inline, mas bg-ink agora resolve para hsl(--ink) que é o creme.
+     Adicionamos uma sombra sutil para destacar o nav sobre conteúdo claro. */
+}
+.v3-scope header.fixed.\\:not\\(.bg-transparent\\) {
+  box-shadow: 0 1px 0 hsl(var(--border));
+}
+
+/* Refinamento tipográfico: corpo um pouco mais quente */
+.v3-scope body,
+.v3-scope {
+  font-feature-settings: "ss01", "cv11";
+}
+
+/* Selection */
+.v3-scope ::selection {
+  background: hsl(var(--accent) / 0.3);
+  color: hsl(var(--foreground));
+}
