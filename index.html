@@ -84,13 +84,6 @@
             object-fit: cover;
         }
 
-        .hero-overlay {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to top, rgba(5, 0, 10, 1) 0%, rgba(5, 0, 10, 0.4) 50%, rgba(5, 0, 10, 0.7) 100%);
-            z-index: 0;
-        }
-
         .card-methodology {
             background: #f8f9fa;
             border: 1px solid #eee;
@@ -229,8 +222,7 @@
                 <a href="#hero" class="scroll-link">Início</a>
                 <a href="#metodologia" class="scroll-link">Metodologia</a>
                 <a href="#sobre" class="scroll-link">A Produtora</a>
-                <!-- Link Comercial atualizado para apontar para a pasta comercial -->
-                <a href="/comercial/index.html" class="text-[--acid-green] hover:text-white font-bold">COMERCIAL</a>
+                <a href="#contato" class="scroll-link text-[--acid-green] hover:text-white font-bold tracking-widest transition-colors">CONTATO</a>
             </nav>
 
             <div class="w-24 md:block hidden"></div>
@@ -356,13 +348,59 @@
         </div>
     </section>
 
-    <!-- Rodapé -->
-    <footer class="py-24 bg-black text-white border-t border-white/5">
-        <div class="container mx-auto px-6 text-center">
-            <div class="font-heavy text-4xl mb-6 tracking-tighter">DAIME FILMES</div>
-            <p class="opacity-40 text-sm mb-12">Transformando a sua visão em legado audiovisual.</p>
-            <div class="w-full h-[1px] bg-white/10 mb-12"></div>
-            <p class="text-[10px] font-bold uppercase tracking-widest opacity-40">&copy; 2026 Daime Filmes. Todos os direitos reservados.</p>
+    <!-- Rodapé Estratégico -->
+    <footer id="contato" class="relative py-24 md:py-32 bg-black overflow-hidden border-t border-white/5">
+        <!-- Efeito de luz de fundo para manter o estilo cinema -->
+        <div class="absolute inset-0 pointer-events-none">
+            <div class="absolute inset-0 opacity-10" style="background: radial-gradient(circle at center, var(--ref-blue) 0%, transparent 70%);"></div>
+        </div>
+
+        <div class="container mx-auto px-6 relative z-10">
+            <!-- Chamada Principal -->
+            <div class="text-center mb-20 reveal">
+                <span class="text-[--acid-green] font-bold text-[10px] tracking-[0.4em] block mb-6 uppercase">Vamos trabalhar juntos</span>
+                <h2 class="font-header text-5xl md:text-7xl font-[800] text-white tracking-tight leading-[0.95] max-w-4xl mx-auto mb-10">
+                    Sua marca merece ser <br>
+                    <span class="italic opacity-90 text-[--ref-cyan]">vista com excelência.</span>
+                </h2>
+                <p class="text-gray-400 text-base md:text-xl max-w-2xl mx-auto mb-12 font-light leading-relaxed">
+                    Transforme a narrativa da sua empresa em um ativo de lucro. A Daime Filmes une cinema e estratégia para criar resultados reais.
+                </p>
+                
+                <a href="https://wa.me/5573991419330?text=Olá! Gostaria de agendar um diagnóstico gratuito." 
+                   target="_blank" 
+                   class="inline-block bg-[--acid-green] text-black font-heavy text-[11px] uppercase tracking-[0.2em] px-12 py-6 rounded-full hover:scale-105 transition-transform">
+                    Agendar diagnóstico gratuito →
+                </a>
+            </div>
+
+            <!-- Grid de Contatos -->
+            <div class="grid md:grid-cols-3 gap-8 py-12 border-t border-white/10 reveal">
+                <a href="https://instagram.com/daimefilmes" target="_blank" class="flex items-center justify-center gap-3 text-white/60 hover:text-[--ref-cyan] transition-colors group">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path d="M16.5 7.5h.008v.008H16.5V7.5zm-3.5 12c-4.142 0-7.5-3.358-7.5-7.5s3.358-7.5 7.5-7.5 7.5 3.358 7.5 7.5-3.358 7.5-7.5 7.5zm0-13c-3.037 0-5.5 2.463-5.5 5.5s2.463 5.5 5.5 5.5 5.5-2.463 5.5-5.5-2.463-5.5-5.5-5.5z"></path><path d="M2 12c0-4.418 0-6.627 1.373-8.001C4.745 2.626 6.954 2.626 11.373 2.626h1.254c4.42 0 6.63 0 8.002 1.373C22 5.373 22 7.582 22 12.001v1.254c0 4.42 0 6.63-1.372 8.002-1.373 1.373-3.582 1.373-8.002 1.373h-1.254c-4.419 0-6.628 0-8.001-1.373C2 19.883 2 17.674 2 13.255V12z"></path></svg>
+                    <span class="text-sm font-bold tracking-widest">@DAIMEFILMES</span>
+                </a>
+                <a href="mailto:contato@daimefilmes.com.br" class="flex items-center justify-center gap-3 text-white/60 hover:text-[--ref-cyan] transition-colors group">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"></path></svg>
+                    <span class="text-sm font-bold tracking-widest uppercase">contato@daimefilmes.com.br</span>
+                </a>
+                <div class="flex items-center justify-center gap-3 text-white/60">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"></path><path d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"></path></svg>
+                    <span class="text-sm font-bold tracking-widest uppercase text-center">Teixeira de Freitas - BA</span>
+                </div>
+            </div>
+
+            <!-- Rodapé Institucional -->
+            <div class="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
+                <div class="text-center md:text-left">
+                    <div class="font-heavy text-2xl tracking-tighter text-white">DAIME <span class="text-[--acid-green]">FILMES</span></div>
+                    <p class="text-[9px] uppercase tracking-[0.5em] text-white/30 mt-1">Cinema · Estratégia · Resultado</p>
+                </div>
+                
+                <div class="text-center md:text-right opacity-30">
+                    <p class="text-[10px] font-bold uppercase tracking-widest mb-1">&copy; 2026 Daime Filmes. Todos os direitos reservados.</p>
+                </div>
+            </div>
         </div>
     </footer>
 
