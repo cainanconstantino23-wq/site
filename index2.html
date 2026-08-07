@@ -56,19 +56,16 @@
   .carousel-track {
     display: flex;
     gap: 1.5rem;
-    overflow-x: auto;
-    overflow-y: hidden;
-    touch-action: pan-x;
+    overflow-x: hidden;
+    overflow-y: visible;
+    touch-action: pan-y;
     scroll-snap-type: x proximity;
     overscroll-behavior-x: contain;
-    overscroll-behavior-y: none;
-    scroll-behavior: smooth;
+    overscroll-behavior-y: auto;
+    scroll-behavior: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    cursor: grab;
-  }
-  .carousel-track:active {
-    cursor: grabbing;
+    cursor: default;
   }
   .carousel-track::-webkit-scrollbar { display: none; }
   .carousel-card { flex: 0 0 calc(85% - 1rem); scroll-snap-align: start; }
@@ -950,6 +947,30 @@
 
   carousel.addEventListener('scroll', updateCarouselState);
 
+  let autoScrollTimer = null;
+
+  function startAutoScroll() {
+    if (autoScrollTimer) return;
+    autoScrollTimer = setInterval(() => {
+      const maxScrollLeft = carousel.scrollWidth - carousel.clientWidth;
+      if (carousel.scrollLeft >= maxScrollLeft - 2) {
+        carousel.scrollLeft = 0;
+        return;
+      }
+      carousel.scrollLeft += 1;
+    }, 20);
+  }
+
+  function stopAutoScroll() {
+    if (!autoScrollTimer) return;
+    clearInterval(autoScrollTimer);
+    autoScrollTimer = null;
+  }
+
+  startAutoScroll();
+  carousel.addEventListener('mouseenter', stopAutoScroll);
+  carousel.addEventListener('mouseleave', startAutoScroll);
+
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       filterBtns.forEach(b => {
@@ -1043,39 +1064,6 @@
         openVideoModal(src);
       }
     });
-  });
-
-  // ARRASTAR COM O MOUSE (DRAG-TO-SCROLL)
-  let isMouseDown = false;
-  let isDragging = false;
-  let startX = 0;
-  let scrollLeftPos = 0;
-
-  carousel.addEventListener('mousedown', (e) => {
-    isMouseDown = true;
-    isDragging = false;
-    startX = e.pageX - carousel.offsetLeft;
-    scrollLeftPos = carousel.scrollLeft;
-  });
-
-  carousel.addEventListener('mouseleave', () => {
-    isMouseDown = false;
-  });
-
-  carousel.addEventListener('mouseup', () => {
-    isMouseDown = false;
-    setTimeout(() => { isDragging = false; }, 50);
-  });
-
-  carousel.addEventListener('mousemove', (e) => {
-    if (!isMouseDown) return;
-    const x = e.pageX - carousel.offsetLeft;
-    const walk = (x - startX);
-    if (Math.abs(walk) > 5) {
-      isDragging = true;
-      e.preventDefault();
-      carousel.scrollLeft = scrollLeftPos - walk;
-    }
   });
 
   closeModalBtn.addEventListener('click', closeVideoModal);
