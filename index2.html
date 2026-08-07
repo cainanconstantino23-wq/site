@@ -787,14 +787,44 @@
     }
   }, { passive: true });
 
+  function getVisibleCards() {
+    return Array.from(carouselItems).filter(card => card.style.display !== 'none');
+  }
+
+  let autoScrollResumeTimer = null;
+
+  function goToCarouselCard(index) {
+    const visibleCards = getVisibleCards();
+    if (!visibleCards.length) return;
+
+    const targetIndex = Math.min(Math.max(index, 0), visibleCards.length - 1);
+    const targetCard = visibleCards[targetIndex];
+    if (!targetCard) return;
+
+    stopAutoScroll();
+    const targetScrollLeft = Math.max(0, targetCard.offsetLeft - 24);
+    carousel.scrollLeft = targetScrollLeft;
+    updateCarouselState();
+
+    if (autoScrollResumeTimer) clearTimeout(autoScrollResumeTimer);
+    autoScrollResumeTimer = setTimeout(() => {
+      startAutoScroll();
+    }, 1800);
+  }
+
   function updateCarouselState() {
-    const visibleCards = Array.from(carouselItems).filter(card => card.style.display !== 'none');
+    const visibleCards = getVisibleCards();
     totalSlidesSpan.textContent = String(visibleCards.length).padStart(2, '0');
 
     dotsContainer.innerHTML = '';
     visibleCards.forEach((_, index) => {
-      const dot = document.createElement('div');
+      const dot = document.createElement('button');
+      dot.type = 'button';
+      dot.setAttribute('aria-label', `Ir para o vídeo ${index + 1}`);
       dot.className = `h-1.5 rounded-full transition-all duration-300 ${index === 0 ? 'w-8 bg-primary' : 'w-2 bg-border'}`;
+      dot.addEventListener('click', () => {
+        goToCarouselCard(index);
+      });
       dotsContainer.appendChild(dot);
     });
 
@@ -822,13 +852,25 @@
   }
 
   nextBtn.addEventListener('click', () => {
+    stopAutoScroll();
     const cardWidth = carouselItems[0].getBoundingClientRect().width + 24;
-    carousel.scrollBy({ left: cardWidth, behavior: 'smooth' });
+    carousel.scrollLeft += cardWidth;
+    updateCarouselState();
+    if (autoScrollResumeTimer) clearTimeout(autoScrollResumeTimer);
+    autoScrollResumeTimer = setTimeout(() => {
+      startAutoScroll();
+    }, 1800);
   });
 
   prevBtn.addEventListener('click', () => {
+    stopAutoScroll();
     const cardWidth = carouselItems[0].getBoundingClientRect().width + 24;
-    carousel.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+    carousel.scrollLeft -= cardWidth;
+    updateCarouselState();
+    if (autoScrollResumeTimer) clearTimeout(autoScrollResumeTimer);
+    autoScrollResumeTimer = setTimeout(() => {
+      startAutoScroll();
+    }, 1800);
   });
 
   carousel.addEventListener('scroll', updateCarouselState);
