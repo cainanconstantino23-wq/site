@@ -90,6 +90,23 @@
   .hero-headline {
     text-shadow: 0 10px 30px rgba(28,25,23,0.15);
   }
+  .hero-line {
+    display: block;
+    font-family: 'Thunder-Black', 'Bebas Neue', sans-serif;
+    line-height: 0.82;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 640px) {
+    .hero-headline {
+      line-height: 0.8;
+    }
+    .hero-line {
+      font-size: clamp(3.1rem, 17vw, 6.1rem) !important;
+      letter-spacing: 0.01em;
+    }
+  }
 </style>
 </head>
 <body class="antialiased bg-[#F8F5F0] text-cream">
@@ -150,17 +167,15 @@
   
   <!-- COLUNA PRINCIPAL: TÍTULO -->
   <div class="lg:col-span-8 reveal"> 
-    <h1 class="text-[13vw] sm:text-[15vw] lg:text-[8.8rem] xl:text-[10rem] leading-[0.82] uppercase hero-headline select-none" style="font-family: 'Thunder-Black', sans-serif;">
+    <h1 class="text-[13vw] sm:text-[15vw] lg:text-[8.8rem] xl:text-[10rem] leading-[0.82] uppercase hero-headline select-none">
       
       <!-- 1. "CINEMA COM" - COR, OPACIDADE E ESPAÇAMENTO DE LETRAS -->
-      <!-- Ajuste no estilo: 'letter-spacing: 0.10em' (negativo junta, positivo afasta, ex: 2px, 0.05em) -->
-      <span class="text-cream opacity-100 block" style="letter-spacing: 0.01em; font-size: 120px;">
+      <span class="hero-line text-cream opacity-100" style="font-size: clamp(4.5rem, 8vw, 9.5rem);">
         CINEMA COM
       </span>
       
       <!-- 2. "ESTRATÉGIA" - COR, OPACIDADE E ESPAÇAMENTO DE LETRAS -->
-      <!-- Ajuste no estilo: 'letter-spacing: 0.05em' -->
-      <span class="text-white opacity-70 block" style="letter-spacing: 0.01em; font-size: 110px;">
+      <span class="hero-line text-white opacity-70" style="font-size: clamp(4.1rem, 7.2vw, 8.8rem);">
         ESTRATÉGIA
       </span>
     </h1>
@@ -857,12 +872,12 @@
 
 <!-- VIDEO MODAL LIGHTBOX -->
 <div id="video-modal" class="fixed inset-0 z-50 bg-cream/80 backdrop-blur-md hidden items-center justify-center p-4 md:p-10 transition-opacity duration-300 opacity-0">
-  <div class="relative w-full max-w-5xl aspect-video bg-darkInk rounded-2xl overflow-hidden shadow-2xl border border-border">
+  <div id="video-modal-shell" class="relative w-full max-w-[520px] aspect-[9/16] bg-darkInk rounded-2xl overflow-hidden shadow-2xl border border-border">
     <button id="close-modal-btn" aria-label="Fechar Vídeo" class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-cream/90 text-darkInk flex items-center justify-center hover:bg-primary hover:text-ink transition">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
     </button>
     <iframe id="modal-iframe" class="w-full h-full hidden" src="" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
-    <video id="modal-video" class="w-full h-full hidden" controls playsinline controlsList="nodownload"></video>
+    <video id="modal-video" class="w-full h-full hidden object-cover" controls playsinline controlsList="nodownload"></video>
   </div>
 </div>
 
@@ -962,20 +977,24 @@
 
   // VIDEO MODAL LIGHTBOX
   const videoModal = document.getElementById('video-modal');
+  const videoModalShell = document.getElementById('video-modal-shell');
   const modalIframe = document.getElementById('modal-iframe');
   const modalVideo = document.getElementById('modal-video');
   const closeModalBtn = document.getElementById('close-modal-btn');
 
   function openVideoModal(src) {
-    // If the source is a local mp4, use the <video> element; otherwise use iframe
     const isLocalMP4 = typeof src === 'string' && src.toLowerCase().endsWith('.mp4');
+
     if (isLocalMP4) {
-      // prepare video for local MP4 and start at 4s
+      videoModalShell.classList.remove('aspect-video', 'max-w-5xl');
+      videoModalShell.classList.add('aspect-[9/16]', 'max-w-[420px]', 'md:max-w-[500px]');
+
       modalIframe.classList.add('hidden');
       modalIframe.src = '';
       modalVideo.classList.remove('hidden');
-      try { modalVideo.pause(); modalVideo.removeAttribute('src'); } catch(e) {}
+      try { modalVideo.pause(); modalVideo.removeAttribute('src'); } catch (e) {}
       modalVideo.src = src;
+
       const startAt = 4;
       const onLoaded = () => {
         try { modalVideo.currentTime = startAt; } catch (e) {}
@@ -983,25 +1002,23 @@
         modalVideo.play().catch(() => {});
       };
       modalVideo.addEventListener('loadedmetadata', onLoaded);
-      videoModal.classList.remove('hidden');
-      videoModal.classList.add('flex');
-      setTimeout(() => {
-        videoModal.classList.remove('opacity-0');
-        videoModal.classList.add('opacity-100');
-      }, 10);
     } else {
+      videoModalShell.classList.remove('aspect-[9/16]', 'max-w-[420px]', 'md:max-w-[500px]');
+      videoModalShell.classList.add('aspect-video', 'max-w-5xl');
+
       modalVideo.pause();
       modalVideo.classList.add('hidden');
       modalVideo.src = '';
       modalIframe.classList.remove('hidden');
       modalIframe.src = src;
-      videoModal.classList.remove('hidden');
-      videoModal.classList.add('flex');
-      setTimeout(() => {
-        videoModal.classList.remove('opacity-0');
-        videoModal.classList.add('opacity-100');
-      }, 10);
     }
+
+    videoModal.classList.remove('hidden');
+    videoModal.classList.add('flex');
+    setTimeout(() => {
+      videoModal.classList.remove('opacity-0');
+      videoModal.classList.add('opacity-100');
+    }, 10);
   }
 
   function closeVideoModal() {
@@ -1011,9 +1028,10 @@
       videoModal.classList.remove('flex');
       videoModal.classList.add('hidden');
       modalIframe.src = '';
-      // stop and clear video if used
       try { modalVideo.pause(); } catch (e) {}
       modalVideo.src = '';
+      videoModalShell.classList.remove('aspect-[9/16]', 'max-w-[420px]', 'md:max-w-[500px]');
+      videoModalShell.classList.add('aspect-[9/16]', 'max-w-[420px]', 'md:max-w-[500px]');
     }, 300);
   }
 
