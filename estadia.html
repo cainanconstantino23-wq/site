@@ -1,0 +1,337 @@
+<!DOCTYPE html><html lang="pt-BR"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Minha Estadia - Santo Hostel</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,wght@0,400;0,600;0,700;1,400&amp;family=Hanken+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-dim": "#dbdad6",
+                        "on-secondary-container": "#676160",
+                        "on-secondary-fixed-variant": "#4b4644",
+                        "background": "#faf9f5",
+                        "primary-fixed-dim": "#e3c19f",
+                        "surface-muted": "#EBE9E1",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-container": "#304051",
+                        "surface-container-high": "#e9e8e4",
+                        "on-background": "#1b1c1a",
+                        "primary-fixed": "#ffddbb",
+                        "on-surface": "#1b1c1a",
+                        "outline": "#80756b",
+                        "tertiary-fixed": "#d4e4fa",
+                        "tertiary-container": "#9babc0",
+                        "ink-deep": "#1C1C1C",
+                        "inverse-surface": "#2f312e",
+                        "on-secondary-fixed": "#1e1b1a",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "inverse-primary": "#e3c19f",
+                        "surface-container-highest": "#e3e2df",
+                        "primary": "#735a3e",
+                        "surface-bright": "#faf9f5",
+                        "inverse-on-surface": "#f2f1ed",
+                        "on-error": "#ffffff",
+                        "on-primary-fixed-variant": "#5a4229",
+                        "on-surface-variant": "#4e453d",
+                        "on-tertiary-fixed": "#0c1d2d",
+                        "on-primary-container": "#503a21",
+                        "on-error-container": "#93000a",
+                        "outline-variant": "#d2c4b9",
+                        "surface": "#faf9f5",
+                        "tertiary": "#506072",
+                        "secondary-container": "#e6dedc",
+                        "surface-variant": "#e3e2df",
+                        "surface-tint": "#735a3e",
+                        "primary-container": "#c4a484",
+                        "error": "#ba1a1a",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed": "#291803",
+                        "tertiary-fixed-dim": "#b8c8de",
+                        "surface-container-low": "#f4f4f0",
+                        "secondary-fixed-dim": "#cdc5c3",
+                        "secondary": "#635d5c",
+                        "on-tertiary-fixed-variant": "#39485a",
+                        "on-primary": "#ffffff",
+                        "secondary-fixed": "#e9e1df",
+                        "surface-container": "#efeeea"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-desktop": "40px",
+                        "gutter": "24px",
+                        "unit": "8px",
+                        "margin-mobile": "16px",
+                        "container-max": "1200px"
+                    },
+                    "fontFamily": {
+                        "title-md": ["Hanken Grotesk"],
+                        "body-lg": ["Hanken Grotesk"],
+                        "headline-lg": ["Literata"],
+                        "body-md": ["Hanken Grotesk"],
+                        "headline-lg-mobile": ["Literata"],
+                        "display-lg": ["Literata"],
+                        "label-md": ["Hanken Grotesk"],
+                        "label-sm": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.08em", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #faf9f5;
+            color: #1b1c1a;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+        @media (max-width: 768px) {
+            .bento-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .soft-shadow {
+            box-shadow: 0 4px 20px rgba(41, 37, 36, 0.06);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md text-on-surface">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface-container-low dark:bg-surface-container-high shadow-sm flex justify-between items-center px-margin-mobile md:px-margin-desktop w-full h-16">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-primary transition-all duration-200 active:scale-95" data-icon="menu">menu</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary tracking-tight">Santo Hostel</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="hidden md:block font-label-md text-label-md text-on-surface-variant">Olá, Viajante</span>
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold overflow-hidden border-2 border-surface">
+<img class="w-full h-full object-cover" data-alt="A sophisticated close-up portrait of a digital nomad guest smiling, reflecting the Santo Hostel boutique aesthetic. The lighting is warm and natural, suggesting a sunset glow in Porto Seguro, Bahia. The guest has a relaxed, professional look, fitting the target audience of young professionals and solo travelers." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqitpAZg-eBOr5Z2DH4-GD3CCllHdicMRgpYfd3MzMpI8gqJ8-r2aV0puivwolTElMnp0nRlZrks1vItV8lb-k9Y-yS7gVc5lktZ4iAyif7WkAVHYeZydr-9WcPkam7k2bgxwYaWfPyCvKQQq1Z3a5m7nJnVKXPAKF67xxJJblVBXXkevUltSdz5kJEahfAwwLhYaPIQImXjtMQ8vMDBX1LpjYwB3bzJTUgMgm7S_CcGk1CcBLFBgKD-FPY8Fq1xkHUgLmnG8M3A">
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-24 pb-32 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+<!-- Welcome Header -->
+<section class="mb-12">
+<h2 class="font-headline-lg text-headline-lg text-ink-deep mb-2">Bem-vindo à sua estadia</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+                Tudo pronto para você relaxar. Sua experiência no Santo Hostel é totalmente automatizada para garantir sua liberdade e segurança.
+            </p>
+</section>
+<!-- Bento Grid Stats & Quick Access -->
+<div class="bento-grid mb-12">
+<!-- Wi-Fi Card -->
+<div class="md:col-span-2 bg-surface-muted p-8 rounded-xl border-l-4 border-primary soft-shadow flex flex-col justify-between transition-all hover:scale-[1.01]">
+<div>
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary" data-icon="wifi">wifi</span>
+<h3 class="font-title-md text-title-md">Wi-Fi do Hostel</h3>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">Conexão de alta velocidade em toda a casa para seu trabalho ou lazer.</p>
+</div>
+<div class="flex items-center justify-between bg-surface-container p-4 rounded-lg">
+<div>
+<p class="text-[10px] font-label-sm uppercase tracking-widest text-outline">Senha</p>
+<p class="font-title-md text-primary select-all">SantoHostel2024</p>
+</div>
+<button class="material-symbols-outlined text-primary hover:bg-primary-container/20 p-2 rounded-full transition-colors" data-icon="content_copy">content_copy</button>
+</div>
+</div>
+<!-- Check-in/out Times -->
+<div class="md:col-span-2 bg-white p-8 rounded-xl soft-shadow border border-surface-variant flex flex-col gap-6">
+<div class="flex justify-between items-start">
+<div class="flex flex-col gap-1">
+<span class="material-symbols-outlined text-secondary" data-icon="login">login</span>
+<p class="font-label-sm text-outline">Check-in</p>
+<p class="font-headline-lg text-primary">14:00</p>
+</div>
+<div class="h-12 w-[1px] bg-surface-variant self-center"></div>
+<div class="flex flex-col gap-1 text-right">
+<span class="material-symbols-outlined text-secondary self-end" data-icon="logout">logout</span>
+<p class="font-label-sm text-outline">Check-out</p>
+<p class="font-headline-lg text-primary">11:00</p>
+</div>
+</div>
+<p class="text-center font-label-md text-label-md text-on-surface-variant bg-surface-container-low py-2 rounded-full">
+                    Precisa de late check-out? Fale conosco no chat.
+                </p>
+</div>
+</div>
+<!-- Automation / Locks Section -->
+<section class="mb-12">
+<div class="flex items-center gap-3 mb-8">
+<div class="w-10 h-10 bg-primary-container rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-container" data-icon="lock_open">lock_open</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg">Acesso Automatizado</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<!-- Portão Principal -->
+<div class="relative group overflow-hidden rounded-xl bg-white border border-surface-variant soft-shadow">
+<div class="h-48 overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A photograph of an elegant wooden gate at a boutique hostel entrance in Porto Seguro. The gate is made of tropical hardwood with subtle modern metal accents. The surrounding area has lush green tropical plants and warm outdoor ambient lighting, emphasizing a sophisticated yet welcoming security aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBv7Rzeqvr7iFlAYUCMH2wmLahgxRWb1yu7y-Mhji-Kr7N9jFYuqa31z2vCawhl-jmMh9DjJInRrVkO_8r4-32Fr240gJNuhe7RMAIuK-E6GIlT5deMB3lOgubg2X4n9xjP2DJEytBqWRtxeZmgBNv-EHHTbX-3zG9dFhJQcj5_LeDlLJ3iUZ7YjZ3lmMEZYkh6h21dCJ6UudgsKQnqnjvyBtFxsPLWo2417vz94sEw1n2F2Apx82z29TDWtCQARYJSnAnsvtpm6Q">
+<div class="absolute top-4 left-4 bg-primary text-white px-3 py-1 rounded-full font-label-sm">Portão Principal</div>
+</div>
+<div class="p-6">
+<h4 class="font-title-md text-title-md mb-2">Acesso à Propriedade</h4>
+<p class="font-body-md text-on-surface-variant mb-6">Utilize o teclado numérico localizado à direita do portão principal.</p>
+<div class="flex items-center gap-4 bg-surface-container-low p-4 rounded-lg border border-surface-variant">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="dialpad">dialpad</span>
+<div>
+<p class="text-xs text-outline font-bold">CÓDIGO ATUAL</p>
+<p class="text-2xl font-bold tracking-[0.2em] text-ink-deep">1298#</p>
+</div>
+</div>
+<ul class="mt-4 space-y-2 text-sm text-on-surface-variant">
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-xs text-primary" data-icon="check_circle">check_circle</span> Digite os 4 dígitos</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-xs text-primary" data-icon="check_circle">check_circle</span> Finalize com a tecla #</li>
+</ul>
+</div>
+</div>
+<!-- Suíte Flor das Águas -->
+<div class="relative group overflow-hidden rounded-xl bg-white border border-surface-variant soft-shadow">
+<div class="h-48 overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A close-up shot of a modern digital door lock on a textured wooden suite door. The hallway is beautifully lit with warm, indirect lighting, reflecting the 'Modern-Tactile' style of Santo Hostel. Subtle greenery is visible in the background, maintaining the tropical luxury atmosphere of a high-end hostel in Bahia." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_B4smX-4ZaJU8IoAf_eCk1U0sD96mB8tUzLBlyCAdbYLzNrxAzei8csmcyPf-mHNHLkCY6kElfez3AYFMXNRo_TcNv_LqbU-uZlkICYeqDhzmtuyc4eisHIDKDCE2_exColRsODQ-N9a7zXcb91LHbkCzcJ0GZm-HYARw9RX-LpuILRqPKWb6rA_P5Kp5kgoCyUzc7PnvC2bnz3CdYxaqz20Tioe_4esWAIrjHdgP6Y8Pdm7itKBud3XXzioTtTUH-y5ZJWbOBg">
+<div class="absolute top-4 left-4 bg-secondary text-white px-3 py-1 rounded-full font-label-sm">Sua Suíte: Flor das Águas</div>
+</div>
+<div class="p-6">
+<h4 class="font-title-md text-title-md mb-2">Acesso ao Quarto</h4>
+<p class="font-body-md text-on-surface-variant mb-6">Sua chave digital é válida até o momento do seu check-out.</p>
+<div class="flex items-center gap-4 bg-primary-container p-4 rounded-lg shadow-sm">
+<span class="material-symbols-outlined text-on-primary-container text-3xl" data-icon="key">key</span>
+<div>
+<p class="text-xs text-on-primary-fixed-variant font-bold">CÓDIGO DA PORTA</p>
+<p class="text-2xl font-bold tracking-[0.2em] text-on-primary-container">4402</p>
+</div>
+</div>
+<ul class="mt-4 space-y-2 text-sm text-on-surface-variant">
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-xs text-primary" data-icon="info">info</span> A fechadura tranca automaticamente após 5 segundos</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-xs text-primary" data-icon="lightbulb">lightbulb</span> Toque no painel para ativar os números</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<!-- Floating Action Button for Help (Contextual) -->
+<div class="fixed bottom-24 right-6 md:right-12 z-40 group">
+<button class="w-16 h-16 bg-primary text-white rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 group-hover:rotate-12" onclick="window.location.href='https://wa.me/557391524222'">
+<span class="material-symbols-outlined text-3xl" data-icon="chat_bubble">chat_bubble</span>
+</button>
+<div class="absolute bottom-full right-0 mb-4 bg-ink-deep text-white text-xs px-3 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                Precisa de ajuda? Fale conosco!
+            </div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-surface-container-low dark:bg-surface-container-high shadow-lg rounded-t-xl md:hidden">
+<div class="w-full flex justify-around items-center pt-2 pb-6 px-2">
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 transition-transform duration-300 ease-out active:scale-90" href="index.html">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="text-label-sm font-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 transition-transform duration-300 ease-out active:scale-90" href="estadia.html">
+<span class="material-symbols-outlined" data-icon="key" style="font-variation-settings: 'FILL' 1;">key</span>
+<span class="text-label-sm font-label-sm">My Stay</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 transition-transform duration-300 ease-out active:scale-90" href="guia.html">
+<span class="material-symbols-outlined" data-icon="explore">explore</span>
+<span class="text-label-sm font-label-sm">Guide</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 transition-transform duration-300 ease-out active:scale-90" href="regras.html">
+<span class="material-symbols-outlined" data-icon="chat_bubble">chat_bubble</span>
+<span class="text-label-sm font-label-sm">Contact</span>
+</a>
+</div>
+</nav>
+<!-- Desktop Navigation Drawer / Side (Hidden on Mobile) -->
+<aside class="hidden md:flex fixed top-16 left-0 h-full w-64 bg-surface-container-low border-r border-surface-variant flex-col p-6 gap-2">
+<p class="font-label-sm text-outline px-4 mb-2">NAVEGAÇÃO</p>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-muted transition-colors" href="index.html">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-title-md">Início</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg bg-primary-container text-on-primary-container transition-colors" href="estadia.html">
+<span class="material-symbols-outlined" data-icon="key">key</span>
+<span class="font-title-md">Minha Estadia</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-muted transition-colors" href="guia.html">
+<span class="material-symbols-outlined" data-icon="explore">explore</span>
+<span class="font-title-md">Guia Local</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-muted transition-colors" href="regras.html">
+<span class="material-symbols-outlined" data-icon="contact_support">contact_support</span>
+<span class="font-title-md">Suporte</span>
+</a>
+<div class="mt-auto mb-20 p-4 bg-surface-muted rounded-xl">
+<p class="text-xs font-bold text-primary mb-2 uppercase">Próxima Experiência</p>
+<p class="text-sm text-ink-deep font-semibold">Pôr do Sol no Quadrado</p>
+<p class="text-xs text-on-surface-variant mb-4">Hoje às 17:00</p>
+<button class="w-full py-2 bg-primary text-white rounded-lg text-xs font-bold hover:brightness-110 transition-all">Ver Detalhes</button>
+</div>
+</aside>
+<script>
+        // Micro-interaction for code copying
+        document.querySelectorAll('[data-icon="content_copy"]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const text = this.previousElementSibling.querySelector('.select-all').textContent;
+                navigator.clipboard.writeText(text);
+                const originalIcon = this.textContent;
+                this.textContent = 'check';
+                this.classList.add('text-green-600');
+                setTimeout(() => {
+                    this.textContent = originalIcon;
+                    this.classList.remove('text-green-600');
+                }, 2000);
+            });
+        });
+
+        // Simple scroll effect for TopAppBar
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 20) {
+                header.classList.add('shadow-md', 'bg-white');
+                header.classList.remove('bg-surface-container-low');
+            } else {
+                header.classList.remove('shadow-md', 'bg-white');
+                header.classList.add('bg-surface-container-low');
+            }
+        });
+    </script>
+
+
+</body></html>
