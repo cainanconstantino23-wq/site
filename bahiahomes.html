@@ -123,76 +123,83 @@
         </div>
     </header>
 
-    <!-- Hero Pitch Title Section -->
-    <section class="relative pt-36 pb-20 lg:pt-44 lg:pb-32 bg-trancoso-linen border-b border-trancoso-clay/10 overflow-hidden">
-        <div class="absolute inset-0 bg-pattern-organic pointer-events-none"></div>
+    <!-- Hero Pitch Title Section with Background Wallpaper -->
+    <section class="relative min-h-[90vh] pt-36 pb-20 lg:pt-44 lg:pb-32 border-b border-trancoso-clay/10 overflow-hidden flex items-center">
+        <!-- Background Wallpaper Image (varanda.jpg) with Dark Organic Overlay -->
+        <div class="absolute inset-0 z-0">
+            <img src="varanda.jpg" alt="Varanda Bahia Homes" class="w-full h-full object-cover object-center" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=1920&q=80';">
+            <div class="absolute inset-0 bg-gradient-to-r from-trancoso-timber/95 via-trancoso-timber/80 to-trancoso-timber/60 backdrop-brightness-90"></div>
+            <div class="absolute inset-0 bg-pattern-organic opacity-10 mix-blend-overlay pointer-events-none"></div>
+        </div>
         
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                 
-                <!-- Left Narrative Column -->
+                <!-- Left Narrative Column (Overlaid Text) -->
                 <div class="lg:col-span-7 space-y-6">
-                    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-trancoso-clay/10 border border-trancoso-clay/20 text-trancoso-clay text-xs font-mono">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-trancoso-straw/20 border border-trancoso-straw/30 text-trancoso-straw text-xs font-mono backdrop-blur-md">
                         <i data-lucide="clapperboard" class="w-3.5 h-3.5"></i>
                         <span>PROJETO AUDIOVISUAL EXCLUSIVO • DAIME FILMES</span>
                     </div>
 
-                    <h1 class="text-4xl sm:text-6xl font-serif-luxury font-bold leading-[1.08] text-trancoso-timber">
-                        Como transformar a alma da <span class="italic font-normal text-trancoso-clay">Bahia Homes</span> em uma série no YouTube.
+                    <h1 class="text-4xl sm:text-6xl font-serif-luxury font-bold leading-[1.08] text-white">
+                        Como transformar a alma da <span class="italic font-normal text-trancoso-straw">Bahia Homes</span> em uma série no YouTube.
                     </h1>
 
-                    <p class="text-stone-700 text-base sm:text-lg font-light leading-relaxed max-w-2xl">
+                    <p class="text-stone-300 text-base sm:text-lg font-light leading-relaxed max-w-2xl">
                         Apresentamos o nosso olhar cinematográfico para traduzir o estilo de vida de luxo em Trancoso, a arquitetura vernacular contemporânea e a arte de bem receber em uma produção documental sem ostentação.
                     </p>
 
-                    <div class="flex flex-wrap gap-2 pt-2 text-xs font-mono text-stone-600">
-                        <span class="bg-trancoso-sand px-3 py-1.5 rounded-lg border border-trancoso-clay/15">Arte</span>
-                        <span class="bg-trancoso-sand px-3 py-1.5 rounded-lg border border-trancoso-clay/15">Filme</span>
-                        <span class="bg-trancoso-sand px-3 py-1.5 rounded-lg border border-trancoso-clay/15">Fotografia</span>
-                        <span class="bg-trancoso-sand px-3 py-1.5 rounded-lg border border-trancoso-clay/15">Estilo de Vida Baiano</span>
+                    <div class="flex flex-wrap gap-2 pt-2 text-xs font-mono text-trancoso-sand/90">
+                        <span class="bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10">Arte</span>
+                        <span class="bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10">Filme</span>
+                        <span class="bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10">Fotografia</span>
+                        <span class="bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10">Estilo de Vida Baiano</span>
                     </div>
 
                     <div class="pt-4 flex flex-col sm:flex-row gap-4">
-                        <a href="#episodios" class="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl bg-trancoso-clay text-white font-semibold text-xs tracking-wider uppercase hover:bg-trancoso-timber transition-all shadow-lg shadow-trancoso-clay/20">
+                        <a href="#episodios" class="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl bg-trancoso-clay text-white font-semibold text-xs tracking-wider uppercase hover:bg-trancoso-straw hover:text-trancoso-timber transition-all shadow-xl shadow-trancoso-clay/30">
                             <i data-lucide="film" class="w-4 h-4"></i>
                             <span>Conhecer os 8 Episódios</span>
                         </a>
-                        <a href="#estetica" class="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl bg-trancoso-sand border border-trancoso-clay/20 text-trancoso-timber font-semibold text-xs tracking-wider uppercase hover:bg-trancoso-linen transition-all">
+                        <a href="#estetica" class="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-white font-semibold text-xs tracking-wider uppercase hover:bg-white/20 transition-all">
                             <span>Ver Proposta Estética</span>
                             <i data-lucide="arrow-down" class="w-4 h-4"></i>
                         </a>
                     </div>
                 </div>
 
-                <!-- Right Moodboard Visual Card -->
+                <!-- Right Moodboard Visual Glass Card -->
                 <div class="lg:col-span-5 relative">
-                    <div class="bg-trancoso-timber text-trancoso-sand rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl relative overflow-hidden border border-trancoso-straw/20">
-                        <div class="relative h-64 sm:h-72 rounded-2xl overflow-hidden border border-trancoso-straw/30 group">
-                            <img src="https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=1000&q=80" alt="Varanda Bahia Homes" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                            <div class="absolute inset-0 bg-gradient-to-t from-trancoso-timber via-transparent to-black/30"></div>
-                            
-                            <div class="absolute top-4 left-4 bg-trancoso-timber/80 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-mono text-trancoso-straw border border-trancoso-straw/30">
+                    <div class="bg-trancoso-timber/90 backdrop-blur-xl text-trancoso-sand rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl relative overflow-hidden border border-trancoso-straw/30">
+                        <!-- Top Tag -->
+                        <div class="flex items-center justify-between border-b border-stone-700/60 pb-3 font-mono text-xs text-trancoso-straw">
+                            <span class="flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-trancoso-clay animate-pulse"></span>
                                 PROJETO YOUTUBE BH
-                            </div>
+                            </span>
+                            <span class="text-stone-400">PITCH DE VÍDEO</span>
+                        </div>
 
-                            <div class="absolute bottom-4 left-4 right-4 text-white">
-                                <p class="text-xs font-mono text-trancoso-straw uppercase">Visão de Produção</p>
-                                <h3 class="text-lg font-serif-luxury font-bold">Daime Filmes x Bahia Homes</h3>
-                            </div>
+                        <div class="space-y-3">
+                            <h3 class="text-2xl font-serif-luxury font-bold text-white">Daime Filmes x Bahia Homes</h3>
+                            <p class="text-xs text-stone-300 font-light leading-relaxed">
+                                Um projeto pensado em cada frame para capturar a luz, a madeira, o vento e os gestos de acolhimento que definem Trancoso.
+                            </p>
                         </div>
 
                         <div class="grid grid-cols-2 gap-3 text-xs font-mono">
-                            <div class="bg-trancoso-wood p-3 rounded-xl border border-trancoso-straw/20">
-                                <span class="text-stone-400 block text-[10px]">APRESENTAÇÃO:</span>
+                            <div class="bg-black/40 p-3.5 rounded-xl border border-trancoso-straw/20">
+                                <span class="text-stone-400 block text-[10px] uppercase">Apresentação</span>
                                 <span class="text-trancoso-straw font-bold text-sm">Raul & Convidados</span>
                             </div>
-                            <div class="bg-trancoso-wood p-3 rounded-xl border border-trancoso-straw/20">
-                                <span class="text-stone-400 block text-[10px]">DIREÇÃO DE ARTE:</span>
+                            <div class="bg-black/40 p-3.5 rounded-xl border border-trancoso-straw/20">
+                                <span class="text-stone-400 block text-[10px] uppercase">Direção de Arte</span>
                                 <span class="text-trancoso-straw font-bold text-sm">Daime Filmes</span>
                             </div>
                         </div>
 
-                        <blockquote class="text-xs italic text-stone-300 border-l-2 border-trancoso-straw pl-3 py-1 font-serif-luxury text-sm">
+                        <blockquote class="text-xs italic text-stone-300 border-l-2 border-trancoso-straw pl-3.5 py-1 font-serif-luxury text-sm leading-snug">
                             "A narrativa combina momentos institucionais, tours guiados por propriedades emblemáticas e retratos poéticos das experiências e personagens locais."
                         </blockquote>
                     </div>
