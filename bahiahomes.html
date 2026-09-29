@@ -5,6 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daime Filmes apresenta: Projeto YouTube Bahia Homes</title>
     
+    <!-- DNS Prefetch & Preconnect para aceleração de conexões -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://www.youtube.com">
+    <link rel="dns-prefetch" href="https://img.youtube.com">
+    <link rel="dns-prefetch" href="https://i.ytimg.com">
+
+    <!-- Preload Hero Image (LCP) -->
+    <link rel="preload" as="image" href="varanda.jpg">
+
+    <!-- Tailwind Play CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -35,13 +46,12 @@
         }
     </script>
     
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Google Fonts Otimizado -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
     
-    <!-- Lucide Icons CDN -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Lucide Icons CDN (Deferred) -->
+    <script src="https://unpkg.com/lucide@latest" defer></script>
 
     <style>
         body {
@@ -127,7 +137,7 @@
     <section class="relative min-h-[92vh] pt-36 pb-20 lg:pt-48 lg:pb-32 border-b border-trancoso-clay/10 overflow-hidden flex items-center">
         <!-- Background Wallpaper Image (varanda.jpg) with Dark Organic Overlay -->
         <div class="absolute inset-0 z-0">
-            <img src="varanda.jpg" alt="Varanda Bahia Homes" class="w-full h-full object-cover object-center" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=1920&q=80';">
+            <img src="varanda.jpg" alt="Varanda Bahia Homes" class="w-full h-full object-cover object-center" fetchpriority="high" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=1920&q=80';">
             <div class="absolute inset-0 bg-gradient-to-r from-trancoso-timber/95 via-trancoso-timber/85 to-trancoso-timber/65 backdrop-brightness-90"></div>
             <div class="absolute inset-0 bg-pattern-organic opacity-10 mix-blend-overlay pointer-events-none"></div>
         </div>
@@ -152,7 +162,6 @@
                     <span class="bg-black/40 backdrop-blur-md px-3.5 py-2 rounded-lg border border-white/10">Arte</span>
                     <span class="bg-black/40 backdrop-blur-md px-3.5 py-2 rounded-lg border border-white/10">Filme</span>
                     <span class="bg-black/40 backdrop-blur-md px-3.5 py-2 rounded-lg border border-white/10">Fotografia</span>
-                   
                 </div>
 
                 <div class="pt-6 flex flex-col sm:flex-row gap-4">
@@ -218,14 +227,12 @@
     <section id="brainstorm" class="py-20 bg-trancoso-linen border-b border-trancoso-clay/10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
             <div class="text-center max-w-2xl mx-auto space-y-2">
-                
                 <h2 class="text-2xl sm:text-3xl font-serif-luxury font-bold text-trancoso-timber">Mapeamento de Experiências & Conteúdo</h2>
                 <p class="text-stone-600 text-xs sm:text-sm font-light">Elementos culturais e de lifestyle identificados para compor os episódios do canal.</p>
             </div>
 
             <!-- Sticky Notes / Sketches Grid -->
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 font-mono text-xs">
-                
                 <div class="bg-trancoso-sand p-4 rounded-xl border border-trancoso-clay/20 space-y-2 hover:border-trancoso-clay transition-all">
                     <span class="text-[10px] text-trancoso-clay font-bold block">#SCHIZZIBOOKS</span>
                     <p class="text-stone-800 font-serif-luxury text-sm sm:text-base font-bold">Arquitetura & Croquis</p>
@@ -255,7 +262,6 @@
                     <p class="text-stone-800 font-serif-luxury text-sm sm:text-base font-bold">Produtores locais & Artesãos</p>
                     <p class="text-[11px] text-stone-500">Encontros com quem molda a cultura local.</p>
                 </div>
-
             </div>
         </div>
     </section>
@@ -263,14 +269,13 @@
     <!-- The 8 Official Episodes Grid Section -->
     <section id="episodios" class="py-24 bg-wood-grain text-trancoso-sand relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-            
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div>
                     <span class="text-xs font-mono tracking-widest text-trancoso-straw uppercase font-semibold">GRADE DE EPISÓDIOS MAPEADA</span>
-                    
                 </div>
                 <p class="text-stone-400 text-xs sm:text-sm max-w-md font-light">
-                    Clique em qualquer episódio para explorar 
+                    Clique em qualquer episódio para explorar os detalhes do roteiro.
+                </p>
             </div>
 
             <!-- Grid of 8 Episodes -->
@@ -443,7 +448,6 @@
     <!-- Proposta Estética & Referências Cinematográficas -->
     <section id="estetica" class="py-24 bg-trancoso-linen border-b border-trancoso-clay/10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
-            
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                 
                 <!-- Narrative Side -->
@@ -479,14 +483,14 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div class="space-y-4">
                             <div class="relative rounded-3xl overflow-hidden border border-trancoso-clay/20 shadow-md h-56 group">
-                                <img src="coco.jpg" alt="MK27 Referência Estética 1" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <img src="coco.jpg" alt="MK27 Referência Estética 1" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
                                 <span class="absolute bottom-3 left-3 text-[10px] font-mono text-trancoso-straw bg-trancoso-timber/80 px-2.5 py-1 rounded border border-trancoso-straw/30">
                                     REF/01: Gastronomia & Cozinha Baiana
                                 </span>
                             </div>
                             <div class="relative rounded-3xl overflow-hidden border border-trancoso-clay/20 shadow-md h-64 group">
-                                <img src="porta.jpg" alt="Arquitetura Vernacular Bahia" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <img src="porta.jpg" alt="Arquitetura Vernacular Bahia" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
                                 <span class="absolute bottom-3 left-3 text-[10px] font-mono text-trancoso-straw bg-trancoso-timber/80 px-2.5 py-1 rounded border border-trancoso-straw/30">
                                     Madeira Nobre & Ventilação
@@ -496,14 +500,14 @@
 
                         <div class="space-y-4 pt-6">
                             <div class="relative rounded-3xl overflow-hidden border border-trancoso-clay/20 shadow-md h-64 group">
-                                <img src="arte.jpg" alt="Refúgio Sahy Residence Falésia" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <img src="arte.jpg" alt="Refúgio Sahy Residence Falésia" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
                                 <span class="absolute bottom-3 left-3 text-[10px] font-mono text-trancoso-straw bg-trancoso-timber/80 px-2.5 py-1 rounded border border-trancoso-straw/30">
                                     REF/02: Arte e decoração
                                 </span>
                             </div>
                             <div class="relative rounded-3xl overflow-hidden border border-trancoso-clay/20 shadow-md h-56 group">
-                                <img src="textura.jpg" alt="Detalhe de Decoração Rústica Chic" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <img src="textura.jpg" alt="Detalhe de Decoração Rústica Chic" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
                                 <span class="absolute bottom-3 left-3 text-[10px] font-mono text-trancoso-straw bg-trancoso-timber/80 px-2.5 py-1 rounded border border-trancoso-straw/30">
                                     Texturas de Argila e jardimagem
@@ -514,7 +518,6 @@
                 </div>
 
             </div>
-
         </div>
     </section>
 
@@ -541,7 +544,7 @@
                 <!-- Video Card 1: Casa 3M (Studio MK27) -->
                 <div class="bg-trancoso-linen rounded-3xl overflow-hidden border border-trancoso-clay/20 shadow-lg flex flex-col justify-between group hover:border-trancoso-clay transition-all">
                     <div class="relative h-64 sm:h-72 overflow-hidden bg-black">
-                        <img src="https://img.youtube.com/vi/WKk1mYgSlic/hqdefault.jpg" alt="REF/01 - Studio MK27 Casa 3M" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90">
+                        <img src="https://i.ytimg.com/vi_webp/WKk1mYgSlic/mqdefault.webp" alt="REF/01 - Studio MK27 Casa 3M" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90">
                         <div class="absolute inset-0 bg-gradient-to-t from-trancoso-timber via-black/20 to-transparent"></div>
                         
                         <!-- Top Badge -->
@@ -584,7 +587,7 @@
                 <!-- Video Card 2: Sahy Residence -->
                 <div class="bg-trancoso-linen rounded-3xl overflow-hidden border border-trancoso-clay/20 shadow-lg flex flex-col justify-between group hover:border-trancoso-clay transition-all">
                     <div class="relative h-64 sm:h-72 overflow-hidden bg-black">
-                        <img src="https://img.youtube.com/vi/Fq3NfokJilI/hqdefault.jpg" alt="REF/02 - Sahy Residence" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90">
+                        <img src="https://i.ytimg.com/vi_webp/Fq3NfokJilI/mqdefault.webp" alt="REF/02 - Sahy Residence" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90">
                         <div class="absolute inset-0 bg-gradient-to-t from-trancoso-timber via-black/20 to-transparent"></div>
                         
                         <!-- Top Badge -->
@@ -651,7 +654,6 @@
 
                 <!-- 10 Planned Shots Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
-                    
                     <div class="bg-trancoso-sand p-4 rounded-xl border border-trancoso-clay/10 space-y-1">
                         <span class="text-trancoso-clay font-bold block">1. Aproximação Aérea FPV:</span>
                         <p class="text-stone-700 font-light">Drone deslizando do oceano em direção à varanda da casa em plano sequência.</p>
@@ -699,9 +701,8 @@
 
                     <div class="bg-trancoso-sand p-4 rounded-xl border border-trancoso-clay/10 space-y-1">
                         <span class="text-trancoso-clay font-bold block">10. Encerramento Poético:</span>
-                        <p class="text-stone-700 font-light">Luzes sutis da casa acendendo ao anitecer com o som suave do mar ao fundo.</p>
+                        <p class="text-stone-700 font-light">Luzes sutis da casa acendendo ao anoitecer com o som suave do mar ao fundo.</p>
                     </div>
-
                 </div>
             </div>
 
@@ -711,7 +712,6 @@
     <!-- Simple Editorial Presentation Footer -->
     <footer class="py-16 bg-trancoso-timber text-trancoso-sand relative">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
-            
             <div class="space-y-2">
                 <span class="text-xs font-mono tracking-widest text-trancoso-straw uppercase font-semibold">DAIME FILMES AUDIOVISUAL ©2026</span>
                 <h2 class="text-2xl sm:text-5xl font-serif-luxury font-bold text-white">
@@ -728,7 +728,6 @@
                     <span>TRANCOSO</span> • <span>OUTEIRO DAS BRISAS</span> • <span>PRAIA DO ESPELHO</span>
                 </div>
             </div>
-
         </div>
     </footer>
 
@@ -780,8 +779,12 @@
 
     <!-- JavaScript Interactions -->
     <script>
-        // Initialize Lucide Icons
-        lucide.createIcons();
+        // Initialize Lucide Icons after DOM load
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+        });
 
         function openVideoModal(videoId, title) {
             const modal = document.getElementById('video-modal');
