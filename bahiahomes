@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daime Filmes apresenta: Projeto YouTube Bahia Homes</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        trancoso: {
+                            sand: '#F5F0EB',
+                            linen: '#EAE3D9',
+                            clay: '#B2533E',
+                            terracotta: '#8C3D2B',
+                            forest: '#1E3A2B',
+                            palm: '#2D5A40',
+                            timber: '#231A16',
+                            wood: '#3D2E27',
+                            straw: '#CBA368',
+                            earth: '#7A5C43',
+                            cream: '#FAF7F2'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        serif: ['Cormorant Garamond', 'Georgia', 'serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F5F0EB;
+            color: #231A16;
+        }
+        .font-serif-luxury {
+            font-family: 'Cormorant Garamond', serif;
+        }
+        .bg-pattern-organic {
+            background-image: radial-gradient(#B2533E 0.6px, transparent 0.6px), radial-gradient(#1E3A2B 0.6px, #F5F0EB 0.6px);
+            background-size: 24px 24px;
+            background-position: 0 0, 12px 12px;
+            opacity: 0.05;
+        }
+        .bg-wood-grain {
+            background-color: #231A16;
+            background-image: radial-gradient(rgba(203, 163, 104, 0.08) 1px, transparent 0);
+            background-size: 16px 16px;
+        }
+        .glass-trancoso {
+            background: rgba(245, 240, 235, 0.88);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(178, 83, 62, 0.12);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #EAE3D9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #B2533E;
+            border-radius: 3px;
+        }
+        .fitinha-ribbon {
+            background: linear-gradient(90deg, #D62828 0%, #0077B6 25%, #2A9D8F 50%, #E9C46A 75%, #B2533E 100%);
+            height: 3px;
+        }
+    </style>
+</head>
+<body class="bg-trancoso-sand text-trancoso-timber antialiased selection:bg-trancoso-clay selection:text-white relative">
+
+    <!-- Top Bonfim Color Accent -->
+    <div class="fitinha-ribbon w-full fixed top-0 left-0 right-0 z-50"></div>
+
+    <!-- Navigation Bar -->
+    <header class="fixed top-1 left-0 right-0 z-40 transition-all duration-300 glass-trancoso">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            
+            <!-- Pitch Identification Badge -->
+            <div class="flex items-center gap-3">
+                <div class="flex flex-col">
+                    <span class="text-xs font-mono tracking-widest text-trancoso-clay uppercase font-semibold">DAIME FILMES</span>
+                    <span class="text-sm sm:text-base font-serif-luxury font-bold text-trancoso-timber tracking-tight uppercase">PROPOSTA DE CONTEÚDO YOUTUBE</span>
+                </div>
+                <span class="hidden sm:inline-block h-6 w-px bg-trancoso-clay/20"></span>
+                <span class="hidden sm:inline-block text-xs font-mono text-stone-500 uppercase tracking-wider">PARA: BAHIA HOMES</span>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="hidden md:flex items-center gap-7 text-xs font-semibold uppercase tracking-widest text-trancoso-timber/80">
+                <a href="#proposta" class="hover:text-trancoso-clay transition-colors">A Proposta</a>
+                <a href="#brainstorm" class="hover:text-trancoso-clay transition-colors">Insights</a>
+                <a href="#episodios" class="hover:text-trancoso-clay transition-colors">8 Episódios</a>
+                <a href="#estetica" class="hover:text-trancoso-clay transition-colors">Estética MK27</a>
+                <a href="#referencias" class="hover:text-trancoso-clay transition-colors">Referências em Vídeo</a>
+                <a href="#shotlist" class="hover:text-trancoso-clay transition-colors">Cenários & Shotlist</a>
+            </nav>
+
+            <!-- Brand Stamp -->
+            <div class="flex items-center gap-2 bg-trancoso-linen px-3.5 py-1.5 rounded-full border border-trancoso-clay/15">
+                <span class="w-2 h-2 rounded-full bg-trancoso-clay animate-pulse"></span>
+                <span class="text-[11px] font-mono font-medium text-trancoso-timber">MOODBOARD ©2026</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Pitch Title Section -->
+    <section class="relative pt-36 pb-20 lg:pt-44 lg:pb-32 bg-trancoso-linen border-b border-trancoso-clay/10 overflow-hidden">
+        <div class="absolute inset-0 bg-pattern-organic pointer-events-none"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Left Narrative Column -->
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-trancoso-clay/10 border border-trancoso-clay/20 text-trancoso-clay text-xs font-mono">
+                        <i data-lucide="clapperboard" class="w-3.5 h-3.5"></i>
+                        <span>PROJETO AUDIOVISUAL EXCLUSIVO • DAIME FILMES</span>
+                    </div>
+
+                    <h1 class="text-4xl sm:text-6xl font-serif-luxury font-bold leading-[1.08] text-trancoso-timber">
+                        Como transformar a alma da <span class="italic font-normal text-trancoso-clay">Bahia Homes</span> em uma série no YouTube.
+                    </h1>
+
+                    <p class="text-stone-700 text-base sm:text-lg font-light leading-relaxed max-w-2xl">
+                        Apresentamos o nosso olhar cinematográfico para traduzir o estilo de vida de luxo em Trancoso, a arquitetura vernacular contemporânea e a arte de bem receber em uma produção documental sem ostentação.
+                    </p>
+
+                    <div class="flex flex-wrap gap-2 pt-2 text-xs font-mono text-stone-600">
+                        <span class="bg-trancoso-sand px-3 py-1.5 rounded-lg border border-trancoso-clay/15">Arte</span>
+                        <span class="bg-trancoso-sand px-3 py-1.5 rounded-lg border border-trancoso-clay/15">Filme</span>
+                        <span class="bg-trancoso-sand px-3 py-1.5 rounded-lg border border-trancoso-clay/15">Fotografia</span>
+                        <span class="bg-trancoso-sand px-3 py-1.5 rounded-lg border border-trancoso-clay/15">Estilo de Vida Baiano</span>
+                    </div>
+
+                    <div class="pt-4 flex flex-col sm:flex-row gap-4">
+                        <a href="#episodios" class="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl bg-trancoso-clay text-white font-semibold text-xs tracking-wider uppercase hover:bg-trancoso-timber transition-all shadow-lg shadow-trancoso-clay/20">
+                            <i data-lucide="film" class="w-4 h-4"></i>
+                            <span>Conhecer os 8 Episódios</span>
+                        </a>
+                        <a href="#estetica" class="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl bg-trancoso-sand border border-trancoso-clay/20 text-trancoso-timber font-semibold text-xs tracking-wider uppercase hover:bg-trancoso-linen transition-all">
+                            <span>Ver Proposta Estética</span>
+                            <i data-lucide="arrow-down" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Moodboard Visual Card -->
+                <div class="lg:col-span-5 relative">
+                    <div class="bg-trancoso-timber text-trancoso-sand rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl relative overflow-hidden border border-trancoso-straw/20">
+                        <div class="relative h-64 sm:h-72 rounded-2xl overflow-hidden border border-trancoso-straw/30 group">
+                            <img src="https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=1000&q=80" alt="Varanda Bahia Homes" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-trancoso-timber via-transparent to-black/30"></div>
+                            
+                            <div class="absolute top-4 left-4 bg-trancoso-timber/80 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-mono text-trancoso-straw border border-trancoso-straw/30">
+                                PROJETO YOUTUBE BH
+                            </div>
+
+                            <div class="absolute bottom-4 left-4 right-4 text-white">
+                                <p class="text-xs font-mono text-trancoso-straw uppercase">Visão de Produção</p>
+                                <h3 class="text-lg font-serif-luxury font-bold">Daime Filmes x Bahia Homes</h3>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3 text-xs font-mono">
+                            <div class="bg-trancoso-wood p-3 rounded-xl border border-trancoso-straw/20">
+                                <span class="text-stone-400 block text-[10px]">APRESENTAÇÃO:</span>
+                                <span class="text-trancoso-straw font-bold text-sm">Raul & Convidados</span>
+                            </div>
+                            <div class="bg-trancoso-wood p-3 rounded-xl border border-trancoso-straw/20">
+                                <span class="text-stone-400 block text-[10px]">DIREÇÃO DE ARTE:</span>
+                                <span class="text-trancoso-straw font-bold text-sm">Daime Filmes</span>
+                            </div>
+                        </div>
+
+                        <blockquote class="text-xs italic text-stone-300 border-l-2 border-trancoso-straw pl-3 py-1 font-serif-luxury text-sm">
+                            "A narrativa combina momentos institucionais, tours guiados por propriedades emblemáticas e retratos poéticos das experiências e personagens locais."
+                        </blockquote>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Concept & Narrative Manifesto Section -->
+    <section id="proposta" class="py-20 bg-trancoso-sand relative border-b border-trancoso-clay/10">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+            <span class="text-xs font-mono tracking-widest text-trancoso-clay uppercase font-semibold">O CONCEITO CENTRAL</span>
+            
+            <h2 class="text-3xl sm:text-5xl font-serif-luxury font-bold text-trancoso-timber max-w-3xl mx-auto leading-tight">
+                "Sair do óbvio imobiliário para celebrar a verdadeira arte de viver na Bahia."
+            </h2>
+
+            <div class="w-16 h-0.5 bg-trancoso-clay mx-auto"></div>
+
+            <p class="text-stone-700 text-base sm:text-lg leading-relaxed font-light max-w-3xl mx-auto">
+                Em vez de apenas listar metragens e preços, a série propõe um olhar documental contemplativo sobre a atmosfera de Trancoso. Vamos revelar o sopro da ventilação cruzada nas treliças, a argila moldada no atelier de Calá, o sabor do peixe fresco na varanda e o afeto discreto da hospitalidade **Bahia Homes**.
+            </p>
+
+            <!-- 3 Core Pillars -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pt-10 text-left">
+                <div class="bg-trancoso-linen p-6 rounded-2xl border border-trancoso-clay/15 space-y-3">
+                    <span class="text-xs font-mono text-trancoso-clay font-bold block">01 / ESTILO DE VIDA</span>
+                    <h3 class="text-lg font-serif-luxury font-bold text-trancoso-timber">Luxo Descalço & Despretensioso</h3>
+                    <p class="text-xs text-stone-600 leading-relaxed font-light">
+                        A essência de Trancoso traduzida em ritmo calmo, luz natural e a simplicidade sofisticada do litoral baiano.
+                    </p>
+                </div>
+
+                <div class="bg-trancoso-linen p-6 rounded-2xl border border-trancoso-clay/15 space-y-3">
+                    <span class="text-xs font-mono text-trancoso-clay font-bold block">02 / ARQUITETURA</span>
+                    <h3 class="text-lg font-serif-luxury font-bold text-trancoso-timber">Arquitetura Vernacular</h3>
+                    <p class="text-xs text-stone-600 leading-relaxed font-light">
+                        Projetos emblemáticos assinados por mestres como Ricardo Salem, unindo madeira nobre, sapé e integração total com a mata.
+                    </p>
+                </div>
+
+                <div class="bg-trancoso-linen p-6 rounded-2xl border border-trancoso-clay/15 space-y-3">
+                    <span class="text-xs font-mono text-trancoso-clay font-bold block">03 / HOSPITALIDADE</span>
+                    <h3 class="text-lg font-serif-luxury font-bold text-trancoso-timber">Hospitalidade Atemporal</h3>
+                    <p class="text-xs text-stone-600 leading-relaxed font-light">
+                        O diferencial do concierge dedicado, serviço de mesa impecável e a atenção afetuosa aos detalhes das estadas.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Brainstorm & Insights Board (Recreating PDF Page 3) -->
+    <section id="brainstorm" class="py-20 bg-trancoso-linen border-b border-trancoso-clay/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+            <div class="text-center max-w-2xl mx-auto space-y-2">
+                <span class="text-xs font-mono tracking-widest text-trancoso-clay uppercase font-semibold">CADERNO DE IDEIAS & INSIGHTS (PDF PG. 03)</span>
+                <h2 class="text-3xl font-serif-luxury font-bold text-trancoso-timber">Mapeamento de Experiências & Conteúdo</h2>
+                <p class="text-stone-600 text-xs sm:text-sm font-light">Elementos culturais e de lifestyle identificados para compor os episódios do canal.</p>
+            </div>
+
+            <!-- Sticky Notes / Sketches Grid -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 font-mono text-xs">
+                
+                <div class="bg-trancoso-sand p-4 rounded-xl border border-trancoso-clay/20 space-y-2 hover:border-trancoso-clay transition-all">
+                    <span class="text-[10px] text-trancoso-clay font-bold block">#SCHIZZIBOOKS</span>
+                    <p class="text-stone-800 font-serif-luxury text-base font-bold">Arquitetura & Croquis</p>
+                    <p class="text-[11px] text-stone-500">Desenhos de plantas e detalhes de marcenaria.</p>
+                </div>
+
+                <div class="bg-trancoso-sand p-4 rounded-xl border border-trancoso-clay/20 space-y-2 hover:border-trancoso-clay transition-all">
+                    <span class="text-[10px] text-trancoso-clay font-bold block">#RÉVEILLON & RECEPTIVO</span>
+                    <p class="text-stone-800 font-serif-luxury text-base font-bold">Check-in Personalizado</p>
+                    <p class="text-[11px] text-stone-500">A recepção calorosa nas casas de altíssimo padrão.</p>
+                </div>
+
+                <div class="bg-trancoso-sand p-4 rounded-xl border border-trancoso-clay/20 space-y-2 hover:border-trancoso-clay transition-all">
+                    <span class="text-[10px] text-trancoso-clay font-bold block">#WELLNESS</span>
+                    <p class="text-stone-800 font-serif-luxury text-base font-bold">Massagem na Casa</p>
+                    <p class="text-[11px] text-stone-500">Sons do mar e aromaterapia privativa.</p>
+                </div>
+
+                <div class="bg-trancoso-sand p-4 rounded-xl border border-trancoso-clay/20 space-y-2 hover:border-trancoso-clay transition-all">
+                    <span class="text-[10px] text-trancoso-clay font-bold block">#SABORES</span>
+                    <p class="text-stone-800 font-serif-luxury text-base font-bold">Caipirinha & Drinks</p>
+                    <p class="text-[11px] text-stone-500">Frutas locais preparadas na hora na varanda.</p>
+                </div>
+
+                <div class="bg-trancoso-sand p-4 rounded-xl border border-trancoso-clay/20 space-y-2 hover:border-trancoso-clay transition-all">
+                    <span class="text-[10px] text-trancoso-clay font-bold block">#PERSONAGENS</span>
+                    <p class="text-stone-800 font-serif-luxury text-base font-bold">Roberto Avelino & Artesãos</p>
+                    <p class="text-[11px] text-stone-500">Encontros com quem molda a cultura local.</p>
+                </div>
+
+                <div class="bg-trancoso-sand p-4 rounded-xl border border-trancoso-clay/20 space-y-2 hover:border-trancoso-clay transition-all">
+                    <span class="text-[10px] text-trancoso-clay font-bold block">#ROTA</span>
+                    <p class="text-stone-800 font-serif-luxury text-base font-bold">Arraial → Trancoso</p>
+                    <p class="text-[11px] text-stone-500">O percurso cinematográfico do Litoral Sul.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- The 8 Official Episodes Grid Section (PDF Pages 5-10) -->
+    <section id="episodios" class="py-24 bg-wood-grain text-trancoso-sand relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+            
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                <div>
+                    <span class="text-xs font-mono tracking-widest text-trancoso-straw uppercase font-semibold">GRADE DE EPISÓDIOS MAREADA (PDF PG. 05-10)</span>
+                    <h2 class="text-3xl sm:text-5xl font-serif-luxury font-bold text-white mt-1">A Estrutura da 1ª Temporada</h2>
+                </div>
+                <p class="text-stone-400 text-xs sm:text-sm max-w-md font-light">
+                    Clique em qualquer episódio para explorar o conceito de roteiro, elenco envolvido e diretrizes de captação da Daime Filmes.
+                </p>
+            </div>
+
+            <!-- Grid of 8 Episodes -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <!-- EP 01 -->
+                <div onclick="openEpisodeDetail(1)" class="bg-stone-900/90 rounded-3xl p-6 border border-stone-800 hover:border-trancoso-straw/50 transition-all cursor-pointer group flex flex-col justify-between space-y-6">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between text-xs font-mono text-trancoso-straw">
+                            <span>EPISÓDIO 01</span>
+                            <span class="px-2 py-0.5 rounded bg-trancoso-clay/20 text-trancoso-straw text-[10px]">MANIFESTO</span>
+                        </div>
+                        <h3 class="text-lg font-serif-luxury font-bold text-white group-hover:text-trancoso-straw transition-colors">
+                            "A História e Visão Bahia Homes"
+                        </h3>
+                        <p class="text-xs text-stone-400 line-clamp-3 leading-relaxed font-light">
+                            Vídeo manifesto de abertura. A trajetória da marca, a filosofia de entregar experiências e sonhos em vez de apenas imóveis de luxo.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-stone-800 text-[11px] font-mono text-stone-500 flex justify-between items-center">
+                        <span>Abertura Institucional</span>
+                        <span class="text-trancoso-straw group-hover:translate-x-1 transition-transform">Roteiro →</span>
+                    </div>
+                </div>
+
+                <!-- EP 02 -->
+                <div onclick="openEpisodeDetail(2)" class="bg-stone-900/90 rounded-3xl p-6 border border-stone-800 hover:border-trancoso-straw/50 transition-all cursor-pointer group flex flex-col justify-between space-y-6">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between text-xs font-mono text-trancoso-straw">
+                            <span>EPISÓDIO 02</span>
+                            <span class="px-2 py-0.5 rounded bg-trancoso-clay/20 text-trancoso-straw text-[10px]">HOUSE TOUR</span>
+                        </div>
+                        <h3 class="text-lg font-serif-luxury font-bold text-white group-hover:text-trancoso-straw transition-colors">
+                            "Uma Casa na Floresta - Pedro Grande 58"
+                        </h3>
+                        <p class="text-xs text-stone-400 line-clamp-3 leading-relaxed font-light">
+                            Vídeo em que Raul mostra a casa Pedro Grande 58, uma propriedade imersa na mata com 2 bangalôs e 5 suítes exclusivas.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-stone-800 text-[11px] font-mono text-stone-500 flex justify-between items-center">
+                        <span>Apresentação: Raul</span>
+                        <span class="text-trancoso-straw group-hover:translate-x-1 transition-transform">Roteiro →</span>
+                    </div>
+                </div>
+
+                <!-- EP 03 -->
+                <div onclick="openEpisodeDetail(3)" class="bg-stone-900/90 rounded-3xl p-6 border border-stone-800 hover:border-trancoso-straw/50 transition-all cursor-pointer group flex flex-col justify-between space-y-6">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between text-xs font-mono text-trancoso-straw">
+                            <span>EPISÓDIO 03</span>
+                            <span class="px-2 py-0.5 rounded bg-trancoso-clay/20 text-trancoso-straw text-[10px]">CONCIERGE</span>
+                        </div>
+                        <h3 class="text-lg font-serif-luxury font-bold text-white group-hover:text-trancoso-straw transition-colors">
+                            "Hospitalidade Atemporal: O Segredo do Concierge"
+                        </h3>
+                        <p class="text-xs text-stone-400 line-clamp-3 leading-relaxed font-light">
+                            Explicar o diferencial do departamento de hospitalidade próprio vs. freelancers. O treinamento contínuo e o olhar atento aos detalhes.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-stone-800 text-[11px] font-mono text-stone-500 flex justify-between items-center">
+                        <span>Bastidores de Serviço</span>
+                        <span class="text-trancoso-straw group-hover:translate-x-1 transition-transform">Roteiro →</span>
+                    </div>
+                </div>
+
+                <!-- EP 04 -->
+                <div onclick="openEpisodeDetail(4)" class="bg-stone-900/90 rounded-3xl p-6 border border-stone-800 hover:border-trancoso-straw/50 transition-all cursor-pointer group flex flex-col justify-between space-y-6">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between text-xs font-mono text-trancoso-straw">
+                            <span>EPISÓDIO 04</span>
+                            <span class="px-2 py-0.5 rounded bg-trancoso-clay/20 text-trancoso-straw text-[10px]">ARQUITETURA</span>
+                        </div>
+                        <h3 class="text-lg font-serif-luxury font-bold text-white group-hover:text-trancoso-straw transition-colors">
+                            "Arquitetura com Alma: O Estilo Baiano"
+                        </h3>
+                        <p class="text-xs text-stone-400 line-clamp-3 leading-relaxed font-light">
+                            Explorar casas projetadas por nomes icônicos como Ricardo Salem. Como a arquitetura vernacular baiana se une ao luxo contemporâneo.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-stone-800 text-[11px] font-mono text-stone-500 flex justify-between items-center">
+                        <span>Raul + Ricardo Salem</span>
+                        <span class="text-trancoso-straw group-hover:translate-x-1 transition-transform">Roteiro →</span>
+                    </div>
+                </div>
+
+                <!-- EP 05 -->
+                <div onclick="openEpisodeDetail(5)" class="bg-stone-900/90 rounded-3xl p-6 border border-stone-800 hover:border-trancoso-straw/50 transition-all cursor-pointer group flex flex-col justify-between space-y-6">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between text-xs font-mono text-trancoso-straw">
+                            <span>EPISÓDIO 05</span>
+                            <span class="px-2 py-0.5 rounded bg-trancoso-clay/20 text-trancoso-straw text-[10px]">GASTRONOMIA</span>
+                        </div>
+                        <h3 class="text-lg font-serif-luxury font-bold text-white group-hover:text-trancoso-straw transition-colors">
+                            "A Rota da Gastronomia Privada & Orgânicos"
+                        </h3>
+                        <p class="text-xs text-stone-400 line-clamp-3 leading-relaxed font-light">
+                            A experiência culinária dentro das casas: peixe fresco da praia, horta orgânica e menus personalizados preparados pela cozinheira local.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-stone-800 text-[11px] font-mono text-stone-500 flex justify-between items-center">
+                        <span>Cozinheira + Concierge</span>
+                        <span class="text-trancoso-straw group-hover:translate-x-1 transition-transform">Roteiro →</span>
+                    </div>
+                </div>
+
+                <!-- EP 06 -->
+                <div onclick="openEpisodeDetail(6)" class="bg-stone-900/90 rounded-3xl p-6 border border-stone-800 hover:border-trancoso-straw/50 transition-all cursor-pointer group flex flex-col justify-between space-y-6">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between text-xs font-mono text-trancoso-straw">
+                            <span>EPISÓDIO 06</span>
+                            <span class="px-2 py-0.5 rounded bg-trancoso-clay/20 text-trancoso-straw text-[10px]">CULTURA LOCAL</span>
+                        </div>
+                        <h3 class="text-lg font-serif-luxury font-bold text-white group-hover:text-trancoso-straw transition-colors">
+                            "As Mãos de Trancoso: A Arte de Receber"
+                        </h3>
+                        <p class="text-xs text-stone-400 line-clamp-3 leading-relaxed font-light">
+                            Um tributo poético aos artesãos e profissionais locais: a cerâmica artesanal de Calá, artistas nativos, camareiras e jardineiros.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-stone-800 text-[11px] font-mono text-stone-500 flex justify-between items-center">
+                        <span>Calá & Artesãos</span>
+                        <span class="text-trancoso-straw group-hover:translate-x-1 transition-transform">Roteiro →</span>
+                    </div>
+                </div>
+
+                <!-- EP 07 -->
+                <div onclick="openEpisodeDetail(7)" class="bg-stone-900/90 rounded-3xl p-6 border border-stone-800 hover:border-trancoso-straw/50 transition-all cursor-pointer group flex flex-col justify-between space-y-6">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between text-xs font-mono text-trancoso-straw">
+                            <span>EPISÓDIO 07</span>
+                            <span class="px-2 py-0.5 rounded bg-trancoso-clay/20 text-trancoso-straw text-[10px]">REFÚGIOS</span>
+                        </div>
+                        <h3 class="text-lg font-serif-luxury font-bold text-white group-hover:text-trancoso-straw transition-colors">
+                            "Refúgios Exclusivos: Outeiro & Espelho"
+                        </h3>
+                        <p class="text-xs text-stone-400 line-clamp-3 leading-relaxed font-light">
+                            Apresentação do condomínio Outeiro das Brisas e Praia do Espelho. Casas integradas à falésia com tomadas de drone marcantes.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-stone-800 text-[11px] font-mono text-stone-500 flex justify-between items-center">
+                        <span>Aéreo & Falésias</span>
+                        <span class="text-trancoso-straw group-hover:translate-x-1 transition-transform">Roteiro →</span>
+                    </div>
+                </div>
+
+                <!-- EP 08 -->
+                <div onclick="openEpisodeDetail(8)" class="bg-stone-900/90 rounded-3xl p-6 border border-stone-800 hover:border-trancoso-straw/50 transition-all cursor-pointer group flex flex-col justify-between space-y-6">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between text-xs font-mono text-trancoso-straw">
+                            <span>EPISÓDIO 08</span>
+                            <span class="px-2 py-0.5 rounded bg-trancoso-clay/20 text-trancoso-straw text-[10px]">LIFESTYLE</span>
+                        </div>
+                        <h3 class="text-lg font-serif-luxury font-bold text-white group-hover:text-trancoso-straw transition-colors">
+                            "Experiências Sob Medida: Além da Estada"
+                        </h3>
+                        <p class="text-xs text-stone-400 line-clamp-3 leading-relaxed font-light">
+                            Curadoria de momentos únicos: capoeira ao pôr do sol, massagem privativa na casa e vivências em família inesquecíveis.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-stone-800 text-[11px] font-mono text-stone-500 flex justify-between items-center">
+                        <span>Experiências VIP</span>
+                        <span class="text-trancoso-straw group-hover:translate-x-1 transition-transform">Roteiro →</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Proposta Estética & Referências Cinematográficas (PDF Pages 11-15) -->
+    <section id="estetica" class="py-24 bg-trancoso-linen border-b border-trancoso-clay/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+            
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Narrative Side -->
+                <div class="lg:col-span-5 space-y-6">
+                    <span class="text-xs font-mono tracking-widest text-trancoso-clay uppercase font-semibold">DIREÇÃO DE FOTOGRAFIA & LINGUAGEM (PDF PG. 11-15)</span>
+                    
+                    <h2 class="text-3xl sm:text-5xl font-serif-luxury font-bold text-trancoso-timber leading-tight">
+                        Inspiração Studio MK27 & Márcio Kogan
+                    </h2>
+
+                    <p class="text-stone-700 text-sm sm:text-base font-light leading-relaxed">
+                        A Daime Filmes propõe uma estética documental de altíssimo nível. Movimentos sutis e elegantes de câmera (travelling contínuo), simetria arquitetônica e valorização da luz natural filtrada pelas pérgulas e sapé.
+                    </p>
+
+                    <div class="space-y-3 pt-2 font-mono text-xs text-stone-800">
+                        <div class="flex items-center gap-3 p-3.5 rounded-xl bg-trancoso-sand border border-trancoso-clay/15">
+                            <i data-lucide="video" class="w-4 h-4 text-trancoso-clay"></i>
+                            <span>Câmera Contemplativa & Enquadramentos Geométricos</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-3.5 rounded-xl bg-trancoso-sand border border-trancoso-clay/15">
+                            <i data-lucide="sun" class="w-4 h-4 text-trancoso-straw"></i>
+                            <span>Luz Quente Natural & Sombras de Treliça</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-3.5 rounded-xl bg-trancoso-sand border border-trancoso-clay/15">
+                            <i data-lucide="compass" class="w-4 h-4 text-trancoso-forest"></i>
+                            <span>REF/02: Sahy Residence — Drones Aéreos de Falésia</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visual Moodboard Gallery Side -->
+                <div class="lg:col-span-7">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-4">
+                            <div class="relative rounded-3xl overflow-hidden border border-trancoso-clay/20 shadow-md h-56 group">
+                                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80" alt="MK27 Referência Estética 1" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+                                <span class="absolute bottom-3 left-3 text-[10px] font-mono text-trancoso-straw bg-trancoso-timber/80 px-2.5 py-1 rounded border border-trancoso-straw/30">
+                                    REF/01: Studio MK27 Style
+                                </span>
+                            </div>
+                            <div class="relative rounded-3xl overflow-hidden border border-trancoso-clay/20 shadow-md h-64 group">
+                                <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80" alt="Arquitetura Vernacular Bahia" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+                                <span class="absolute bottom-3 left-3 text-[10px] font-mono text-trancoso-straw bg-trancoso-timber/80 px-2.5 py-1 rounded border border-trancoso-straw/30">
+                                    Madeira Nobre & Ventilação
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4 pt-6">
+                            <div class="relative rounded-3xl overflow-hidden border border-trancoso-clay/20 shadow-md h-64 group">
+                                <img src="https://images.unsplash.com/photo-1508615070457-7baeba4003ab?auto=format&fit=crop&w=800&q=80" alt="Refúgio Sahy Residence Falésia" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+                                <span class="absolute bottom-3 left-3 text-[10px] font-mono text-trancoso-straw bg-trancoso-timber/80 px-2.5 py-1 rounded border border-trancoso-straw/30">
+                                    REF/02: Sahy Residence (Falésia)
+                                </span>
+                            </div>
+                            <div class="relative rounded-3xl overflow-hidden border border-trancoso-clay/20 shadow-md h-56 group">
+                                <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80" alt="Detalhe de Decoração Rústica Chic" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+                                <span class="absolute bottom-3 left-3 text-[10px] font-mono text-trancoso-straw bg-trancoso-timber/80 px-2.5 py-1 rounded border border-trancoso-straw/30">
+                                    Texturas de Argila & Palha
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Seção de Referências Audiovisuais Interativas (PDF PG. 12 - 15) -->
+    <section id="referencias" class="py-24 bg-trancoso-sand border-b border-trancoso-clay/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+            
+            <div class="text-center max-w-3xl mx-auto space-y-3">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-trancoso-clay/10 border border-trancoso-clay/20 text-trancoso-clay text-xs font-mono uppercase font-semibold">
+                    <i data-lucide="play-circle" class="w-3.5 h-3.5"></i>
+                    <span>REFERÊNCIAS AUDIOVISUAIS DAIME FILMES (PDF PG. 12-15)</span>
+                </div>
+                <h2 class="text-3xl sm:text-5xl font-serif-luxury font-bold text-trancoso-timber">
+                    Inspirações em Vídeo para a Série
+                </h2>
+                <p class="text-stone-600 text-xs sm:text-sm font-light leading-relaxed">
+                    Clique nos players abaixo para assistir diretamente aos filmes que traduzem o ritmo de edição, enquadramento arquitetônico e linguagem poética projetados para o canal da **Bahia Homes**.
+                </p>
+            </div>
+
+            <!-- Video Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <!-- Video Card 1: Casa 3M (Studio MK27) -->
+                <div class="bg-trancoso-linen rounded-3xl overflow-hidden border border-trancoso-clay/20 shadow-lg flex flex-col justify-between group hover:border-trancoso-clay transition-all">
+                    <div class="relative h-64 sm:h-72 overflow-hidden bg-black">
+                        <img src="https://img.youtube.com/vi/WKk1mYgSlic/hqdefault.jpg" alt="REF/01 - Studio MK27 Casa 3M" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90">
+                        <div class="absolute inset-0 bg-gradient-to-t from-trancoso-timber via-black/20 to-transparent"></div>
+                        
+                        <!-- Top Badge -->
+                        <div class="absolute top-4 left-4 flex gap-2">
+                            <span class="bg-trancoso-timber/80 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-mono text-trancoso-straw border border-trancoso-straw/30">
+                                REF/01 • STUDIO MK27
+                            </span>
+                            <span class="bg-red-600/90 text-white px-2.5 py-1 rounded-full text-[10px] font-mono font-bold">
+                                6:34 MIN
+                            </span>
+                        </div>
+
+                        <!-- Center Play Button Trigger -->
+                        <button onclick="openVideoModal('WKk1mYgSlic', 'REF/01: Casa 3M — Studio MK27')" class="absolute inset-0 m-auto w-16 h-16 rounded-full bg-trancoso-clay/90 hover:bg-trancoso-clay text-white flex items-center justify-center shadow-2xl transition-all scale-95 group-hover:scale-110">
+                            <i data-lucide="play" class="w-7 h-7 fill-current ml-1"></i>
+                        </button>
+
+                        <!-- Bottom Title inside Thumbnail -->
+                        <div class="absolute bottom-4 left-4 right-4 text-white">
+                            <p class="text-[11px] font-mono text-trancoso-straw uppercase">Architecture Hunter</p>
+                            <h3 class="text-lg font-serif-luxury font-bold">Casa 3M: A Home That Adapts to Family Living</h3>
+                        </div>
+                    </div>
+
+                    <div class="p-6 space-y-4">
+                        <p class="text-xs text-stone-700 font-light leading-relaxed">
+                            <strong class="font-semibold text-trancoso-timber">Conexão com a Série Bahia Homes:</strong> Demonstração do ritmo contemplativo de câmera, movimentos fluidos de passagem por corredores e a valorização da iluminação natural em interiores com madeira e concreto.
+                        </p>
+                        
+                        <div class="flex items-center justify-between pt-3 border-t border-trancoso-clay/10 font-mono text-xs">
+                            <span class="text-stone-500">Linguagem: Arquitetura & Luz</span>
+                            <button onclick="openVideoModal('WKk1mYgSlic', 'REF/01: Casa 3M — Studio MK27')" class="inline-flex items-center gap-1.5 text-trancoso-clay font-bold hover:underline">
+                                <span>Assistir Referência</span>
+                                <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Video Card 2: Sahy Residence -->
+                <div class="bg-trancoso-linen rounded-3xl overflow-hidden border border-trancoso-clay/20 shadow-lg flex flex-col justify-between group hover:border-trancoso-clay transition-all">
+                    <div class="relative h-64 sm:h-72 overflow-hidden bg-black">
+                        <img src="https://img.youtube.com/vi/Fq3NfokJilI/hqdefault.jpg" alt="REF/02 - Sahy Residence" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90">
+                        <div class="absolute inset-0 bg-gradient-to-t from-trancoso-timber via-black/20 to-transparent"></div>
+                        
+                        <!-- Top Badge -->
+                        <div class="absolute top-4 left-4 flex gap-2">
+                            <span class="bg-trancoso-timber/80 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-mono text-trancoso-straw border border-trancoso-straw/30">
+                                REF/02 • SAHY RESIDENCE
+                            </span>
+                            <span class="bg-red-600/90 text-white px-2.5 py-1 rounded-full text-[10px] font-mono font-bold">
+                                5:06 MIN
+                            </span>
+                        </div>
+
+                        <!-- Center Play Button Trigger -->
+                        <button onclick="openVideoModal('Fq3NfokJilI', 'REF/02: Beach House in Atlantic Forest — Sahy Residence')" class="absolute inset-0 m-auto w-16 h-16 rounded-full bg-trancoso-clay/90 hover:bg-trancoso-clay text-white flex items-center justify-center shadow-2xl transition-all scale-95 group-hover:scale-110">
+                            <i data-lucide="play" class="w-7 h-7 fill-current ml-1"></i>
+                        </button>
+
+                        <!-- Bottom Title inside Thumbnail -->
+                        <div class="absolute bottom-4 left-4 right-4 text-white">
+                            <p class="text-[11px] font-mono text-trancoso-straw uppercase">Architecture Hunter</p>
+                            <h3 class="text-lg font-serif-luxury font-bold">Brazilian Beach House Composed of 3 Pavilions</h3>
+                        </div>
+                    </div>
+
+                    <div class="p-6 space-y-4">
+                        <p class="text-xs text-stone-700 font-light leading-relaxed">
+                            <strong class="font-semibold text-trancoso-timber">Conexão com a Série Bahia Homes:</strong> Inspiração direta para os episódios em condomínios como Outeiro das Brisas e Praia do Espelho. Foco na integração entre a falésia, a vegetação fechada e tomadas aéreas sweeping.
+                        </p>
+                        
+                        <div class="flex items-center justify-between pt-3 border-t border-trancoso-clay/10 font-mono text-xs">
+                            <span class="text-stone-500">Linguagem: Falésias & Natureza</span>
+                            <button onclick="openVideoModal('Fq3NfokJilI', 'REF/02: Beach House in Atlantic Forest — Sahy Residence')" class="inline-flex items-center gap-1.5 text-trancoso-clay font-bold hover:underline">
+                                <span>Assistir Referência</span>
+                                <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Cenários, Direção de Arte e Shotlist (PDF Pages 16-20) -->
+    <section id="shotlist" class="py-20 bg-trancoso-sand border-b border-trancoso-clay/10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+            
+            <div class="text-center max-w-2xl mx-auto space-y-2">
+                <span class="text-xs font-mono tracking-widest text-trancoso-clay uppercase font-semibold">DIREÇÃO DE ARTE & DIREÇÃO DE CENA (PDF PG. 18-20)</span>
+                <h2 class="text-3xl font-serif-luxury font-bold text-trancoso-timber">Estrutura de Captação & Shotlist</h2>
+                <p class="text-stone-600 text-xs sm:text-sm font-light">Mapeamento dos enquadramentos planejados para as gravações em Trancoso e Litoral Sul.</p>
+            </div>
+
+            <!-- Dynamic Interactive Shotlist Panel -->
+            <div class="bg-trancoso-linen rounded-3xl p-6 sm:p-8 border border-trancoso-clay/15 shadow-sm space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-trancoso-clay/10 pb-4 font-mono text-xs gap-2">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="film" class="w-4 h-4 text-trancoso-clay"></i>
+                        <span class="font-bold text-trancoso-clay uppercase">SHOTLIST DAIME FILMES</span>
+                    </div>
+                    <span class="text-stone-500">LOCAÇÕES: TRANCOSO / OUTEIRO DAS BRISAS / ESPELHO</span>
+                </div>
+
+                <!-- 10 Planned Shots Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
+                    
+                    <div class="bg-trancoso-sand p-4 rounded-xl border border-trancoso-clay/10 space-y-1">
+                        <span class="text-trancoso-clay font-bold block">1. Aproximação Aérea FPV:</span>
+                        <p class="text-stone-700 font-light">Drone deslizando do oceano em direção à varanda da casa em plano sequência.</p>
+                    </div>
+
+                    <div class="bg-trancoso-sand p-4 rounded-xl border border-trancoso-clay/10 space-y-1">
+                        <span class="text-trancoso-clay font-bold block">2. Geometria de Luz & Sombra:</span>
+                        <p class="text-stone-700 font-light">Luz do sol atravessando treliças criando padrões no piso de cimento queimado.</p>
+                    </div>
+
+                    <div class="bg-trancoso-sand p-4 rounded-xl border border-trancoso-clay/10 space-y-1">
+                        <span class="text-trancoso-clay font-bold block">3. Entrevista Informal com Raul:</span>
+                        <p class="text-stone-700 font-light">Raul confortavelmente acomodado no sofá de linho contando a história do projeto.</p>
+                    </div>
+
+                    <div class="bg-trancoso-sand p-4 rounded-xl border border-trancoso-clay/10 space-y-1">
+                        <span class="text-trancoso-clay font-bold block">4. Gastronomia ao Vivo:</span>
+                        <p class="text-stone-700 font-light">Preparo da moqueca com peixe fresco capturado no dia e temperos da horta orgânica.</p>
+                    </div>
+
+                    <div class="bg-trancoso-sand p-4 rounded-xl border border-trancoso-clay/10 space-y-1">
+                        <span class="text-trancoso-clay font-bold block">5. Mãos de Calá na Cerâmica:</span>
+                        <p class="text-stone-700 font-light">Câmera lenta focada nas mãos moldando argila no atelier de Trancoso.</p>
+                    </div>
+
+                    <div class="bg-trancoso-sand p-4 rounded-xl border border-trancoso-clay/10 space-y-1">
+                        <span class="text-trancoso-clay font-bold block">6. Mesa Posta do Concierge:</span>
+                        <p class="text-stone-700 font-light">A arrumação do café da manhã tropical com frutas da estação e arranjos nativos.</p>
+                    </div>
+
+                    <div class="bg-trancoso-sand p-4 rounded-xl border border-trancoso-clay/10 space-y-1">
+                        <span class="text-trancoso-clay font-bold block">7. Bangalôs Pedro Grande 58:</span>
+                        <p class="text-stone-700 font-light">Travelling lateral revelando a transição fluida entre a suíte e a vegetação fechada.</p>
+                    </div>
+
+                    <div class="bg-trancoso-sand p-4 rounded-xl border border-trancoso-clay/10 space-y-1">
+                        <span class="text-trancoso-clay font-bold block">8. Falésias do Outeiro:</span>
+                        <p class="text-stone-700 font-light">Tomada contemplativa ao pôr do sol mostrando a integração da casa com o penhasco.</p>
+                    </div>
+
+                    <div class="bg-trancoso-sand p-4 rounded-xl border border-trancoso-clay/10 space-y-1">
+                        <span class="text-trancoso-clay font-bold block">9. Ritmos da Capoeira:</span>
+                        <p class="text-stone-700 font-light">Movimento de capoeira na areia com silhuetas contra a luz dourada do entardecer.</p>
+                    </div>
+
+                    <div class="bg-trancoso-sand p-4 rounded-xl border border-trancoso-clay/10 space-y-1">
+                        <span class="text-trancoso-clay font-bold block">10. Encerramento Poético:</span>
+                        <p class="text-stone-700 font-light">Luzes sutis da casa acendendo ao anitecer com o som suave do mar ao fundo.</p>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Simple Editorial Presentation Footer -->
+    <footer class="py-16 bg-trancoso-timber text-trancoso-sand relative">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
+            
+            <div class="space-y-2">
+                <span class="text-xs font-mono tracking-widest text-trancoso-straw uppercase font-semibold">DAIME FILMES AUDIOVISUAL ©2026</span>
+                <h2 class="text-3xl sm:text-5xl font-serif-luxury font-bold text-white">
+                    Bahia Homes x Daime Filmes
+                </h2>
+                <p class="text-stone-400 text-xs sm:text-sm max-w-lg mx-auto font-light">
+                    Apresentação de diretrizes de produção e proposta conceitual para o canal do YouTube.
+                </p>
+            </div>
+
+            <div class="pt-10 border-t border-stone-800 text-[11px] font-mono text-stone-500 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <p>© 2026 DAIME FILMES • ARTE, FILME E FOTOGRAFIA</p>
+                <div class="flex gap-4 text-trancoso-straw">
+                    <span>TRANCOSO</span> • <span>OUTEIRO DAS BRISAS</span> • <span>PRAIA DO ESPELHO</span>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+
+    <!-- Interactive Episode Detail Modal -->
+    <div id="episode-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-trancoso-timber text-trancoso-sand border border-trancoso-straw/30 rounded-3xl max-w-xl w-full p-6 sm:p-8 space-y-6 relative max-h-[90vh] overflow-y-auto custom-scrollbar">
+            
+            <button onclick="closeEpisodeModal()" class="absolute top-6 right-6 p-2 rounded-full bg-stone-800 text-stone-400 hover:text-white transition-colors">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <span id="ep-modal-badge" class="px-3 py-1 rounded-full bg-trancoso-clay/20 text-trancoso-straw text-xs font-mono">
+                EPISÓDIO DETALHADO
+            </span>
+
+            <h3 id="ep-modal-title" class="text-2xl font-serif-luxury font-bold text-white">
+                Título do Episódio
+            </h3>
+
+            <div id="ep-modal-body" class="space-y-4 text-xs font-mono text-stone-300 leading-relaxed">
+                <!-- Injected via JavaScript -->
+            </div>
+
+            <button onclick="closeEpisodeModal()" class="w-full py-3 rounded-xl bg-stone-800 text-stone-200 font-semibold text-xs uppercase hover:bg-trancoso-clay hover:text-white transition-colors">
+                Fechar Detalhes
+            </button>
+        </div>
+    </div>
+
+    <!-- Interactive YouTube Video Player Modal -->
+    <div id="video-modal" class="fixed inset-0 z-50 hidden bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="relative w-full max-w-4xl bg-trancoso-timber rounded-3xl overflow-hidden border border-trancoso-straw/30 shadow-2xl space-y-4 p-4 sm:p-6">
+            <div class="flex items-center justify-between border-b border-stone-800 pb-3">
+                <div class="flex items-center gap-2 text-xs font-mono text-trancoso-straw">
+                    <i data-lucide="youtube" class="w-4 h-4 text-red-500"></i>
+                    <span id="video-modal-title" class="font-bold uppercase">REFERÊNCIA AUDIOVISUAL DAIME FILMES</span>
+                </div>
+                <button onclick="closeVideoModal()" class="p-2 rounded-full bg-stone-800 text-stone-400 hover:text-white transition-colors">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            
+            <!-- 16:9 Aspect Ratio Embed Container -->
+            <div class="relative w-full pb-[56.25%] h-0 rounded-2xl overflow-hidden bg-black">
+                <iframe id="youtube-iframe" class="absolute top-0 left-0 w-full h-full border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Interactions -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        function openVideoModal(videoId, title) {
+            const modal = document.getElementById('video-modal');
+            const iframe = document.getElementById('youtube-iframe');
+            const titleElem = document.getElementById('video-modal-title');
+            
+            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+            titleElem.innerText = title;
+            modal.classList.remove('hidden');
+        }
+
+        function closeVideoModal() {
+            const modal = document.getElementById('video-modal');
+            const iframe = document.getElementById('youtube-iframe');
+            iframe.src = '';
+            modal.classList.add('hidden');
+        }
+
+        // 8 Episodes Data directly from PDF
+        const episodesData = {
+            1: {
+                badge: "EPISÓDIO 01 • MANIFESTO (PDF PG. 05)",
+                title: '"A História e Visão Bahia Homes"',
+                content: `
+                    <p><strong>Conceito do Roteiro:</strong> Vídeo manifesto de abertura apresentando a trajetória da marca e a filosofia de entregar experiências e realizações de sonhos em vez de apenas negociar imóveis de luxo.</p>
+                    <p><strong>Elenco & Presença:</strong> Raul conduzindo o olhar do espectador por Trancoso.</p>
+                    <p><strong>Linguagem Audiovisual:</strong> Tom poético, narração pausada, iluminação de fim de tarde e trilha sonora acústica e envolvente.</p>
+                `
+            },
+            2: {
+                badge: "EPISÓDIO 02 • TOUR NA MATA (PDF PG. 06)",
+                title: '"Uma Casa na Floresta - Pedro Grande 58"',
+                content: `
+                    <p><strong>Conceito do Roteiro:</strong> Vídeo em que Raul mostra a casa Pedro Grande 58, uma residência extraordinária imersa na mata atlântica composta por 2 bangalôs independentes e 5 suítes.</p>
+                    <p><strong>Destaques da Gravação:</strong> Integração da piscina com a vegetação nativa, marcenaria em madeira de demolição e a brisa da mata.</p>
+                    <p><strong>Locação:</strong> Condomínio Pedro Grande, Trancoso.</p>
+                `
+            },
+            3: {
+                badge: "EPISÓDIO 03 • BASTIDORES & SERVIÇO (PDF PG. 07)",
+                title: '"Hospitalidade Atemporal: O Segredo do Nosso Concierge Permanente"',
+                content: `
+                    <p><strong>Conceito do Roteiro:</strong> Apresentar o diferencial competitivo do departamento de hospitalidade próprio vs. freelancers do mercado.</p>
+                    <p><strong>Foco Narrativo:</strong> O treinamento contínuo da equipe, a linha de atendimento exclusiva para os hóspedes e o carinho artesanal na preparação de cada estada.</p>
+                `
+            },
+            4: {
+                badge: "EPISÓDIO 04 • ARQUITETURA & DESIGN (PDF PG. 08)",
+                title: '"Arquitetura com Alma: O Estilo Baiano Contemporâneo"',
+                content: `
+                    <p><strong>Conceito do Roteiro:</strong> Explorar casas projetadas por nomes icônicos da arquitetura (ex: Ricardo Salem). Como a arquitetura vernacular baiana se une ao luxo e ao conforto moderno.</p>
+                    <p><strong>Formato de Cena:</strong> Tour guiado por Raul acompanhado do arquiteto convidado + tomadas detalhadas de estrutura de madeira, palha de sapé e ventilação cruzada.</p>
+                `
+            },
+            5: {
+                badge: "EPISÓDIO 05 • GASTRONOMIA PRIVADA (PDF PG. 09)",
+                title: '"A Rota da Gastronomia Privada & Ingredientes Orgânicos"',
+                content: `
+                    <p><strong>Conceito do Roteiro:</strong> A experiência culinária dentro das casas Bahia Homes: seleção de produtores locais, peixe fresco direto da praia, horta orgânica e menus sob medida.</p>
+                    <p><strong>Personagens:</strong> Cozinheira local da casa + Concierge de Gastronomia com preparo ao vivo de pratos típicos e contemporâneos.</p>
+                `
+            },
+            6: {
+                badge: "EPISÓDIO 06 • PERSONAGENS LOCAIS (PDF PG. 10)",
+                title: '"As Mãos de Trancoso: A Arte de Receber"',
+                content: `
+                    <p><strong>Conceito do Roteiro:</strong> Tributo poético focado nos artesãos e profissionais locais que constroem a alma de Trancoso: a cerâmica artesanal de Calá, artistas locais, camareiras e cozinheiras.</p>
+                    <p><strong>Atmosfera da Imagem:</strong> Câmera lenta nas mãos moldando argila, texturas e afetividade baiana.</p>
+                `
+            },
+            7: {
+                badge: "EPISÓDIO 07 • DESTINOS EXCLUSIVOS (PDF PG. 10)",
+                title: '"Refúgios Exclusivos: Outeiro das Brisas e Praia do Espelho"',
+                content: `
+                    <p><strong>Conceito do Roteiro:</strong> Apresentação do condomínio Outeiro das Brisas e das praias do entorno como um "mundo à parte" no Sul da Bahia. Casas integradas às falésias.</p>
+                    <p><strong>Recursos Visuais:</strong> Imagens aéreas de drone cinematográfico + Tour guiado por Raul em uma propriedade emblemática da região.</p>
+                `
+            },
+            8: {
+                badge: "EPISÓDIO 08 • EXPERIÊNCIAS (PDF PG. 10)",
+                title: '"Experiências Sob Medida: Além da Hospedagem"',
+                content: `
+                    <p><strong>Conceito do Roteiro:</strong> Curadoria de momentos memoráveis: aulas de capoeira ao pôr do sol na praia, passeios guiados privativos, bem-estar/spa dentro da casa e momentos em família.</p>
+                    <p><strong>Encerramento:</strong> Fechamento emocionante da temporada reforçando a marca Bahia Homes.</p>
+                `
+            }
+        };
+
+        function openEpisodeDetail(epNum) {
+            const data = episodesData[epNum];
+            document.getElementById('ep-modal-badge').innerText = data.badge;
+            document.getElementById('ep-modal-title').innerText = data.title;
+            document.getElementById('ep-modal-body').innerHTML = data.content;
+            document.getElementById('episode-modal').classList.remove('hidden');
+        }
+
+        function closeEpisodeModal() {
+            document.getElementById('episode-modal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
