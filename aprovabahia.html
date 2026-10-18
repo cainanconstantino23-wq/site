@@ -518,20 +518,33 @@
           <input id="input-title" type="text" required placeholder="Ex: Casa Terravista Golf — Villa 12" class="w-full bg-bh-softBg border border-bh-border rounded-xl px-4 py-3 text-xs text-bh-dark focus:outline-none focus:border-bh-forest">
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-[10px] font-bold text-bh-muted uppercase tracking-wider mb-1">Formato de Mídia</label>
-            <select id="input-type" class="w-full bg-bh-softBg border border-bh-border rounded-xl px-4 py-3 text-xs text-bh-dark focus:outline-none focus:border-bh-forest">
-              <option value="Reels">Instagram Reels (9:16)</option>
-              <option value="Carrossel">Carrossel de Imagens</option>
-              <option value="Feed">Imagem Feed (1:1)</option>
-              <option value="Stories">Instagram Stories</option>
-            </select>
-          </div>
+        <div>
+          <label class="block text-[10px] font-bold text-bh-muted uppercase tracking-wider mb-1">Formato de Mídia</label>
+          <select id="input-type" class="w-full bg-bh-softBg border border-bh-border rounded-xl px-4 py-3 text-xs text-bh-dark focus:outline-none focus:border-bh-forest">
+            <option value="Reels">Instagram Reels (9:16 - Vídeo Vertical)</option>
+            <option value="Carrossel">Carrossel de Imagens</option>
+            <option value="Feed">Imagem Feed (1:1 / 4:5)</option>
+            <option value="Stories">Instagram Stories (9:16)</option>
+          </select>
+        </div>
 
-          <div>
-            <label class="block text-[10px] font-bold text-bh-muted uppercase tracking-wider mb-1">URL da Mídia Exclusiva</label>
-            <input id="input-media" type="url" required placeholder="https://..." value="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&auto=format&fit=crop&q=80" class="w-full bg-bh-softBg border border-bh-border rounded-xl px-4 py-3 text-xs text-bh-dark focus:outline-none focus:border-bh-forest">
+        <div>
+          <label class="block text-[10px] font-bold text-bh-muted uppercase tracking-wider mb-1">Arquivo de Mídia (Foto ou Vídeo do Computador)</label>
+          <div class="relative border-2 border-dashed border-bh-bronze/40 bg-bh-softBg hover:bg-white rounded-2xl p-5 text-center transition-all cursor-pointer group">
+            <input id="input-file-local" type="file" accept="image/*,video/*" required class="absolute inset-0 opacity-0 cursor-pointer z-10" onchange="handleModalFileSelect(event)">
+            
+            <div id="file-drop-prompt" class="space-y-2">
+              <div class="w-10 h-10 rounded-full bg-bh-forest/10 text-bh-forest flex items-center justify-center mx-auto group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-cloud-arrow-up text-lg text-bh-bronze"></i>
+              </div>
+              <p class="text-xs font-semibold text-bh-dark">Clique ou arraste a foto/vídeo vertical aqui</p>
+              <p class="text-[10px] text-bh-muted">Suporta arquivos .MP4, .MOV, .JPG, .PNG ou .WEBP</p>
+            </div>
+
+            <div id="file-selected-badge" class="hidden flex items-center justify-center gap-2 text-xs font-bold text-bh-forest">
+              <i class="fa-solid fa-circle-check text-bh-bronze text-sm"></i>
+              <span id="selected-file-label">arquivo.mp4 selecionado</span>
+            </div>
           </div>
         </div>
 
@@ -550,190 +563,22 @@
   </div>
 
   <!-- MODAL 2: AUDIT TRAIL -->
-  <div id="modal-audit-trail" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white border border-bh-border w-full max-w-xl rounded-3xl overflow-hidden shadow-2xl">
-      <div class="p-5 border-b border-bh-border flex items-center justify-between">
-        <div class="flex items-center gap-2 text-bh-forest">
-          <i class="fa-solid fa-shield-halved text-base text-bh-bronze"></i>
-          <h3 class="font-serif font-bold text-bh-dark text-lg">Rastro de Auditoria & Validação Jurídica</h3>
-        </div>
-        <button onclick="toggleAuditModal()" class="text-bh-muted hover:text-bh-dark p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
-      </div>
-
-      <div class="p-6 space-y-4 max-h-[60vh] overflow-y-auto">
-        <p class="text-xs text-bh-muted leading-relaxed">
-          Registro temporal e criptográfico de interações do cliente via Link Mágico tokenizado sem necessidade de conta/login:
-        </p>
-        <div id="audit-logs-container" class="space-y-2.5 font-mono text-[10px]">
-          <!-- Injected via JS -->
-        </div>
-      </div>
-
-      <div class="p-4 border-t border-bh-border bg-bh-softBg flex justify-between items-center text-[10px] text-bh-muted">
-        <span>Segurança: <strong>Token SHA-256 Validado</strong></span>
-        <button onclick="toggleAuditModal()" class="bg-bh-forest text-white font-medium px-4 py-2 rounded-full">Fechar</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    /* Luxury Real Estate Posts Data (Bahia Homes Style) */
-    let posts = [
-      {
-        id: 'post-1',
-        title: 'Estância Fasano Trancoso — Villa 14',
-        type: 'Reels',
-        mediaUrl: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&auto=format&fit=crop&q=80',
-        caption: 'Uma das propriedades mais exclusivas do Sul da Bahia. Localizada na praia de Itapororoca, a Villa 14 oferece 6 suítes integradas à Mata Atlântica e serviço impecável de apoio de praia privativo. 🌴☀️\n\nDisponível para aluguel de temporada e venda com a curadoria Bahia Homes.',
-        hashtags: '#BahiaHomes #Trancoso #FasanoTrancoso #CasasDeLuxo',
-        status: 'pending',
-        rejectionReason: '',
-        comments: [
-          { author: 'Curadoria Bahia Homes', text: 'Vídeo gravado ao pôr do sol na praia. Foco nos detalhes da piscina de pedra vulcânica.', date: 'Há 2 horas', isAgency: true }
-        ],
-        likes: 5420,
-        igComments: 210,
-        reach: 38900
-      },
-      {
-        id: 'post-2',
-        title: 'Terravista Golf Club — Casa 72',
-        type: 'Carrossel',
-        mediaUrl: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&auto=format&fit=crop&q=80',
-        caption: 'Design assinado, vista panorâmica sobre as falésias e acesso direto ao aeroporto privado de Terravista. 🏌️‍♂️🌊\n\nDeslize para conferir a suíte máster com varanda voltada para o azul do Atlântico.',
-        hashtags: '#TerravistaGolf #TrancosoBahia #ArquiteturaDeLuxo',
-        status: 'approved',
-        rejectionReason: '',
-        comments: [
-          { author: 'Proprietário / Cliente', text: 'Excelente sequência de fotos! Aprovado para o lote de amanhã.', date: 'Há 45 min', isAgency: false }
-        ],
-        likes: 7120,
-        igComments: 380,
-        reach: 45000
-      },
-      {
-        id: 'post-3',
-        title: 'Gastronomia Privada no Quadrado',
-        type: 'Feed',
-        mediaUrl: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800&auto=format&fit=crop&q=80',
-        caption: 'Experiência de chef privativo servindo frutos do mar na varanda da sua casa em Trancoso. O verdadeiro significado de hospitalidade com DNA Bahia Homes. 🍷🍤',
-        hashtags: '#QuadradoTrancoso #ConciergeBahia #GastronomiaBaiana',
-        status: 'rejected',
-        rejectionReason: 'Substituir a legenda para citar que o serviço de chef já está incluso na diária.',
-        comments: [
-          { author: 'Proprietário / Cliente', text: 'Por favor incluir a menção ao concierge do aluguel.', date: 'Há 20 min', isAgency: false }
-        ],
-        likes: 0,
-        igComments: 0,
-        reach: 0
-      },
-      {
-        id: 'post-4',
-        title: 'Pôr do Sol em Itapororoca — Sunset Tour',
-        type: 'Stories',
-        mediaUrl: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&auto=format&fit=crop&q=80',
-        caption: 'Pé na areia ou piscina infinita? Descubra o paraíso reservando com a Bahia Homes.',
-        hashtags: '#Trancoso #SunsetBahia #Itapororoca',
-        status: 'pending',
-        rejectionReason: '',
-        comments: [],
-        likes: 2100,
-        igComments: 85,
-        reach: 18000
-      }
-    ];
-
-    let auditLogs = [
-      { timestamp: '2026-10-18 09:12:00', ip: '187.108.34.12', action: 'MAGIC_LINK_CREATED', detail: 'Link Mágico gerado para a Coleção Bahia Homes (Sem Login).' },
-      { timestamp: '2026-10-18 10:05:44', ip: '201.88.192.50', action: 'CLIENT_ACCESS', detail: 'Cliente acessou o portal via iPhone 15 Pro (Safari iOS).' },
-      { timestamp: '2026-10-18 11:20:15', ip: '201.88.192.50', action: 'POST_APPROVED', detail: 'Aprovação concedida para "Terravista Golf Club — Casa 72".' }
-    ];
-
-    let currentSelectedPostId = 'post-1';
-    let currentFilter = 'all';
-
-    /* Navigation Logic */
-    function switchView(viewName) {
-      document.getElementById('view-agency-dashboard').classList.add('hidden');
-      document.getElementById('view-client-approval').classList.add('hidden');
-      document.getElementById('view-metrics-dashboard').classList.add('hidden');
-
-      // Desktop Styling
-      const navBtns = ['nav-btn-agency', 'nav-btn-client', 'nav-btn-stats'];
-      navBtns.forEach(id => {
-        const btn = document.getElementById(id);
-        if (btn) btn.className = "px-4 py-2 rounded-full text-xs font-medium transition-all duration-300 text-bh-muted hover:text-bh-dark";
-      });
-
-      // Mobile Navigation Buttons
-      const mobileNavBtns = {
-        'agency-dashboard': 'mobile-nav-agency',
-        'client-approval': 'mobile-nav-client',
-        'metrics-dashboard': 'mobile-nav-stats'
-      };
-
-      Object.values(mobileNavBtns).forEach(id => {
-        const btn = document.getElementById(id);
-        if (btn) btn.className = "flex flex-col items-center gap-1 text-bh-muted";
-      });
-
-      if (viewName === 'agency-dashboard') {
-        document.getElementById('view-agency-dashboard').classList.remove('hidden');
-        if (document.getElementById('nav-btn-agency')) document.getElementById('nav-btn-agency').className = "px-4 py-2 rounded-full text-xs font-semibold transition-all duration-300 bg-bh-forest text-white shadow-sm";
-        document.getElementById('mobile-nav-agency').className = "flex flex-col items-center gap-1 text-bh-forest font-bold";
-        renderAgencyPosts();
-      } else if (viewName === 'client-approval') {
-        document.getElementById('view-client-approval').classList.remove('hidden');
-        if (document.getElementById('nav-btn-client')) document.getElementById('nav-btn-client').className = "px-4 py-2 rounded-full text-xs font-semibold transition-all duration-300 bg-bh-forest text-white shadow-sm";
-        document.getElementById('mobile-nav-client').className = "flex flex-col items-center gap-1 text-bh-forest font-bold";
-        renderClientSimulator();
-      } else if (viewName === 'metrics-dashboard') {
-        document.getElementById('view-metrics-dashboard').classList.remove('hidden');
-        if (document.getElementById('nav-btn-stats')) document.getElementById('nav-btn-stats').className = "px-4 py-2 rounded-full text-xs font-semibold transition-all duration-300 bg-bh-forest text-white shadow-sm";
-        document.getElementById('mobile-nav-stats').className = "flex flex-col items-center gap-1 text-bh-forest font-bold";
-        renderMetricsTable();
-      }
-
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    /* Agency Grid Renderer */
-    function renderAgencyPosts() {
-      const container = document.getElementById('agency-posts-grid');
-      container.innerHTML = '';
-
-      const filtered = posts.filter(p => {
-        if (currentFilter === 'all') return true;
-        return p.status === currentFilter;
-      });
-
-      filtered.forEach(post => {
-        let statusBadge = '';
-        if (post.status === 'pending') {
-          statusBadge = `<span class="bg-bh-bronze/10 text-bh-bronze border border-bh-bronze/30 text-[9px] font-bold px-2.5 py-1 rounded-full uppercase flex items-center gap-1"><i class="fa-solid fa-clock"></i> Pendente</span>`;
-        } else if (post.status === 'approved') {
-          statusBadge = `<span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[9px] font-bold px-2.5 py-1 rounded-full uppercase flex items-center gap-1"><i class="fa-solid fa-check-circle"></i> Aprovado</span>`;
-        } else {
-          statusBadge = `<span class="bg-rose-50 text-bh-terracotta border border-rose-200 text-[9px] font-bold px-2.5 py-1 rounded-full uppercase flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation"></i> Ajuste</span>`;
-        }
-
-        const card = document.createElement('div');
-        card.className = "bg-white border border-bh-border hover:border-bh-bronze/50 rounded-2xl p-5 flex flex-col justify-between transition-all duration-300 shadow-sm hover:shadow-md";
-        
-        card.innerHTML = `
-          <div>
-            <div class="relative aspect-video rounded-xl overflow-hidden bg-bh-softBg mb-4">
-              <img src="${post.mediaUrl}" class="w-full h-full object-cover" alt="Mídia de Luxo">
-              <div class="absolute top-2.5 left-2.5 bg-bh-dark/80 text-white text-[9px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md backdrop-blur-xs">
-                ${post.type}
-              </div>
-              <div class="absolute top-2.5 right-2.5">
-                ${statusBadge}
+            <!-- Media Content Viewport -->
+            <div id="sim-media-container" class="relative bg-zinc-900 aspect-square flex items-center justify-center overflow-hidden">
+              <img id="sim-media-img" src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&auto=format&fit=crop&q=80" class="w-full h-full object-cover" alt="Post preview">
+              <video id="sim-media-video" controls autoplay loop muted class="w-full h-full object-cover hidden"></video>
+              
+              <div id="sim-reel-badge" class="hidden absolute top-3 right-3 bg-black/75 backdrop-blur-md px-2.5 py-1 rounded-md text-[10px] font-bold text-white flex items-center gap-1.5 border border-white/10">
+                <i class="fa-solid fa-clapperboard text-bh-bronze"></i> REELS
               </div>
             </div>
 
             <h3 class="font-serif font-bold text-base text-bh-dark line-clamp-1 mb-1.5">${post.title}</h3>
-            <p class="text-xs text-bh-muted line-clamp-2 mb-4 leading-relaxed font-light">${post.caption}</p>
+    let currentSelectedPostId = 'post-1';
+    let currentFilter = 'all';
+    let tempUploadedFileUrl = '';
+    let tempIsVideoType = false;
+
             
             ${post.status === 'rejected' ? `
               <div class="bg-rose-50 border border-rose-200 p-3 rounded-xl mb-4 text-xs text-bh-terracotta">
@@ -786,7 +631,19 @@
     function renderClientSimulator() {
       const post = posts.find(p => p.id === currentSelectedPostId) || posts[0];
       
-      document.getElementById('sim-media-img').src = post.mediaUrl;
+      const imgEl = document.getElementById('sim-media-img');
+      const videoEl = document.getElementById('sim-media-video');
+
+      if (post.isVideo) {
+        imgEl.classList.add('hidden');
+        videoEl.classList.remove('hidden');
+        videoEl.src = post.mediaUrl;
+      } else {
+        videoEl.classList.add('hidden');
+        imgEl.classList.remove('hidden');
+        imgEl.src = post.mediaUrl;
+      }
+
       document.getElementById('sim-caption-text').innerText = post.caption;
       document.getElementById('sim-hashtags').innerText = post.hashtags;
 
@@ -815,14 +672,66 @@
     }
 
     function renderCommentsList(comments) {
-      const listContainer = document.getElementById('comments-list');
-      document.getElementById('comments-count-badge').innerText = comments.length;
-      listContainer.innerHTML = '';
+    /* Modal Helpers & Local File Upload */
+    function openNewPostModal() {
+      document.getElementById('modal-new-post').classList.remove('hidden');
+    }
 
-      if (comments.length === 0) {
-        listContainer.innerHTML = `<p class="text-xs text-bh-muted italic font-light">Nenhum comentário adicionado ainda.</p>`;
+    function closeNewPostModal() {
+      document.getElementById('modal-new-post').classList.add('hidden');
+      document.getElementById('form-new-post').reset();
+      document.getElementById('file-drop-prompt').classList.remove('hidden');
+      document.getElementById('file-selected-badge').classList.add('hidden');
+      tempUploadedFileUrl = '';
+      tempIsVideoType = false;
+    }
+
+    function handleModalFileSelect(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      tempIsVideoType = file.type.startsWith('video/');
+      tempUploadedFileUrl = URL.createObjectURL(file);
+
+      document.getElementById('file-drop-prompt').classList.add('hidden');
+      const badge = document.getElementById('file-selected-badge');
+      badge.classList.remove('hidden');
+      document.getElementById('selected-file-label').innerText = `${file.name} (${tempIsVideoType ? 'Vídeo' : 'Foto'})`;
+    }
+
+    function handleCreatePost(event) {
+      event.preventDefault();
+      
+      if (!tempUploadedFileUrl) {
+        showToast('Selecione uma Mídia', 'Por favor escolha uma foto ou vídeo do seu computador.');
         return;
       }
+
+      const title = document.getElementById('input-title').value;
+      const type = document.getElementById('input-type').value;
+      const caption = document.getElementById('input-caption').value;
+
+      const newPost = {
+        id: 'post-' + (posts.length + 1),
+        title,
+        type,
+        isVideo: tempIsVideoType,
+        mediaUrl: tempUploadedFileUrl,
+        caption,
+        hashtags: '#BahiaHomes #Trancoso #LuxuryRealEstate',
+        status: 'pending',
+        rejectionReason: '',
+        comments: [],
+        likes: 0,
+        igComments: 0,
+        reach: 0
+      };
+
+      posts.unshift(newPost);
+      closeNewPostModal();
+      renderAgencyPosts();
+      showToast('Nova Mídia Adicionada', 'Arquivo carregado com sucesso no lote.');
+    }
 
       comments.forEach(c => {
         const item = document.createElement('div');
