@@ -47,6 +47,7 @@
         .font-serif-title {
             font-family: 'Playfair Display', serif;
         }
+        /* Custom scrollbars */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -75,35 +76,28 @@
                 </div>
             </div>
 
-            <!-- VIEW MODE TOGGLER & NEW POST BUTTON -->
-            <div class="flex items-center space-x-3">
-                <button onclick="openNewPostModal()" class="bg-bahia-gold hover:bg-bahia-goldHover text-bahia-charcoal px-3 py-1.5 rounded-full font-bold text-xs flex items-center space-x-1.5 shadow-sm transition-all">
-                    <i data-lucide="plus-circle" class="w-4 h-4"></i>
-                    <span>Novo Post</span>
+            <!-- VIEW MODE TOGGLER -->
+            <div class="flex items-center space-x-2 bg-black/20 p-1 rounded-full border border-white/10 text-xs">
+                <button id="btn-view-client" onclick="setViewMode('client')" class="px-3 py-1.5 rounded-full font-medium transition-all flex items-center space-x-1.5 bg-bahia-gold text-bahia-charcoal shadow-sm">
+                    <i data-lucide="link-2" class="w-3.5 h-3.5"></i>
+                    <span>Modo Cliente (Link Mágico)</span>
                 </button>
-
-                <div class="flex items-center space-x-1 bg-black/20 p-1 rounded-full border border-white/10 text-xs">
-                    <button id="btn-view-client" onclick="setViewMode('client')" class="px-3 py-1.5 rounded-full font-medium transition-all flex items-center space-x-1.5 bg-bahia-gold text-bahia-charcoal shadow-sm">
-                        <i data-lucide="link-2" class="w-3.5 h-3.5"></i>
-                        <span>Modo Cliente</span>
-                    </button>
-                    <button id="btn-view-agency" onclick="setViewMode('agency')" class="px-3 py-1.5 rounded-full font-medium transition-all flex items-center space-x-1.5 text-white/80 hover:text-white">
-                        <i data-lucide="layout-dashboard" class="w-3.5 h-3.5"></i>
-                        <span class="hidden sm:inline">Painel Agência</span>
-                    </button>
-                </div>
+                <button id="btn-view-agency" onclick="setViewMode('agency')" class="px-3 py-1.5 rounded-full font-medium transition-all flex items-center space-x-1.5 text-white/80 hover:text-white">
+                    <i data-lucide="layout-dashboard" class="w-3.5 h-3.5"></i>
+                    <span class="hidden sm:inline">Painel da Agência</span>
+                </button>
             </div>
         </div>
     </header>
 
-    <!-- CLIENT MAGIC LINK BANNER -->
+    <!-- CLIENT MAGIC LINK BANNER (NOTIFICATION) -->
     <div id="magic-link-banner" class="bg-bahia-sandDark border-b border-bahia-gold/30 px-4 py-2.5 text-xs text-bahia-charcoal">
         <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
             <div class="flex items-center space-x-2">
                 <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-bahia-green text-white">
-                    <i data-lucide="shield-check" class="w-3 h-3 mr-1 text-bahia-gold"></i> LINK MÁGICO SEM LOGIN
+                    <i data-lucide="shield-check" class="w-3 h-3 mr-1 text-bahia-gold"></i> SEM LOGIN EXIGIDO
                 </span>
-                <span>Lote <strong>#BH-TRN-2026-10</strong> de Conteúdo em Análise.</span>
+                <span>Você está acessando o Lote <strong>#BH-TRN-2026-10</strong> via Link Mágico Seguro.</span>
             </div>
             <div class="flex items-center space-x-3 text-[11px] text-bahia-muted">
                 <span>Validade: <strong>24/10/2026</strong></span>
@@ -119,6 +113,7 @@
         <!-- LEFT COLUMN: POST SELECTOR & BATCH CONTROLS -->
         <div class="w-full lg:w-1/3 flex flex-col space-y-6">
             
+            <!-- BATCH HEADER INFO -->
             <div class="bg-white rounded-xl p-5 border border-bahia-gold/20 shadow-sm">
                 <div class="flex justify-between items-start mb-3">
                     <div>
@@ -130,9 +125,10 @@
                     </span>
                 </div>
                 <p class="text-xs text-bahia-muted leading-relaxed">
-                    Vídeos em alta resolução e fotos de arquitetura vertical para o perfil oficial da Bahia Homes.
+                    Aprovação de vídeos em alta resolução, carrosséis de arquitetura e chamadas de concierge para o perfil oficial da Bahia Homes.
                 </p>
 
+                <!-- STATS & BATCH ACTIONS -->
                 <div class="mt-4 pt-4 border-t border-bahia-sandDark flex items-center justify-between">
                     <div class="text-xs">
                         <span class="text-bahia-muted">Progresso: </span>
@@ -147,13 +143,10 @@
 
             <!-- POSTS SELECTOR LIST -->
             <div class="space-y-3">
-                <div class="flex items-center justify-between px-1">
-                    <h3 class="text-xs uppercase tracking-wider text-bahia-muted font-bold">Publicações no Lote (<span id="posts-count">4</span>)</h3>
-                    <button onclick="openNewPostModal()" class="text-xs text-bahia-gold font-semibold hover:underline flex items-center space-x-1">
-                        <i data-lucide="plus" class="w-3 h-3"></i>
-                        <span>Adicionar</span>
-                    </button>
-                </div>
+                <h3 class="text-xs uppercase tracking-wider text-bahia-muted font-bold px-1 flex items-center justify-between">
+                    <span>Publicações no Lote (4)</span>
+                    <span class="text-[10px] lowercase font-normal text-bahia-gold">clique para selecionar</span>
+                </h3>
 
                 <div id="posts-list" class="space-y-2.5">
                     <!-- Dynamic rendering via JS -->
@@ -180,6 +173,7 @@
             <!-- INSTAGRAM MOCKUP PREVIEW -->
             <div class="w-full xl:w-1/2 flex justify-center">
                 <div class="w-full max-w-[360px] bg-black rounded-[36px] p-3 shadow-2xl border-4 border-bahia-charcoal relative">
+                    <!-- IPHONE NOTCH & HEADER -->
                     <div class="w-32 h-4 bg-black mx-auto rounded-b-xl mb-1 flex justify-center items-center">
                         <div class="w-10 h-1 bg-neutral-800 rounded-full"></div>
                     </div>
@@ -199,15 +193,22 @@
                             </div>
                         </div>
 
-                        <!-- INSTAGRAM POST CONTENT -->
+                        <!-- INSTAGRAM POST CONTENT (DYNAMIC PREVIEW) -->
                         <div id="insta-preview-container" class="flex-1 overflow-y-auto relative bg-black flex flex-col justify-between">
-                            <!-- MEDIA CONTAINER (IMAGE OR VIDEO) -->
-                            <div id="media-viewport" class="relative w-full h-[380px] bg-neutral-900 flex items-center justify-center overflow-hidden">
+                            <!-- MEDIA CONTENT (IMAGE / REELS) -->
+                            <div class="relative w-full h-[380px] bg-neutral-900 flex items-center justify-center overflow-hidden">
                                 <img id="preview-image" src="" alt="Post preview" class="w-full h-full object-cover">
-                                <video id="preview-video" controls autoplay loop muted class="w-full h-full object-cover hidden"></video>
-
+                                
+                                <!-- REELS OVERLAY ICON -->
                                 <div id="reels-overlay" class="absolute top-3 right-3 bg-black/60 text-white p-1.5 rounded-full backdrop-blur-md hidden">
                                     <i data-lucide="clapperboard" class="w-4 h-4"></i>
+                                </div>
+
+                                <!-- CAROUSEL DOTS OVERLAY -->
+                                <div id="carousel-overlay" class="absolute bottom-3 left-0 right-0 flex justify-center space-x-1 hidden">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
+                                    <span class="w-1.5 h-1.5 rounded-full bg-white/50"></span>
+                                    <span class="w-1.5 h-1.5 rounded-full bg-white/50"></span>
                                 </div>
                             </div>
 
@@ -222,10 +223,12 @@
                                     <i data-lucide="bookmark" class="w-5 h-5 hover:text-gray-600 cursor-pointer"></i>
                                 </div>
 
+                                <!-- LIKES COUNTER -->
                                 <div class="font-semibold text-[11px] text-gray-900">
                                     Curtido por <span class="font-bold">trancoso_lifestyle</span> e <span id="preview-likes">128 outras pessoas</span>
                                 </div>
 
+                                <!-- CAPTION -->
                                 <div class="text-[11px] leading-snug space-y-1">
                                     <p><strong class="font-bold mr-1">bahiahomes</strong> <span id="preview-caption">Carregando legenda...</span></p>
                                 </div>
@@ -251,6 +254,7 @@
             <!-- ACTION & COMMENTS PANEL -->
             <div class="w-full xl:w-1/2 flex flex-col justify-between space-y-5">
                 
+                <!-- CURRENT POST DETAILS -->
                 <div class="bg-white rounded-xl p-5 border border-bahia-gold/20 shadow-sm space-y-4">
                     <div class="flex justify-between items-center">
                         <span id="post-type-badge" class="px-2.5 py-0.5 rounded-full text-[10px] uppercase tracking-wider font-bold bg-bahia-sandDark text-bahia-green border border-bahia-gold/30">
@@ -265,6 +269,7 @@
                         Casa Fasano Trancoso — Experiência Pé na Areia
                     </h3>
 
+                    <!-- METRICS SIMULATION (POST-PUBLICATION DATA) -->
                     <div class="bg-bahia-sandDark/60 rounded-lg p-3 border border-bahia-gold/20 grid grid-cols-3 gap-2 text-center">
                         <div>
                             <span class="text-[10px] uppercase text-bahia-muted block">Estimativa Likes</span>
@@ -280,6 +285,7 @@
                         </div>
                     </div>
 
+                    <!-- DECISION BUTTONS (APPROVE / ADJUST) -->
                     <div class="pt-2 flex items-center gap-3">
                         <button onclick="approveCurrentPost()" class="flex-1 bg-bahia-green hover:bg-bahia-greenLight text-white py-3 px-4 rounded-lg font-semibold text-xs tracking-wider uppercase transition-all shadow-md flex items-center justify-center space-x-2">
                             <i data-lucide="check-circle" class="w-4 h-4 text-bahia-gold"></i>
@@ -292,13 +298,13 @@
                     </div>
                 </div>
 
-                <!-- ADJUSTMENT FORM -->
+                <!-- ADJUSTMENT REQUEST FORM (HIDDEN BY DEFAULT) -->
                 <div id="adjust-form" class="bg-amber-50/80 rounded-xl p-4 border border-amber-200 hidden space-y-3">
                     <div class="flex justify-between items-center text-xs font-bold text-amber-900">
                         <span>Solicitar Correção ou Alteração</span>
                         <button onclick="toggleAdjustForm()" class="text-amber-700 hover:text-amber-900"><i data-lucide="x" class="w-4 h-4"></i></button>
                     </div>
-                    <textarea id="adjust-comment-input" rows="3" class="w-full p-2.5 text-xs rounded-md border border-amber-300 focus:ring-1 focus:ring-bahia-gold focus:outline-none bg-white" placeholder="Descreva o ajuste necessário (ex: alterar valor da diária, ajustar corte do vídeo, mudar hashtag)..."></textarea>
+                    <textarea id="adjust-comment-input" rows="3" class="w-full p-2.5 text-xs rounded-md border border-amber-300 focus:ring-1 focus:ring-bahia-gold focus:outline-none bg-white" placeholder="Descreva o ajuste necessário (ex: alterar valor da diária, ajustar corte da imagem, mudar hashtag)..."></textarea>
                     <div class="flex justify-end">
                         <button onclick="submitAdjustment()" class="bg-bahia-terracotta hover:bg-red-800 text-white px-4 py-1.5 rounded text-xs font-semibold shadow-sm transition-colors">
                             Enviar Pedido de Ajuste
@@ -306,7 +312,7 @@
                     </div>
                 </div>
 
-                <!-- COMMENTS HISTORY -->
+                <!-- COMMENTS / FEEDBACK HISTORY -->
                 <div class="bg-white rounded-xl p-4 border border-bahia-gold/20 shadow-sm flex-1 flex flex-col justify-between min-h-[180px]">
                     <div class="space-y-2">
                         <span class="text-xs font-bold text-bahia-green uppercase tracking-wider block border-b border-bahia-sandDark pb-1.5">
@@ -318,6 +324,7 @@
                         </div>
                     </div>
 
+                    <!-- QUICK COMMENT INPUT -->
                     <div class="mt-3 pt-2 border-t border-bahia-sandDark flex items-center space-x-2">
                         <input id="quick-comment" type="text" placeholder="Escrever uma observação rápida..." class="flex-1 bg-bahia-sand p-2 text-xs rounded-md border border-bahia-gold/30 focus:outline-none focus:border-bahia-gold">
                         <button onclick="addQuickComment()" class="bg-bahia-gold hover:bg-bahia-goldHover text-bahia-charcoal p-2 rounded-md transition-colors">
@@ -332,75 +339,12 @@
 
     </main>
 
-    <!-- CREATE NEW POST MODAL (UPLOAD FROM COMPUTER) -->
-    <div id="new-post-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl max-w-lg w-full p-6 border border-bahia-gold/30 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center border-b border-bahia-sandDark pb-3">
-                <div class="flex items-center space-x-2">
-                    <i data-lucide="upload-cloud" class="w-5 h-5 text-bahia-gold"></i>
-                    <h3 class="font-serif-title font-bold text-lg text-bahia-green">Adicionar Novo Post (Foto ou Vídeo)</h3>
-                </div>
-                <button onclick="closeNewPostModal()" class="text-bahia-muted hover:text-bahia-charcoal"><i data-lucide="x" class="w-5 h-5"></i></button>
-            </div>
-
-            <form id="new-post-form" onsubmit="handleNewPostSubmit(event)" class="space-y-4 text-xs">
-                <!-- FILE UPLOAD INPUT -->
-                <div>
-                    <label class="block font-semibold text-bahia-green mb-1">Upload de Arquivo (Vídeo ou Foto Vertical)</label>
-                    <div class="border-2 border-dashed border-bahia-gold/40 rounded-xl p-4 text-center bg-bahia-sand hover:bg-bahia-sandDark transition-all cursor-pointer relative">
-                        <input type="file" id="file-input" accept="image/*,video/*" required class="absolute inset-0 opacity-0 cursor-pointer" onchange="handleFileSelect(event)">
-                        <div id="file-upload-placeholder" class="space-y-1">
-                            <i data-lucide="film" class="w-8 h-8 text-bahia-gold mx-auto"></i>
-                            <p class="font-semibold text-bahia-green">Clique ou arraste o arquivo do seu computador</p>
-                            <p class="text-[10px] text-bahia-muted">Suporta arquivos .MP4, .MOV, .JPG ou .PNG (Sempre em proporção vertical 9:16 ou 4:5)</p>
-                        </div>
-                        <div id="file-upload-preview-info" class="hidden text-emerald-800 font-semibold flex items-center justify-center space-x-2">
-                            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600"></i>
-                            <span id="selected-file-name">arquivo.mp4 selecionado</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TITLE & TYPE -->
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block font-semibold text-bahia-green mb-1">Título Interno da Peça</label>
-                        <input type="text" id="post-title-input" required placeholder="Ex: Casa 58 — Reels Teaser" class="w-full p-2.5 rounded-lg border border-bahia-gold/30 focus:ring-1 focus:ring-bahia-gold focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block font-semibold text-bahia-green mb-1">Formato do Instagram</label>
-                        <select id="post-type-input" class="w-full p-2.5 rounded-lg border border-bahia-gold/30 focus:ring-1 focus:ring-bahia-gold focus:outline-none bg-white">
-                            <option value="REELS">REELS (Vídeo Vertical)</option>
-                            <option value="FEED">FEED (Foto Única)</option>
-                            <option value="STORIES">STORIES (Vídeo/Foto Full Screen)</option>
-                            <option value="CARROSSEL">CARROSSEL (Múltiplas Fotos)</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- CAPTION -->
-                <div>
-                    <label class="block font-semibold text-bahia-green mb-1">Legenda da Publicação</label>
-                    <textarea id="post-caption-input" rows="3" required placeholder="Escreva a legenda com emojis e hashtags de luxo..." class="w-full p-2.5 rounded-lg border border-bahia-gold/30 focus:ring-1 focus:ring-bahia-gold focus:outline-none"></textarea>
-                </div>
-
-                <div class="flex justify-end space-x-3 pt-2 border-t border-bahia-sandDark">
-                    <button type="button" onclick="closeNewPostModal()" class="px-4 py-2 rounded-lg border border-gray-300 font-semibold text-bahia-muted hover:bg-gray-50">Cancelar</button>
-                    <button type="submit" class="px-5 py-2 rounded-lg bg-bahia-green hover:bg-bahia-greenLight text-white font-bold shadow-md flex items-center space-x-1.5">
-                        <i data-lucide="plus" class="w-4 h-4 text-bahia-gold"></i>
-                        <span>Publicar no Lote</span>
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
     <!-- FOOTER -->
     <footer class="bg-bahia-green text-white/70 border-t border-bahia-gold/20 py-6 text-xs mt-auto">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="flex items-center space-x-2">
                 <span class="font-serif-title text-bahia-gold font-semibold">Aprova Bahia</span>
-                <span>• Plataforma de Governança de Conteúdo Imobiliário</span>
+                <span>• Plataforma de Governança e Validação de Conteúdo Imobiliário</span>
             </div>
             <div class="text-bahia-gold/80">
                 Desenvolvido para <strong>Bahia Homes Luxury Real Estate</strong>
@@ -410,55 +354,52 @@
 
     <!-- JAVASCRIPT APP LOGIC -->
     <script>
+        // DATA STATE FOR SAMPLE POSTS (BAHIA HOMES LUXURY REAL ESTATE)
         const samplePosts = [
             {
                 id: 1,
-                title: "Casa 58 Reels Teaser — Trancoso",
+                title: "Casa Fasano Trancoso — Experiência Pé na Areia",
                 type: "REELS",
-                isVideo: false,
                 status: "Pendente",
                 image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80",
-                caption: "Um refúgio exclusivo no Altos de Trancoso. Suítes integradas à Mata Atlântica e serviço de concierge privativo. 🌊✨ #BahiaHomes #Trancoso #LuxoNoBrasil",
+                caption: "Um refúgio exclusivo assinado por Bernardes Arquitetura no Fasano Vilas Trancoso. Suítes integradas à Mata Atlântica e serviço de concierge privativo. 🌊✨ #BahiaHomes #Trancoso #FasanoVilas #LuxoNoBrasil",
                 likes: "342 pessoas",
                 reach: "4.5k Views",
                 comments: [
-                    { author: "Agência Daime", text: "Vídeo editado em tom quente para valorizar a luz de Trancoso.", time: "10:15" }
+                    { author: "Agência Daime", text: "Vídeo editado com color grading aquecido para destacar o pôr do sol.", time: "10:15" }
                 ]
             },
             {
                 id: 2,
-                title: "Villa Terravista Golf Club — Arquitetura",
+                title: "Villa Terravista Golf Club — Arquitetura de Papo",
                 type: "CARROSSEL",
-                isVideo: false,
                 status: "Pendente",
                 image: "https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=800&q=80",
-                caption: "Design contemporâneo sob falésias com vista infinita para o Atlântico. Disponível para locação de temporada. ⛳️🏡 #TerravistaGolf #TrancosoRealEstate",
+                caption: "Design contemporâneo sob falésias com vista infinita para o Atlântico. Disponível para locação de temporada e investimento. ⛳️🏡 #TerravistaGolf #TrancosoRealEstate #ArquiteturaDeLuxo",
                 likes: "518 pessoas",
                 reach: "2.8k Impr.",
                 comments: []
             },
             {
                 id: 3,
-                title: "Espelho Beach Sanctuary — Gastronomia",
+                title: "Espelho Beach Sanctuary — Gastronomia no Quadrado",
                 type: "FEED",
-                isVideo: false,
                 status: "Aprovado",
                 image: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80",
-                caption: "Momentos inesquecíveis na Praia do Espelho com chef exclusivo servindo o melhor da culinária baiana. 🌴🥥 #PraiaDoEspelho #BahiaHomes",
+                caption: "Momentos inesquecíveis na Praia do Espelho com chef exclusivo servindo o melhor da culinária baiana. 🌴🥥 #PraiaDoEspelho #BahiaHomesConcierge #BahiaVibes",
                 likes: "892 pessoas",
                 reach: "6.1k Impr.",
                 comments: [
-                    { author: "Cliente (Bahia Homes)", text: "Foto aprovada! Ficou excelente.", time: "11:40" }
+                    { author: "Cliente (Bahia Homes)", text: "Foto aprovada! Ficou excelente a composição da mesa.", time: "11:40" }
                 ]
             },
             {
                 id: 4,
-                title: "Pôr do Sol Itapororoca — Heliponto",
+                title: "Pôr do Sol em Itapororoca — Heliponto Privado",
                 type: "STORIES",
-                isVideo: false,
                 status: "Pendente",
                 image: "https://images.unsplash.com/photo-1512915922686-57c11dde9b6b?auto=format&fit=crop&w=800&q=80",
-                caption: "Chegada exclusiva por helicóptero na Casa 17 em Itapororoca. Arraste para cima para reservar. 🚁🌅",
+                caption: "Chegada exclusiva por helicóptero na Casa 17 em Itapororoca. Arraste para cima para reservar suas férias de fim de ano. 🚁🌅",
                 likes: "190 pessoas",
                 reach: "1.9k Views",
                 comments: []
@@ -467,24 +408,23 @@
 
         let currentPostId = 1;
         let viewMode = 'client';
-        let tempSelectedFileUrl = null;
-        let tempIsVideo = false;
 
+        // INITIALIZE APP
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
             renderPostsList();
             loadPostDetails(currentPostId);
         });
 
+        // RENDER POSTS SELECTOR LIST
         function renderPostsList() {
             const container = document.getElementById('posts-list');
             container.innerHTML = '';
-            document.getElementById('posts-count').innerText = samplePosts.length;
 
             samplePosts.forEach(post => {
                 const isSelected = post.id === currentPostId;
                 const statusColor = post.status === 'Aprovado' ? 'bg-emerald-100 text-emerald-800 border-emerald-300' : 
-                                   (post.status === 'Ajuste' ? 'bg-rose-100 text-rose-800 border-rose-300' : 'bg-amber-100 text-amber-800 border-amber-200');
+                                   (post.status === 'Ajuste' ? 'bg-rose-100 text-rose-800 border-rose-300' : 'bg-amber-100 text-amber-800 border-amber-300');
 
                 const card = document.createElement('div');
                 card.onclick = () => selectPost(post.id);
@@ -492,12 +432,8 @@
                     isSelected ? 'border-bahia-gold ring-1 ring-bahia-gold shadow-md' : 'border-bahia-gold/20 hover:border-bahia-gold/50'
                 }`;
 
-                const mediaPreviewHtml = post.isVideo 
-                    ? `<video src="${post.image}" class="w-12 h-12 rounded-md object-cover border border-bahia-sandDark bg-black"></video>`
-                    : `<img src="${post.image}" class="w-12 h-12 rounded-md object-cover border border-bahia-sandDark">`;
-
                 card.innerHTML = `
-                    ${mediaPreviewHtml}
+                    <img src="${post.image}" class="w-12 h-12 rounded-md object-cover border border-bahia-sandDark">
                     <div class="flex-1 min-w-0">
                         <div class="flex items-center justify-between">
                             <span class="text-[10px] font-bold text-bahia-gold tracking-wider uppercase">${post.type}</span>
@@ -513,28 +449,22 @@
             updateProgressSummary();
         }
 
+        // LOAD POST DETAILS INTO PREVIEW AND PANEL
         function loadPostDetails(id) {
             currentPostId = id;
             const post = samplePosts.find(p => p.id === id);
             if (!post) return;
 
-            const imgEl = document.getElementById('preview-image');
-            const videoEl = document.getElementById('preview-video');
-
-            if (post.isVideo) {
-                imgEl.classList.add('hidden');
-                videoEl.classList.remove('hidden');
-                videoEl.src = post.image;
-            } else {
-                videoEl.classList.add('hidden');
-                imgEl.classList.remove('hidden');
-                imgEl.src = post.image;
-            }
-
+            // Update Mockup Preview
+            document.getElementById('preview-image').src = post.image;
             document.getElementById('preview-caption').innerText = post.caption;
             document.getElementById('preview-likes').innerText = post.likes;
-            document.getElementById('reels-overlay').classList.toggle('hidden', post.type !== 'REELS');
 
+            // Show/Hide Type Overlay
+            document.getElementById('reels-overlay').classList.toggle('hidden', post.type !== 'REELS');
+            document.getElementById('carousel-overlay').classList.toggle('hidden', post.type !== 'CARROSSEL');
+
+            // Update Panel Details
             document.getElementById('post-title').innerText = post.title;
             document.getElementById('post-type-badge').innerText = `${post.type} • PREVIEW BAHIA HOMES`;
             document.getElementById('metric-reach').innerText = post.reach;
@@ -555,6 +485,7 @@
             loadPostDetails(id);
         }
 
+        // RENDER COMMENTS
         function renderComments(comments) {
             const container = document.getElementById('comments-container');
             if (comments.length === 0) {
@@ -573,66 +504,7 @@
             `).join('');
         }
 
-        // UPLOAD FILE LOGIC FROM COMPUTER
-        function handleFileSelect(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            tempIsVideo = file.type.startsWith('video/');
-            tempSelectedFileUrl = URL.createObjectURL(file);
-
-            document.getElementById('file-upload-placeholder').classList.add('hidden');
-            const infoEl = document.getElementById('file-upload-preview-info');
-            infoEl.classList.remove('hidden');
-            document.getElementById('selected-file-name').innerText = `${file.name} (${tempIsVideo ? 'Vídeo' : 'Foto'})`;
-        }
-
-        function openNewPostModal() {
-            document.getElementById('new-post-modal').classList.remove('hidden');
-        }
-
-        function closeNewPostModal() {
-            document.getElementById('new-post-modal').classList.add('hidden');
-            document.getElementById('new-post-form').reset();
-            document.getElementById('file-upload-placeholder').classList.remove('hidden');
-            document.getElementById('file-upload-preview-info').classList.add('hidden');
-            tempSelectedFileUrl = null;
-        }
-
-        function handleNewPostSubmit(e) {
-            e.preventDefault();
-            if (!tempSelectedFileUrl) {
-                alert('Por favor, selecione um arquivo de vídeo ou foto do seu computador.');
-                return;
-            }
-
-            const title = document.getElementById('post-title-input').value;
-            const type = document.getElementById('post-type-input').value;
-            const caption = document.getElementById('post-caption-input').value;
-
-            const newPost = {
-                id: samplePosts.length + 1,
-                title: title,
-                type: type,
-                isVideo: tempIsVideo,
-                status: "Pendente",
-                image: tempSelectedFileUrl,
-                caption: caption,
-                likes: "0 pessoas",
-                reach: "Recém Adicionado",
-                comments: [{
-                    author: "Agência Daime",
-                    text: "Novo post enviado para o lote de aprovação.",
-                    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-                }]
-            };
-
-            samplePosts.push(newPost);
-            addAuditLog(`Novo post #${newPost.id} (${title}) adicionado ao lote via upload.`);
-            closeNewPostModal();
-            loadPostDetails(newPost.id);
-        }
-
+        // ACTIONS: APPROVE CURRENT POST
         function approveCurrentPost() {
             const post = samplePosts.find(p => p.id === currentPostId);
             if (post) {
@@ -647,10 +519,13 @@
             }
         }
 
+        // ACTIONS: TOGGLE ADJUSTMENT FORM
         function toggleAdjustForm() {
-            document.getElementById('adjust-form').classList.toggle('hidden');
+            const form = document.getElementById('adjust-form');
+            form.classList.toggle('hidden');
         }
 
+        // SUBMIT ADJUSTMENT
         function submitAdjustment() {
             const text = document.getElementById('adjust-comment-input').value.trim();
             if (!text) return;
@@ -669,6 +544,7 @@
             }
         }
 
+        // QUICK COMMENT
         function addQuickComment() {
             const input = document.getElementById('quick-comment');
             const text = input.value.trim();
@@ -686,12 +562,14 @@
             }
         }
 
+        // APPROVE ALL
         function approveAllBatch() {
             samplePosts.forEach(p => p.status = 'Aprovado');
             addAuditLog('Lote completo #BH-TRN-2026-10 APROVADO pelo cliente.');
             loadPostDetails(currentPostId);
         }
 
+        // UPDATE PROGRESS SUMMARY
         function updateProgressSummary() {
             const approved = samplePosts.filter(p => p.status === 'Aprovado').length;
             document.getElementById('approval-progress').innerText = `${approved} de ${samplePosts.length} aprovados`;
@@ -706,6 +584,7 @@
             }
         }
 
+        // AUDIT LOG ADDER
         function addAuditLog(msg) {
             const container = document.getElementById('audit-log');
             const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -714,6 +593,7 @@
             container.prepend(item);
         }
 
+        // TOGGLE VIEW MODE (CLIENT vs AGENCY)
         function setViewMode(mode) {
             viewMode = mode;
             const btnClient = document.getElementById('btn-view-client');
