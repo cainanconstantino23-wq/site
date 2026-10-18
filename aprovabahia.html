@@ -1,1098 +1,734 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="h-full bg-[#FAF8F5] text-[#2C302E]">
+<html lang="pt-BR" class="h-full bg-[#FDFBF7]">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Aprova Bahia | Gestão e Aprovação de Mídias de Luxo</title>
-  
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- FontAwesome Icons CDN -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  
-  <!-- Google Fonts: Playfair Display (Serif Luxo) & Plus Jakarta Sans (Modern Neutral) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            bh: {
-              sand: '#FAF8F5',       // Fundo principal estilo areia fina
-              card: '#FFFFFF',       // Superfície limpa de cartões
-              dark: '#1C201D',       // Escuro elegante para textos principais
-              forest: '#2A4032',     // Verde palmeira/mata atlântica refinado
-              forestHover: '#1E2F25',
-              bronze: '#C39A57',     // Dourado/Bronze nobre de alto padrão
-              terracotta: '#B85C38', // Tom terroso/argila baiana
-              muted: '#7A827D',      // Texto secundário suave
-              border: '#E8E4DC',     // Linha fina de separação estilo linho
-              softBg: '#F3EFE9'      // Fundo secundário
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprova Bahia | Curadoria de Conteúdo e Aprovação de Luxo</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bahia: {
+                            sand: '#FDFBF7',
+                            sandDark: '#F4EFE6',
+                            green: '#1C3A27',
+                            greenLight: '#2D583C',
+                            gold: '#C5A059',
+                            goldHover: '#B08B46',
+                            terracotta: '#B85C38',
+                            charcoal: '#1A1A1A',
+                            muted: '#736D65'
+                        }
+                    },
+                    fontFamily: {
+                        playfair: ['Playfair Display', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif']
+                    }
+                }
             }
-          },
-          fontFamily: {
-            serif: ['"Playfair Display"', 'serif'],
-            sans: ['"Plus Jakarta Sans"', 'sans-serif']
-          }
         }
-      }
-    }
-  </script>
-
-  <style>
-    /* Custom Luxury Scrollbars */
-    ::-webkit-scrollbar {
-      width: 5px;
-      height: 5px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #FAF8F5;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #C39A57;
-      border-radius: 4px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #2A4032;
-    }
-
-    /* Instagram Phone Mockup Luxury Styling */
-    .phone-mockup {
-      box-shadow: 0 25px 50px -12px rgba(28, 32, 29, 0.25);
-      border: 10px solid #1C201D;
-      border-radius: 36px;
-    }
-
-    @media (min-width: 640px) {
-      .phone-mockup {
-        border-width: 12px;
-        border-radius: 42px;
-      }
-    }
-
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
-    .no-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-
-    .glass-card {
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(12px);
-    }
-  </style>
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #FDFBF7;
+            color: #1A1A1A;
+        }
+        .font-serif-title {
+            font-family: 'Playfair Display', serif;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F4EFE6;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #C5A059;
+            border-radius: 3px;
+        }
+    </style>
 </head>
-<body class="bg-bh-sand text-bh-dark font-sans min-h-full antialiased pb-24 md:pb-12 selection:bg-bh-bronze selection:text-white">
+<body class="h-full flex flex-col antialiased selection:bg-bahia-gold selection:text-white">
 
-  <!-- Top Navigation Bar -->
-  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-bh-border">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-20 gap-4">
-        
-        <!-- Brand Logo inspired by Bahia Homes -->
-        <div class="flex items-center gap-3 cursor-pointer shrink-0" onclick="switchView('agency-dashboard')">
-          <div class="w-10 h-10 rounded-full bg-bh-forest text-bh-bronze flex items-center justify-center font-serif font-bold text-xl shadow-md border border-bh-bronze/30">
-            BH
-          </div>
-          <div class="flex flex-col">
-            <span class="font-serif font-bold text-lg sm:text-xl tracking-tight text-bh-dark leading-none">
-              Aprova <span class="italic text-bh-bronze font-normal">Bahia</span>
-            </span>
-            <span class="text-[9px] font-medium tracking-widest uppercase text-bh-muted mt-0.5">
-              Curadoria & Mídias de Luxo
-            </span>
-          </div>
-        </div>
-
-        <!-- Desktop Navigation Switcher -->
-        <div class="hidden md:flex items-center gap-1 bg-bh-softBg p-1.5 rounded-full border border-bh-border">
-          <button id="nav-btn-agency" onclick="switchView('agency-dashboard')" class="px-4 py-2 rounded-full text-xs font-semibold transition-all duration-300 bg-bh-forest text-white shadow-sm">
-            <i class="fa-solid fa-compass mr-2 text-bh-bronze"></i> Painel Agência
-          </button>
-          <button id="nav-btn-client" onclick="switchView('client-approval')" class="px-4 py-2 rounded-full text-xs font-medium transition-all duration-300 text-bh-muted hover:text-bh-dark">
-            <i class="fa-solid fa-gem mr-2 text-bh-bronze"></i> Visão Cliente (Link)
-          </button>
-          <button id="nav-btn-stats" onclick="switchView('metrics-dashboard')" class="px-4 py-2 rounded-full text-xs font-medium transition-all duration-300 text-bh-muted hover:text-bh-dark">
-            <i class="fa-solid fa-chart-pie mr-2 text-bh-bronze"></i> Performance
-          </button>
-        </div>
-
-        <!-- Header Actions -->
-        <div class="flex items-center gap-3">
-          <button onclick="openNewPostModal()" class="flex items-center gap-2 bg-bh-forest hover:bg-bh-forestHover text-white font-medium text-xs px-4 py-2.5 rounded-full transition-all shadow-md active:scale-95 border border-bh-bronze/30">
-            <i class="fa-solid fa-plus text-bh-bronze text-xs"></i> 
-            <span class="hidden sm:inline font-medium uppercase tracking-wider text-[11px]">Novo Post</span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <!-- Mobile Bottom Navigation Bar -->
-  <nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-bh-border px-4 py-2.5 flex justify-around items-center text-[10px] font-medium shadow-lg">
-    <button id="mobile-nav-agency" onclick="switchView('agency-dashboard')" class="flex flex-col items-center gap-1 text-bh-forest font-bold">
-      <i class="fa-solid fa-compass text-lg text-bh-bronze"></i>
-      <span>Painel</span>
-    </button>
-    <button id="mobile-nav-client" onclick="switchView('client-approval')" class="flex flex-col items-center gap-1 text-bh-muted">
-      <i class="fa-solid fa-gem text-lg"></i>
-      <span>Aprovação</span>
-    </button>
-    <button id="mobile-nav-stats" onclick="switchView('metrics-dashboard')" class="flex flex-col items-center gap-1 text-bh-muted">
-      <i class="fa-solid fa-chart-pie text-lg"></i>
-      <span>Métricas</span>
-    </button>
-  </nav>
-
-  <!-- Toast Notification System -->
-  <div id="toast-notification" class="fixed bottom-20 md:bottom-8 right-4 left-4 md:left-auto z-50 transform translate-y-28 opacity-0 transition-all duration-300 pointer-events-none">
-    <div class="bg-bh-dark text-white px-5 py-4 rounded-2xl shadow-2xl flex items-center gap-4 max-w-md mx-auto border border-bh-bronze/40">
-      <div id="toast-icon" class="w-9 h-9 rounded-full bg-bh-forest text-bh-bronze flex items-center justify-center shrink-0 border border-bh-bronze/30">
-        <i class="fa-solid fa-check text-sm"></i>
-      </div>
-      <div>
-        <h4 id="toast-title" class="font-serif font-semibold text-sm text-bh-bronze">Notificação</h4>
-        <p id="toast-message" class="text-xs text-slate-300 mt-0.5">Mensagem da ação executada.</p>
-      </div>
-    </div>
-  </div>
-
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
-
-    <!-- VIEW 1: AGENCY DASHBOARD -->
-    <section id="view-agency-dashboard" class="space-y-6">
-      
-      <!-- Top Action Bar & Workspace Summary -->
-      <div class="bg-white border border-bh-border p-6 sm:p-8 rounded-3xl shadow-sm relative overflow-hidden">
-        <div class="absolute -top-12 -right-12 w-48 h-48 rounded-full bg-bh-softBg opacity-60 pointer-events-none"></div>
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
-          <div>
-            <div class="flex items-center gap-2 text-bh-bronze text-xs font-semibold uppercase tracking-widest mb-2">
-              <i class="fa-solid fa-house-chimney text-xs"></i> Curadoria Ativa de Conteúdo
-            </div>
-            <h1 class="text-2xl sm:text-3xl font-serif font-bold text-bh-dark">
-              Bahia Homes — <span class="italic font-normal text-bh-forest">Coleção Trancoso & Sul da Bahia</span>
-            </h1>
-            <p class="text-bh-muted text-xs sm:text-sm mt-2 max-w-2xl font-light leading-relaxed">
-              Gestão de mídias de alto padrão para propriedades no Quadrado, Terravista, Itapororoca e Fasano. Envie o lote exclusivo para validação do cliente via Link Mágico.
-            </p>
-          </div>
-
-          <div class="flex items-center gap-3 shrink-0">
-            <button onclick="copyMagicLink()" class="w-full md:w-auto flex items-center justify-center gap-2.5 bg-bh-forest hover:bg-bh-forestHover text-white border border-bh-bronze/40 px-5 py-3.5 rounded-full font-medium text-xs transition-all active:scale-95 shadow-md">
-              <i class="fa-solid fa-key text-bh-bronze"></i> Copiar Link Mágico Sem Login
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Quick Metrics Cards Grid -->
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="bg-white border border-bh-border p-5 rounded-2xl shadow-sm">
-          <span class="text-bh-muted text-xs font-medium uppercase tracking-wider block">Total Mídias</span>
-          <div class="flex items-baseline justify-between mt-2">
-            <span id="metric-total" class="text-2xl sm:text-3xl font-serif font-bold text-bh-dark">4</span>
-            <span class="text-[10px] text-bh-muted bg-bh-softBg px-2 py-1 rounded-full"><i class="fa-solid fa-layer-group text-bh-bronze"></i> Lote Verão</span>
-          </div>
-        </div>
-        
-        <div class="bg-white border border-bh-border p-5 rounded-2xl shadow-sm border-l-4 border-l-bh-bronze">
-          <span class="text-bh-muted text-xs font-medium uppercase tracking-wider block">Aguardando Aprovação</span>
-          <div class="flex items-baseline justify-between mt-2">
-            <span id="metric-pending" class="text-2xl sm:text-3xl font-serif font-bold text-bh-bronze">2</span>
-            <span class="text-[10px] text-bh-bronze font-semibold uppercase"><i class="fa-solid fa-clock"></i> Em Análise</span>
-          </div>
-        </div>
-
-        <div class="bg-white border border-bh-border p-5 rounded-2xl shadow-sm border-l-4 border-l-bh-forest">
-          <span class="text-bh-muted text-xs font-medium uppercase tracking-wider block">Conteúdos Aprovados</span>
-          <div class="flex items-baseline justify-between mt-2">
-            <span id="metric-approved" class="text-2xl sm:text-3xl font-serif font-bold text-bh-forest">1</span>
-            <span class="text-[10px] text-bh-forest font-semibold uppercase"><i class="fa-solid fa-check"></i> Prontos</span>
-          </div>
-        </div>
-
-        <div class="bg-white border border-bh-border p-5 rounded-2xl shadow-sm border-l-4 border-l-bh-terracotta">
-          <span class="text-bh-muted text-xs font-medium uppercase tracking-wider block">Solicitação de Ajuste</span>
-          <div class="flex items-baseline justify-between mt-2">
-            <span id="metric-rejected" class="text-2xl sm:text-3xl font-serif font-bold text-bh-terracotta">1</span>
-            <span class="text-[10px] text-bh-terracotta font-semibold uppercase"><i class="fa-solid fa-pen"></i> Revisar</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Filters & Audit Trail Bar -->
-      <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 bg-white p-3 sm:p-4 rounded-2xl border border-bh-border shadow-sm">
-        <div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
-          <button onclick="filterPosts('all')" class="filter-btn active-filter px-4 py-2 rounded-full text-xs font-semibold bg-bh-forest text-white transition whitespace-nowrap shadow-xs">Todos (4)</button>
-          <button onclick="filterPosts('pending')" class="filter-btn px-4 py-2 rounded-full text-xs font-medium text-bh-muted hover:text-bh-dark hover:bg-bh-softBg transition whitespace-nowrap">Pendentes</button>
-          <button onclick="filterPosts('approved')" class="filter-btn px-4 py-2 rounded-full text-xs font-medium text-bh-muted hover:text-bh-dark hover:bg-bh-softBg transition whitespace-nowrap">Aprovados</button>
-          <button onclick="filterPosts('rejected')" class="filter-btn px-4 py-2 rounded-full text-xs font-medium text-bh-muted hover:text-bh-dark hover:bg-bh-softBg transition whitespace-nowrap">Com Ajustes</button>
-        </div>
-
-        <div class="flex items-center justify-end">
-          <button onclick="toggleAuditModal()" class="w-full sm:w-auto text-xs text-bh-dark hover:text-bh-forest flex items-center justify-center gap-2 bg-bh-softBg px-4 py-2.5 rounded-full border border-bh-border active:scale-95 transition">
-            <i class="fa-solid fa-shield-halved text-bh-bronze"></i> Rastro de Auditoria
-          </button>
-        </div>
-      </div>
-
-      <!-- Posts Grid (Agency View) -->
-      <div id="agency-posts-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- Dynamic Luxury Cards Injected via JS -->
-      </div>
-    </section>
-
-    <!-- VIEW 2: CLIENT APPROVAL PORTAL (MAGIC LINK EXPERIENCE) -->
-    <section id="view-client-approval" class="hidden space-y-6">
-      
-      <!-- Magic Link Banner Header -->
-      <div class="bg-bh-forest text-white p-6 sm:p-8 rounded-3xl relative overflow-hidden shadow-xl border border-bh-bronze/30">
-        <div class="absolute top-0 right-0 w-80 h-80 bg-bh-bronze/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative z-10">
-          <div>
-            <div class="flex items-center gap-3">
-              <span class="bg-bh-bronze/20 text-bh-bronze text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border border-bh-bronze/40 flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-bh-bronze animate-pulse"></span> Link Mágico de Segurança Ativo
-              </span>
-              <span class="text-xs text-slate-300 font-light">Acesso Exclusivo Curadoria</span>
-            </div>
-            <h1 class="text-2xl sm:text-3xl font-serif font-bold text-white mt-3">Portal de Aprovação — Bahia Homes</h1>
-            <p class="text-slate-200 text-xs sm:text-sm mt-1 max-w-2xl leading-relaxed font-light">
-              Avalie o lote de postagens preparado para o Instagram da sua propriedade. Acurácia de pré-visualização, legendas e mídias em alta definição.
-            </p>
-          </div>
-
-          <button onclick="approveAllBatch()" class="w-full md:w-auto bg-bh-bronze hover:bg-amber-600 text-white font-medium text-xs uppercase tracking-widest px-6 py-4 rounded-full shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2 shrink-0 border border-white/20">
-            <i class="fa-solid fa-check-double text-sm"></i> Aprovar Todo o Lote
-          </button>
-        </div>
-      </div>
-
-      <!-- Batch Selector Bar -->
-      <div class="bg-white border border-bh-border p-4 rounded-2xl shadow-sm space-y-2">
-        <div class="flex items-center justify-between">
-          <h4 class="text-xs font-bold text-bh-muted uppercase tracking-wider">Mídias em Curadoria (Selecione para simular)</h4>
-          <span class="text-[10px] text-bh-muted sm:hidden"><i class="fa-solid fa-arrow-right-long mr-1"></i> Deslize para navegar</span>
-        </div>
-        <div id="batch-thumbnails-list" class="flex sm:grid sm:grid-cols-4 gap-3 overflow-x-auto no-scrollbar py-1">
-          <!-- Injected via JS -->
-        </div>
-      </div>
-
-      <!-- Simulator Layout Grid -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        
-        <!-- Instagram Phone Simulator Frame -->
-        <div class="lg:col-span-5 flex flex-col items-center">
-          <div class="text-xs font-medium text-bh-muted mb-3 flex items-center gap-2">
-            <i class="fa-solid fa-mobile-screen text-bh-bronze"></i> Simulador Nativo do Instagram
-          </div>
-
-          <!-- Mobile Phone Display Mockup -->
-          <div class="w-full max-w-[350px] sm:max-w-[370px] phone-mockup bg-black overflow-hidden text-white font-sans text-xs select-none">
-            
-            <!-- Instagram Header Mock -->
-            <div class="px-4 py-3 border-b border-zinc-800 flex items-center justify-between bg-black">
-              <div class="flex items-center gap-2.5">
-                <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-bh-bronze to-bh-forest p-0.5 shrink-0">
-                  <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=150&auto=format&fit=crop&q=80" class="w-full h-full object-cover rounded-full" alt="Perfil">
+    <!-- TOP HEADER / BRAND BAR -->
+    <header class="bg-bahia-green text-white border-b border-bahia-gold/20 sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-bahia-gold/20 p-2 rounded-full border border-bahia-gold/40">
+                    <i data-lucide="palmtree" class="w-5 h-5 text-bahia-gold"></i>
                 </div>
                 <div>
-                  <h5 class="font-bold text-xs leading-none">bahiahomes</h5>
-                  <span class="text-[9px] text-zinc-400">Trancoso, Bahia</span>
+                    <span class="font-serif-title text-xl tracking-wider font-semibold text-white block leading-none">BAHIA HOMES</span>
+                    <span class="text-[10px] uppercase tracking-[0.2em] text-bahia-gold font-medium">Curadoria de Conteúdo • Aprova Bahia</span>
                 </div>
-              </div>
-              <i class="fa-solid fa-ellipsis text-zinc-400 px-1"></i>
             </div>
 
-            <!-- Media Content Viewport -->
-            <div id="sim-media-container" class="relative bg-zinc-900 aspect-square flex items-center justify-center overflow-hidden">
-              <img id="sim-media-img" src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&auto=format&fit=crop&q=80" class="w-full h-full object-cover" alt="Post preview">
-              
-              <div id="sim-reel-badge" class="hidden absolute top-3 right-3 bg-black/75 backdrop-blur-md px-2.5 py-1 rounded-md text-[10px] font-bold text-white flex items-center gap-1.5 border border-white/10">
-                <i class="fa-solid fa-clapperboard text-bh-bronze"></i> REELS
-              </div>
-            </div>
+            <!-- VIEW MODE TOGGLER & NEW POST BUTTON -->
+            <div class="flex items-center space-x-3">
+                <button onclick="openNewPostModal()" class="bg-bahia-gold hover:bg-bahia-goldHover text-bahia-charcoal px-3 py-1.5 rounded-full font-bold text-xs flex items-center space-x-1.5 shadow-sm transition-all">
+                    <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                    <span>Novo Post</span>
+                </button>
 
-            <!-- Instagram Actions Bar -->
-            <div class="p-3.5 flex items-center justify-between text-base border-t border-zinc-900">
-              <div class="flex items-center gap-4">
-                <i class="fa-regular fa-heart hover:text-rose-500 cursor-pointer"></i>
-                <i class="fa-regular fa-comment hover:text-slate-400 cursor-pointer"></i>
-                <i class="fa-regular fa-paper-plane hover:text-slate-400 cursor-pointer"></i>
-              </div>
-              <i class="fa-regular fa-bookmark hover:text-slate-400 cursor-pointer"></i>
+                <div class="flex items-center space-x-1 bg-black/20 p-1 rounded-full border border-white/10 text-xs">
+                    <button id="btn-view-client" onclick="setViewMode('client')" class="px-3 py-1.5 rounded-full font-medium transition-all flex items-center space-x-1.5 bg-bahia-gold text-bahia-charcoal shadow-sm">
+                        <i data-lucide="link-2" class="w-3.5 h-3.5"></i>
+                        <span>Modo Cliente</span>
+                    </button>
+                    <button id="btn-view-agency" onclick="setViewMode('agency')" class="px-3 py-1.5 rounded-full font-medium transition-all flex items-center space-x-1.5 text-white/80 hover:text-white">
+                        <i data-lucide="layout-dashboard" class="w-3.5 h-3.5"></i>
+                        <span class="hidden sm:inline">Painel Agência</span>
+                    </button>
+                </div>
             </div>
-
-            <!-- Instagram Caption -->
-            <div class="px-3.5 pb-5 space-y-1 text-left">
-              <p class="text-[11px] leading-snug">
-                <strong class="font-semibold mr-1">bahiahomes</strong>
-                <span id="sim-caption-text">Refúgio exclusivo em Trancoso com vista infinita para o mar.</span>
-              </p>
-              <div id="sim-hashtags" class="text-[10px] text-emerald-400 font-medium">
-                #BahiaHomes #Trancoso #LuxuryRealEstate
-              </div>
-            </div>
-          </div>
         </div>
+    </header>
 
-        <!-- Post Information & Interactive Decision Card -->
-        <div class="lg:col-span-7 space-y-6">
-          
-          <div class="bg-white border border-bh-border p-6 sm:p-8 rounded-3xl shadow-sm space-y-6">
-            
-            <div class="flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <span id="selected-post-type" class="text-[9px] font-bold uppercase tracking-widest px-3 py-1 rounded-full bg-bh-softBg text-bh-forest border border-bh-border">
-                  REELS
+    <!-- CLIENT MAGIC LINK BANNER -->
+    <div id="magic-link-banner" class="bg-bahia-sandDark border-b border-bahia-gold/30 px-4 py-2.5 text-xs text-bahia-charcoal">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+            <div class="flex items-center space-x-2">
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-bahia-green text-white">
+                    <i data-lucide="shield-check" class="w-3 h-3 mr-1 text-bahia-gold"></i> LINK MÁGICO SEM LOGIN
                 </span>
-                <h3 id="selected-post-title" class="text-xl sm:text-2xl font-serif font-bold text-bh-dark mt-2">
-                  Casa Fasano Trancoso — Experiência Pé na Areia
-                </h3>
-              </div>
-              
-              <div id="selected-post-status-pill"></div>
+                <span>Lote <strong>#BH-TRN-2026-10</strong> de Conteúdo em Análise.</span>
             </div>
-
-            <!-- Caption Box -->
-            <div class="bg-bh-softBg border border-bh-border p-4 rounded-2xl">
-              <label class="text-[10px] font-bold text-bh-muted uppercase tracking-wider block mb-1">Legenda Completa da Publicação</label>
-              <p id="selected-post-caption" class="text-xs sm:text-sm text-bh-dark whitespace-pre-line leading-relaxed font-light">
-                O refúgio perfeito na Praia de Itapororoca...
-              </p>
+            <div class="flex items-center space-x-3 text-[11px] text-bahia-muted">
+                <span>Validade: <strong>24/10/2026</strong></span>
+                <span>•</span>
+                <span>Rastro IP: <strong id="user-ip">187.62.10.42 (Trancoso, BA)</strong></span>
             </div>
-
-            <!-- Decision Buttons (1-Click Approval) -->
-            <div class="pt-2 border-t border-bh-border space-y-3">
-              <label class="text-[11px] font-bold text-bh-dark uppercase tracking-wider block">Sua Decisão para esta Mídia</label>
-              
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <button id="btn-action-approve" onclick="approveCurrentPost()" class="w-full bg-bh-forest hover:bg-bh-forestHover text-white font-medium text-xs py-4 px-6 rounded-2xl shadow-md flex items-center justify-center gap-2.5 transition active:scale-95 border border-bh-bronze/30">
-                  <i class="fa-solid fa-circle-check text-bh-bronze text-base"></i> APROVAR PUBLICAÇÃO
-                </button>
-
-                <button id="btn-action-reject" onclick="toggleRejectForm()" class="w-full bg-white hover:bg-bh-softBg text-bh-terracotta border border-bh-terracotta/40 font-medium text-xs py-4 px-6 rounded-2xl flex items-center justify-center gap-2.5 transition active:scale-95">
-                  <i class="fa-solid fa-pen-to-square text-base"></i> SOLICITAR AJUSTES
-                </button>
-              </div>
-            </div>
-
-            <!-- Rejection Reason Form (Hidden by default) -->
-            <div id="reject-form-box" class="hidden bg-rose-50 border border-rose-200 p-5 rounded-2xl space-y-3">
-              <h5 class="text-xs font-bold text-bh-terracotta flex items-center gap-2">
-                <i class="fa-solid fa-triangle-exclamation"></i> Detalhe os ajustes necessários para a equipe:
-              </h5>
-              <textarea id="reject-reason-input" rows="3" placeholder="Ex: Ajustar o valor da diária ou alterar a imagem de capa para o Quadrado..." class="w-full bg-white border border-rose-300 rounded-xl p-3.5 text-xs text-bh-dark placeholder-slate-400 focus:outline-none focus:border-bh-terracotta"></textarea>
-              <div class="flex justify-end gap-2">
-                <button onclick="toggleRejectForm()" class="px-4 py-2 rounded-xl text-xs font-medium text-bh-muted hover:text-bh-dark">Cancelar</button>
-                <button onclick="submitRejection()" class="bg-bh-terracotta hover:bg-rose-700 text-white font-bold text-xs px-5 py-2 rounded-xl">Enviar Ajuste</button>
-              </div>
-            </div>
-
-            <!-- Comments Stream -->
-            <div class="pt-4 border-t border-bh-border space-y-4">
-              <h4 class="text-xs font-bold text-bh-dark uppercase tracking-wider flex items-center justify-between">
-                <span><i class="fa-solid fa-comments text-bh-bronze mr-2"></i> Histórico de Comentários</span>
-                <span id="comments-count-badge" class="text-[10px] bg-bh-softBg text-bh-dark px-2.5 py-1 rounded-full border border-bh-border">0</span>
-              </h4>
-
-              <div id="comments-list" class="space-y-3 max-h-52 overflow-y-auto pr-1">
-                <!-- Injected via JS -->
-              </div>
-
-              <div class="flex gap-2">
-                <input id="input-new-comment" type="text" placeholder="Escreva uma observação..." class="flex-1 bg-bh-softBg border border-bh-border rounded-xl px-4 py-3 text-xs text-bh-dark focus:outline-none focus:border-bh-forest">
-                <button onclick="addClientComment()" class="bg-bh-forest hover:bg-bh-forestHover text-white font-medium px-5 py-3 rounded-xl text-xs transition active:scale-95 border border-bh-bronze/30">
-                  <i class="fa-solid fa-paper-plane text-bh-bronze"></i>
-                </button>
-              </div>
-            </div>
-
-          </div>
-
         </div>
-
-      </div>
-    </section>
-
-    <!-- VIEW 3: POST-PUBLICATION METRICS DASHBOARD -->
-    <section id="view-metrics-dashboard" class="hidden space-y-6">
-      
-      <div class="bg-white border border-bh-border p-6 sm:p-8 rounded-3xl shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <div>
-          <div class="flex items-center gap-2 text-bh-forest text-xs font-semibold uppercase tracking-widest mb-1">
-            <i class="fa-brands fa-instagram text-base text-bh-bronze"></i> Performance Sincronizada
-          </div>
-          <h1 class="text-2xl sm:text-3xl font-serif font-bold text-bh-dark">Métricas de Engajamento Instagram</h1>
-          <p class="text-bh-muted text-xs sm:text-sm mt-1">Dados oficiais via Meta Graph API para a coleção Bahia Homes.</p>
-        </div>
-
-        <button onclick="simulateSyncMetrics()" class="w-full md:w-auto bg-bh-forest hover:bg-bh-forestHover text-white font-medium text-xs px-5 py-3.5 rounded-full flex items-center justify-center gap-2 transition active:scale-95 shadow-md border border-bh-bronze/30">
-          <i class="fa-solid fa-rotate text-bh-bronze"></i> Sincronizar Agora
-        </button>
-      </div>
-
-      <!-- Performance Cards -->
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="bg-white border border-bh-border p-5 rounded-2xl shadow-sm">
-          <div class="text-bh-muted text-xs font-medium uppercase tracking-wider">Curtidas Totais</div>
-          <div class="text-2xl sm:text-3xl font-serif font-bold text-bh-dark mt-2">18.420</div>
-          <span class="text-emerald-700 text-[10px] font-bold flex items-center gap-1 mt-1">
-            <i class="fa-solid fa-arrow-trend-up"></i> +24.8% no segmento Luxo
-          </span>
-        </div>
-
-        <div class="bg-white border border-bh-border p-5 rounded-2xl shadow-sm">
-          <div class="text-bh-muted text-xs font-medium uppercase tracking-wider">Views em Reels</div>
-          <div class="text-2xl sm:text-3xl font-serif font-bold text-bh-bronze mt-2">112.900</div>
-          <span class="text-emerald-700 text-[10px] font-bold flex items-center gap-1 mt-1">
-            <i class="fa-solid fa-play"></i> Altíssima Retenção
-          </span>
-        </div>
-
-        <div class="bg-white border border-bh-border p-5 rounded-2xl shadow-sm">
-          <div class="text-bh-muted text-xs font-medium uppercase tracking-wider">Comentários & DMs</div>
-          <div class="text-2xl sm:text-3xl font-serif font-bold text-bh-forest mt-2">1.840</div>
-          <span class="text-bh-forest text-[10px] font-bold flex items-center gap-1 mt-1">
-            <i class="fa-regular fa-comment"></i> Leads Qualificados
-          </span>
-        </div>
-
-        <div class="bg-white border border-bh-border p-5 rounded-2xl shadow-sm">
-          <div class="text-bh-muted text-xs font-medium uppercase tracking-wider">Engajamento Médio</div>
-          <div class="text-2xl sm:text-3xl font-serif font-bold text-bh-terracotta mt-2">8.4%</div>
-          <span class="text-emerald-700 text-[10px] font-bold flex items-center gap-1 mt-1">
-            <i class="fa-solid fa-fire"></i> Top 5% Imobiliárias
-          </span>
-        </div>
-      </div>
-
-      <!-- Metrics Table -->
-      <div class="bg-white border border-bh-border rounded-3xl overflow-hidden shadow-sm">
-        <div class="p-5 border-b border-bh-border flex items-center justify-between">
-          <h3 class="font-serif font-bold text-base text-bh-dark">Desempenho Individual por Imóvel / Mídia</h3>
-          <span class="text-[10px] bg-bh-softBg text-bh-dark px-3 py-1 rounded-full font-medium">Sincronizado</span>
-        </div>
-
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs min-w-[550px]">
-            <thead class="bg-bh-softBg text-bh-muted uppercase text-[10px] font-bold tracking-wider">
-              <tr>
-                <th class="py-3.5 px-5">Propriedade / Post</th>
-                <th class="py-3.5 px-5 text-right"><i class="fa-solid fa-heart text-rose-500 mr-1"></i> Curtidas</th>
-                <th class="py-3.5 px-5 text-right"><i class="fa-solid fa-comment text-bh-forest mr-1"></i> Comentários</th>
-                <th class="py-3.5 px-5 text-right"><i class="fa-solid fa-eye text-bh-bronze mr-1"></i> Alcance</th>
-                <th class="py-3.5 px-5 text-center">Status</th>
-              </tr>
-            </thead>
-            <tbody id="metrics-table-body" class="divide-y divide-bh-border text-bh-dark font-medium">
-              <!-- Injected via JS -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- MODAL 1: CREATE NEW POST -->
-  <div id="modal-new-post" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white border border-bh-border w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl">
-      
-      <div class="p-5 border-b border-bh-border flex items-center justify-between">
-        <h3 class="font-serif font-bold text-bh-dark text-lg">Novo Post — Curadoria Luxo</h3>
-        <button onclick="closeNewPostModal()" class="text-bh-muted hover:text-bh-dark p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
-      </div>
-
-      <form id="form-new-post" onsubmit="handleCreatePost(event)" class="p-6 space-y-4">
-        <div>
-          <label class="block text-[10px] font-bold text-bh-muted uppercase tracking-wider mb-1">Título do Imóvel / Conteúdo</label>
-          <input id="input-title" type="text" required placeholder="Ex: Casa Terravista Golf — Villa 12" class="w-full bg-bh-softBg border border-bh-border rounded-xl px-4 py-3 text-xs text-bh-dark focus:outline-none focus:border-bh-forest">
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-[10px] font-bold text-bh-muted uppercase tracking-wider mb-1">Formato de Mídia</label>
-            <select id="input-type" class="w-full bg-bh-softBg border border-bh-border rounded-xl px-4 py-3 text-xs text-bh-dark focus:outline-none focus:border-bh-forest">
-              <option value="Reels">Instagram Reels (9:16)</option>
-              <option value="Carrossel">Carrossel de Imagens</option>
-              <option value="Feed">Imagem Feed (1:1)</option>
-              <option value="Stories">Instagram Stories</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-[10px] font-bold text-bh-muted uppercase tracking-wider mb-1">URL da Mídia Exclusiva</label>
-            <input id="input-media" type="url" required placeholder="https://..." value="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&auto=format&fit=crop&q=80" class="w-full bg-bh-softBg border border-bh-border rounded-xl px-4 py-3 text-xs text-bh-dark focus:outline-none focus:border-bh-forest">
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-[10px] font-bold text-bh-muted uppercase tracking-wider mb-1">Legenda Completa</label>
-          <textarea id="input-caption" rows="3" required placeholder="Digite a legenda..." class="w-full bg-bh-softBg border border-bh-border rounded-xl p-3.5 text-xs text-bh-dark focus:outline-none focus:border-bh-forest">Refúgio espetacular no Sul da Bahia. Arquitetura integrada à natureza e serviço de concierge exclusivo. 🌴✨ #BahiaHomes #TrancosoLuxo</textarea>
-        </div>
-
-        <div class="pt-3 flex justify-end gap-2 border-t border-bh-border">
-          <button type="button" onclick="closeNewPostModal()" class="px-5 py-2.5 rounded-full text-xs font-medium text-bh-muted hover:text-bh-dark">Cancelar</button>
-          <button type="submit" class="bg-bh-forest hover:bg-bh-forestHover text-white font-medium text-xs px-6 py-2.5 rounded-full transition shadow-md border border-bh-bronze/30">Adicionar ao Lote</button>
-        </div>
-      </form>
-
     </div>
-  </div>
 
-  <!-- MODAL 2: AUDIT TRAIL -->
-  <div id="modal-audit-trail" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white border border-bh-border w-full max-w-xl rounded-3xl overflow-hidden shadow-2xl">
-      <div class="p-5 border-b border-bh-border flex items-center justify-between">
-        <div class="flex items-center gap-2 text-bh-forest">
-          <i class="fa-solid fa-shield-halved text-base text-bh-bronze"></i>
-          <h3 class="font-serif font-bold text-bh-dark text-lg">Rastro de Auditoria & Validação Jurídica</h3>
+    <!-- MAIN APP CONTAINER -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col lg:flex-row gap-8">
+        
+        <!-- LEFT COLUMN: POST SELECTOR & BATCH CONTROLS -->
+        <div class="w-full lg:w-1/3 flex flex-col space-y-6">
+            
+            <div class="bg-white rounded-xl p-5 border border-bahia-gold/20 shadow-sm">
+                <div class="flex justify-between items-start mb-3">
+                    <div>
+                        <span class="text-xs uppercase tracking-widest text-bahia-gold font-bold">Lote em Análise</span>
+                        <h2 class="font-serif-title text-xl font-bold text-bahia-green">Coleção Trancoso & Espelho</h2>
+                    </div>
+                    <span id="batch-status-badge" class="px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 border border-amber-200">
+                        Pendente
+                    </span>
+                </div>
+                <p class="text-xs text-bahia-muted leading-relaxed">
+                    Vídeos em alta resolução e fotos de arquitetura vertical para o perfil oficial da Bahia Homes.
+                </p>
+
+                <div class="mt-4 pt-4 border-t border-bahia-sandDark flex items-center justify-between">
+                    <div class="text-xs">
+                        <span class="text-bahia-muted">Progresso: </span>
+                        <strong id="approval-progress" class="text-bahia-green font-semibold">1 de 4 aprovados</strong>
+                    </div>
+                    <button onclick="approveAllBatch()" class="text-xs text-bahia-green hover:text-bahia-gold font-medium flex items-center space-x-1 underline transition-colors">
+                        <i data-lucide="check-check" class="w-3.5 h-3.5"></i>
+                        <span>Aprovar Lote Todo</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- POSTS SELECTOR LIST -->
+            <div class="space-y-3">
+                <div class="flex items-center justify-between px-1">
+                    <h3 class="text-xs uppercase tracking-wider text-bahia-muted font-bold">Publicações no Lote (<span id="posts-count">4</span>)</h3>
+                    <button onclick="openNewPostModal()" class="text-xs text-bahia-gold font-semibold hover:underline flex items-center space-x-1">
+                        <i data-lucide="plus" class="w-3 h-3"></i>
+                        <span>Adicionar</span>
+                    </button>
+                </div>
+
+                <div id="posts-list" class="space-y-2.5">
+                    <!-- Dynamic rendering via JS -->
+                </div>
+            </div>
+
+            <!-- AUDIT TRAIL LOG BOX -->
+            <div class="bg-white/80 rounded-xl p-4 border border-bahia-gold/20 text-xs space-y-2">
+                <div class="flex items-center justify-between font-semibold text-bahia-green">
+                    <span class="flex items-center"><i data-lucide="file-badge-2" class="w-4 h-4 mr-1 text-bahia-gold"></i> Registros de Auditoria</span>
+                    <span class="text-[10px] text-bahia-muted">Immutable Trail</span>
+                </div>
+                <div id="audit-log" class="text-[11px] text-bahia-muted space-y-1 font-mono max-h-28 overflow-y-auto pr-1">
+                    <div>[18/10 13:30] Link acessado pelo cliente</div>
+                    <div>[18/10 13:32] Post #3 aprovado via mobile</div>
+                </div>
+            </div>
+
         </div>
-        <button onclick="toggleAuditModal()" class="text-bh-muted hover:text-bh-dark p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
-      </div>
 
-      <div class="p-6 space-y-4 max-h-[60vh] overflow-y-auto">
-        <p class="text-xs text-bh-muted leading-relaxed">
-          Registro temporal e criptográfico de interações do cliente via Link Mágico tokenizado sem necessidade de conta/login:
-        </p>
-        <div id="audit-logs-container" class="space-y-2.5 font-mono text-[10px]">
-          <!-- Injected via JS -->
+        <!-- RIGHT COLUMN: INSTAGRAM SIMULATOR & ACTION PANEL -->
+        <div class="w-full lg:w-2/3 flex flex-col xl:flex-row gap-6">
+            
+            <!-- INSTAGRAM MOCKUP PREVIEW -->
+            <div class="w-full xl:w-1/2 flex justify-center">
+                <div class="w-full max-w-[360px] bg-black rounded-[36px] p-3 shadow-2xl border-4 border-bahia-charcoal relative">
+                    <div class="w-32 h-4 bg-black mx-auto rounded-b-xl mb-1 flex justify-center items-center">
+                        <div class="w-10 h-1 bg-neutral-800 rounded-full"></div>
+                    </div>
+
+                    <!-- INSTAGRAM APP INTERFACE -->
+                    <div class="bg-white rounded-[28px] overflow-hidden text-black text-xs flex flex-col h-[580px] relative">
+                        
+                        <!-- INSTAGRAM APP HEADER -->
+                        <div class="px-3 py-2.5 border-b border-gray-100 flex items-center justify-between bg-white z-10">
+                            <div class="flex items-center space-x-2">
+                                <i data-lucide="instagram" class="w-4 h-4 text-pink-600"></i>
+                                <span class="font-serif-title font-bold text-sm tracking-tight text-gray-900">bahiahomes</span>
+                            </div>
+                            <div class="flex items-center space-x-2 text-gray-700">
+                                <i data-lucide="heart" class="w-4 h-4"></i>
+                                <i data-lucide="send" class="w-4 h-4"></i>
+                            </div>
+                        </div>
+
+                        <!-- INSTAGRAM POST CONTENT -->
+                        <div id="insta-preview-container" class="flex-1 overflow-y-auto relative bg-black flex flex-col justify-between">
+                            <!-- MEDIA CONTAINER (IMAGE OR VIDEO) -->
+                            <div id="media-viewport" class="relative w-full h-[380px] bg-neutral-900 flex items-center justify-center overflow-hidden">
+                                <img id="preview-image" src="" alt="Post preview" class="w-full h-full object-cover">
+                                <video id="preview-video" controls autoplay loop muted class="w-full h-full object-cover hidden"></video>
+
+                                <div id="reels-overlay" class="absolute top-3 right-3 bg-black/60 text-white p-1.5 rounded-full backdrop-blur-md hidden">
+                                    <i data-lucide="clapperboard" class="w-4 h-4"></i>
+                                </div>
+                            </div>
+
+                            <!-- INSTAGRAM ENGAGEMENT BAR -->
+                            <div class="p-3 bg-white text-gray-900 space-y-2">
+                                <div class="flex justify-between items-center text-gray-800">
+                                    <div class="flex space-x-3">
+                                        <i data-lucide="heart" class="w-5 h-5 hover:text-red-500 cursor-pointer"></i>
+                                        <i data-lucide="message-circle" class="w-5 h-5 hover:text-gray-600 cursor-pointer"></i>
+                                        <i data-lucide="send" class="w-5 h-5 hover:text-gray-600 cursor-pointer"></i>
+                                    </div>
+                                    <i data-lucide="bookmark" class="w-5 h-5 hover:text-gray-600 cursor-pointer"></i>
+                                </div>
+
+                                <div class="font-semibold text-[11px] text-gray-900">
+                                    Curtido por <span class="font-bold">trancoso_lifestyle</span> e <span id="preview-likes">128 outras pessoas</span>
+                                </div>
+
+                                <div class="text-[11px] leading-snug space-y-1">
+                                    <p><strong class="font-bold mr-1">bahiahomes</strong> <span id="preview-caption">Carregando legenda...</span></p>
+                                </div>
+
+                                <div class="text-[9px] text-gray-400 uppercase tracking-wider">Há 2 horas • Trancoso, Bahia</div>
+                            </div>
+
+                        </div>
+
+                        <!-- INSTAGRAM BOTTOM BAR -->
+                        <div class="h-10 border-t border-gray-100 bg-white flex justify-around items-center text-gray-700">
+                            <i data-lucide="home" class="w-4 h-4"></i>
+                            <i data-lucide="search" class="w-4 h-4"></i>
+                            <i data-lucide="plus-square" class="w-4 h-4"></i>
+                            <i data-lucide="film" class="w-4 h-4"></i>
+                            <div class="w-4 h-4 rounded-full bg-bahia-gold border border-gray-300"></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- ACTION & COMMENTS PANEL -->
+            <div class="w-full xl:w-1/2 flex flex-col justify-between space-y-5">
+                
+                <div class="bg-white rounded-xl p-5 border border-bahia-gold/20 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span id="post-type-badge" class="px-2.5 py-0.5 rounded-full text-[10px] uppercase tracking-wider font-bold bg-bahia-sandDark text-bahia-green border border-bahia-gold/30">
+                            REELS • VÍDEO VERTICAL
+                        </span>
+                        <span id="single-post-status" class="px-2 py-0.5 rounded text-xs font-semibold bg-amber-100 text-amber-800">
+                            Pendente
+                        </span>
+                    </div>
+
+                    <h3 id="post-title" class="font-serif-title text-lg font-bold text-bahia-green">
+                        Casa Fasano Trancoso — Experiência Pé na Areia
+                    </h3>
+
+                    <div class="bg-bahia-sandDark/60 rounded-lg p-3 border border-bahia-gold/20 grid grid-cols-3 gap-2 text-center">
+                        <div>
+                            <span class="text-[10px] uppercase text-bahia-muted block">Estimativa Likes</span>
+                            <span id="metric-likes" class="font-bold text-bahia-green text-xs">450 - 600</span>
+                        </div>
+                        <div>
+                            <span class="text-[10px] uppercase text-bahia-muted block">Alcance Previsto</span>
+                            <span id="metric-reach" class="font-bold text-bahia-green text-xs">3.2k Views</span>
+                        </div>
+                        <div>
+                            <span class="text-[10px] uppercase text-bahia-muted block">Horário Sugerido</span>
+                            <span class="font-bold text-bahia-gold text-xs">18:30 (Sáb)</span>
+                        </div>
+                    </div>
+
+                    <div class="pt-2 flex items-center gap-3">
+                        <button onclick="approveCurrentPost()" class="flex-1 bg-bahia-green hover:bg-bahia-greenLight text-white py-3 px-4 rounded-lg font-semibold text-xs tracking-wider uppercase transition-all shadow-md flex items-center justify-center space-x-2">
+                            <i data-lucide="check-circle" class="w-4 h-4 text-bahia-gold"></i>
+                            <span>Aprovar Publicação</span>
+                        </button>
+                        <button onclick="toggleAdjustForm()" class="flex-1 bg-white hover:bg-bahia-sandDark text-bahia-terracotta border border-bahia-terracotta/40 py-3 px-4 rounded-lg font-semibold text-xs tracking-wider uppercase transition-all flex items-center justify-center space-x-2">
+                            <i data-lucide="message-square-plus" class="w-4 h-4"></i>
+                            <span>Pedir Ajuste</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ADJUSTMENT FORM -->
+                <div id="adjust-form" class="bg-amber-50/80 rounded-xl p-4 border border-amber-200 hidden space-y-3">
+                    <div class="flex justify-between items-center text-xs font-bold text-amber-900">
+                        <span>Solicitar Correção ou Alteração</span>
+                        <button onclick="toggleAdjustForm()" class="text-amber-700 hover:text-amber-900"><i data-lucide="x" class="w-4 h-4"></i></button>
+                    </div>
+                    <textarea id="adjust-comment-input" rows="3" class="w-full p-2.5 text-xs rounded-md border border-amber-300 focus:ring-1 focus:ring-bahia-gold focus:outline-none bg-white" placeholder="Descreva o ajuste necessário (ex: alterar valor da diária, ajustar corte do vídeo, mudar hashtag)..."></textarea>
+                    <div class="flex justify-end">
+                        <button onclick="submitAdjustment()" class="bg-bahia-terracotta hover:bg-red-800 text-white px-4 py-1.5 rounded text-xs font-semibold shadow-sm transition-colors">
+                            Enviar Pedido de Ajuste
+                        </button>
+                    </div>
+                </div>
+
+                <!-- COMMENTS HISTORY -->
+                <div class="bg-white rounded-xl p-4 border border-bahia-gold/20 shadow-sm flex-1 flex flex-col justify-between min-h-[180px]">
+                    <div class="space-y-2">
+                        <span class="text-xs font-bold text-bahia-green uppercase tracking-wider block border-b border-bahia-sandDark pb-1.5">
+                            Histórico de Comentários e Observações
+                        </span>
+                        
+                        <div id="comments-container" class="space-y-2 text-xs max-h-36 overflow-y-auto pr-1">
+                            <!-- Dynamic comments -->
+                        </div>
+                    </div>
+
+                    <div class="mt-3 pt-2 border-t border-bahia-sandDark flex items-center space-x-2">
+                        <input id="quick-comment" type="text" placeholder="Escrever uma observação rápida..." class="flex-1 bg-bahia-sand p-2 text-xs rounded-md border border-bahia-gold/30 focus:outline-none focus:border-bahia-gold">
+                        <button onclick="addQuickComment()" class="bg-bahia-gold hover:bg-bahia-goldHover text-bahia-charcoal p-2 rounded-md transition-colors">
+                            <i data-lucide="send" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
         </div>
-      </div>
 
-      <div class="p-4 border-t border-bh-border bg-bh-softBg flex justify-between items-center text-[10px] text-bh-muted">
-        <span>Segurança: <strong>Token SHA-256 Validado</strong></span>
-        <button onclick="toggleAuditModal()" class="bg-bh-forest text-white font-medium px-4 py-2 rounded-full">Fechar</button>
-      </div>
+    </main>
+
+    <!-- CREATE NEW POST MODAL (UPLOAD FROM COMPUTER) -->
+    <div id="new-post-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6 border border-bahia-gold/30 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-bahia-sandDark pb-3">
+                <div class="flex items-center space-x-2">
+                    <i data-lucide="upload-cloud" class="w-5 h-5 text-bahia-gold"></i>
+                    <h3 class="font-serif-title font-bold text-lg text-bahia-green">Adicionar Novo Post (Foto ou Vídeo)</h3>
+                </div>
+                <button onclick="closeNewPostModal()" class="text-bahia-muted hover:text-bahia-charcoal"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+
+            <form id="new-post-form" onsubmit="handleNewPostSubmit(event)" class="space-y-4 text-xs">
+                <!-- FILE UPLOAD INPUT -->
+                <div>
+                    <label class="block font-semibold text-bahia-green mb-1">Upload de Arquivo (Vídeo ou Foto Vertical)</label>
+                    <div class="border-2 border-dashed border-bahia-gold/40 rounded-xl p-4 text-center bg-bahia-sand hover:bg-bahia-sandDark transition-all cursor-pointer relative">
+                        <input type="file" id="file-input" accept="image/*,video/*" required class="absolute inset-0 opacity-0 cursor-pointer" onchange="handleFileSelect(event)">
+                        <div id="file-upload-placeholder" class="space-y-1">
+                            <i data-lucide="film" class="w-8 h-8 text-bahia-gold mx-auto"></i>
+                            <p class="font-semibold text-bahia-green">Clique ou arraste o arquivo do seu computador</p>
+                            <p class="text-[10px] text-bahia-muted">Suporta arquivos .MP4, .MOV, .JPG ou .PNG (Sempre em proporção vertical 9:16 ou 4:5)</p>
+                        </div>
+                        <div id="file-upload-preview-info" class="hidden text-emerald-800 font-semibold flex items-center justify-center space-x-2">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600"></i>
+                            <span id="selected-file-name">arquivo.mp4 selecionado</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TITLE & TYPE -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-semibold text-bahia-green mb-1">Título Interno da Peça</label>
+                        <input type="text" id="post-title-input" required placeholder="Ex: Casa 58 — Reels Teaser" class="w-full p-2.5 rounded-lg border border-bahia-gold/30 focus:ring-1 focus:ring-bahia-gold focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-bahia-green mb-1">Formato do Instagram</label>
+                        <select id="post-type-input" class="w-full p-2.5 rounded-lg border border-bahia-gold/30 focus:ring-1 focus:ring-bahia-gold focus:outline-none bg-white">
+                            <option value="REELS">REELS (Vídeo Vertical)</option>
+                            <option value="FEED">FEED (Foto Única)</option>
+                            <option value="STORIES">STORIES (Vídeo/Foto Full Screen)</option>
+                            <option value="CARROSSEL">CARROSSEL (Múltiplas Fotos)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- CAPTION -->
+                <div>
+                    <label class="block font-semibold text-bahia-green mb-1">Legenda da Publicação</label>
+                    <textarea id="post-caption-input" rows="3" required placeholder="Escreva a legenda com emojis e hashtags de luxo..." class="w-full p-2.5 rounded-lg border border-bahia-gold/30 focus:ring-1 focus:ring-bahia-gold focus:outline-none"></textarea>
+                </div>
+
+                <div class="flex justify-end space-x-3 pt-2 border-t border-bahia-sandDark">
+                    <button type="button" onclick="closeNewPostModal()" class="px-4 py-2 rounded-lg border border-gray-300 font-semibold text-bahia-muted hover:bg-gray-50">Cancelar</button>
+                    <button type="submit" class="px-5 py-2 rounded-lg bg-bahia-green hover:bg-bahia-greenLight text-white font-bold shadow-md flex items-center space-x-1.5">
+                        <i data-lucide="plus" class="w-4 h-4 text-bahia-gold"></i>
+                        <span>Publicar no Lote</span>
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
-  </div>
 
-  <script>
-    /* Luxury Real Estate Posts Data (Bahia Homes Style) */
-    let posts = [
-      {
-        id: 'post-1',
-        title: 'Estância Fasano Trancoso — Villa 14',
-        type: 'Reels',
-        mediaUrl: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&auto=format&fit=crop&q=80',
-        caption: 'Uma das propriedades mais exclusivas do Sul da Bahia. Localizada na praia de Itapororoca, a Villa 14 oferece 6 suítes integradas à Mata Atlântica e serviço impecável de apoio de praia privativo. 🌴☀️\n\nDisponível para aluguel de temporada e venda com a curadoria Bahia Homes.',
-        hashtags: '#BahiaHomes #Trancoso #FasanoTrancoso #CasasDeLuxo',
-        status: 'pending',
-        rejectionReason: '',
-        comments: [
-          { author: 'Curadoria Bahia Homes', text: 'Vídeo gravado ao pôr do sol na praia. Foco nos detalhes da piscina de pedra vulcânica.', date: 'Há 2 horas', isAgency: true }
-        ],
-        likes: 5420,
-        igComments: 210,
-        reach: 38900
-      },
-      {
-        id: 'post-2',
-        title: 'Terravista Golf Club — Casa 72',
-        type: 'Carrossel',
-        mediaUrl: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&auto=format&fit=crop&q=80',
-        caption: 'Design assinado, vista panorâmica sobre as falésias e acesso direto ao aeroporto privado de Terravista. 🏌️‍♂️🌊\n\nDeslize para conferir a suíte máster com varanda voltada para o azul do Atlântico.',
-        hashtags: '#TerravistaGolf #TrancosoBahia #ArquiteturaDeLuxo',
-        status: 'approved',
-        rejectionReason: '',
-        comments: [
-          { author: 'Proprietário / Cliente', text: 'Excelente sequência de fotos! Aprovado para o lote de amanhã.', date: 'Há 45 min', isAgency: false }
-        ],
-        likes: 7120,
-        igComments: 380,
-        reach: 45000
-      },
-      {
-        id: 'post-3',
-        title: 'Gastronomia Privada no Quadrado',
-        type: 'Feed',
-        mediaUrl: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800&auto=format&fit=crop&q=80',
-        caption: 'Experiência de chef privativo servindo frutos do mar na varanda da sua casa em Trancoso. O verdadeiro significado de hospitalidade com DNA Bahia Homes. 🍷🍤',
-        hashtags: '#QuadradoTrancoso #ConciergeBahia #GastronomiaBaiana',
-        status: 'rejected',
-        rejectionReason: 'Substituir a legenda para citar que o serviço de chef já está incluso na diária.',
-        comments: [
-          { author: 'Proprietário / Cliente', text: 'Por favor incluir a menção ao concierge do aluguel.', date: 'Há 20 min', isAgency: false }
-        ],
-        likes: 0,
-        igComments: 0,
-        reach: 0
-      },
-      {
-        id: 'post-4',
-        title: 'Pôr do Sol em Itapororoca — Sunset Tour',
-        type: 'Stories',
-        mediaUrl: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&auto=format&fit=crop&q=80',
-        caption: 'Pé na areia ou piscina infinita? Descubra o paraíso reservando com a Bahia Homes.',
-        hashtags: '#Trancoso #SunsetBahia #Itapororoca',
-        status: 'pending',
-        rejectionReason: '',
-        comments: [],
-        likes: 2100,
-        igComments: 85,
-        reach: 18000
-      }
-    ];
+    <!-- FOOTER -->
+    <footer class="bg-bahia-green text-white/70 border-t border-bahia-gold/20 py-6 text-xs mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-2">
+                <span class="font-serif-title text-bahia-gold font-semibold">Aprova Bahia</span>
+                <span>• Plataforma de Governança de Conteúdo Imobiliário</span>
+            </div>
+            <div class="text-bahia-gold/80">
+                Desenvolvido para <strong>Bahia Homes Luxury Real Estate</strong>
+            </div>
+        </div>
+    </footer>
 
-    let auditLogs = [
-      { timestamp: '2026-10-18 09:12:00', ip: '187.108.34.12', action: 'MAGIC_LINK_CREATED', detail: 'Link Mágico gerado para a Coleção Bahia Homes (Sem Login).' },
-      { timestamp: '2026-10-18 10:05:44', ip: '201.88.192.50', action: 'CLIENT_ACCESS', detail: 'Cliente acessou o portal via iPhone 15 Pro (Safari iOS).' },
-      { timestamp: '2026-10-18 11:20:15', ip: '201.88.192.50', action: 'POST_APPROVED', detail: 'Aprovação concedida para "Terravista Golf Club — Casa 72".' }
-    ];
+    <!-- JAVASCRIPT APP LOGIC -->
+    <script>
+        const samplePosts = [
+            {
+                id: 1,
+                title: "Casa 58 Reels Teaser — Trancoso",
+                type: "REELS",
+                isVideo: false,
+                status: "Pendente",
+                image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80",
+                caption: "Um refúgio exclusivo no Altos de Trancoso. Suítes integradas à Mata Atlântica e serviço de concierge privativo. 🌊✨ #BahiaHomes #Trancoso #LuxoNoBrasil",
+                likes: "342 pessoas",
+                reach: "4.5k Views",
+                comments: [
+                    { author: "Agência Daime", text: "Vídeo editado em tom quente para valorizar a luz de Trancoso.", time: "10:15" }
+                ]
+            },
+            {
+                id: 2,
+                title: "Villa Terravista Golf Club — Arquitetura",
+                type: "CARROSSEL",
+                isVideo: false,
+                status: "Pendente",
+                image: "https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=800&q=80",
+                caption: "Design contemporâneo sob falésias com vista infinita para o Atlântico. Disponível para locação de temporada. ⛳️🏡 #TerravistaGolf #TrancosoRealEstate",
+                likes: "518 pessoas",
+                reach: "2.8k Impr.",
+                comments: []
+            },
+            {
+                id: 3,
+                title: "Espelho Beach Sanctuary — Gastronomia",
+                type: "FEED",
+                isVideo: false,
+                status: "Aprovado",
+                image: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80",
+                caption: "Momentos inesquecíveis na Praia do Espelho com chef exclusivo servindo o melhor da culinária baiana. 🌴🥥 #PraiaDoEspelho #BahiaHomes",
+                likes: "892 pessoas",
+                reach: "6.1k Impr.",
+                comments: [
+                    { author: "Cliente (Bahia Homes)", text: "Foto aprovada! Ficou excelente.", time: "11:40" }
+                ]
+            },
+            {
+                id: 4,
+                title: "Pôr do Sol Itapororoca — Heliponto",
+                type: "STORIES",
+                isVideo: false,
+                status: "Pendente",
+                image: "https://images.unsplash.com/photo-1512915922686-57c11dde9b6b?auto=format&fit=crop&w=800&q=80",
+                caption: "Chegada exclusiva por helicóptero na Casa 17 em Itapororoca. Arraste para cima para reservar. 🚁🌅",
+                likes: "190 pessoas",
+                reach: "1.9k Views",
+                comments: []
+            }
+        ];
 
-    let currentSelectedPostId = 'post-1';
-    let currentFilter = 'all';
+        let currentPostId = 1;
+        let viewMode = 'client';
+        let tempSelectedFileUrl = null;
+        let tempIsVideo = false;
 
-    /* Navigation Logic */
-    function switchView(viewName) {
-      document.getElementById('view-agency-dashboard').classList.add('hidden');
-      document.getElementById('view-client-approval').classList.add('hidden');
-      document.getElementById('view-metrics-dashboard').classList.add('hidden');
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            renderPostsList();
+            loadPostDetails(currentPostId);
+        });
 
-      // Desktop Styling
-      const navBtns = ['nav-btn-agency', 'nav-btn-client', 'nav-btn-stats'];
-      navBtns.forEach(id => {
-        const btn = document.getElementById(id);
-        if (btn) btn.className = "px-4 py-2 rounded-full text-xs font-medium transition-all duration-300 text-bh-muted hover:text-bh-dark";
-      });
+        function renderPostsList() {
+            const container = document.getElementById('posts-list');
+            container.innerHTML = '';
+            document.getElementById('posts-count').innerText = samplePosts.length;
 
-      // Mobile Navigation Buttons
-      const mobileNavBtns = {
-        'agency-dashboard': 'mobile-nav-agency',
-        'client-approval': 'mobile-nav-client',
-        'metrics-dashboard': 'mobile-nav-stats'
-      };
+            samplePosts.forEach(post => {
+                const isSelected = post.id === currentPostId;
+                const statusColor = post.status === 'Aprovado' ? 'bg-emerald-100 text-emerald-800 border-emerald-300' : 
+                                   (post.status === 'Ajuste' ? 'bg-rose-100 text-rose-800 border-rose-300' : 'bg-amber-100 text-amber-800 border-amber-200');
 
-      Object.values(mobileNavBtns).forEach(id => {
-        const btn = document.getElementById(id);
-        if (btn) btn.className = "flex flex-col items-center gap-1 text-bh-muted";
-      });
+                const card = document.createElement('div');
+                card.onclick = () => selectPost(post.id);
+                card.className = `p-3 rounded-lg border cursor-pointer transition-all flex items-center space-x-3 bg-white ${
+                    isSelected ? 'border-bahia-gold ring-1 ring-bahia-gold shadow-md' : 'border-bahia-gold/20 hover:border-bahia-gold/50'
+                }`;
 
-      if (viewName === 'agency-dashboard') {
-        document.getElementById('view-agency-dashboard').classList.remove('hidden');
-        if (document.getElementById('nav-btn-agency')) document.getElementById('nav-btn-agency').className = "px-4 py-2 rounded-full text-xs font-semibold transition-all duration-300 bg-bh-forest text-white shadow-sm";
-        document.getElementById('mobile-nav-agency').className = "flex flex-col items-center gap-1 text-bh-forest font-bold";
-        renderAgencyPosts();
-      } else if (viewName === 'client-approval') {
-        document.getElementById('view-client-approval').classList.remove('hidden');
-        if (document.getElementById('nav-btn-client')) document.getElementById('nav-btn-client').className = "px-4 py-2 rounded-full text-xs font-semibold transition-all duration-300 bg-bh-forest text-white shadow-sm";
-        document.getElementById('mobile-nav-client').className = "flex flex-col items-center gap-1 text-bh-forest font-bold";
-        renderClientSimulator();
-      } else if (viewName === 'metrics-dashboard') {
-        document.getElementById('view-metrics-dashboard').classList.remove('hidden');
-        if (document.getElementById('nav-btn-stats')) document.getElementById('nav-btn-stats').className = "px-4 py-2 rounded-full text-xs font-semibold transition-all duration-300 bg-bh-forest text-white shadow-sm";
-        document.getElementById('mobile-nav-stats').className = "flex flex-col items-center gap-1 text-bh-forest font-bold";
-        renderMetricsTable();
-      }
+                const mediaPreviewHtml = post.isVideo 
+                    ? `<video src="${post.image}" class="w-12 h-12 rounded-md object-cover border border-bahia-sandDark bg-black"></video>`
+                    : `<img src="${post.image}" class="w-12 h-12 rounded-md object-cover border border-bahia-sandDark">`;
 
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+                card.innerHTML = `
+                    ${mediaPreviewHtml}
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-bold text-bahia-gold tracking-wider uppercase">${post.type}</span>
+                            <span class="text-[9px] px-1.5 py-0.5 rounded border ${statusColor}">${post.status}</span>
+                        </div>
+                        <h4 class="text-xs font-semibold text-bahia-green truncate">${post.title}</h4>
+                    </div>
+                `;
 
-    /* Agency Grid Renderer */
-    function renderAgencyPosts() {
-      const container = document.getElementById('agency-posts-grid');
-      container.innerHTML = '';
+                container.appendChild(card);
+            });
 
-      const filtered = posts.filter(p => {
-        if (currentFilter === 'all') return true;
-        return p.status === currentFilter;
-      });
-
-      filtered.forEach(post => {
-        let statusBadge = '';
-        if (post.status === 'pending') {
-          statusBadge = `<span class="bg-bh-bronze/10 text-bh-bronze border border-bh-bronze/30 text-[9px] font-bold px-2.5 py-1 rounded-full uppercase flex items-center gap-1"><i class="fa-solid fa-clock"></i> Pendente</span>`;
-        } else if (post.status === 'approved') {
-          statusBadge = `<span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[9px] font-bold px-2.5 py-1 rounded-full uppercase flex items-center gap-1"><i class="fa-solid fa-check-circle"></i> Aprovado</span>`;
-        } else {
-          statusBadge = `<span class="bg-rose-50 text-bh-terracotta border border-rose-200 text-[9px] font-bold px-2.5 py-1 rounded-full uppercase flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation"></i> Ajuste</span>`;
+            updateProgressSummary();
         }
 
-        const card = document.createElement('div');
-        card.className = "bg-white border border-bh-border hover:border-bh-bronze/50 rounded-2xl p-5 flex flex-col justify-between transition-all duration-300 shadow-sm hover:shadow-md";
-        
-        card.innerHTML = `
-          <div>
-            <div class="relative aspect-video rounded-xl overflow-hidden bg-bh-softBg mb-4">
-              <img src="${post.mediaUrl}" class="w-full h-full object-cover" alt="Mídia de Luxo">
-              <div class="absolute top-2.5 left-2.5 bg-bh-dark/80 text-white text-[9px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md backdrop-blur-xs">
-                ${post.type}
-              </div>
-              <div class="absolute top-2.5 right-2.5">
-                ${statusBadge}
-              </div>
-            </div>
+        function loadPostDetails(id) {
+            currentPostId = id;
+            const post = samplePosts.find(p => p.id === id);
+            if (!post) return;
 
-            <h3 class="font-serif font-bold text-base text-bh-dark line-clamp-1 mb-1.5">${post.title}</h3>
-            <p class="text-xs text-bh-muted line-clamp-2 mb-4 leading-relaxed font-light">${post.caption}</p>
-            
-            ${post.status === 'rejected' ? `
-              <div class="bg-rose-50 border border-rose-200 p-3 rounded-xl mb-4 text-xs text-bh-terracotta">
-                <strong>Solicitação do Cliente:</strong> ${post.rejectionReason}
-              </div>
-            ` : ''}
-          </div>
+            const imgEl = document.getElementById('preview-image');
+            const videoEl = document.getElementById('preview-video');
 
-          <div class="pt-3 border-t border-bh-border flex items-center justify-between text-xs">
-            <span class="text-bh-muted text-[11px]">
-              <i class="fa-regular fa-comment mr-1.5 text-bh-bronze"></i> ${post.comments.length} nota(s)
-            </span>
-
-            <button onclick="previewInSimulator('${post.id}')" class="text-bh-forest hover:text-bh-forestHover font-bold text-xs flex items-center gap-1.5">
-              Simular Cliente <i class="fa-solid fa-arrow-right text-[10px] text-bh-bronze"></i>
-            </button>
-          </div>
-        `;
-
-        container.appendChild(card);
-      });
-
-      updateMetricsSummary();
-    }
-
-    function updateMetricsSummary() {
-      document.getElementById('metric-total').innerText = posts.length;
-      document.getElementById('metric-pending').innerText = posts.filter(p => p.status === 'pending').length;
-      document.getElementById('metric-approved').innerText = posts.filter(p => p.status === 'approved').length;
-      document.getElementById('metric-rejected').innerText = posts.filter(p => p.status === 'rejected').length;
-    }
-
-    function filterPosts(filterType) {
-      currentFilter = filterType;
-      document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.classList.remove('bg-bh-forest', 'text-white', 'shadow-xs');
-        btn.classList.add('text-bh-muted');
-      });
-      event.target.classList.add('bg-bh-forest', 'text-white', 'shadow-xs');
-      event.target.classList.remove('text-bh-muted');
-      renderAgencyPosts();
-    }
-
-    /* Client Portal Simulator */
-    function previewInSimulator(postId) {
-      currentSelectedPostId = postId;
-      switchView('client-approval');
-    }
-
-    function renderClientSimulator() {
-      const post = posts.find(p => p.id === currentSelectedPostId) || posts[0];
-      
-      document.getElementById('sim-media-img').src = post.mediaUrl;
-      document.getElementById('sim-caption-text').innerText = post.caption;
-      document.getElementById('sim-hashtags').innerText = post.hashtags;
-
-      const reelBadge = document.getElementById('sim-reel-badge');
-      if (post.type === 'Reels') {
-        reelBadge.classList.remove('hidden');
-      } else {
-        reelBadge.classList.add('hidden');
-      }
-
-      document.getElementById('selected-post-title').innerText = post.title;
-      document.getElementById('selected-post-type').innerText = post.type;
-      document.getElementById('selected-post-caption').innerText = post.caption + '\n\n' + post.hashtags;
-
-      const statusContainer = document.getElementById('selected-post-status-pill');
-      if (post.status === 'pending') {
-        statusContainer.innerHTML = `<span class="bg-bh-bronze/10 text-bh-bronze border border-bh-bronze/30 text-xs font-bold px-3 py-1 rounded-full uppercase"><i class="fa-solid fa-clock"></i> Aguardando Aprovação</span>`;
-      } else if (post.status === 'approved') {
-        statusContainer.innerHTML = `<span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold px-3 py-1 rounded-full uppercase"><i class="fa-solid fa-check-circle"></i> Mídia Aprovada</span>`;
-      } else {
-        statusContainer.innerHTML = `<span class="bg-rose-50 text-bh-terracotta border border-rose-200 text-xs font-bold px-3 py-1 rounded-full uppercase"><i class="fa-solid fa-triangle-exclamation"></i> Ajuste Solicitado</span>`;
-      }
-
-      renderCommentsList(post.comments);
-      renderBatchThumbnails();
-    }
-
-    function renderCommentsList(comments) {
-      const listContainer = document.getElementById('comments-list');
-      document.getElementById('comments-count-badge').innerText = comments.length;
-      listContainer.innerHTML = '';
-
-      if (comments.length === 0) {
-        listContainer.innerHTML = `<p class="text-xs text-bh-muted italic font-light">Nenhum comentário adicionado ainda.</p>`;
-        return;
-      }
-
-      comments.forEach(c => {
-        const item = document.createElement('div');
-        item.className = `p-3 rounded-2xl text-xs space-y-1 ${c.isAgency ? 'bg-bh-softBg border border-bh-border' : 'bg-bh-forest/5 border border-bh-forest/20'}`;
-        item.innerHTML = `
-          <div class="flex items-center justify-between text-[10px] font-bold ${c.isAgency ? 'text-bh-forest' : 'text-bh-bronze'} uppercase">
-            <span>${c.author}</span>
-            <span class="text-bh-muted font-normal">${c.date}</span>
-          </div>
-          <p class="text-bh-dark leading-relaxed font-light">${c.text}</p>
-        `;
-        listContainer.appendChild(item);
-      });
-    }
-
-    function renderBatchThumbnails() {
-      const container = document.getElementById('batch-thumbnails-list');
-      container.innerHTML = '';
-
-      posts.forEach(post => {
-        const isSelected = post.id === currentSelectedPostId;
-        const thumb = document.createElement('div');
-        thumb.onclick = () => {
-          currentSelectedPostId = post.id;
-          renderClientSimulator();
-        };
-
-        thumb.className = `cursor-pointer rounded-2xl p-2.5 border transition-all flex items-center gap-3 shrink-0 min-w-[150px] sm:min-w-0 ${
-          isSelected 
-            ? 'bg-bh-forest/10 border-bh-forest text-bh-dark shadow-xs' 
-            : 'bg-bh-softBg border-bh-border hover:border-bh-bronze text-bh-muted'
-        }`;
-
-        thumb.innerHTML = `
-          <img src="${post.mediaUrl}" class="w-10 h-10 object-cover rounded-xl shrink-0" alt="thumb">
-          <div class="overflow-hidden text-left">
-            <h6 class="text-[11px] font-serif font-bold line-clamp-1 text-bh-dark">${post.title}</h6>
-            <span class="text-[8px] uppercase font-bold tracking-wider text-bh-bronze">${post.status}</span>
-          </div>
-        `;
-
-        container.appendChild(thumb);
-      });
-    }
-
-    /* Decision Handlers */
-    function approveCurrentPost() {
-      const post = posts.find(p => p.id === currentSelectedPostId);
-      if (!post) return;
-
-      post.status = 'approved';
-      auditLogs.unshift({
-        timestamp: new Date().toISOString().replace('T', ' ').substring(0, 19),
-        ip: '201.88.192.50',
-        action: 'POST_APPROVED',
-        detail: `Publicação '${post.title}' aprovada digitalmente pelo cliente.`
-      });
-
-      showToast('Conteúdo Aprovado!', 'A mídia está autorizada para agendamento oficial.');
-      renderClientSimulator();
-    }
-
-    function toggleRejectForm() {
-      const box = document.getElementById('reject-form-box');
-      box.classList.toggle('hidden');
-    }
-
-    function submitRejection() {
-      const reason = document.getElementById('reject-reason-input').value.trim();
-      if (!reason) {
-        showToast('Observação Necessária', 'Por favor descreva o ajuste a ser feito.');
-        return;
-      }
-
-      const post = posts.find(p => p.id === currentSelectedPostId);
-      if (!post) return;
-
-      post.status = 'rejected';
-      post.rejectionReason = reason;
-      post.comments.push({
-        author: 'Proprietário / Cliente',
-        text: `Solicitação de ajuste: ${reason}`,
-        date: 'Agora',
-        isAgency: false
-      });
-
-      auditLogs.unshift({
-        timestamp: new Date().toISOString().replace('T', ' ').substring(0, 19),
-        ip: '201.88.192.50',
-        action: 'POST_REJECTED',
-        detail: `Solicitação de revisão para '${post.title}': ${reason}`
-      });
-
-      document.getElementById('reject-reason-input').value = '';
-      toggleRejectForm();
-      showToast('Ajustes Solicitados', 'O feedback foi enviado para a equipe de curadoria.');
-      renderClientSimulator();
-    }
-
-    function addClientComment() {
-      const input = document.getElementById('input-new-comment');
-      const text = input.value.trim();
-      if (!text) return;
-
-      const post = posts.find(p => p.id === currentSelectedPostId);
-      if (!post) return;
-
-      post.comments.push({
-        author: 'Proprietário / Cliente',
-        text: text,
-        date: 'Agora',
-        isAgency: false
-      });
-
-      input.value = '';
-      renderCommentsList(post.comments);
-      showToast('Comentário Registrado', 'Sua observação foi salva no lote.');
-    }
-
-    function approveAllBatch() {
-      posts.forEach(p => p.status = 'approved');
-      auditLogs.unshift({
-        timestamp: new Date().toISOString().replace('T', ' ').substring(0, 19),
-        ip: '201.88.192.50',
-        action: 'BATCH_APPROVED',
-        detail: 'Lote completo de mídias aprovado pelo cliente.'
-      });
-
-      showToast('Lote Aprovado!', 'Todas as postagens da coleção foram autorizadas.');
-      renderClientSimulator();
-    }
-
-    function copyMagicLink() {
-      const dummyUrl = window.location.origin + window.location.pathname + "#magic-token=bahiahomes_sec_99a81c";
-      const tempInput = document.createElement("input");
-      tempInput.value = dummyUrl;
-      document.body.appendChild(tempInput);
-      tempInput.select();
-      document.execCommand("copy");
-      document.body.removeChild(tempInput);
-
-      showToast('Link Mágico Copiado!', 'Envie diretamente ao cliente no WhatsApp. Sem necessidade de conta ou login.');
-    }
-
-    /* Analytics Dashboard */
-    function renderMetricsTable() {
-      const tbody = document.getElementById('metrics-table-body');
-      tbody.innerHTML = '';
-
-      posts.forEach(post => {
-        const row = document.createElement('tr');
-        row.className = "hover:bg-bh-softBg/60 transition";
-        row.innerHTML = `
-          <td class="py-4 px-5">
-            <div class="flex items-center gap-3">
-              <img src="${post.mediaUrl}" class="w-9 h-9 object-cover rounded-xl shrink-0" alt="post">
-              <div>
-                <h5 class="font-serif font-bold text-bh-dark leading-snug line-clamp-1">${post.title}</h5>
-                <span class="text-[9px] text-bh-bronze font-bold uppercase tracking-wider">${post.type}</span>
-              </div>
-            </div>
-          </td>
-          <td class="py-4 px-5 text-right font-bold text-bh-dark">${post.likes.toLocaleString('pt-BR')}</td>
-          <td class="py-4 px-5 text-right font-bold text-bh-forest">${post.igComments.toLocaleString('pt-BR')}</td>
-          <td class="py-4 px-5 text-right font-bold text-bh-bronze">${post.reach.toLocaleString('pt-BR')}</td>
-          <td class="py-4 px-5 text-center">
-            ${post.status === 'approved' 
-              ? '<span class="bg-emerald-50 text-emerald-700 text-[9px] font-bold px-3 py-1 rounded-full uppercase"><i class="fa-solid fa-check"></i> Publicado</span>'
-              : '<span class="bg-bh-softBg text-bh-muted text-[9px] font-bold px-3 py-1 rounded-full uppercase">Pendente</span>'
+            if (post.isVideo) {
+                imgEl.classList.add('hidden');
+                videoEl.classList.remove('hidden');
+                videoEl.src = post.image;
+            } else {
+                videoEl.classList.add('hidden');
+                imgEl.classList.remove('hidden');
+                imgEl.src = post.image;
             }
-          </td>
-        `;
-        tbody.appendChild(row);
-      });
-    }
 
-    function simulateSyncMetrics() {
-      showToast('Sincronizando Meta Graph API...', 'Conectando ao perfil oficial do Instagram...');
-      setTimeout(() => {
-        posts.forEach(p => {
-          if (p.status === 'approved') {
-            p.likes += Math.floor(Math.random() * 80) + 20;
-            p.reach += Math.floor(Math.random() * 300) + 100;
-          }
-        });
-        renderMetricsTable();
-        showToast('Sincronização Concluída!', 'Métricas de engajamento atualizadas.');
-      }, 1200);
-    }
+            document.getElementById('preview-caption').innerText = post.caption;
+            document.getElementById('preview-likes').innerText = post.likes;
+            document.getElementById('reels-overlay').classList.toggle('hidden', post.type !== 'REELS');
 
-    /* Modal Helpers */
-    function openNewPostModal() {
-      document.getElementById('modal-new-post').classList.remove('hidden');
-    }
+            document.getElementById('post-title').innerText = post.title;
+            document.getElementById('post-type-badge').innerText = `${post.type} • PREVIEW BAHIA HOMES`;
+            document.getElementById('metric-reach').innerText = post.reach;
 
-    function closeNewPostModal() {
-      document.getElementById('modal-new-post').classList.add('hidden');
-    }
+            const statusBadge = document.getElementById('single-post-status');
+            statusBadge.innerText = post.status;
+            statusBadge.className = `px-2 py-0.5 rounded text-xs font-semibold ${
+                post.status === 'Aprovado' ? 'bg-emerald-100 text-emerald-800' : 
+                (post.status === 'Ajuste' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800')
+            }`;
 
-    function handleCreatePost(event) {
-      event.preventDefault();
-      
-      const title = document.getElementById('input-title').value;
-      const type = document.getElementById('input-type').value;
-      const mediaUrl = document.getElementById('input-media').value;
-      const caption = document.getElementById('input-caption').value;
+            renderComments(post.comments);
+            renderPostsList();
+            document.getElementById('adjust-form').classList.add('hidden');
+        }
 
-      const newPost = {
-        id: 'post-' + (posts.length + 1),
-        title,
-        type,
-        mediaUrl,
-        caption,
-        hashtags: '#BahiaHomes #Trancoso #LuxuryRealEstate',
-        status: 'pending',
-        rejectionReason: '',
-        comments: [],
-        likes: 0,
-        igComments: 0,
-        reach: 0
-      };
+        function selectPost(id) {
+            loadPostDetails(id);
+        }
 
-      posts.unshift(newPost);
-      closeNewPostModal();
-      renderAgencyPosts();
-      showToast('Nova Mídia Adicionada', 'Publicação inserida na curadoria.');
-    }
+        function renderComments(comments) {
+            const container = document.getElementById('comments-container');
+            if (comments.length === 0) {
+                container.innerHTML = '<span class="text-bahia-muted italic text-[11px]">Nenhum comentário para esta publicação ainda.</span>';
+                return;
+            }
 
-    function toggleAuditModal() {
-      const modal = document.getElementById('modal-audit-trail');
-      modal.classList.toggle('hidden');
+            container.innerHTML = comments.map(c => `
+                <div class="p-2 rounded bg-bahia-sandDark/50 border border-bahia-gold/10 space-y-0.5">
+                    <div class="flex justify-between items-center text-[10px] text-bahia-muted">
+                        <strong class="text-bahia-green font-semibold">${c.author}</strong>
+                        <span>${c.time}</span>
+                    </div>
+                    <p class="text-bahia-charcoal leading-tight">${c.text}</p>
+                </div>
+            `).join('');
+        }
 
-      if (!modal.classList.contains('hidden')) {
-        const container = document.getElementById('audit-logs-container');
-        container.innerHTML = '';
-        
-        auditLogs.forEach(log => {
-          const item = document.createElement('div');
-          item.className = "bg-bh-softBg border border-bh-border p-3 rounded-xl text-bh-dark space-y-1";
-          item.innerHTML = `
-            <div class="flex items-center justify-between text-bh-forest font-bold">
-              <span>[${log.action}] IP: ${log.ip}</span>
-              <span class="text-bh-muted font-normal">${log.timestamp}</span>
-            </div>
-            <p class="text-bh-dark">${log.detail}</p>
-          `;
-          container.appendChild(item);
-        });
-      }
-    }
+        // UPLOAD FILE LOGIC FROM COMPUTER
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
 
-    function showToast(title, message) {
-      const toast = document.getElementById('toast-notification');
-      document.getElementById('toast-title').innerText = title;
-      document.getElementById('toast-message').innerText = message;
+            tempIsVideo = file.type.startsWith('video/');
+            tempSelectedFileUrl = URL.createObjectURL(file);
 
-      toast.classList.remove('translate-y-28', 'opacity-0');
-      toast.classList.add('translate-y-0', 'opacity-100');
+            document.getElementById('file-upload-placeholder').classList.add('hidden');
+            const infoEl = document.getElementById('file-upload-preview-info');
+            infoEl.classList.remove('hidden');
+            document.getElementById('selected-file-name').innerText = `${file.name} (${tempIsVideo ? 'Vídeo' : 'Foto'})`;
+        }
 
-      setTimeout(() => {
-        toast.classList.remove('translate-y-0', 'opacity-100');
-        toast.classList.add('translate-y-28', 'opacity-0');
-      }, 3500);
-    }
+        function openNewPostModal() {
+            document.getElementById('new-post-modal').classList.remove('hidden');
+        }
 
-    /* Initialize Application */
-    window.onload = function() {
-      renderAgencyPosts();
-      renderClientSimulator();
-    };
-  </script>
+        function closeNewPostModal() {
+            document.getElementById('new-post-modal').classList.add('hidden');
+            document.getElementById('new-post-form').reset();
+            document.getElementById('file-upload-placeholder').classList.remove('hidden');
+            document.getElementById('file-upload-preview-info').classList.add('hidden');
+            tempSelectedFileUrl = null;
+        }
+
+        function handleNewPostSubmit(e) {
+            e.preventDefault();
+            if (!tempSelectedFileUrl) {
+                alert('Por favor, selecione um arquivo de vídeo ou foto do seu computador.');
+                return;
+            }
+
+            const title = document.getElementById('post-title-input').value;
+            const type = document.getElementById('post-type-input').value;
+            const caption = document.getElementById('post-caption-input').value;
+
+            const newPost = {
+                id: samplePosts.length + 1,
+                title: title,
+                type: type,
+                isVideo: tempIsVideo,
+                status: "Pendente",
+                image: tempSelectedFileUrl,
+                caption: caption,
+                likes: "0 pessoas",
+                reach: "Recém Adicionado",
+                comments: [{
+                    author: "Agência Daime",
+                    text: "Novo post enviado para o lote de aprovação.",
+                    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                }]
+            };
+
+            samplePosts.push(newPost);
+            addAuditLog(`Novo post #${newPost.id} (${title}) adicionado ao lote via upload.`);
+            closeNewPostModal();
+            loadPostDetails(newPost.id);
+        }
+
+        function approveCurrentPost() {
+            const post = samplePosts.find(p => p.id === currentPostId);
+            if (post) {
+                post.status = 'Aprovado';
+                post.comments.push({
+                    author: viewMode === 'client' ? 'Cliente (Bahia Homes)' : 'Agência Daime',
+                    text: '✅ Publicação aprovada sem ressalvas!',
+                    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                });
+                addAuditLog(`Post #${post.id} (${post.title}) APROVADO.`);
+                loadPostDetails(currentPostId);
+            }
+        }
+
+        function toggleAdjustForm() {
+            document.getElementById('adjust-form').classList.toggle('hidden');
+        }
+
+        function submitAdjustment() {
+            const text = document.getElementById('adjust-comment-input').value.trim();
+            if (!text) return;
+
+            const post = samplePosts.find(p => p.id === currentPostId);
+            if (post) {
+                post.status = 'Ajuste';
+                post.comments.push({
+                    author: viewMode === 'client' ? 'Cliente (Bahia Homes)' : 'Agência Daime',
+                    text: `⚠️ Pedido de ajuste: ${text}`,
+                    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                });
+                addAuditLog(`Post #${post.id} solicitado AJUSTE.`);
+                document.getElementById('adjust-comment-input').value = '';
+                loadPostDetails(currentPostId);
+            }
+        }
+
+        function addQuickComment() {
+            const input = document.getElementById('quick-comment');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const post = samplePosts.find(p => p.id === currentPostId);
+            if (post) {
+                post.comments.push({
+                    author: viewMode === 'client' ? 'Cliente (Bahia Homes)' : 'Agência Daime',
+                    text: text,
+                    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                });
+                input.value = '';
+                renderComments(post.comments);
+            }
+        }
+
+        function approveAllBatch() {
+            samplePosts.forEach(p => p.status = 'Aprovado');
+            addAuditLog('Lote completo #BH-TRN-2026-10 APROVADO pelo cliente.');
+            loadPostDetails(currentPostId);
+        }
+
+        function updateProgressSummary() {
+            const approved = samplePosts.filter(p => p.status === 'Aprovado').length;
+            document.getElementById('approval-progress').innerText = `${approved} de ${samplePosts.length} aprovados`;
+            
+            const badge = document.getElementById('batch-status-badge');
+            if (approved === samplePosts.length) {
+                badge.innerText = 'Concluído';
+                badge.className = 'px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300';
+            } else {
+                badge.innerText = 'Pendente';
+                badge.className = 'px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 border border-amber-200';
+            }
+        }
+
+        function addAuditLog(msg) {
+            const container = document.getElementById('audit-log');
+            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const item = document.createElement('div');
+            item.innerText = `[${time}] ${msg}`;
+            container.prepend(item);
+        }
+
+        function setViewMode(mode) {
+            viewMode = mode;
+            const btnClient = document.getElementById('btn-view-client');
+            const btnAgency = document.getElementById('btn-view-agency');
+
+            if (mode === 'client') {
+                btnClient.className = "px-3 py-1.5 rounded-full font-medium transition-all flex items-center space-x-1.5 bg-bahia-gold text-bahia-charcoal shadow-sm";
+                btnAgency.className = "px-3 py-1.5 rounded-full font-medium transition-all flex items-center space-x-1.5 text-white/80 hover:text-white";
+                document.getElementById('magic-link-banner').classList.remove('hidden');
+            } else {
+                btnAgency.className = "px-3 py-1.5 rounded-full font-medium transition-all flex items-center space-x-1.5 bg-bahia-gold text-bahia-charcoal shadow-sm";
+                btnClient.className = "px-3 py-1.5 rounded-full font-medium transition-all flex items-center space-x-1.5 text-white/80 hover:text-white";
+                document.getElementById('magic-link-banner').classList.add('hidden');
+            }
+        }
+    </script>
 </body>
 </html>
