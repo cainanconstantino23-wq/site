@@ -11,7 +11,7 @@
   <!-- FontAwesome Icons CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   
-  <!-- Google Fonts: Playfair Display (Serif Luxo) & Plus Jakarta Sans (Modern Neutral) -->
+  <!-- Google Fonts: Playfair Display & Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -95,7 +95,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-20 gap-4">
         
-        <!-- Brand Logo inspired by Bahia Homes -->
+        <!-- Brand Logo -->
         <div class="flex items-center gap-3 cursor-pointer shrink-0" onclick="switchView('agency-dashboard')">
           <div class="w-10 h-10 rounded-full bg-bh-forest text-bh-bronze flex items-center justify-center font-serif font-bold text-xl shadow-md border border-bh-bronze/30">
             BH
@@ -126,8 +126,8 @@
         <!-- Header Actions -->
         <div class="flex items-center gap-3">
           <button onclick="openNewPostModal()" class="flex items-center gap-2 bg-bh-forest hover:bg-bh-forestHover text-white font-medium text-xs px-4 py-2.5 rounded-full transition-all shadow-md active:scale-95 border border-bh-bronze/30">
-            <i class="fa-solid fa-plus text-bh-bronze text-xs"></i> 
-            <span class="hidden sm:inline font-medium uppercase tracking-wider text-[11px]">Novo Post</span>
+            <i class="fa-solid fa-cloud-arrow-up text-bh-bronze text-xs"></i> 
+            <span class="hidden sm:inline font-medium uppercase tracking-wider text-[11px]">Upload de Mídia</span>
           </button>
         </div>
       </div>
@@ -230,7 +230,7 @@
       <!-- Filters & Audit Trail Bar -->
       <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 bg-white p-3 sm:p-4 rounded-2xl border border-bh-border shadow-sm">
         <div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
-          <button onclick="filterPosts('all')" class="filter-btn active-filter px-4 py-2 rounded-full text-xs font-semibold bg-bh-forest text-white transition whitespace-nowrap shadow-xs">Todos (4)</button>
+          <button onclick="filterPosts('all')" class="filter-btn active-filter px-4 py-2 rounded-full text-xs font-semibold bg-bh-forest text-white transition whitespace-nowrap shadow-xs">Todos</button>
           <button onclick="filterPosts('pending')" class="filter-btn px-4 py-2 rounded-full text-xs font-medium text-bh-muted hover:text-bh-dark hover:bg-bh-softBg transition whitespace-nowrap">Pendentes</button>
           <button onclick="filterPosts('approved')" class="filter-btn px-4 py-2 rounded-full text-xs font-medium text-bh-muted hover:text-bh-dark hover:bg-bh-softBg transition whitespace-nowrap">Aprovados</button>
           <button onclick="filterPosts('rejected')" class="filter-btn px-4 py-2 rounded-full text-xs font-medium text-bh-muted hover:text-bh-dark hover:bg-bh-softBg transition whitespace-nowrap">Com Ajustes</button>
@@ -249,7 +249,7 @@
       </div>
     </section>
 
-    <!-- VIEW 2: CLIENT APPROVAL PORTAL (MAGIC LINK EXPERIENCE) -->
+    <!-- VIEW 2: CLIENT APPROVAL PORTAL -->
     <section id="view-client-approval" class="hidden space-y-6">
       
       <!-- Magic Link Banner Header -->
@@ -312,11 +312,12 @@
               <i class="fa-solid fa-ellipsis text-zinc-400 px-1"></i>
             </div>
 
-            <!-- Media Content Viewport -->
+            <!-- Media Content Viewport (Image or Video) -->
             <div id="sim-media-container" class="relative bg-zinc-900 aspect-square flex items-center justify-center overflow-hidden">
-              <img id="sim-media-img" src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&auto=format&fit=crop&q=80" class="w-full h-full object-cover" alt="Post preview">
+              <img id="sim-media-img" src="" class="w-full h-full object-cover hidden" alt="Post preview">
+              <video id="sim-media-video" class="w-full h-full object-cover hidden" controls autoplay loop muted playsinline></video>
               
-              <div id="sim-reel-badge" class="hidden absolute top-3 right-3 bg-black/75 backdrop-blur-md px-2.5 py-1 rounded-md text-[10px] font-bold text-white flex items-center gap-1.5 border border-white/10">
+              <div id="sim-reel-badge" class="hidden absolute top-3 right-3 bg-black/75 backdrop-blur-md px-2.5 py-1 rounded-md text-[10px] font-bold text-white flex items-center gap-1.5 border border-white/10 z-10">
                 <i class="fa-solid fa-clapperboard text-bh-bronze"></i> REELS
               </div>
             </div>
@@ -385,12 +386,12 @@
               </div>
             </div>
 
-            <!-- Rejection Reason Form (Hidden by default) -->
+            <!-- Rejection Reason Form -->
             <div id="reject-form-box" class="hidden bg-rose-50 border border-rose-200 p-5 rounded-2xl space-y-3">
               <h5 class="text-xs font-bold text-bh-terracotta flex items-center gap-2">
                 <i class="fa-solid fa-triangle-exclamation"></i> Detalhe os ajustes necessários para a equipe:
               </h5>
-              <textarea id="reject-reason-input" rows="3" placeholder="Ex: Ajustar o valor da diária ou alterar a imagem de capa para o Quadrado..." class="w-full bg-white border border-rose-300 rounded-xl p-3.5 text-xs text-bh-dark placeholder-slate-400 focus:outline-none focus:border-bh-terracotta"></textarea>
+              <textarea id="reject-reason-input" rows="3" placeholder="Ex: Ajustar o valor da diária ou alterar a imagem de capa..." class="w-full bg-white border border-rose-300 rounded-xl p-3.5 text-xs text-bh-dark placeholder-slate-400 focus:outline-none focus:border-bh-terracotta"></textarea>
               <div class="flex justify-end gap-2">
                 <button onclick="toggleRejectForm()" class="px-4 py-2 rounded-xl text-xs font-medium text-bh-muted hover:text-bh-dark">Cancelar</button>
                 <button onclick="submitRejection()" class="bg-bh-terracotta hover:bg-rose-700 text-white font-bold text-xs px-5 py-2 rounded-xl">Enviar Ajuste</button>
@@ -503,36 +504,66 @@
 
   </main>
 
-  <!-- MODAL 1: CREATE NEW POST -->
+  <!-- MODAL: UPLOAD DE NOVO ARQUIVO / POST -->
   <div id="modal-new-post" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white border border-bh-border w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl">
       
       <div class="p-5 border-b border-bh-border flex items-center justify-between">
-        <h3 class="font-serif font-bold text-bh-dark text-lg">Novo Post — Curadoria Luxo</h3>
+        <div class="flex items-center gap-2 text-bh-forest">
+          <i class="fa-solid fa-cloud-arrow-up text-bh-bronze"></i>
+          <h3 class="font-serif font-bold text-bh-dark text-lg">Upload de Mídia de Computador</h3>
+        </div>
         <button onclick="closeNewPostModal()" class="text-bh-muted hover:text-bh-dark p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
       </div>
 
       <form id="form-new-post" onsubmit="handleCreatePost(event)" class="p-6 space-y-4">
+        
+        <!-- Drag & Drop / File Selector Area -->
+        <div>
+          <label class="block text-[10px] font-bold text-bh-muted uppercase tracking-wider mb-1.5">Selecione o Arquivo de Imagem ou Vídeo</label>
+          <div id="drop-zone" onclick="document.getElementById('input-file').click()" class="border-2 border-dashed border-bh-border hover:border-bh-bronze bg-bh-softBg/50 rounded-2xl p-6 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-2 group">
+            <input id="input-file" type="file" accept="image/*,video/*" onchange="handleFileSelect(event)" class="hidden">
+            
+            <div class="w-12 h-12 rounded-full bg-white shadow-sm flex items-center justify-center text-bh-bronze group-hover:scale-110 transition-transform">
+              <i class="fa-solid fa-folder-open text-lg"></i>
+            </div>
+            
+            <div>
+              <p class="text-xs font-semibold text-bh-dark">Clique ou arraste um arquivo do seu computador</p>
+              <p class="text-[10px] text-bh-muted mt-0.5">Suporta imagens (JPG, PNG, WEBP) e vídeos (MP4, MOV)</p>
+            </div>
+          </div>
+
+          <!-- File Upload Preview Box -->
+          <div id="file-preview-box" class="hidden mt-3 p-3 bg-bh-softBg border border-bh-border rounded-xl flex items-center justify-between">
+            <div class="flex items-center gap-3 overflow-hidden">
+              <div id="file-preview-media" class="w-12 h-12 rounded-lg bg-black/10 overflow-hidden shrink-0 flex items-center justify-center">
+                <!-- Image or Video Preview Thumbnail -->
+              </div>
+              <div class="overflow-hidden text-left">
+                <p id="file-name" class="text-xs font-bold text-bh-dark truncate">nome-do-arquivo.jpg</p>
+                <p id="file-size" class="text-[10px] text-bh-muted">2.4 MB</p>
+              </div>
+            </div>
+            <button type="button" onclick="resetFileSelection()" class="text-bh-terracotta hover:text-rose-700 p-2 text-xs font-bold">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </div>
+        </div>
+
         <div>
           <label class="block text-[10px] font-bold text-bh-muted uppercase tracking-wider mb-1">Título do Imóvel / Conteúdo</label>
           <input id="input-title" type="text" required placeholder="Ex: Casa Terravista Golf — Villa 12" class="w-full bg-bh-softBg border border-bh-border rounded-xl px-4 py-3 text-xs text-bh-dark focus:outline-none focus:border-bh-forest">
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-[10px] font-bold text-bh-muted uppercase tracking-wider mb-1">Formato de Mídia</label>
-            <select id="input-type" class="w-full bg-bh-softBg border border-bh-border rounded-xl px-4 py-3 text-xs text-bh-dark focus:outline-none focus:border-bh-forest">
-              <option value="Reels">Instagram Reels (9:16)</option>
-              <option value="Carrossel">Carrossel de Imagens</option>
-              <option value="Feed">Imagem Feed (1:1)</option>
-              <option value="Stories">Instagram Stories</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-[10px] font-bold text-bh-muted uppercase tracking-wider mb-1">URL da Mídia Exclusiva</label>
-            <input id="input-media" type="url" required placeholder="https://..." value="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&auto=format&fit=crop&q=80" class="w-full bg-bh-softBg border border-bh-border rounded-xl px-4 py-3 text-xs text-bh-dark focus:outline-none focus:border-bh-forest">
-          </div>
+        <div>
+          <label class="block text-[10px] font-bold text-bh-muted uppercase tracking-wider mb-1">Formato de Mídia</label>
+          <select id="input-type" class="w-full bg-bh-softBg border border-bh-border rounded-xl px-4 py-3 text-xs text-bh-dark focus:outline-none focus:border-bh-forest">
+            <option value="Reels">Instagram Reels (9:16)</option>
+            <option value="Carrossel">Carrossel de Imagens</option>
+            <option value="Feed">Imagem Feed (1:1)</option>
+            <option value="Stories">Instagram Stories</option>
+          </select>
         </div>
 
         <div>
@@ -549,7 +580,7 @@
     </div>
   </div>
 
-  <!-- MODAL 2: AUDIT TRAIL -->
+  <!-- MODAL: AUDIT TRAIL -->
   <div id="modal-audit-trail" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white border border-bh-border w-full max-w-xl rounded-3xl overflow-hidden shadow-2xl">
       <div class="p-5 border-b border-bh-border flex items-center justify-between">
@@ -577,12 +608,13 @@
   </div>
 
   <script>
-    /* Luxury Real Estate Posts Data (Bahia Homes Style) */
+    /* Luxury Real Estate Posts Data */
     let posts = [
       {
         id: 'post-1',
         title: 'Estância Fasano Trancoso — Villa 14',
         type: 'Reels',
+        isVideo: false,
         mediaUrl: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&auto=format&fit=crop&q=80',
         caption: 'Uma das propriedades mais exclusivas do Sul da Bahia. Localizada na praia de Itapororoca, a Villa 14 oferece 6 suítes integradas à Mata Atlântica e serviço impecável de apoio de praia privativo. 🌴☀️\n\nDisponível para aluguel de temporada e venda com a curadoria Bahia Homes.',
         hashtags: '#BahiaHomes #Trancoso #FasanoTrancoso #CasasDeLuxo',
@@ -599,6 +631,7 @@
         id: 'post-2',
         title: 'Terravista Golf Club — Casa 72',
         type: 'Carrossel',
+        isVideo: false,
         mediaUrl: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&auto=format&fit=crop&q=80',
         caption: 'Design assinado, vista panorâmica sobre as falésias e acesso direto ao aeroporto privado de Terravista. 🏌️‍♂️🌊\n\nDeslize para conferir a suíte máster com varanda voltada para o azul do Atlântico.',
         hashtags: '#TerravistaGolf #TrancosoBahia #ArquiteturaDeLuxo',
@@ -615,6 +648,7 @@
         id: 'post-3',
         title: 'Gastronomia Privada no Quadrado',
         type: 'Feed',
+        isVideo: false,
         mediaUrl: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800&auto=format&fit=crop&q=80',
         caption: 'Experiência de chef privativo servindo frutos do mar na varanda da sua casa em Trancoso. O verdadeiro significado de hospitalidade com DNA Bahia Homes. 🍷🍤',
         hashtags: '#QuadradoTrancoso #ConciergeBahia #GastronomiaBaiana',
@@ -631,6 +665,7 @@
         id: 'post-4',
         title: 'Pôr do Sol em Itapororoca — Sunset Tour',
         type: 'Stories',
+        isVideo: false,
         mediaUrl: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&auto=format&fit=crop&q=80',
         caption: 'Pé na areia ou piscina infinita? Descubra o paraíso reservando com a Bahia Homes.',
         hashtags: '#Trancoso #SunsetBahia #Itapororoca',
@@ -651,6 +686,91 @@
 
     let currentSelectedPostId = 'post-1';
     let currentFilter = 'all';
+    let currentUploadedFileUrl = '';
+    let currentUploadedIsVideo = false;
+
+    /* File Drag & Drop + Reader Handling */
+    function setupDragAndDrop() {
+      const dropZone = document.getElementById('drop-zone');
+      if (!dropZone) return;
+
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, preventDefaults, false);
+      });
+
+      function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+
+      ['dragenter', 'dragover'].forEach(eventName => {
+        dropZone.addEventListener(eventName, () => dropZone.classList.add('border-bh-bronze', 'bg-bh-softBg'), false);
+      });
+
+      ['dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, () => dropZone.classList.remove('border-bh-bronze', 'bg-bh-softBg'), false);
+      });
+
+      dropZone.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        if (files && files.length > 0) {
+          processFile(files[0]);
+        }
+      }, false);
+    }
+
+    function handleFileSelect(event) {
+      const file = event.target.files[0];
+      if (file) {
+        processFile(file);
+      }
+    }
+
+    function processFile(file) {
+      const isVideo = file.type.startsWith('video/');
+      const isImage = file.type.startsWith('image/');
+
+      if (!isImage && !isVideo) {
+        showToast('Formato Inválido', 'Por favor escolha um arquivo de imagem ou vídeo.');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        currentUploadedFileUrl = e.target.result;
+        currentUploadedIsVideo = isVideo;
+
+        // Automatically set media type dropdown if video
+        if (isVideo) {
+          document.getElementById('input-type').value = 'Reels';
+        }
+
+        // Display File Preview Box
+        const previewMedia = document.getElementById('file-preview-media');
+        if (isVideo) {
+          previewMedia.innerHTML = `<video src="${currentUploadedFileUrl}" class="w-full h-full object-cover"></video>`;
+        } else {
+          previewMedia.innerHTML = `<img src="${currentUploadedFileUrl}" class="w-full h-full object-cover" alt="Preview">`;
+        }
+
+        document.getElementById('file-name').innerText = file.name;
+        document.getElementById('file-size').innerText = (file.size / (1024 * 1024)).toFixed(2) + ' MB';
+
+        document.getElementById('file-preview-box').classList.remove('hidden');
+        document.getElementById('drop-zone').classList.add('hidden');
+      };
+
+      reader.readAsDataURL(file);
+    }
+
+    function resetFileSelection() {
+      currentUploadedFileUrl = '';
+      currentUploadedIsVideo = false;
+      document.getElementById('input-file').value = '';
+      document.getElementById('file-preview-box').classList.add('hidden');
+      document.getElementById('drop-zone').classList.remove('hidden');
+    }
 
     /* Navigation Logic */
     function switchView(viewName) {
@@ -720,12 +840,16 @@
         const card = document.createElement('div');
         card.className = "bg-white border border-bh-border hover:border-bh-bronze/50 rounded-2xl p-5 flex flex-col justify-between transition-all duration-300 shadow-sm hover:shadow-md";
         
+        const mediaDisplay = post.isVideo 
+          ? `<video src="${post.mediaUrl}" class="w-full h-full object-cover" muted></video>`
+          : `<img src="${post.mediaUrl}" class="w-full h-full object-cover" alt="Mídia de Luxo">`;
+
         card.innerHTML = `
           <div>
             <div class="relative aspect-video rounded-xl overflow-hidden bg-bh-softBg mb-4">
-              <img src="${post.mediaUrl}" class="w-full h-full object-cover" alt="Mídia de Luxo">
-              <div class="absolute top-2.5 left-2.5 bg-bh-dark/80 text-white text-[9px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md backdrop-blur-xs">
-                ${post.type}
+              ${mediaDisplay}
+              <div class="absolute top-2.5 left-2.5 bg-bh-dark/80 text-white text-[9px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md backdrop-blur-xs flex items-center gap-1">
+                ${post.isVideo ? '<i class="fa-solid fa-video text-bh-bronze"></i>' : ''} ${post.type}
               </div>
               <div class="absolute top-2.5 right-2.5">
                 ${statusBadge}
@@ -786,12 +910,24 @@
     function renderClientSimulator() {
       const post = posts.find(p => p.id === currentSelectedPostId) || posts[0];
       
-      document.getElementById('sim-media-img').src = post.mediaUrl;
+      const imgElem = document.getElementById('sim-media-img');
+      const videoElem = document.getElementById('sim-media-video');
+
+      if (post.isVideo) {
+        imgElem.classList.add('hidden');
+        videoElem.classList.remove('hidden');
+        videoElem.src = post.mediaUrl;
+      } else {
+        videoElem.classList.add('hidden');
+        imgElem.classList.remove('hidden');
+        imgElem.src = post.mediaUrl;
+      }
+
       document.getElementById('sim-caption-text').innerText = post.caption;
       document.getElementById('sim-hashtags').innerText = post.hashtags;
 
       const reelBadge = document.getElementById('sim-reel-badge');
-      if (post.type === 'Reels') {
+      if (post.type === 'Reels' || post.isVideo) {
         reelBadge.classList.remove('hidden');
       } else {
         reelBadge.classList.add('hidden');
@@ -856,8 +992,12 @@
             : 'bg-bh-softBg border-bh-border hover:border-bh-bronze text-bh-muted'
         }`;
 
+        const thumbMedia = post.isVideo 
+          ? `<video src="${post.mediaUrl}" class="w-10 h-10 object-cover rounded-xl shrink-0"></video>`
+          : `<img src="${post.mediaUrl}" class="w-10 h-10 object-cover rounded-xl shrink-0" alt="thumb">`;
+
         thumb.innerHTML = `
-          <img src="${post.mediaUrl}" class="w-10 h-10 object-cover rounded-xl shrink-0" alt="thumb">
+          ${thumbMedia}
           <div class="overflow-hidden text-left">
             <h6 class="text-[11px] font-serif font-bold line-clamp-1 text-bh-dark">${post.title}</h6>
             <span class="text-[8px] uppercase font-bold tracking-wider text-bh-bronze">${post.status}</span>
@@ -1015,6 +1155,7 @@
 
     /* Modal Helpers */
     function openNewPostModal() {
+      resetFileSelection();
       document.getElementById('modal-new-post').classList.remove('hidden');
     }
 
@@ -1025,16 +1166,21 @@
     function handleCreatePost(event) {
       event.preventDefault();
       
+      if (!currentUploadedFileUrl) {
+        showToast('Nenhum Arquivo Selecionado', 'Por favor escolha uma imagem ou vídeo no computador.');
+        return;
+      }
+
       const title = document.getElementById('input-title').value;
       const type = document.getElementById('input-type').value;
-      const mediaUrl = document.getElementById('input-media').value;
       const caption = document.getElementById('input-caption').value;
 
       const newPost = {
         id: 'post-' + (posts.length + 1),
         title,
         type,
-        mediaUrl,
+        isVideo: currentUploadedIsVideo,
+        mediaUrl: currentUploadedFileUrl,
         caption,
         hashtags: '#BahiaHomes #Trancoso #LuxuryRealEstate',
         status: 'pending',
@@ -1048,7 +1194,7 @@
       posts.unshift(newPost);
       closeNewPostModal();
       renderAgencyPosts();
-      showToast('Nova Mídia Adicionada', 'Publicação inserida na curadoria.');
+      showToast('Nova Mídia Adicionada', 'Arquivo enviado e adicionado à curadoria.');
     }
 
     function toggleAuditModal() {
@@ -1090,6 +1236,7 @@
 
     /* Initialize Application */
     window.onload = function() {
+      setupDragAndDrop();
       renderAgencyPosts();
       renderClientSimulator();
     };
