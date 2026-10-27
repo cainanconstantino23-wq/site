@@ -1,0 +1,343 @@
+<!DOCTYPE html><html lang="pt-BR"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Santo Hostel Concierge - Bem-vindo</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,wght@0,400;0,600;0,700;1,400&amp;family=Hanken+Grotesk:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-dim": "#dbdad6",
+                        "on-secondary-container": "#676160",
+                        "on-secondary-fixed-variant": "#4b4644",
+                        "background": "#faf9f5",
+                        "primary-fixed-dim": "#e3c19f",
+                        "surface-muted": "#EBE9E1",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-container": "#304051",
+                        "surface-container-high": "#e9e8e4",
+                        "on-background": "#1b1c1a",
+                        "primary-fixed": "#ffddbb",
+                        "on-surface": "#1b1c1a",
+                        "outline": "#80756b",
+                        "tertiary-fixed": "#d4e4fa",
+                        "tertiary-container": "#9babc0",
+                        "ink-deep": "#1C1C1C",
+                        "inverse-surface": "#2f312e",
+                        "on-secondary-fixed": "#1e1b1a",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "inverse-primary": "#e3c19f",
+                        "surface-container-highest": "#e3e2df",
+                        "primary": "#735a3e",
+                        "surface-bright": "#faf9f5",
+                        "inverse-on-surface": "#f2f1ed",
+                        "on-error": "#ffffff",
+                        "on-primary-fixed-variant": "#5a4229",
+                        "on-surface-variant": "#4e453d",
+                        "on-tertiary-fixed": "#0c1d2d",
+                        "on-primary-container": "#503a21",
+                        "on-error-container": "#93000a",
+                        "outline-variant": "#d2c4b9",
+                        "surface": "#faf9f5",
+                        "tertiary": "#506072",
+                        "secondary-container": "#e6dedc",
+                        "surface-variant": "#e3e2df",
+                        "surface-tint": "#735a3e",
+                        "primary-container": "#c4a484",
+                        "error": "#ba1a1a",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed": "#291803",
+                        "tertiary-fixed-dim": "#b8c8de",
+                        "surface-container-low": "#f4f4f0",
+                        "secondary-fixed-dim": "#cdc5c3",
+                        "secondary": "#635d5c",
+                        "on-tertiary-fixed-variant": "#39485a",
+                        "on-primary": "#ffffff",
+                        "secondary-fixed": "#e9e1df",
+                        "surface-container": "#efeeea"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-desktop": "40px",
+                        "gutter": "24px",
+                        "unit": "8px",
+                        "margin-mobile": "16px",
+                        "container-max": "1200px"
+                    },
+                    "fontFamily": {
+                        "title-md": ["Hanken Grotesk"],
+                        "body-lg": ["Hanken Grotesk"],
+                        "headline-lg": ["Literata"],
+                        "body-md": ["Hanken Grotesk"],
+                        "headline-lg-mobile": ["Literata"],
+                        "display-lg": ["Literata"],
+                        "label-md": ["Hanken Grotesk"],
+                        "label-sm": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.08em", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #faf9f5;
+            color: #1b1c1a;
+            scroll-behavior: smooth;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .soft-shadow {
+            box-shadow: 0 10px 30px -10px rgba(41, 37, 36, 0.08);
+        }
+        .tropical-blur {
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md text-on-background">
+<!-- Top App Bar -->
+<header class="fixed top-0 w-full z-50 bg-surface-container-low shadow-sm h-16 flex justify-between items-center px-margin-mobile md:px-margin-desktop transition-all duration-200">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-primary active:scale-95 transition-transform" data-icon="menu">menu</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary tracking-tight">Santo Hostel</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-container">
+<img class="w-full h-auto" data-alt="A warm and professional portrait of a friendly concierge staff member in Porto Seguro, Bahia. They are wearing a light linen shirt, smiling warmly at the camera, with a sun-drenched, lush tropical garden in the soft-focus background. The lighting is golden hour, creating a welcoming, high-end hospitality atmosphere consistent with a boutique hostel aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAICGEfYu0Kx6y2N6EmQ65Vecd26sSVN9J6izZ915Iwl3FF-yk1-FCONSPQg9pfXhjUD7Sch_n2wDuZXB7vM-siJWtIevzykt9QZW6AjC4H2lJDyU66IorniFWhB5nQhA5mmeLAcl6mBQ7iJUrgQdJ6T42H7UOP9jbbYyfK76vtFu8bGQ18cP7JYjTIdqgEJHPKzEZqBATqbuER680zUKrkRmSjt2A-WtlEodL5Z7tpH1dM8kRsIY5fh-Q14NWPEEB0ohMR0AvG8g">
+</div>
+</div>
+</header>
+<main class="pt-16 pb-24 md:pb-8 max-w-container-max mx-auto overflow-x-hidden">
+<!-- Hero Section -->
+<section class="relative h-[397px] md:h-[530px] w-full flex items-end overflow-hidden mb-gutter">
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover" data-alt="A panoramic wide-angle aerial shot of the historic colorful buildings of Porto Seguro at sunset, mirroring the provided reference image. The vibrant yellow, red, and blue facades glow under the golden sunlight, framed by the lush green canopy of ancient trees. The atmosphere is peaceful and evokes the soul of Bahia, emphasizing simplicity meeting sophistication." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCEGWjNH0IAtVvnaai8HSDMkehr8s75jvhdzlTKLeAoJlJJWlW5CvWPynqcj4f4yKyp8ov8Fa7Y-762TH2jGWRmk4CmkhwnUL0c-LxD2NAXOsNXUoP0KzvL0l5Y9qfHqOzeEvKErdJZBZtSBdf763W3e6M7-_gnvLpAJKcX22tOW1f-gnQOkDOQbE0WCzipydNbuMGF9AwKVL6Bl2gotl8XpelG_krMpmK7I6ZXpmhq1mNRWOMFUP1nzc2TLm8g79ukkTYerkYSw">
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+</div>
+<div class="relative z-10 p-margin-mobile md:p-margin-desktop text-white">
+<p class="font-label-md text-label-md uppercase tracking-widest mb-2 text-primary-fixed">Bem-vindo à Bahia</p>
+<h2 class="font-display-lg text-display-lg leading-tight mb-4">Sinta-se em casa, longe de casa.</h2>
+<div class="flex gap-3">
+<span class="px-3 py-1 bg-white/20 tropical-blur rounded-full text-label-sm font-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="location_on">location_on</span> Porto Seguro
+                    </span>
+<span class="px-3 py-1 bg-white/20 tropical-blur rounded-full text-label-sm font-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="sunny">sunny</span> 28°C
+                    </span>
+</div>
+</div>
+</section>
+<!-- Quick Actions Bento Grid -->
+<section class="px-margin-mobile md:px-0 grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+<!-- Critical Path: Check-in -->
+<a href="estadia.html" class="col-span-2 bg-primary-container text-on-primary-container p-6 rounded-xl flex flex-col justify-between min-h-[160px] soft-shadow active:scale-[0.98] transition-all cursor-pointer"><div><span class="material-symbols-outlined text-3xl mb-2" data-icon="key">key</span><h3 class="font-title-md text-title-md">Check-in Online</h3><p class="font-body-md text-body-md opacity-90">Agilize sua chegada e receba sua senha digital.</p></div><div class="flex items-center gap-2 mt-4 font-label-md"><span class="">Começar agora</span><span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span></div></a>
+<!-- WhatsApp Concierge -->
+<a class="bg-surface-muted p-5 rounded-xl flex flex-col items-center justify-center text-center gap-2 soft-shadow border-l-4 border-primary hover:bg-secondary-container transition-colors" href="https://wa.me/557391524222">
+<span class="material-symbols-outlined text-primary text-2xl" data-icon="chat">chat</span>
+<span class="font-label-md text-label-md">Falar no WhatsApp</span>
+</a>
+<!-- WiFi Info -->
+<div class="bg-surface-muted p-5 rounded-xl flex flex-col items-center justify-center text-center gap-2 soft-shadow border-l-4 border-primary transition-all">
+<span class="material-symbols-outlined text-primary text-2xl" data-icon="wifi">wifi</span>
+<span class="font-label-md text-label-md">Senha do Wi-Fi</span>
+</div>
+</section>
+<!-- Soul of the House Section -->
+<section class="px-margin-mobile md:px-0 mb-16">
+<div class="flex flex-col md:flex-row gap-8 items-center">
+<div class="w-full md:w-1/2">
+<span class="font-label-md text-label-md text-primary uppercase tracking-widest block mb-4">Nossa Essência</span>
+<h2 class="font-headline-lg text-headline-lg mb-6">Uma casa com alma, feita de histórias.</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-6 leading-relaxed">
+                        O Santo Hostel não é apenas um lugar para dormir, é um convite para desacelerar. Inspirada na cultura local da região e no design tropical, cada canto foi pensado para despertar os sentidos. 
+                    </p>
+<blockquote class="border-l-4 border-primary-container pl-6 py-2 italic font-headline-lg text-title-md text-primary mb-8">
+                        "Luxo é ter tempo, silêncio e espaço."
+                    </blockquote>
+<a href="guia.html" class="px-8 py-3 bg-primary text-white rounded-full font-label-md flex items-center gap-2 hover:opacity-90 transition-opacity inline-flex">Conhecer Experiências <span class="material-symbols-outlined" data-icon="explore">explore</span></a>
+</div>
+<div class="w-full md:w-1/2 grid grid-cols-2 gap-4">
+<div class="rounded-xl overflow-hidden aspect-[3/4] soft-shadow mt-8">
+<img class="w-full h-full object-cover" data-alt="A close-up artistic shot of artisanal decorations inside Santo Hostel. The image features hand-woven macramé, locally crafted pottery, and vibrant textiles against a soft neutral-toned wall. The lighting is soft and natural, emphasizing the modern-tactile aesthetic of the boutique hostel. The color palette includes warm ochre, terracotta, and soft creams." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMIcWgTk981DOYJLNUCYXwkidFdR-g6au9uchn-lDnSKyjryTHp1TXrSRPukgh5V_JufN5r2YPht_lrKeZDM8ljDaRvAFW4wpyvx5GF5EuD_k84_iq2LPWtEabyNR9hCjSJuJZociDll3rEGyJ5lLE6cxw0V-0kELomXCA9fAEBJwXYn_TkPRSLA9sgmADbEJvJXv53FpUYgaH-J4gkJTedAmkQFbGYD1GhSbLDk3S8zwcVIRU-Att6SZ6wyV7Gxnl49NUx_kT-Q">
+</div>
+<div class="rounded-xl overflow-hidden aspect-[3/4] soft-shadow">
+<img class="w-full h-full object-cover" data-alt="A lush, sun-dappled interior courtyard of a tropical hostel. Tall palm leaves and exotic plants fill the frame, with a hint of a hammock and a wooden deck. The mood is serene and peaceful, illustrating the 'Soul of the House' philosophy where nature meets sophisticated simplicity in Porto Seguro, Bahia." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmbBkztmd2S9gCLjWsdMDP1cKU2jjkH1YrynhWRBgUbqcW2tDb0C8iVatc8nBDqdE27z3RCrHlyBmj38kqDaYqWDd1pjpQTW_yEGeUEZ7MK8qI7HO54mn0i7sR82Y3I2wKvOIMdFdwyVkhZI3x9d1tD1hK3ChkbxW6ZLVKFA2DrMTyrvLvWKX6_DZaDERU3sj5AN0GHn3dPMzjr027yfrOKFcAmtInwiYBDNQHHqTw2Yf-8YxbZu9Y-EeR-YIDccb6UJYGEjxinw">
+</div>
+</div>
+</div>
+</section>
+<!-- Accommodations Horizontal Scroll -->
+<section class="mb-16">
+<div class="px-margin-mobile md:px-0 flex justify-between items-end mb-6">
+<div>
+<span class="font-label-md text-label-md text-primary uppercase tracking-widest block mb-2">Acomodações</span>
+<h2 class="font-headline-lg text-headline-lg">Nossas Suítes</h2>
+</div>
+<a href="guia.html" class="text-primary font-label-md flex items-center gap-1">Ver todas <span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span></a>
+</div>
+<div class="flex overflow-x-auto hide-scrollbar gap-6 px-margin-mobile md:px-0 pb-6">
+<!-- Suite 1 -->
+<div class="flex-none w-72 md:w-96 bg-white rounded-2xl overflow-hidden soft-shadow group">
+<div class="h-48 relative overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="The Suíte Jasmin interior at Santo Hostel. A large king-size bed with crisp white linens and a traditional hand-woven blanket. A private balcony is visible in the background with greenery. The room features high ceilings and polished wood floors, combining historic charm with contemporary comfort in a bright, airy setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWkNiEiiqsOBwXncsvsyQPu_ap8vXV2rDWmZKo5M5UUmlqD95Q03T01a8gVKmPw7qD_i7rC3i8K5jFEpkRo08ghoZhZuH2BfWDE-SARfsgnkPgaHOmfqhMx-z0u30oJa_wfg-KaJgWq0UxzyvZfCSd2M11LuvgcWLKw59dLODnFqmC8tWiby5pwoApKiDVM_BpNiI28bOxt70AHrGBh1WaDPIfknbKGEwokZDM9tV1DDmndxdyYNwuE7X2v-PK-98vx9GO0vV2mA">
+<div class="absolute top-4 right-4 bg-white/80 tropical-blur px-2 py-1 rounded text-label-sm font-label-sm">
+                            Jasmin
+                        </div>
+</div>
+<div class="p-6">
+<h4 class="font-title-md text-title-md mb-2">Suíte Jasmin</h4>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4 line-clamp-2">Imersão na história com conforto contemporâneo e artesanato local.</p>
+<button class="w-full py-2 border border-outline text-on-surface rounded-lg font-label-md hover:bg-surface-muted transition-colors">Reservar Agora</button>
+</div>
+</div>
+<!-- Suite 2 -->
+<div class="flex-none w-72 md:w-96 bg-white rounded-2xl overflow-hidden soft-shadow group">
+<div class="h-48 relative overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="The Suíte Flor das Águas at Santo Hostel. The image focuses on an incredible outdoor shower area surrounded by dense tropical plants and stones. The indoor part of the suite shows a minimalist wooden bed frame and soft mood lighting, creating a retreat of absolute silence and peace." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBiJ35_Cy-U2ZrOFzgruLEcwaJIsIe3gC5kTHsuwEbQ92E55iRYu7nW598TnHvRiBxF6R9-wgUpccHjNZWMftl-IFjdFm4mGmqiYT3R_DzXzY5LPZsuAuyyJjO5dBZUGHJLZoQGJIcWiOLyBSsV8CEQ7Enz1JxSjA0IbeARNNXSChS3RffJQXxZKiGAxpid1iMCuIjg6Gj33r54D8Oz9zSh7_fwqESEOERPELty0Aq7npToh8ajHAB0IuwRs3Ibcj3KdXC924D9fQ">
+<div class="absolute top-4 right-4 bg-white/80 tropical-blur px-2 py-1 rounded text-label-sm font-label-sm">
+                            Natureza
+                        </div>
+</div>
+<div class="p-6">
+<h4 class="font-title-md text-title-md mb-2">Flor das Águas</h4>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4 line-clamp-2">Rodeada pelo verde, oferece silêncio absoluto e banho ao ar livre.</p>
+<button class="w-full py-2 border border-outline text-on-surface rounded-lg font-label-md hover:bg-surface-muted transition-colors">Reservar Agora</button>
+</div>
+</div>
+<!-- Suite 3 -->
+<div class="flex-none w-72 md:w-96 bg-white rounded-2xl overflow-hidden soft-shadow group">
+<div class="h-48 relative overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A spacious modern Loft at Santo Hostel. The design features integrated living space with a stylish leather sofa, a small kitchenette with wooden accents, and large windows looking out towards the historic center of Porto Seguro. The interior is sophisticated yet cozy, with polished concrete floors and vibrant art." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqsGr2_TBtbdCkqtBiun23_kA28DuzDsrUP2SVROlbvOTJLRFStDks1aL5F0HU4qO9jVHRExYmkeIsB2FmTQSaLdNI8XLkDoXdgub7HNYw1-9-2S32bHei0hYnXogq2JG49UP4a3Gw8_ccJXgSm8jwcfEo8wS0_qH0R3Ab-35WaCTs79WbvGUyfLKoJ3JSp9DiMK5Sc0f0LFKX9Alwzl-hx8QA09vQULZWydjzU2t73i4Z3HJpXZjGLfJvIdQlbAhWULUb1-qC8Q">
+<div class="absolute top-4 right-4 bg-white/80 tropical-blur px-2 py-1 rounded text-label-sm font-label-sm">
+                            Espaçoso
+                        </div>
+</div>
+<div class="p-6">
+<h4 class="font-title-md text-title-md mb-2">Loft Histórico</h4>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4 line-clamp-2">Charme e sofisticação a poucos passos do centro histórico.</p>
+<button class="w-full py-2 border border-outline text-on-surface rounded-lg font-label-md hover:bg-surface-muted transition-colors">Reservar Agora</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Recommendations Grid -->
+<section class="px-margin-mobile md:px-0 mb-16">
+<h2 class="font-headline-lg text-headline-lg mb-8 text-center">Dicas Locais</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="p-6 bg-white rounded-xl soft-shadow border-t-4 border-primary">
+<span class="material-symbols-outlined text-primary mb-4" data-icon="history_edu">history_edu</span>
+<h4 class="font-title-md text-title-md mb-2">Centro Histórico</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Explore casarios coloridos e igrejas coloniais. O berço do Brasil a poucos minutos.</p>
+</div>
+<div class="p-6 bg-white rounded-xl soft-shadow border-t-4 border-primary">
+<span class="material-symbols-outlined text-primary mb-4" data-icon="restaurant">restaurant</span>
+<h4 class="font-title-md text-title-md mb-2">Gastronomia</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Os melhores sabores da Bahia, da moqueca tradicional ao acarajé da praça.</p>
+</div>
+<div class="p-6 bg-white rounded-xl soft-shadow border-t-4 border-primary">
+<span class="material-symbols-outlined text-primary mb-4" data-icon="beach_access">beach_access</span>
+<h4 class="font-title-md text-title-md mb-2">Praias Desertas</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Descubra refúgios de areia branca e águas mornas longe do agito turístico.</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Nav Bar -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full bg-surface-container-low shadow-lg rounded-t-xl z-50 flex justify-around items-center pt-2 pb-6 px-2">
+<a href="index.html" class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 transition-transform duration-300 active:scale-90"><span class="material-symbols-outlined" data-icon="home">home</span><span class="font-label-sm text-label-sm">Home</span></a>
+<a href="estadia.html" class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-secondary-container transition-transform duration-300 active:scale-90"><span class="material-symbols-outlined" data-icon="key">key</span><span class="font-label-sm text-label-sm">My Stay</span></a>
+<a href="guia.html" class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-secondary-container transition-transform duration-300 active:scale-90"><span class="material-symbols-outlined" data-icon="explore">explore</span><span class="font-label-sm text-label-sm">Guide</span></a>
+<a href="regras.html" class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-secondary-container transition-transform duration-300 active:scale-90"><span class="material-symbols-outlined" data-icon="chat_bubble">chat_bubble</span><span class="font-label-sm text-label-sm">Contact</span></a>
+</nav>
+<!-- Footer (Desktop) -->
+<footer class="hidden md:block bg-surface-container-highest py-16 px-margin-desktop mt-12 border-t border-outline-variant">
+<div class="max-w-container-max mx-auto grid grid-cols-4 gap-12">
+<div class="col-span-1">
+<h3 class="font-headline-lg text-primary mb-4">Santo Hostel</h3>
+<p class="font-body-md text-on-surface-variant">Sinta-se em casa, longe de casa. Um refúgio de paz em Porto Seguro, Bahia.</p>
+</div>
+<div>
+<h5 class="font-label-md text-label-md text-on-surface uppercase mb-6">Contato</h5>
+<p class="font-body-md text-on-surface-variant mb-2">Rua Ubirajara, 08 - Pacatá</p>
+<p class="font-body-md text-on-surface-variant mb-2">+55 (73) 99152-4222</p>
+<p class="font-body-md text-on-surface-variant">santohostel.ps@gmail.com</p>
+</div>
+<div>
+<h5 class="font-label-md text-label-md text-on-surface uppercase mb-6">Links</h5>
+<ul class="space-y-3 font-body-md text-on-surface-variant">
+<li class=""><a class="hover:text-primary transition-colors" href="#">Voluntariado</a></li>
+<li class=""><a class="hover:text-primary transition-colors" href="#">Manual do Hóspede</a></li>
+<li class=""><a class="hover:text-primary transition-colors" href="#">Política de Privacidade</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-label-md text-label-md text-on-surface uppercase mb-6">Newsletter</h5>
+<div class="flex">
+<input class="bg-surface border-none rounded-l-lg w-full focus:ring-1 focus:ring-primary" placeholder="Seu e-mail" type="email">
+<button class="bg-primary text-white px-4 rounded-r-lg hover:opacity-90 transition-opacity">Enviar</button>
+</div>
+</div>
+</div>
+<div class="max-w-container-max mx-auto mt-16 pt-8 border-t border-outline-variant text-center font-label-sm text-on-surface-variant opacity-60">
+            © 2026 SANTO HOSTEL. TODOS OS DIREITOS RESERVADOS.
+        </div>
+</footer>
+<script>
+        // Micro-interactions for scrolling
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 20) {
+                header.classList.add('bg-white/90', 'tropical-blur');
+            } else {
+                header.classList.remove('bg-white/90', 'tropical-blur');
+            }
+        });
+
+        // Simple button active state visual feedback
+        document.querySelectorAll('button, a').forEach(el => {
+            el.addEventListener('touchstart', () => {
+                el.style.transform = 'scale(0.95)';
+            });
+            el.addEventListener('touchend', () => {
+                el.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+
+
+</body></html>

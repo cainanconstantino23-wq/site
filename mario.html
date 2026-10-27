@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proposta Podcast de Saúde | Daime Filmes & Dr. Mário</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts modernas e limpas -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Inter:wght@300;400;600;700&family=Syne:wght@500;800&family=Archivo+Black&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                        syne: ['Syne', 'sans-serif'],
+                        heavy: ['Archivo Black', 'sans-serif'],
+                    },
+                    colors: {
+                        clinicNavy: '#004a7c', // Azul oficial da Daime
+                        clinicTeal: '#00bcd4', // Ciano médico elegante
+                        clinicSlate: '#475569', // Cinza clínico
+                        acidGreen: '#d4ff00',  // Sotaque cirúrgico da Daime
+                        warmCreamBg: '#F4F1EA', // Cor de fundo do mockup
+                        terracotta: '#D45D3F', // Cor de destaque do mockup
+                        pureWhite: '#ffffff',
+                        softGray: '#f8fafc'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            background-color: #ffffff;
+            color: #1e293b;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+        .noise-soft {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/7/76/16mm_film_grain_texture.jpg');
+            opacity: 0.015; /* Sutilíssimo grão cinematográfico */
+            mix-blend-mode: overlay;
+            pointer-events: none;
+            z-index: 9999;
+        }
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f8fafc;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="custom-scrollbar selection:bg-clinicNavy/10 selection:text-clinicNavy">
+
+    <div class="noise-soft"></div>
+
+    <!-- Header Fixo -->
+    <header class="fixed top-0 left-0 w-full z-50 bg-white/85 backdrop-blur-md border-b border-slate-100 py-4 px-6 md:px-12 transition-all">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <span class="font-heavy text-sm tracking-tighter text-clinicNavy">DAIME <span class="text-clinicTeal">FILMES</span></span>
+                <span class="w-[1px] h-4 bg-slate-200"></span>
+                <span class="font-display font-medium text-[10px] tracking-widest text-slate-400 uppercase">PROPOSTA</span>
+            </div>
+            <div class="hidden md:flex items-center space-x-8 text-[11px] uppercase tracking-widest font-bold text-slate-500">
+                <a href="#conceito" class="hover:text-clinicNavy transition-colors">O Conceito</a>
+                <a href="#roteiro" class="hover:text-clinicNavy transition-colors">Roteiro</a>
+                <a href="#logistica" class="hover:text-clinicNavy transition-colors">Logística</a>
+                <a href="#investimento" class="hover:text-clinicNavy transition-colors">Comercial</a>
+            </div>
+            <div>
+                <a href="#investimento" class="px-5 py-2 bg-[#D45D3F] text-white font-display text-[10px] uppercase tracking-wider font-bold rounded-lg hover:bg-[#B54D33] transition-colors inline-block">
+                    Ver Investimento
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Seção Hero Clean -->
+    <section class="relative min-h-[85vh] flex items-center justify-center pt-32 pb-16 px-6 bg-gradient-to-b from-slate-50 to-white">
+        <div class="absolute inset-0 pointer-events-none overflow-hidden">
+            <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-clinicTeal/5 rounded-full blur-[120px]"></div>
+        </div>
+
+        <div class="max-w-4xl mx-auto text-center z-10 relative reveal active">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-clinicNavy/5 text-clinicNavy font-semibold text-[10px] tracking-widest uppercase mb-6">
+                <i data-lucide="sparkles" class="w-3 h-3 text-clinicTeal"></i> CO-CRIAÇÃO AUDIOVISUAL • DR. MÁRIO
+            </span>
+            
+            <h1 class="font-display font-bold text-3xl md:text-5xl lg:text-6xl text-slate-900 leading-tight mb-8 tracking-tight">
+                Ciência, Saúde e <br>
+                <span class="text-clinicNavy italic">Impacto Regional</span>
+            </h1>
+            
+            <p class="text-sm md:text-base text-slate-600 max-w-2xl mx-auto mb-6 font-light leading-relaxed">
+                Desenvolvemos o projeto de um podcast/talk-show itinerante focado em educação em saúde para as cidades de <strong class="text-slate-800 font-semibold">Porto Seguro, Trancoso, Eunápolis e Cabrália</strong>. Um conteúdo elegante, didático e de utilidade pública para o YouTube.
+            </p>
+        </div>
+    </section>
+
+    <!-- Seção Conceito -->
+    <section id="conceito" class="py-24 px-6 md:px-12 border-b border-slate-100 bg-white">
+        <div class="max-w-5xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div class="lg:col-span-5 space-y-5 reveal">
+                    <span class="text-clinicTeal font-bold text-xs tracking-widest block uppercase">O Posicionamento</span>
+                    <h2 class="font-display font-bold text-3xl text-slate-900 tracking-tight leading-none">
+                        Descentralização e Democratização da Informação de Saúde
+                    </h2>
+                    <p class="text-slate-600 text-sm leading-relaxed font-light">
+                        O morador se vê representado na tela. Em vez de assistir a um programa gravado em um estúdio genérico em São Paulo ou Salvador, ele assiste a uma produção com padrão de cinema feita na sua própria terra, discutindo os desafios de saúde que afetam diretamente a sua comunidade.
+                    </p>
+                    <p class="text-slate-600 text-sm leading-relaxed font-light">
+                        Em resumo, o projeto transforma a comunicação médica em um legado educativo para a região, elevando o nível de consciência sobre saúde preventiva e melhorando a qualidade de vida da população local através da informação.
+                    </p>
+                </div>
+
+                <div class="lg:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-5 reveal">
+                    <div class="p-6 bg-slate-50 rounded-xl border border-slate-100">
+                        <div class="w-8 h-8 rounded-lg bg-clinicNavy/5 flex items-center justify-center text-clinicNavy mb-4">
+                            <i data-lucide="heart" class="w-4 h-4"></i>
+                        </div>
+                        <h4 class="font-display font-bold text-slate-800 text-sm mb-2">Utilidade Pública</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed">Foco didático em esclarecer doenças comuns, exames preventivos e sanar as dúvidas recorrentes dos pacientes da região.</p>
+                    </div>
+
+                    <div class="p-6 bg-slate-50 rounded-xl border border-slate-100">
+                        <div class="w-8 h-8 rounded-lg bg-clinicNavy/5 flex items-center justify-center text-clinicTeal mb-4">
+                            <i data-lucide="video" class="w-4 h-4"></i>
+                        </div>
+                        <h4 class="font-display font-bold text-slate-800 text-sm mb-2">Padrão Cinematográfico</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed">Produção refinada com 3 cams, equipamentos de luzes profissionais e lentes que proporcionam profundidade e foco premium.</p>
+                    </div>
+
+                    <div class="p-6 bg-slate-50 rounded-xl border border-slate-100">
+                        <div class="w-8 h-8 rounded-lg bg-clinicNavy/5 flex items-center justify-center text-clinicTeal mb-4">
+                            <i data-lucide="compass" class="w-4 h-4"></i>
+                        </div>
+                        <h4 class="font-display font-bold text-slate-800 text-sm mb-2">Formato Itinerante</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed">Cenários flexíveis, divididos entre laboratórios e pontos turísticos emblemáticos, valorizando a identidade regional.</p>
+                    </div>
+
+                    <div class="p-6 bg-slate-50 rounded-xl border border-slate-100">
+                        <div class="w-8 h-8 rounded-lg bg-clinicNavy/5 flex items-center justify-center text-clinicNavy mb-4">
+                            <i data-lucide="scissors" class="w-4 h-4"></i>
+                        </div>
+                        <h4 class="font-display font-bold text-slate-800 text-sm mb-2">Pílulas de Engajamento</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed">Fatiamento inteligente de cada episódio em 3 a 4 cortes verticais (Reels/Shorts) legendados para as redes sociais.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção Roteiro -->
+    <section id="roteiro" class="py-24 px-6 md:px-12 border-b border-slate-100 bg-slate-50">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center max-w-2xl mx-auto mb-16 reveal">
+                <span class="text-clinicTeal font-bold text-xs tracking-widest block uppercase mb-2">Fluxo de Conteúdo</span>
+                <h2 class="font-display font-bold text-3xl text-slate-900 tracking-tight">O Roteiro de 60 Minutos</h2>
+                <p class="text-slate-500 text-xs mt-2 font-light">
+                    Desenvolvemos uma estrutura didática para manter o dinamismo técnico e a retenção do público no YouTube.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <!-- Timeline Accordion -->
+                <div class="lg:col-span-5 space-y-2.5 reveal">
+                    <button onclick="selectTimeline(0)" id="t-btn-0" class="w-full text-left p-4 rounded-xl border border-clinicNavy/25 bg-white shadow-sm transition-all flex items-center justify-between group">
+                        <div class="flex items-center space-x-3">
+                            <span class="font-display font-bold text-clinicNavy text-xs">01</span>
+                            <span class="font-semibold text-xs text-slate-800">Abertura Cinematográfica</span>
+                        </div>
+                        <span class="text-[10px] text-slate-400 font-mono">00:00 - 03:00</span>
+                    </button>
+
+                    <button onclick="selectTimeline(1)" id="t-btn-1" class="w-full text-left p-4 rounded-xl border border-slate-200 bg-white hover:border-slate-300 transition-all flex items-center justify-between group">
+                        <div class="flex items-center space-x-3">
+                            <span class="font-display font-bold text-slate-400 text-xs group-hover:text-clinicNavy">02</span>
+                            <span class="font-medium text-xs text-slate-600 group-hover:text-slate-800">Contexto Regional</span>
+                        </div>
+                        <span class="text-[10px] text-slate-400 font-mono">03:00 - 15:00</span>
+                    </button>
+
+                    <button onclick="selectTimeline(2)" id="t-btn-2" class="w-full text-left p-4 rounded-xl border border-slate-200 bg-white hover:border-slate-300 transition-all flex items-center justify-between group">
+                        <div class="flex items-center space-x-3">
+                            <span class="font-display font-bold text-slate-400 text-xs group-hover:text-clinicNavy">03</span>
+                            <span class="font-medium text-xs text-slate-600 group-hover:text-slate-800">O Miolo Clínico</span>
+                        </div>
+                        <span class="text-[10px] text-slate-400 font-mono">15:00 - 45:00</span>
+                    </button>
+
+                    <button onclick="selectTimeline(3)" id="t-btn-3" class="w-full text-left p-4 rounded-xl border border-slate-200 bg-white hover:border-slate-300 transition-all flex items-center justify-between group">
+                        <div class="flex items-center space-x-3">
+                            <span class="font-display font-bold text-slate-400 text-xs group-hover:text-clinicNavy">04</span>
+                            <span class="font-medium text-xs text-slate-600 group-hover:text-slate-800">Interação da Comunidade</span>
+                        </div>
+                        <span class="text-[10px] text-slate-400 font-mono">45:00 - 55:00</span>
+                    </button>
+
+                    <button onclick="selectTimeline(4)" id="t-btn-4" class="w-full text-left p-4 rounded-xl border border-slate-200 bg-white hover:border-slate-300 transition-all flex items-center justify-between group">
+                        <div class="flex items-center space-x-3">
+                            <span class="font-display font-bold text-slate-400 text-xs group-hover:text-clinicNavy">05</span>
+                            <span class="font-medium text-xs text-slate-600 group-hover:text-slate-800">Encerramento Prático</span>
+                        </div>
+                        <span class="text-[10px] text-slate-400 font-mono">55:00 - 60:00</span>
+                    </button>
+                </div>
+
+                <!-- Timeline Preview Screen -->
+                <div class="lg:col-span-7 reveal">
+                    <div id="timeline-display-card" class="p-8 bg-white rounded-xl border border-slate-200 shadow-sm min-h-[300px] flex flex-col justify-between">
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center">
+                                <span id="t-tag" class="px-2.5 py-0.5 bg-clinicNavy/5 text-clinicNavy text-[9px] font-bold uppercase tracking-wider rounded">Abertura</span>
+                                <span id="t-time" class="text-xs text-slate-400 font-medium flex items-center"><i data-lucide="clock" class="w-3.5 h-3.5 mr-1 text-clinicTeal"></i> 0 a 3 min</span>
+                            </div>
+                            
+                            <h3 id="t-title" class="font-display font-bold text-lg text-slate-900">Introdução Cinematográfica</h3>
+                            <p id="t-desc" class="text-slate-600 text-xs leading-relaxed font-light">
+                                Imagens de apoio da locação do dia (o amanhecer em Trancoso ou o maquinário avançado do laboratório). O Mário apresenta o tema de forma impactante, contextualizando os dados clínicos da nossa região antes de chamar o especialista.
+                            </p>
+                        </div>
+
+                        <div class="border-t border-slate-100 pt-5 mt-6 flex justify-between items-center text-[10px] font-bold uppercase tracking-wider">
+                            <span id="t-speaker" class="text-clinicNavy">Foco: Mário</span>
+                            <span id="t-visual" class="text-slate-400 font-normal normal-case">Visual: Drone / Imagens de Apoio</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção Logística -->
+    <section id="logistica" class="py-24 px-6 md:px-12 border-b border-slate-100 bg-white">
+        <div class="max-w-5xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+                <div class="lg:col-span-6 space-y-6 reveal">
+                    <span class="text-clinicTeal font-bold text-xs tracking-widest block uppercase">Engenharia Audiovisual</span>
+                    <h2 class="font-display font-bold text-3xl text-slate-900 tracking-tight">
+                        Logística em Campo Segura e Silenciosa
+                    </h2>
+                    <p class="text-slate-600 text-sm leading-relaxed font-light">
+                        Operar de maneira itinerante ao ar livre exige domínio de variáveis severas. Planejamos a engenharia audiovisual completa para que Dr. Mário e seus convidados tenham foco exclusivo na pauta de saúde.
+                    </p>
+
+                    <div class="space-y-4">
+                        <div class="flex gap-4 items-start">
+                            <div class="p-2 bg-clinicNavy/5 text-clinicNavy rounded-lg mt-0.5"><i data-lucide="mic" class="w-4 h-4"></i></div>
+                            <div>
+                                <h4 class="font-display font-bold text-xs text-slate-800 uppercase tracking-wider">Isolamento Acústico Avançado</h4>
+                                <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">Uso de microfones lapelas com bloqueadores físicos de ruído de vento, isolando integralmente as vozes.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4 items-start">
+                            <div class="p-2 bg-clinicNavy/5 text-clinicNavy rounded-lg mt-0.5"><i data-lucide="sun" class="w-4 h-4"></i></div>
+                            <div>
+                                <h4 class="font-display font-bold text-xs text-slate-800 uppercase tracking-wider">Equipamentos de Luzes Profissionais</h4>
+                                <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">Contamos com um setup de iluminação premium profissional que molda e suaviza os rostos mesmo em ambientes de contraste solar instável ou interiores frios.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-6 p-8 bg-slate-50 rounded-2xl border border-slate-100 space-y-6 reveal" id="cronograma">
+                    <span class="text-clinicNavy font-bold text-[10px] tracking-widest block uppercase">Cronograma de Atividades (Ciclo Mensal)</span>
+                    
+                    <div class="space-y-4 relative before:absolute before:left-3.5 before:top-2 before:bottom-2 before:w-[1px] before:bg-slate-200">
+                        <div class="flex items-start space-x-4 relative">
+                            <div class="w-7 h-7 rounded-full bg-clinicNavy text-white font-display font-bold text-[10px] flex items-center justify-center shrink-0 z-10">01</div>
+                            <div>
+                                <h5 class="font-semibold text-xs text-slate-800 uppercase tracking-wider">Pauta & Manual (Dias 1-7)</h5>
+                                <p class="text-[11px] text-slate-500 mt-0.5">Definição do médico, estruturação do roteiro didático e orientação prévia de figurino.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-4 relative">
+                            <div class="w-7 h-7 rounded-full bg-slate-200 text-slate-500 font-semibold text-[10px] flex items-center justify-center shrink-0 z-10">02</div>
+                            <div>
+                                <h5 class="font-semibold text-xs text-slate-600 uppercase tracking-wider">Visita Técnica (Dias 8-12)</h5>
+                                <p class="text-[11px] text-slate-500 mt-0.5">Análise preventiva de som ambiente, posicionamento do sol e rotas de acesso.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-4 relative">
+                            <div class="w-7 h-7 rounded-full bg-clinicTeal text-white font-display font-bold text-[10px] flex items-center justify-center shrink-0 z-10">03</div>
+                            <div>
+                                <h5 class="font-semibold text-xs text-slate-800 uppercase tracking-wider">Dia de Gravação (Dia 15)</h5>
+                                <p class="text-[11px] text-slate-500 mt-0.5">Montagem antecipada (1h30), captação limpa de áudio/vídeo (1h) e desmontagem.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-4 relative">
+                            <div class="w-7 h-7 rounded-full bg-slate-200 text-slate-500 font-semibold text-[10px] flex items-center justify-center shrink-0 z-10">04</div>
+                            <div>
+                                <h5 class="font-semibold text-xs text-slate-600 uppercase tracking-wider">Edição & Cortes (Dias 16-28)</h5>
+                                <p class="text-[11px] text-slate-500 mt-0.5">Junção multicâmera, ajuste fino de ruídos, color grading e extração dos cortes.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-4 relative">
+                            <div class="w-7 h-7 rounded-full bg-clinicNavy text-white font-display font-bold text-[10px] flex items-center justify-center shrink-0 z-10">05</div>
+                            <div>
+                                <h5 class="font-semibold text-xs text-slate-800 uppercase tracking-wider">Entrega & Publicação (Dia 30)</h5>
+                                <p class="text-[11px] text-slate-500 mt-0.5">Lançamento do vídeo no YouTube e entrega dos cortes para as redes sociais.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção: Investimento & Escopo Estratégico -->
+    <section id="investimento" class="py-24 bg-warmCreamBg text-[#111] border-t border-slate-200 reveal">
+        <div class="container mx-auto px-6 max-w-6xl">
+            
+            <!-- Cabeçalho da Seção -->
+            <div class="text-center mb-16">
+                <span class="text-[#004a7c] font-bold text-xs tracking-[0.4em] block mb-3 uppercase">Planos de Investimento</span>
+                <h2 class="font-header text-4xl md:text-5xl font-[800] tracking-tight text-[#111] uppercase mb-4">
+                    Estrutura Comercial
+                </h2>
+                <p class="text-gray-500 max-w-xl mx-auto font-inter text-xs md:text-sm">
+                    Escolha o formato ideal para as necessidades de expansão e comunicação do seu projeto de saúde.
+                </p>
+            </div>
+
+            <!-- Grid de 2 Planos (Otimizado para duas colunas centralizadas) -->
+            <div class="grid md:grid-cols-2 gap-8 items-stretch max-w-4xl mx-auto mb-16">
+                
+                <!-- CARD 1: Video Avulso -->
+                <div class="bg-white border border-slate-200/80 p-8 md:p-10 rounded-xl shadow-sm flex flex-col justify-between transition-all hover:shadow-md">
+                    <div>
+                        <h3 class="font-header text-3xl font-[800] text-[#111] mb-2 tracking-tight">Vídeo Avulso</h3>
+                        <p class="text-gray-500 text-sm font-inter mb-6">
+                            Para demandas pontuais e produção avulsa sob demanda.
+                        </p>
+                        
+                        <div class="border-t border-slate-100 pt-6 mb-6">
+                            <span class="text-[10px] text-gray-400 font-bold uppercase tracking-widest block mb-1">Preço por Execução:</span>
+                            <div class="text-4xl font-heavy text-[#111]">
+                                R$ 6.000 <span class="text-xs font-normal text-gray-400">/ episódio</span>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-dashed border-slate-200">
+                                <span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest block mb-1">Ou no contrato de 6 episódios:</span>
+                                <div class="text-lg font-bold text-[#004a7c]">
+                                    R$ 30.000 <span class="text-xs font-normal text-slate-500">total em pagamentos mensais</span>
+                                </div>
+                                <p class="text-[11px] text-slate-400 font-inter mt-1">Garante a consistência mensal em parcelas recorrentes.</p>
+                            </div>
+                        </div>
+
+                        <!-- O Que Está Incluso -->
+                        <div class="border-t border-slate-100 pt-6">
+                            <span class="text-[10px] text-slate-400 font-bold tracking-wider uppercase block mb-4">O que está incluso:</span>
+                            <ul class="space-y-3.5">
+                                <li class="flex items-start gap-3">
+                                    <svg class="w-4 h-4 text-terracotta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                                    <span class="text-xs text-slate-600 font-inter">Briefing estratégico de pauta</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <svg class="w-4 h-4 text-terracotta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                                    <span class="text-xs text-slate-600 font-inter">Captação local itinerante (1x ao mês)</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <svg class="w-4 h-4 text-terracotta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                                    <span class="text-xs text-slate-600 font-inter">Equipamentos de luzes profissionais</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <svg class="w-4 h-4 text-terracotta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                                    <span class="text-xs text-slate-600 font-inter">Edição master (45 a 60 min no YouTube)</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <svg class="w-4 h-4 text-terracotta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                                    <span class="text-xs text-slate-600 font-inter">3 a 4 cortes verticais (Reels/Shorts)</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Botão Ghost inferior -->
+                    <div class="mt-8 pt-6 border-t border-slate-100">
+                        <a href="https://wa.me/5573991419330?text=Olá%20Cainan!%20Gostaria%20de%20fechar%20o%20projeto%20do%20Podcast%20no%20formato%20Video%20Avulso%20(Episódio%20Avulso)." 
+                           target="_blank" 
+                           class="block text-center border border-slate-300 text-slate-700 font-heavy text-[11px] uppercase tracking-widest py-4 rounded-lg hover:border-[#111] hover:text-[#111] transition-all">
+                            Quero este plano
+                        </a>
+                    </div>
+                </div>
+
+                <!-- CARD 2: Pacote Completo -->
+                <div class="bg-[#F9F7F2] border-2 border-terracotta p-8 md:p-10 rounded-xl shadow-md flex flex-col justify-between relative overflow-hidden transform lg:-translate-y-2">
+                    <!-- Badge superior -->
+                    <div class="absolute top-0 right-0 bg-terracotta text-white text-[9px] font-heavy tracking-widest uppercase px-5 py-2 rounded-bl-lg">
+                        Mais Vantajoso (15% OFF)
+                    </div>
+                    
+                    <div>
+                        <h3 class="font-header text-3xl font-[800] text-[#111] mb-2 tracking-tight">Pacote Completo</h3>
+                        <p class="text-slate-500 text-sm font-inter mb-6">
+                            Máxima economia e planejamento total para a temporada completa de 6 meses.
+                        </p>
+                        
+                        <div class="border-t border-slate-200/60 pt-6 mb-6">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="text-[10px] text-[#004a7c] font-bold uppercase tracking-widest">Valor por vídeo (Economia Real):</span>
+                                <span class="bg-emerald-50 text-emerald-700 text-[9px] font-bold px-2 py-0.5 rounded border border-emerald-200">15% OFF</span>
+                            </div>
+                            <!-- O número 4250 está no mesmo tamanho (text-4xl) de 6.000 do card anterior -->
+                            <div class="text-4xl font-heavy text-[#111]">
+                                R$ 4.250 <span class="text-xs font-normal text-gray-400">/ por vídeo</span>
+                            </div>
+                            
+                            <div class="mt-4 pt-4 border-t border-dashed border-slate-200">
+                                <span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest block mb-1">Valor Total à Vista:</span>
+                                <!-- O número 25500 possui exatamente o mesmo tamanho (text-lg font-bold) do valor 30000 do card anterior -->
+                                <div class="text-lg font-bold text-emerald-700">
+                                    R$ 25.500 <span class="text-xs font-normal text-slate-500">total pago em cota única</span>
+                                </div>
+                                <p class="text-[11px] text-slate-400 font-inter mt-1">Garante um desconto robusto no investimento integral do projeto.</p>
+                            </div>
+                        </div>
+
+                        <!-- O Que Está Incluso -->
+                        <div class="border-t border-slate-200/60 pt-6">
+                            <span class="text-[10px] text-[#004a7c] font-bold tracking-wider uppercase block mb-4">O que está incluso:</span>
+                            <ul class="space-y-3.5">
+                                <!-- Requisitos do Usuário em Destaque -->
+                                <li class="flex items-start gap-3">
+                                    <svg class="w-4 h-4 text-terracotta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                                    <span class="text-xs text-slate-700 font-inter font-semibold">6 Podcasts para YouTube de até 40 minutos</span>
+                                </li>
+                                <!-- Item Adicionado Conforme Solicitado -->
+                                <li class="flex items-start gap-3">
+                                    <svg class="w-4 h-4 text-terracotta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                                    <span class="text-xs text-slate-700 font-inter font-semibold">24 vídeos verticais (Reels/Shorts)</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <svg class="w-4 h-4 text-terracotta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                                    <span class="text-xs text-slate-700 font-inter">Assessoria especializada na estruturação de pautas de saúde pública</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <svg class="w-4 h-4 text-terracotta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                                    <span class="text-xs text-slate-700 font-inter">Produção itinerante em Porto Seguro, Trancoso, Eunápolis e Cabrália</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <svg class="w-4 h-4 text-terracotta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                                    <span class="text-xs text-slate-700 font-inter">Luzes premium, captação multicâmera profissional e som de estúdio</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <svg class="w-4 h-4 text-terracotta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                                    <span class="text-xs text-slate-700 font-inter">Color grading cinematográfico dedicado aos tons regionais</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <svg class="w-4 h-4 text-terracotta shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                                    <span class="text-xs text-slate-700 font-inter">Criação de capas profissionais (Thumbnails) para os episódios no YouTube</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Botão Terracotta inferior -->
+                    <div class="mt-8 pt-6 border-t border-slate-200/60">
+                        <a href="https://wa.me/5573991419330?text=Olá%20Cainan!%20Gostaria%20de%20fechar%20o%20projeto%20do%20Podcast%20no%20formato%20Pacote%20Completo." 
+                           target="_blank" 
+                           class="block text-center bg-terracotta hover:bg-[#B54D33] text-white font-heavy text-[11px] uppercase tracking-widest py-4 rounded-lg transition-all shadow-sm">
+                            Quero o Pacote Completo
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Rodapé de Garantias Adicionais -->
+            <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 pt-12 border-t border-slate-300/60 text-center md:text-left">
+                <div class="space-y-1">
+                    <h5 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Prazos de Entrega</h5>
+                    <p class="text-[11px] text-slate-500 leading-relaxed">Vídeo master e cortes em até 15 dias após o término de cada gravação.</p>
+                </div>
+                <div class="space-y-1">
+                    <h5 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Aprovações Rápidas</h5>
+                    <p class="text-[11px] text-slate-500 leading-relaxed">Canal exclusivo via WhatsApp para ajustes e aprovação dinâmica de roteiros.</p>
+                </div>
+                <div class="space-y-1">
+                    <h5 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Suporte de Produção</h5>
+                    <p class="text-[11px] text-slate-500 leading-relaxed">Logística e planejamento por conta da equipe especializada da Daime Filmes.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer Elegante -->
+    <footer class="bg-slate-900 text-white py-12 px-6 md:px-12 border-t border-slate-800">
+        <div class="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex flex-col items-center md:items-start space-y-2">
+                <span class="font-heavy text-md tracking-tighter">DAIME <span class="text-clinicTeal">FILMES</span></span>
+                <p class="text-slate-400 text-xs font-light">Transformando ideias em imagens com profundidade e beleza.</p>
+            </div>
+            
+            <div class="text-center md:text-right space-y-2">
+                <p class="text-xs text-slate-400">Dúvidas sobre o escopo ou parcelamento?</p>
+                <div class="flex flex-col md:flex-row gap-4 items-center justify-center md:justify-end">
+                    <a href="https://wa.me/5573991419330" target="_blank" class="text-xs text-clinicTeal font-bold flex items-center gap-1.5 hover:underline">
+                        <i data-lucide="phone" class="w-3.5 h-3.5"></i> Falar com Cainan (73) 99141-9330
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="max-w-5xl mx-auto mt-12 pt-6 border-t border-slate-800 text-center">
+            <p class="text-[10px] text-slate-500">&copy; 2026 Daime Filmes. Todos os direitos reservados. Proposta válida por 30 dias.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts Funcionais -->
+    <script>
+        // Dados do fluxo do Roteiro Interativo
+        const timelineData = [
+            {
+                tag: "Abertura",
+                time: "0 a 3 min",
+                title: "Introdução Cinematográfica",
+                desc: "Imagens de apoio da locação do dia (o amanhecer em Trancoso ou o maquinário avançado do laboratório). O Mário apresenta o tema de forma impactante, contextualizando os dados clínicos da nossa região antes de chamar o especialista.",
+                speaker: "Foco: Mário",
+                visual: "Visual: Drone / Imagens de Apoio"
+            },
+            {
+                tag: "Contexto",
+                time: "3 a 15 min",
+                title: "Contexto Regional",
+                desc: "Apresentação do convidado e discussão sobre a realidade de saúde local das cidades atendidas (Porto Seguro, Trancoso, Eunápolis ou Cabrália). Abordagem de dados epidemiológicos regionais de forma simples e humana.",
+                speaker: "Foco: Mário & Convidado",
+                visual: "Visual: Câmera Dupla / Close-ups"
+            },
+            {
+                tag: "Clínico",
+                time: "15 a 45 min",
+                title: "O Miolo Clínico",
+                desc: "O núcleo científico e explicativo do episódio. Dr. Mário e o convidado explicam diagnósticos, prevenções e tratamentos práticos de forma leve e didática, desmistificando mitos da medicina tradicional.",
+                speaker: "Foco: Convidado (Explicações)",
+                visual: "Visual: Gráficos sobrepostos / Lentes Prime"
+            },
+            {
+                tag: "Comunidade",
+                time: "45 a 55 min",
+                title: "Interação da Comunidade",
+                desc: "Respostas diretas a dúvidas enviadas por pacientes das redes sociais e moradores locais, gerando identificação extrema com a audiência local do Extremo Sul da Bahia.",
+                speaker: "Foco: Mário (Lendo perguntas)",
+                visual: "Visual: GC com pergunta na tela"
+            },
+            {
+                tag: "Encerramento",
+                time: "55 a 60 min",
+                title: "Encerramento Prático",
+                desc: "Resumo com 3 conselhos preventivos que o espectador pode aplicar no mesmo dia. Mensagem de encorajamento final e indicações sobre onde encontrar os serviços de saúde explicados.",
+                speaker: "Foco: Mário & Convidado",
+                visual: "Visual: Transição suave de luz / Créditos"
+            }
+        ];
+
+        // Função de alteração do Roteiro Interativo
+        function selectTimeline(index) {
+            for (let i = 0; i < 5; i++) {
+                const btn = document.getElementById(`t-btn-${i}`);
+                if (btn) {
+                    if (i === index) {
+                        btn.className = "w-full text-left p-4 rounded-xl border border-clinicNavy/25 bg-white shadow-sm transition-all flex items-center justify-between group";
+                        btn.querySelector('span:first-child').className = "font-display font-bold text-clinicNavy text-xs";
+                        btn.querySelector('span:nth-child(2)').className = "font-semibold text-xs text-slate-800";
+                    } else {
+                        btn.className = "w-full text-left p-4 rounded-xl border border-slate-200 bg-white hover:border-slate-300 transition-all flex items-center justify-between group";
+                        btn.querySelector('span:first-child').className = "font-display font-bold text-slate-400 text-xs group-hover:text-clinicNavy";
+                        btn.querySelector('span:nth-child(2)').className = "font-medium text-xs text-slate-600 group-hover:text-slate-800";
+                    }
+                }
+            }
+
+            const data = timelineData[index];
+            if (data) {
+                document.getElementById('t-tag').innerText = data.tag;
+                document.getElementById('t-time').innerHTML = `<i data-lucide="clock" class="w-3.5 h-3.5 mr-1 text-clinicTeal"></i> ${data.time}`;
+                document.getElementById('t-title').innerText = data.title;
+                document.getElementById('t-desc').innerText = data.desc;
+                document.getElementById('t-speaker').innerText = data.speaker;
+                document.getElementById('t-visual').innerText = data.visual;
+            }
+            
+            // Re-renderização dos ícones do Lucide correspondentes à caixa de diálogo alterada
+            lucide.createIcons();
+        }
+
+        // Animação de Entrada suave no scroll
+        document.addEventListener("DOMContentLoaded", function() {
+            lucide.createIcons();
+            
+            const reveals = document.querySelectorAll(".reveal");
+            const revealOnScroll = () => {
+                const windowHeight = window.innerHeight;
+                reveals.forEach(el => {
+                    const elementTop = el.getBoundingClientRect().top;
+                    const elementVisible = 150;
+                    if (elementTop < windowHeight - elementVisible) {
+                        el.classList.add("active");
+                    }
+                });
+            };
+            
+            window.addEventListener("scroll", revealOnScroll);
+            revealOnScroll(); // disparo inicial
+        });
+    </script>
+</body>
+</html>

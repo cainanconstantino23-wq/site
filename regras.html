@@ -1,0 +1,330 @@
+<!DOCTYPE html><html class="light" lang="pt-BR"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Regras &amp; FAQ - Santo Hostel</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;family=Literata:ital,wght@0,600;0,700;1,600&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-dim": "#dbdad6",
+                    "on-secondary-container": "#676160",
+                    "on-secondary-fixed-variant": "#4b4644",
+                    "background": "#faf9f5",
+                    "primary-fixed-dim": "#e3c19f",
+                    "surface-muted": "#EBE9E1",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-container": "#304051",
+                    "surface-container-high": "#e9e8e4",
+                    "on-background": "#1b1c1a",
+                    "primary-fixed": "#ffddbb",
+                    "on-surface": "#1b1c1a",
+                    "outline": "#80756b",
+                    "tertiary-fixed": "#d4e4fa",
+                    "tertiary-container": "#9babc0",
+                    "ink-deep": "#1C1C1C",
+                    "inverse-surface": "#2f312e",
+                    "on-secondary-fixed": "#1e1b1a",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "inverse-primary": "#e3c19f",
+                    "surface-container-highest": "#e3e2df",
+                    "primary": "#735a3e",
+                    "surface-bright": "#faf9f5",
+                    "inverse-on-surface": "#f2f1ed",
+                    "on-error": "#ffffff",
+                    "on-primary-fixed-variant": "#5a4229",
+                    "on-surface-variant": "#4e453d",
+                    "on-tertiary-fixed": "#0c1d2d",
+                    "on-primary-container": "#503a21",
+                    "on-error-container": "#93000a",
+                    "outline-variant": "#d2c4b9",
+                    "surface": "#faf9f5",
+                    "tertiary": "#506072",
+                    "secondary-container": "#e6dedc",
+                    "surface-variant": "#e3e2df",
+                    "surface-tint": "#735a3e",
+                    "primary-container": "#c4a484",
+                    "error": "#ba1a1a",
+                    "error-container": "#ffdad6",
+                    "on-primary-fixed": "#291803",
+                    "tertiary-fixed-dim": "#b8c8de",
+                    "surface-container-low": "#f4f4f0",
+                    "secondary-fixed-dim": "#cdc5c3",
+                    "secondary": "#635d5c",
+                    "on-tertiary-fixed-variant": "#39485a",
+                    "on-primary": "#ffffff",
+                    "secondary-fixed": "#e9e1df",
+                    "surface-container": "#efeeea"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-desktop": "40px",
+                    "gutter": "24px",
+                    "unit": "8px",
+                    "margin-mobile": "16px",
+                    "container-max": "1200px"
+            },
+            "fontFamily": {
+                    "title-md": ["Hanken Grotesk"],
+                    "body-lg": ["Hanken Grotesk"],
+                    "headline-lg": ["Literata"],
+                    "body-md": ["Hanken Grotesk"],
+                    "headline-lg-mobile": ["Literata"],
+                    "display-lg": ["Literata"],
+                    "label-md": ["Hanken Grotesk"],
+                    "label-sm": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                    "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.08em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #faf9f5;
+            color: #1b1c1a;
+            overflow-x: hidden;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+        .rule-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .rule-card:hover {
+            transform: translateY(-4px);
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .faq-item[open] .faq-icon {
+            transform: rotate(180deg);
+        }
+        .faq-icon {
+            transition: transform 0.3s ease;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md text-on-surface">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface-container-low dark:bg-surface-container-high shadow-sm h-16 flex justify-between items-center px-margin-mobile md:px-margin-desktop">
+<div class="flex items-center gap-4">
+<button class="transition-all duration-200 active:scale-95 text-primary">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary tracking-tight md:text-headline-lg font-bold">Santo Hostel</h1>
+</div>
+<div class="flex items-center gap-4">
+<nav class="hidden md:flex gap-6 mr-6">
+<a class="font-label-md text-label-md text-primary transition-all hover:opacity-80" href="regras.html">Regras</a>
+<a class="font-label-md text-label-md text-on-surface-variant transition-all hover:opacity-80" href="regras.html">FAQ</a>
+<a class="font-label-md text-label-md text-on-surface-variant transition-all hover:opacity-80" href="guia.html">Guia</a>
+</nav>
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A detailed portrait of a traveler with a warm, welcoming smile, wearing modern outdoor apparel. The lighting is soft and golden, suggesting a late afternoon sun. The background is a blurred view of a cozy hostel lounge with natural wood textures and green plants, maintaining a professional and friendly hospitality aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiS8_D6PYEguYQpTAEQS8U7svNyES-iEEigBq772DKrIoRLKXWjFYL6QwWClmGF5uUv2LzxqfhNDo21c8i4nrQes9VtAh-blTe4Db4qFl69DGRhkSyYg3Z3BZepr-vWrxvTXXFA7gvRl83aB8dtfTl0lMBqs1o--tEuCLJQUYWBAkWKD4WBrwrl0h8Ob8aqn3bVYbPsY_lV-VT4KElpJlTY5CzzmCGLlKYUqYq_l-CUnlhxzbBm4N0h7XFmKnSZ9Nc_ixJYvccUA">
+</div>
+</div>
+</header>
+<main class="pt-24 pb-32 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+<!-- Header Section -->
+<section class="mb-16 text-center md:text-left">
+<span class="inline-block px-4 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm mb-4">CONVIVÊNCIA HARMÔNICA</span>
+<h2 class="font-display-lg text-display-lg text-ink-deep mb-4 leading-tight">Regras da Casa &amp; Perguntas Frequentes</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+                O Santo Hostel é um convite para desacelerar. Para garantir que todos tenham uma estadia memorável, pedimos que siga nossas orientações de convivência.
+            </p>
+</section>
+<!-- Bento Rules Section -->
+<section class="mb-24">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Rule 1: Silence -->
+<div class="md:col-span-8 rule-card relative overflow-hidden rounded-xl bg-surface-muted p-8 border-l-4 border-primary">
+<div class="flex flex-col h-full justify-between gap-8">
+<div>
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">volume_off</span>
+<h3 class="font-title-md text-title-md">Horário de Silêncio</h3>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                                Respeite o descanso dos outros hóspedes. Das 22h às 08h, pedimos silêncio total nas áreas comuns e corredores. Nas suítes, mantenha o volume de dispositivos eletrônicos moderado.
+                            </p>
+</div>
+<div class="flex items-center gap-2 text-primary font-label-md">
+<span class="material-symbols-outlined">info</span>
+<span class="">Luxo é ter tempo e silêncio.</span>
+</div>
+</div>
+</div>
+<!-- Rule 2: Smoking -->
+<div class="md:col-span-4 rule-card rounded-xl bg-white shadow-sm p-8 flex flex-col justify-center items-center text-center">
+<div class="w-16 h-16 rounded-full bg-error-container text-on-error-container flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-3xl">smoke_free</span>
+</div>
+<h3 class="font-title-md text-title-md mb-2">Política de Fumo</h3>
+<p class="font-label-md text-label-md text-on-surface-variant">
+                        É estritamente proibido fumar dentro das suítes e áreas internas. Use exclusivamente as áreas externas designadas.
+                    </p>
+</div>
+<!-- Rule 3: Common Areas (Image + Overlay) -->
+<div class="md:col-span-5 h-[350px] relative rounded-xl overflow-hidden group">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" data-alt="A serene wide shot of the hostel's common lounge area during the morning. Soft sunlight filters through large windows, illuminating handcrafted wooden furniture, cozy woven rugs, and lush indoor plants. The atmosphere is peaceful and sophisticated, reflecting the 'home away from home' philosophy. High-quality boutique hostel interior design." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAO5YebP86wveDYgUtiWQ2OMzYda0xrUCmaetUDisy9HrP3qtplqYPW2C5VmhXbyei7T_RobzeZHVxU_OQQDmEYz9KfrKwMmgEYR_SyzUnpqOipTFHYztpdwt_Rk1UFzEeDCqf89Zf6Hf4-LJd5lioD4Qw-3ucXrMT5gjecftbrhYifIqIs0lhCgPqM79zhHpXF1u9tAf-LRokshMFoqzJOvnA8oDnRZKWCefiu0IkAOiM_FIVOHBd0MkvNOxaRKKCN-K1c6-tJEg')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-8 text-white">
+<h3 class="font-title-md text-title-md mb-2">Áreas Comuns</h3>
+<p class="text-sm opacity-90">Mantenha a organização. Após o uso da cozinha ou lounge, pedimos que deixe o espaço como o encontrou.</p>
+</div>
+</div>
+<!-- Rule 4: Visitors -->
+<div class="md:col-span-7 rule-card rounded-xl bg-surface-container-low p-8 border-l-4 border-primary">
+<div class="flex items-start gap-4">
+<span class="material-symbols-outlined text-primary text-3xl">group</span>
+<div>
+<h3 class="font-title-md text-title-md mb-2">Visitas e Acesso</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">
+                                O acesso ao hostel é restrito a hóspedes registrados por questões de segurança e privacidade. Visitas externas devem ser autorizadas previamente pela recepção e permanecem apenas nas áreas sociais até as 20h.
+                            </p>
+<div class="p-3 bg-primary-container/20 rounded-lg">
+<p class="text-xs font-label-sm text-on-primary-container">Check-in: 14h | Check-out: 11h</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- FAQ Section -->
+<section class="max-w-3xl mx-auto">
+<div class="text-center mb-12">
+<h2 class="font-headline-lg text-headline-lg mb-2">Perguntas Frequentes</h2>
+<p class="text-on-surface-variant">Tudo o que você precisa saber sobre sua estadia em Porto Seguro.</p>
+</div>
+<div class="space-y-4">
+<!-- FAQ 1 -->
+<details class="faq-item group bg-white rounded-xl shadow-sm overflow-hidden transition-all duration-300">
+<summary class="flex justify-between items-center p-6 cursor-pointer list-none">
+<h4 class="font-title-md text-title-md text-on-surface">Como funciona o check-in automatizado?</h4>
+<span class="material-symbols-outlined faq-icon text-primary">expand_more</span>
+</summary>
+<div class="px-6 pb-6 text-on-surface-variant font-body-md">
+                        Após a confirmação da reserva, você receberá um código único via WhatsApp. Este código libera o acesso ao portão principal e à sua suíte. Sem filas, sem burocracia.
+                    </div>
+</details>
+<!-- FAQ 2 -->
+<details class="faq-item group bg-white rounded-xl shadow-sm overflow-hidden transition-all duration-300">
+<summary class="flex justify-between items-center p-6 cursor-pointer list-none">
+<h4 class="font-title-md text-title-md text-on-surface">O café da manhã está incluído?</h4>
+<span class="material-symbols-outlined faq-icon text-primary">expand_more</span>
+</summary>
+<div class="px-6 pb-6 text-on-surface-variant font-body-md">
+                        Sim! Oferecemos um café da manhã artesanal com produtos locais, servido em nossa varanda das 08h às 10h. Opções veganas disponíveis sob pedido prévio.
+                    </div>
+</details>
+<!-- FAQ 3 -->
+<details class="faq-item group bg-white rounded-xl shadow-sm overflow-hidden transition-all duration-300">
+<summary class="flex justify-between items-center p-6 cursor-pointer list-none">
+<h4 class="font-title-md text-title-md text-on-surface">Existe estacionamento no local?</h4>
+<span class="material-symbols-outlined faq-icon text-primary">expand_more</span>
+</summary>
+<div class="px-6 pb-6 text-on-surface-variant font-body-md">
+                        Temos vagas limitadas na frente do hostel. Recomendamos reservar com antecedência. A rua Ubirajara é tranquila e segura para estacionar.
+                    </div>
+</details>
+<!-- FAQ 4 -->
+<details class="faq-item group bg-white rounded-xl shadow-sm overflow-hidden transition-all duration-300">
+<summary class="flex justify-between items-center p-6 cursor-pointer list-none">
+<h4 class="font-title-md text-title-md text-on-surface">O hostel é pet friendly?</h4>
+<span class="material-symbols-outlined faq-icon text-primary">expand_more</span>
+</summary>
+<div class="px-6 pb-6 text-on-surface-variant font-body-md">
+                        Amamos animais! Aceitamos pets de pequeno porte mediante taxa adicional de limpeza e aviso prévio. Consulte as regras específicas para pets com nossa equipe.
+                    </div>
+</details>
+</div>
+</section>
+<!-- CTA Support -->
+<section class="mt-24 p-12 rounded-3xl bg-primary text-white text-center relative overflow-hidden">
+<div class="absolute top-0 right-0 p-8 opacity-10">
+<span class="material-symbols-outlined text-[120px]">chat_bubble</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg mb-4">Ainda tem dúvidas?</h2>
+<p class="font-body-lg text-body-lg mb-8 max-w-xl mx-auto opacity-90">
+                Nossa equipe de suporte está pronta para ajudar você com qualquer questão sobre sua reserva ou as regras da casa.
+            </p>
+<a class="inline-flex items-center gap-3 px-8 py-4 bg-white text-primary rounded-full font-title-md hover:scale-105 transition-transform" href="https://wa.me/557391524222?text=Olá,%20tenho%20uma%20dúvida%20sobre%20as%20regras.">
+<span class="material-symbols-outlined">chat</span>
+                Fale pelo WhatsApp
+            </a>
+</section>
+</main>
+<!-- WhatsApp FAB -->
+<a class="fixed bottom-24 right-6 z-[60] w-14 h-14 bg-[#25D366] text-white rounded-full flex items-center justify-center shadow-xl hover:scale-110 transition-transform active:scale-90" href="https://wa.me/557391524222?text=Olá,%20Gostaria%20de%20fazer%20uma%20pergunta." title="Suporte via WhatsApp">
+<svg fill="currentColor" height="28" viewBox="0 0 24 24" width="28">
+<path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"></path>
+</svg>
+</a>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center pt-2 pb-safe px-2 bg-surface shadow-lg z-50 rounded-t-xl h-20 border-t border-outline-variant/10">
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 transition-transform active:scale-90" href="index.html">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-label-sm">Início</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 transition-transform active:scale-90" href="estadia.html">
+<span class="material-symbols-outlined">key</span>
+<span class="font-label-sm text-label-sm">Estadia</span>
+</a>
+<a href="guia.html" class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 transition-transform active:scale-90"><span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">explore</span><span class="font-label-sm text-label-sm">Guia</span></a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 transition-transform active:scale-90" href="regras.html">
+<span class="material-symbols-outlined">chat_bubble</span>
+<span class="font-label-sm text-label-sm">Contato</span>
+</a>
+</nav>
+<!-- Interactive script for some hover effects and accordion state logic -->
+<script>
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.addEventListener('toggle', (event) => {
+                if (item.open) {
+                    document.querySelectorAll('.faq-item').forEach(other => {
+                        if (other !== item) other.removeAttribute('open');
+                    });
+                }
+            });
+        });
+    </script>
+
+
+</body></html>
