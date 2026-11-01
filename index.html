@@ -9,6 +9,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+
 <script>
   tailwind.config = {
     theme: {
@@ -40,6 +42,11 @@
     font-family: 'Thunder-Black';
     src: url('Thunder-ExtraBoldLC') format('opentype');
   }
+
+    /* Refinamento de Tipografia Geral - Hanken Grotesk para corpo, mantendo elegância */
+    body { background:#F8F5F0; color:#1C1917; font-family:'Hanken Grotesk', sans-serif; }
+    h1, h2, h3 { font-family: 'Thunder-Black', 'Bebas Neue', sans-serif; }
+    .font-serif { font-family: 'Cormorant Garamond', Georgia, serif; }
 
   body { background:#F8F5F0; color:#1C1917; font-family:'Inter',sans-serif; }
   .font-serif { font-family:'Cormorant Garamond', Georgia, serif; }
@@ -76,6 +83,27 @@
     box-sizing: border-box;
   }
   @media (min-width: 640px) { .carousel-card { flex: 0 0 calc(45% - 1rem); } }
+    /* Otimização da Seção de Vídeos */
+    .carousel-card video {
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+    }
+    .carousel-card:hover video {
+      transform: scale(1.05);
+      opacity: 1;
+    }
+    .carousel-card .text-overlay {
+      background: linear-gradient(to top, rgba(17, 15, 14, 0.9) 0%, rgba(17, 15, 14, 0.3) 60%, transparent 100%);
+    }
+    .carousel-card .play-icon {
+      opacity: 0;
+      transform: scale(0.8);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .carousel-card:hover .play-icon {
+      opacity: 1;
+      transform: scale(1);
+    }
+
   @media (min-width: 1024px) { .carousel-card { flex: 0 0 calc(31% - 1rem); } }
 
   /* Impede que a tag de vídeo intercepte o scroll do mouse */
@@ -180,18 +208,23 @@
       </div>
 
       <div class="lg:col-span-4 flex flex-col justify-start space-y-8 lg:pl-6 reveal">
-        <div class="space-y-2 font-mono text-[10px] sm:text-xs uppercase border-l-2 border-primary/80 pl-3">
-          <p class="font-semibold text-primary opacity-100" style="letter-spacing: 0.1em;">
-            AUDIOVISUAL ESTRATÉGICO
+        <div class="space-y-2 font-serif text-[12px] sm:text-sm uppercase border-l-2 border-primary/80 pl-3">
+          <p class="font-bold text-primary opacity-100 tracking-wider">
+            Audiovisual de Performance
           </p>
-          <p class="text-muted opacity-80" style="letter-spacing: 0.08em;">
-            EMPRESAS DE SUCESSO.
+          <p class="text-muted opacity-80 tracking-widest">
+            Para clínicas premium.
           </p>
         </div>
 
-        <div class="max-w-md font-mono text-[10px] sm:text-[13px] uppercase leading-relaxed text-muted opacity-75" style="letter-spacing: 0.15em;">
-          PRODUÇÃO CINEMATOGRÁFICA EXCLUSIVA QUE CONECTA CLIENTES QUALIFICADOS.
+        <div class="max-w-md font-serif text-[13px] sm:text-[16px] leading-relaxed text-muted opacity-85">
+          Transformamos sua autoridade clínica em resultados concretos através de cinema de alto impacto.
         </div>
+
+        <a href="#contato" class="inline-block border border-primary text-primary font-bold text-[11px] uppercase tracking-[0.2em] px-8 py-4 hover:bg-primary hover:text-ink transition-all duration-300">
+          Agendar Consultoria
+        </a>
+
       </div>
     </div>
 
@@ -321,9 +354,17 @@
             loop 
             muted 
             playsinline 
-            class="card-bg-zoom w-full h-full object-cover opacity-85 transition duration-700">
+            class="w-full h-full object-cover opacity-90 transition duration-700">
           </video>
-          <div class="absolute inset-0 bg-gradient-to-t from-cream via-cream/30 to-transparent"></div>
+          <!-- Gradiente de Leitura Aprimorado -->
+          <div class="absolute inset-0 text-overlay"></div>
+          
+          <!-- Ícone de Play -->
+          <div class="absolute inset-0 flex items-center justify-center play-icon pointer-events-none">
+            <div class="w-16 h-16 rounded-full bg-primary/20 backdrop-blur-md border border-primary/50 flex items-center justify-center">
+               <svg class="w-8 h-8 text-primary ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+          </div>
           <span class="absolute top-4 left-4 text-[10px] uppercase tracking-[0.2em] bg-card/90 backdrop-blur text-primary border border-primary/30 px-3 py-1 rounded-full font-mono font-semibold">
             Institucional 4K
           </span>
