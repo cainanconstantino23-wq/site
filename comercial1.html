@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Daime Filmes — Audiovisual estratégico para clínicas</title>
+<meta name="description" content="Produtora audiovisual para clínicas, estética e bem-estar. Cinema com estratégia de performance para transformar a sua autoridade." />
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          ink: '#0F0D0B',
+          cream: '#F1E9DC',
+          primary: '#E89A47',
+          ember: '#D9531E',
+          muted: '#9A8F82',
+          border: '#2A2520',
+          card: '#16120F',
+        },
+        fontFamily: {
+          sans: ['Inter', 'system-ui', 'sans-serif'],
+          serif: ['Cormorant Garamond', 'Georgia', 'serif'],
+        }
+      }
+    }
+  }
+</script>
+<style>
+  body { background:#0F0D0B; color:#F1E9DC; font-family:'Inter',sans-serif; }
+  .font-serif { font-family:'Cormorant Garamond', Georgia, serif; }
+  .letter-tight { letter-spacing:-0.03em; }
+  .letter-wide { letter-spacing:0.25em; }
+  .grain::after{content:"";position:absolute;inset:0;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");opacity:.06;mix-blend-mode:overlay;}
+  html{scroll-behavior:smooth;}
+  .reveal{opacity:0;transform:translateY(30px);transition:opacity .9s ease, transform .9s cubic-bezier(.22,1,.36,1);}
+  .reveal.in{opacity:1;transform:none;}
+  .hero-bg{background:linear-gradient(135deg,#0F0D0B 0%,#1A1410 50%,#0F0D0B 100%);}
+  .img-ph{background:linear-gradient(135deg,#1A1410,#0F0D0B);display:flex;align-items:center;justify-content:center;color:#5a4f43;font-family:'Cormorant Garamond',serif;font-style:italic;}
+</style>
+</head>
+<body class="antialiased">
+
+<!-- NAV -->
+<nav class="fixed top-0 inset-x-0 z-50 backdrop-blur bg-ink/70 border-b border-border/60">
+  <div class="max-w-[1400px] mx-auto px-6 md:px-10 py-5 flex items-center justify-between">
+    <a href="#" class="font-serif italic text-2xl text-cream">Daime <span class="text-primary">Filmes</span></a>
+    <div class="hidden md:flex items-center gap-8 text-xs uppercase tracking-[0.2em] text-cream/70">
+      <a href="#sobre" class="hover:text-primary transition">Sobre</a>
+      <a href="#metodo" class="hover:text-primary transition">Método</a>
+      <a href="#diferenciais" class="hover:text-primary transition">Diferenciais</a>
+      <a href="#portfolio" class="hover:text-primary transition">Portfólio</a>
+      <a href="#contato" class="hover:text-primary transition">Contato</a>
+    </div>
+    <a href="#contato" class="text-xs uppercase tracking-[0.2em] border border-primary/60 text-primary px-4 py-2 hover:bg-primary hover:text-ink transition">Falar com a Daime</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero-bg relative min-h-screen flex items-center pt-24 grain overflow-hidden">
+  <div class="max-w-[1400px] mx-auto px-6 md:px-10 grid md:grid-cols-12 gap-10 items-center w-full">
+    <div class="md:col-span-7 reveal">
+      <div class="flex items-center gap-4 mb-8 font-serif">
+        <span class="italic text-primary text-sm">00</span>
+        <span class="h-px w-10 bg-primary/40"></span>
+        <span class="text-[10px] uppercase tracking-[0.3em] text-muted">2026</span>
+      </div>
+      <h1 class="font-serif text-5xl md:text-7xl lg:text-8xl text-cream letter-tight leading-[1.02]">
+        Cinema com<br/>
+        <span class="italic text-primary">estratégia</span> de<br/>
+        performance.
+      </h1>
+      <p class="mt-8 text-lg md:text-xl text-cream/70 max-w-xl leading-relaxed">
+        Audiovisual sob medida para clínicas, estética e bem-estar — pensado para transformar autoridade em pacientes.
+      </p>
+      <div class="mt-10 flex flex-wrap gap-4">
+        <a href="#contato" class="bg-primary text-ink px-7 py-4 text-xs uppercase tracking-[0.2em] hover:bg-cream transition">Quero uma proposta</a>
+        <a href="#portfolio" class="border border-cream/30 text-cream px-7 py-4 text-xs uppercase tracking-[0.2em] hover:border-primary hover:text-primary transition">Ver portfólio</a>
+      </div>
+    </div>
+    <div class="md:col-span-5 reveal">
+      <div class="img-ph aspect-[4/5] w-full">[ Imagem · Câmera cinema ]</div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="sobre" class="relative py-32 md:py-40 grain overflow-hidden">
+  <div class="max-w-[1400px] mx-auto px-6 md:px-10 grid md:grid-cols-12 gap-12 md:gap-20 items-start">
+    <div class="md:col-span-5 md:sticky md:top-32 reveal">
+      <div class="flex items-center gap-4 mb-8 font-serif">
+        <span class="italic text-primary text-sm">01</span>
+        <span class="h-px w-10 bg-primary/40"></span>
+        <span class="text-[10px] uppercase tracking-[0.3em] text-muted">A Produtora</span>
+      </div>
+      <h2 class="md:text-6xl text-cream letter-tight leading-[1.05] font-serif text-3xl">
+        Cinema com <span class="italic text-primary">propósito</span> de venda.
+      </h2>
+    </div>
+    <div class="md:col-span-7 space-y-8 reveal">
+      <p class="text-lg md:text-xl text-cream/80 font-light leading-relaxed">
+        A <span class="text-primary">Daime Filmes</span> nasce da fusão entre linguagem cinematográfica e estratégia de performance. Cada frame é pensado para construir autoridade — e cada vídeo, para gerar resultado.
+      </p>
+      <p class="text-base md:text-lg text-muted leading-relaxed">
+        Nosso trabalho começa muito antes da câmera ligar. Mergulhamos no modelo de negócio do cliente, estudamos a concorrência e desenhamos um posicionamento único — para que cada peça produzida atraia o paciente certo, com real potencial de fechamento.
+      </p>
+      <div class="grid grid-cols-3 gap-6 pt-8 border-t border-border/60 mt-12">
+        <div><div class="font-serif text-3xl md:text-5xl text-primary">+30</div><div class="text-[10px] uppercase tracking-[0.2em] text-muted mt-2">Projetos<br/>entregues</div></div>
+        <div><div class="font-serif text-3xl md:text-5xl text-primary">100%</div><div class="text-[10px] uppercase tracking-[0.2em] text-muted mt-2">Foco em<br/>conversão</div></div>
+        <div><div class="font-serif text-3xl md:text-5xl text-primary">4K</div><div class="text-[10px] uppercase tracking-[0.2em] text-muted mt-2">Padrão<br/>cinematográfico</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="relative py-32 md:py-40 bg-card/50 overflow-hidden">
+  <div class="max-w-[1400px] mx-auto px-6 md:px-10 reveal">
+    <div class="flex items-center gap-4 mb-8 font-serif">
+      <span class="italic text-primary text-sm">02</span>
+      <span class="h-px w-10 bg-primary/40"></span>
+      <span class="text-[10px] uppercase tracking-[0.3em] text-muted">O Cenário</span>
+    </div>
+    <h2 class="font-serif md:text-6xl text-3xl text-cream letter-tight leading-[1.05] max-w-4xl">
+      Em 2026, quem não é visto com<br/>
+      <span class="italic text-primary">excelência</span> é esquecido.
+    </h2>
+    <p class="mt-10 text-lg text-cream/70 max-w-3xl leading-relaxed">
+      Clínicas e profissionais da saúde competem por atenção em um ambiente saturado. Conteúdo amador desgasta a marca, e produções sem estratégia geram custo — não retorno.
+    </p>
+  </div>
+</section>
+
+<!-- METHOD -->
+<section id="metodo" class="relative py-32 md:py-40 overflow-hidden">
+  <div class="max-w-[1400px] mx-auto px-6 md:px-10">
+    <div class="flex items-center gap-4 mb-8 font-serif reveal">
+      <span class="italic text-primary text-sm">03</span>
+      <span class="h-px w-10 bg-primary/40"></span>
+      <span class="text-[10px] uppercase tracking-[0.3em] text-muted">Nosso Método</span>
+    </div>
+    <div class="grid md:grid-cols-12 gap-12 md:gap-16 items-center">
+      <div class="md:col-span-6 order-2 md:order-1 reveal">
+        <div class="img-ph aspect-[4/5] relative">
+          [ Pós-produção · Color grading ]
+          <div class="absolute bottom-6 left-6 right-6 font-serif italic text-cream/80 text-lg">"Cada vídeo é uma engrenagem de uma máquina maior: a sua marca."</div>
+        </div>
+      </div>
+      <div class="md:col-span-6 order-1 md:order-2 reveal">
+        <h2 class="md:text-6xl text-cream letter-tight leading-[1.05] font-serif text-3xl mb-8">
+          Estratégia primeiro. <span class="italic text-primary">Câmera depois.</span>
+        </h2>
+        <p class="text-lg text-cream/70 leading-relaxed mb-12">Unimos audiovisual e performance para transformar a identidade da sua clínica em um ativo que gera lucro.</p>
+        <div class="space-y-8">
+          <div class="flex gap-6">
+            <div class="font-serif text-5xl text-primary/40 leading-none">01</div>
+            <div class="pt-2"><h3 class="font-serif text-2xl text-cream mb-2">Imersão estratégica</h3><p class="text-muted leading-relaxed">Análise profunda do modelo de negócio e dos concorrentes para desenhar um posicionamento único e inquestionável.</p></div>
+          </div>
+          <div class="flex gap-6">
+            <div class="font-serif text-5xl text-primary/40 leading-none">02</div>
+            <div class="pt-2"><h3 class="font-serif text-2xl text-cream mb-2">Conteúdo com intenção</h3><p class="text-muted leading-relaxed">Roteiro estratégico e entrega final focada em autoridade, visando atrair pacientes com real potencial de fechamento.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DIFFERENTIALS -->
+<section id="diferenciais" class="relative py-32 md:py-40 bg-card/40 overflow-hidden">
+  <div class="max-w-[1400px] mx-auto px-6 md:px-10">
+    <div class="max-w-3xl mb-20 reveal">
+      <div class="flex items-center gap-4 mb-8 font-serif">
+        <span class="italic text-primary text-sm">04</span>
+        <span class="h-px w-10 bg-primary/40"></span>
+        <span class="text-[10px] uppercase tracking-[0.3em] text-muted">Diferenciais</span>
+      </div>
+      <h2 class="md:text-6xl text-cream letter-tight leading-[1.05] font-serif text-3xl">
+        O que faz a Daime ser <span class="italic text-primary">diferente.</span>
+      </h2>
+    </div>
+    <div class="grid md:grid-cols-2 gap-px bg-border/60">
+      <!-- items -->
+      <div class="bg-ink p-10 md:p-12 relative overflow-hidden reveal">
+        <div class="absolute top-0 right-0 font-serif text-[10rem] text-primary/[0.05] leading-none -mt-8 -mr-4">01</div>
+        <div class="flex items-center gap-3 mb-6"><span class="font-serif italic text-primary">01</span><span class="h-px w-8 bg-primary/40"></span></div>
+        <h3 class="font-serif text-3xl md:text-4xl text-cream mb-4 letter-tight">Acompanhamento integral</h3>
+        <p class="text-muted leading-relaxed">Da produção à análise de resultados, presença contínua ao seu lado em cada etapa do processo.</p>
+      </div>
+      <div class="bg-ink p-10 md:p-12 relative overflow-hidden reveal">
+        <div class="absolute top-0 right-0 font-serif text-[10rem] text-primary/[0.05] leading-none -mt-8 -mr-4">02</div>
+        <div class="flex items-center gap-3 mb-6"><span class="font-serif italic text-primary">02</span><span class="h-px w-8 bg-primary/40"></span></div>
+        <h3 class="font-serif text-3xl md:text-4xl text-cream mb-4 letter-tight">Entrega de resultados</h3>
+        <p class="text-muted leading-relaxed">Cada peça audiovisual tem objetivo claro: atrair, converter e fidelizar novos pacientes.</p>
+      </div>
+      <div class="bg-ink p-10 md:p-12 relative overflow-hidden reveal">
+        <div class="absolute top-0 right-0 font-serif text-[10rem] text-primary/[0.05] leading-none -mt-8 -mr-4">03</div>
+        <div class="flex items-center gap-3 mb-6"><span class="font-serif italic text-primary">03</span><span class="h-px w-8 bg-primary/40"></span></div>
+        <h3 class="font-serif text-3xl md:text-4xl text-cream mb-4 letter-tight">Conteúdo orientado a conversão</h3>
+        <p class="text-muted leading-relaxed">Cada vídeo é pensado para gerar agendamentos e fechamentos — não apenas curtidas.</p>
+      </div>
+      <div class="bg-ink p-10 md:p-12 relative overflow-hidden reveal">
+        <div class="absolute top-0 right-0 font-serif text-[10rem] text-primary/[0.05] leading-none -mt-8 -mr-4">04</div>
+        <div class="flex items-center gap-3 mb-6"><span class="font-serif italic text-primary">04</span><span class="h-px w-8 bg-primary/40"></span></div>
+        <h3 class="font-serif text-3xl md:text-4xl text-cream mb-4 letter-tight">Plataforma própria de aprovação</h3>
+        <p class="text-muted leading-relaxed">Todos os meses entregamos relatórios detalhados de progresso em um app exclusivo para você.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="relative py-32 md:py-40 overflow-hidden">
+  <div class="max-w-[1400px] mx-auto px-6 md:px-10">
+    <div class="max-w-3xl mb-20 reveal">
+      <div class="flex items-center gap-4 mb-8 font-serif">
+        <span class="italic text-primary text-sm">05</span>
+        <span class="h-px w-10 bg-primary/40"></span>
+        <span class="text-[10px] uppercase tracking-[0.3em] text-muted">Processo</span>
+      </div>
+      <h2 class="md:text-6xl text-cream letter-tight leading-[1.05] font-serif text-3xl">Do briefing à <span class="italic text-primary">entrega final.</span></h2>
+    </div>
+    <div class="grid md:grid-cols-4 gap-8">
+      <div class="reveal"><div class="font-serif text-5xl text-primary mb-4">01</div><h3 class="font-serif text-2xl text-cream mb-3">Diagnóstico</h3><p class="text-muted text-sm leading-relaxed">Reunião imersiva para entender objetivos, público e diferenciais da clínica.</p></div>
+      <div class="reveal"><div class="font-serif text-5xl text-primary mb-4">02</div><h3 class="font-serif text-2xl text-cream mb-3">Roteiro</h3><p class="text-muted text-sm leading-relaxed">Construção do conceito narrativo e direção criativa estratégica.</p></div>
+      <div class="reveal"><div class="font-serif text-5xl text-primary mb-4">03</div><h3 class="font-serif text-2xl text-cream mb-3">Produção</h3><p class="text-muted text-sm leading-relaxed">Captação cinematográfica em 4K com equipe especializada.</p></div>
+      <div class="reveal"><div class="font-serif text-5xl text-primary mb-4">04</div><h3 class="font-serif text-2xl text-cream mb-3">Distribuição</h3><p class="text-muted text-sm leading-relaxed">Edição, color grading e plano de veiculação orientado a performance.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="relative py-32 md:py-40 bg-card/40">
+  <div class="max-w-[1400px] mx-auto px-6 md:px-10">
+    <div class="max-w-3xl mb-20 reveal">
+      <div class="flex items-center gap-4 mb-8 font-serif">
+        <span class="italic text-primary text-sm">06</span>
+        <span class="h-px w-10 bg-primary/40"></span>
+        <span class="text-[10px] uppercase tracking-[0.3em] text-muted">O que fazemos por você</span>
+      </div>
+      <h2 class="md:text-6xl text-cream letter-tight leading-[1.05] font-serif text-3xl">Um ecossistema completo de <span class="italic text-primary">aquisição.</span></h2>
+    </div>
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="p-8 bg-ink border border-border/60 hover:border-primary/60 transition reveal">
+        <p class="text-[10px] uppercase tracking-[0.25em] text-muted mb-2">Briefing & Story</p>
+        <h3 class="font-serif text-2xl text-cream mb-4">Estratégia</h3>
+        <p class="text-sm text-muted leading-relaxed">Planejamento, briefing criativo e análise aprofundada de concorrentes.</p>
+      </div>
+      <div class="p-8 bg-ink border border-border/60 hover:border-primary/60 transition reveal">
+        <p class="text-[10px] uppercase tracking-[0.25em] text-muted mb-2">Conteúdo Visual</p>
+        <h3 class="font-serif text-2xl text-cream mb-4">Captação & Edição</h3>
+        <p class="text-sm text-muted leading-relaxed">Produção audiovisual de alta qualidade para contar a história do seu negócio.</p>
+      </div>
+      <div class="p-8 bg-ink border border-border/60 hover:border-primary/60 transition reveal">
+        <p class="text-[10px] uppercase tracking-[0.25em] text-muted mb-2">Conversão</p>
+        <h3 class="font-serif text-2xl text-cream mb-4">Landing Page</h3>
+        <p class="text-sm text-muted leading-relaxed">Páginas de destino otimizadas para converter visitantes em clientes.</p>
+      </div>
+      <div class="p-8 bg-ink border border-border/60 hover:border-primary/60 transition reveal">
+        <p class="text-[10px] uppercase tracking-[0.25em] text-muted mb-2">Crescimento</p>
+        <h3 class="font-serif text-2xl text-cream mb-4">Tráfego Pago</h3>
+        <p class="text-sm text-muted leading-relaxed">Distribuição inteligente para atingir o público certo no momento ideal.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio" class="relative py-32 md:py-40">
+  <div class="max-w-[1400px] mx-auto px-6 md:px-10">
+    <div class="grid md:grid-cols-12 gap-8 mb-20">
+      <div class="md:col-span-6 reveal">
+        <div class="flex items-center gap-4 mb-8 font-serif">
+          <span class="italic text-primary text-sm">07</span>
+          <span class="h-px w-10 bg-primary/40"></span>
+          <span class="text-[10px] uppercase tracking-[0.3em] text-muted">Portfólio</span>
+        </div>
+        <h2 class="md:text-6xl text-cream letter-tight leading-[1.05] font-serif text-3xl">Estética cinematográfica para <span class="italic text-primary">marcas que cuidam.</span></h2>
+      </div>
+      <div class="md:col-span-5 md:col-start-8 md:pt-4 reveal">
+        <p class="text-lg text-cream/70 leading-relaxed">Selecionamos alguns dos nossos trabalhos para mostrar o padrão Daime — clínicas médicas, estética avançada e espaços de bem-estar.</p>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-12 gap-4 md:gap-6">
+      <div class="col-span-2 md:col-span-7 img-ph aspect-[5/6] relative reveal">
+        [ Clínica Médica ]
+        <div class="absolute bottom-0 left-0 right-0 p-6 md:p-8 bg-gradient-to-t from-ink via-ink/30 to-transparent">
+          <p class="text-[10px] uppercase tracking-[0.3em] text-primary mb-2">Vídeo institucional</p>
+          <h3 class="font-serif text-2xl md:text-3xl text-cream">Clínica Médica</h3>
+        </div>
+      </div>
+      <div class="col-span-2 md:col-span-5 grid grid-cols-1 gap-4 md:gap-6">
+        <div class="img-ph aspect-[4/3] relative reveal">[ Estética Avançada ]
+          <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-ink via-ink/30 to-transparent">
+            <p class="text-[10px] uppercase tracking-[0.3em] text-primary mb-2">Reels & Shorts</p>
+            <h3 class="font-serif text-2xl text-cream">Estética Avançada</h3>
+          </div>
+        </div>
+        <div class="img-ph aspect-[4/3] relative reveal">[ Bastidores ]
+          <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-ink via-ink/30 to-transparent">
+            <p class="text-[10px] uppercase tracking-[0.3em] text-primary mb-2">Behind the scenes</p>
+            <h3 class="font-serif text-2xl text-cream">Bastidores</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-span-2 md:col-span-12 img-ph aspect-[21/9] relative reveal">[ Bem-Estar & Spa ]
+        <div class="absolute bottom-0 left-0 right-0 p-6 md:p-8 bg-gradient-to-t from-ink via-ink/30 to-transparent">
+          <p class="text-[10px] uppercase tracking-[0.3em] text-primary mb-2">Branded content</p>
+          <h3 class="font-serif text-2xl md:text-3xl text-cream">Bem-Estar & Spa</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PLANS -->
+<section class="relative py-32 md:py-40 bg-card/40">
+  <div class="max-w-[1400px] mx-auto px-6 md:px-10">
+    <div class="max-w-3xl mb-20 reveal">
+      <div class="flex items-center gap-4 mb-8 font-serif">
+        <span class="italic text-primary text-sm">08</span>
+        <span class="h-px w-10 bg-primary/40"></span>
+        <span class="text-[10px] uppercase tracking-[0.3em] text-muted">Escopos</span>
+      </div>
+      <h2 class="md:text-6xl text-cream letter-tight leading-[1.05] font-serif text-3xl">Escopos sob medida para cada <span class="italic text-primary">fase da sua marca.</span></h2>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="p-10 bg-ink border border-border/60 reveal">
+        <p class="text-[10px] uppercase tracking-[0.25em] text-muted mb-4">Essencial</p>
+        <h3 class="font-serif text-3xl text-cream mb-6">Presença</h3>
+        <p class="text-muted text-sm leading-relaxed mb-8">Para clínicas que querem profissionalizar a comunicação e estabelecer presença consistente.</p>
+        <ul class="space-y-3 text-sm text-cream/80">
+          <li>— Pacote mensal de conteúdo</li>
+          <li>— Roteiros estratégicos</li>
+          <li>— Edição e color grading</li>
+          <li>— Reels e shorts otimizados</li>
+        </ul>
+      </div>
+      <div class="p-10 bg-primary text-ink relative reveal">
+        <p class="text-[10px] uppercase tracking-[0.25em] mb-4">Recomendado</p>
+        <h3 class="font-serif text-3xl mb-6">Autoridade</h3>
+        <p class="text-sm leading-relaxed mb-8 text-ink/80">Conteúdo cinematográfico + estratégia de distribuição para construir autoridade real.</p>
+        <ul class="space-y-3 text-sm">
+          <li>— Tudo do plano Presença</li>
+          <li>— Vídeo institucional 4K</li>
+          <li>— Landing page de conversão</li>
+          <li>— Relatórios mensais</li>
+        </ul>
+      </div>
+      <div class="p-10 bg-ink border border-border/60 reveal">
+        <p class="text-[10px] uppercase tracking-[0.25em] text-muted mb-4">Performance</p>
+        <h3 class="font-serif text-3xl text-cream mb-6">Aquisição</h3>
+        <p class="text-muted text-sm leading-relaxed mb-8">Ecossistema completo: produção, landing pages e tráfego pago integrados.</p>
+        <ul class="space-y-3 text-sm text-cream/80">
+          <li>— Tudo do plano Autoridade</li>
+          <li>— Gestão de tráfego pago</li>
+          <li>— Múltiplas landing pages</li>
+          <li>— Acompanhamento semanal</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contato" class="relative py-32 md:py-40 overflow-hidden">
+  <div class="max-w-[1100px] mx-auto px-6 md:px-10 text-center reveal">
+    <div class="flex items-center justify-center gap-4 mb-8 font-serif">
+      <span class="italic text-primary text-sm">09</span>
+      <span class="h-px w-10 bg-primary/40"></span>
+      <span class="text-[10px] uppercase tracking-[0.3em] text-muted">Próximo passo</span>
+    </div>
+    <h2 class="font-serif text-4xl md:text-7xl text-cream letter-tight leading-[1.05]">
+      Vamos transformar sua clínica em uma <span class="italic text-primary">marca inesquecível.</span>
+    </h2>
+    <p class="mt-8 text-lg text-cream/70 max-w-2xl mx-auto leading-relaxed">
+      Conte um pouco sobre o seu negócio e preparamos uma proposta personalizada para sua realidade.
+    </p>
+    <div class="mt-12 flex flex-wrap justify-center gap-4">
+      <a href="mailto:contato@daimefilmes.com" class="bg-primary text-ink px-8 py-4 text-xs uppercase tracking-[0.2em] hover:bg-cream transition">contato@daimefilmes.com</a>
+      <a href="#" class="border border-cream/30 text-cream px-8 py-4 text-xs uppercase tracking-[0.2em] hover:border-primary hover:text-primary transition">WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+<footer class="border-t border-border/60 py-10 text-center text-xs uppercase tracking-[0.2em] text-muted">
+  © Daime Filmes · Audiovisual estratégico
+</footer>
+
+<script>
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  },{rootMargin:'-80px'});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
