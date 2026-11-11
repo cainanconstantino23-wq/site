@@ -74,6 +74,8 @@ section{padding:var(--gap) var(--m) 0}
    Pontos claros + vãos levemente escuros: assim a trama aparece também na areia clara, não só nas fotos escuras.
    Para deixar mais forte ou mais fraca, mude os dois valores de transparência (.07 e .049). */
 html::before{content:"";position:fixed;inset:0;z-index:99999;pointer-events:none;background:radial-gradient(at 20% 80%,rgba(255,255,255,.07) 1.5px,rgba(0,0,0,.049) 0) 0 0/3px 3px}
+/* No celular a trama pesa mais (tela menor, mais densidade): 20% mais fraca */
+@media (max-width:820px){html::before{background-image:radial-gradient(at 20% 80%,rgba(255,255,255,.056) 1.5px,rgba(0,0,0,.039) 0)}}
 
 /* ───────── Barra de progresso da página ───────── */
 .progress{position:fixed;inset:0 0 auto;height:3px;z-index:45;background:var(--ink);transform:scaleX(0);transform-origin:left;pointer-events:none}
