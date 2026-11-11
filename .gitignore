@@ -18,3 +18,8 @@ img/arte-*
 img/coco-*
 img/porta-*
 img/varanda-*
+
+# Originais dos bastidores (pesados). O site usa as versões leves em img/bastidores/ e img/bastidores/coletividade/
+img/bastidores/*.MOV
+img/bastidores/*.mov
+img/bastidores/IMG_*
