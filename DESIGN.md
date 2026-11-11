@@ -81,6 +81,9 @@ Formas arredondadas e orgânicas (pedido do cliente em 2026-11-10, no lugar dos 
 - **Pílula** (`999px`): botões, menu fixo, linhas do contato, botão Fechar.
 - **Raio médio / grande** (`--r`, `--r-lg`): painéis de vidro, fotos, blocos de planos, base do hero, topo do rodapé.
 
+## Texture
+Textura de TV antiga sobre a página inteira (`html::before`, fixa, sem cliques, estática): grade de pontos claros de 1,5px a cada 3px, com os vãos levemente escuros — `radial-gradient(at 20% 80%, rgba(255,255,255,.07) 1.5px, rgba(0,0,0,.049) 0) 0 0/3px 3px`. Inspirada em timeset.com.br, mas mais forte: a receita deles (`plus-lighter` a 4%) só clareia e some sobre a areia. Força reduzida em 30% a pedido do cliente (era .10/.07). A camada escurece a areia em cerca de 3%; para ajustar, mude os dois valores juntos.
+
 ## Glass
 Vidro (fundo translúcido + `backdrop-filter`) é permitido, a pedido do cliente, em quatro lugares e só neles:
 - Menu fixo: transparente no topo; ao rolar, areia a 80% com desfoque de 18px.

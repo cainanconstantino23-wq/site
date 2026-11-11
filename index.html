@@ -69,6 +69,12 @@ section{padding:var(--gap) var(--m) 0}
 .lnk::after{content:"";position:absolute;left:0;right:0;bottom:-3px;height:2px;border-radius:2px;background:currentColor;transform:scaleX(0);transform-origin:right;transition:transform .5s var(--ease)}
 .lnk:hover::after,.lnk:focus-visible::after{transform:scaleX(1);transform-origin:left}
 
+/* ───────── Textura de TV antiga: grade de pontos de 1px a cada 3px sobre a tela inteira ───────── */
+/* Estática (não anima), não recebe cliques e fica acima de tudo.
+   Pontos claros + vãos levemente escuros: assim a trama aparece também na areia clara, não só nas fotos escuras.
+   Para deixar mais forte ou mais fraca, mude os dois valores de transparência (.07 e .049). */
+html::before{content:"";position:fixed;inset:0;z-index:99999;pointer-events:none;background:radial-gradient(at 20% 80%,rgba(255,255,255,.07) 1.5px,rgba(0,0,0,.049) 0) 0 0/3px 3px}
+
 /* ───────── Barra de progresso da página ───────── */
 .progress{position:fixed;inset:0 0 auto;height:3px;z-index:45;background:var(--ink);transform:scaleX(0);transform-origin:left;pointer-events:none}
 
