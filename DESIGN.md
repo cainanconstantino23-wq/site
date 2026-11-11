@@ -1,117 +1,110 @@
 ---
 name: Daime Filmes
-description: "Sistema Visual Cinematográfico e Direção de Arte para Audiovisual Estratégico"
+description: "O nome como monumento: areia de praia, o azul das portas de Trancoso e o nome DAIME FILMES como título de filme"
 colors:
-  primary: "#C87A2A"
-  primary-dark: "#0F1412"
-  amber-accent: "#E89A47"
-  ember: "#B8531E"
-  ink: "#110F0E"
-  neutral-bg: "#F8F5F0"
-  neutral-card: "#F1ECE4"
-  neutral-muted: "#78716C"
+  ground: "#ECE3D3"
+  surface: "#E0D3BC"
+  surface-2: "#D3C4A9"
+  ink: "#123C8C"
+  ink-deep: "#0C2C6B"
+  ink-mid: "#34549F"
+  muted: "#3D5D9C"
+  paper: "#F3EDE2"
 typography:
   display:
-    fontFamily: "Thunder-Black, Bebas Neue, sans-serif"
-    fontWeight: 900
-    lineHeight: "0.82"
-    letterSpacing: "0.01em"
-  serif:
-    fontFamily: "Cormorant Garamond, Georgia, serif"
-    fontWeight: 500
-  mono:
-    fontFamily: "Space Grotesk, monospace"
-    letterSpacing: "0.15em"
+    fontFamily: "Switzer, system-ui, sans-serif"
+    fontWeight: 600
+    lineHeight: "0.76"
+    letterSpacing: "-0.06em"
+  heading:
+    fontFamily: "Switzer, system-ui, sans-serif"
+    fontWeight: 600
+    lineHeight: "0.98"
+    letterSpacing: "-0.04em"
   body:
-    fontFamily: "Inter, system-ui, sans-serif"
-    fontSize: "16px"
-    lineHeight: "1.6"
+    fontFamily: "Switzer, system-ui, sans-serif"
+    fontSize: "19px"
+    lineHeight: "1.5"
 rounded:
-  sm: "4px"
-  md: "8px"
-  lg: "16px"
-  xl: "32px"
+  pill: "999px"
+  md: "clamp(20px, 2.2vw, 32px)"
+  lg: "clamp(28px, 3.4vw, 52px)"
 spacing:
-  sm: "8px"
-  md: "16px"
-  lg: "24px"
-  xl: "48px"
+  margin: "clamp(16px, 2.4vw, 32px)"
+  section: "clamp(120px, 15vw, 220px)"
 components:
   button-primary:
-    backgroundColor: "{colors.primary}"
+    backgroundColor: "{colors.ink}"
+    textColor: "{colors.ground}"
+    rounded: "{rounded.pill}"
+    padding: "15px 24px"
+  button-on-photo:
+    backgroundColor: "{colors.paper}"
     textColor: "{colors.ink}"
-    rounded: "{rounded.sm}"
-    padding: "14px 28px"
+    rounded: "{rounded.pill}"
+    padding: "15px 24px"
 ---
 
 # Design System — Daime Filmes
 
 ## Overview
-O sistema visual da Daime Filmes foi desenvolvido para transmitir o prestígio de produções cinematográficas de alto nível e a precisão da estratégia de performance para o mercado médico e de saúde premium. A linguagem combina contraste marcante, tipografia editorial dramática, textura sutil de grao de filme (film grain) e acabamentos inspirados em lentes e cinema.
+Direção "O nome como monumento" (Taste Skill, seed 1407257202), escolhida pelo cliente em 2026-11-10 entre três amostras (ver `_direcoes/`). O nome é a manchete: "DAIME FILMES" fica na base do hero, à esquerda, com "Produtora audiovisual" logo abaixo (os dois dentro do `h1`), e volta cortado no rodapé. Depois do hero a página é calma e tipográfica, para o contraste com o monumento se manter.
+
+A ideia vem do lugar: areia de praia como fundo e o azul das portas e janelas de Trancoso como única tinta. Serve tanto à produtora geral quanto ao foco em imóveis.
 
 ## Colors
-
-### Primary & Accent Roles
-- **Primary Amber (`#C87A2A` / `#E89A47`):** Representa o brilho quente das luzes de estúdio e a sofisticação. Utilizado em CTAs principais, detalhes de destaque e estado de hover de cards.
-- **Ember Accent (`#B8531E`):** Utilizado para momentos de maior intensidade visual e pontos focalizadores de atração.
-
-### Neutral Surfaces
-- **Dark Ink (`#110F0E` / `#0F1412`):** A cor de autoridade e profundidade cinematográfica. Usada em fundos de seções hero, rodapés e cards escuros de alta relevância.
-- **Warm Cream Background (`#F8F5F0`):** Fundo suave e tátil de inspiração editorial que substitui o branco frio padrão.
-- **Warm Cream Card (`#F1ECE4`):** Superfície elevada para cards e containers claros.
-- **Muted Stone (`#78716C`):** Reservado para textos secundários, legendas e rótulos de navegação.
+- **Ground `#ECE3D3` (areia):** fundo de toda a página. Escolha deliberada, tirada do tema; não trocar por off-white genérico.
+- **Ink `#123C8C` (azul de porta):** todo o texto, os botões e o rodapé. Não há preto nem segunda cor de destaque.
+- **Surface `#E0D3BC` / `#D3C4A9`:** degraus de tom para separar superfícies (quadro do vídeo, linhas do contato, plano Essencial). Nunca linhas finas nem sombras.
+- **Ink-mid `#34549F` / Ink-deep `#0C2C6B`:** só nos blocos de planos e em hovers.
+- **Muted `#3D5D9C`:** texto secundário (5,2:1 sobre a areia).
+- **Paper `#F3EDE2`:** texto e botão sobre foto e sobre azul.
 
 ## Typography
+Uma família só: **Switzer** (Fontshare), pesos 400, 500 e 600. Cinco tamanhos na página inteira:
+- **Nome:** "DAIME FILMES" a `clamp(52px, 10.4vw, 210px)` no hero (13.6vw no celular) e 14.6vw, cortado, no rodapé; 600, tracking -0.055em. O cliente achou o "DAIME" de ponta a ponta (33vw) exagerado em 2026-11-10: não voltar a esse tamanho.
+- **Título:** `clamp(2rem, 1.3rem + 3.2vw, 4rem)`, 600, tracking -0.04em. Títulos de seção, nomes dos trabalhos, etapas, linhas de contato.
+- **Lead:** `clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem)`.
+- **Corpo:** `clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem)`, leading 1.5.
+- **Pequeno:** 15px.
 
-### **The Editorial Drama Rule**
-Títulos de hero e seções principais devem combinar tipografia Display monumental em caixa alta (`Thunder-Black` / `Bebas Neue`) com serifas editoriais elegantes (`Cormorant Garamond`).
-
-- **Display Headline:** `font-family: 'Thunder-Black', 'Bebas Neue', sans-serif`, `line-height: 0.82`, `text-transform: uppercase`. Expressão máxima de impacto nos títulos.
-- **Editorial Serif:** `font-family: 'Cormorant Garamond', Georgia, serif`, usada para criar contraste poético e sofisticação médica.
-- **Technical Mono:** `font-family: 'Space Grotesk', monospace`, em tamanho reduzido (10px - 12px) e caixa alta com `letter-spacing: 0.15em - 0.25em` para metadados, números de seção e labels técnicos.
-- **Body UI:** `font-family: 'Inter', sans-serif`, peso 400/500 para garantida de legibilidade em blocos de texto e formulários.
+Sem maiúsculas espaçadas, sem itálico de destaque, sem monoespaçada. Títulos em até duas linhas em qualquer largura.
 
 ## Layout
+- Uma margem externa igual dos dois lados (`--m`); seções separadas por 120–220px.
+- Cada seção tem composição própria: o filme institucional largo em cima e, abaixo, uma faixa de seis vídeos que se abre ao passar o mouse (flex-grow de 1 para 1.85, só transform/flex) — no celular, duas colunas em 9:16 (trabalhos), foto 4:5 + texto (sobre), segunda grade de arcos com seis vídeos de casas, com o desencontro invertido (imóveis), linhas em escada (método), blocos que sobem como gráfico (planos), linhas em tamanho de título (contato).
+- Sem cartões com ícone, sem numeração 01/02/03, sem rótulos acima dos títulos.
 
-### **The Frame-in-Frame Rule**
-As seções principais do site utilizam a metáfora de quadros de câmera (frames) com bordas bem demarcadas (`border-border`) e cantos suavemente arredondados (`32px` em desktop / `16px` em mobile), contidos dentro de margens internas respiráveis.
+## Shape
+Formas arredondadas e orgânicas (pedido do cliente em 2026-11-10, no lugar dos cantos retos):
+- **Arco** (`--arch`: topo em semicírculo, base com raio médio): a forma-assinatura, tirada das portas e janelas coloniais. Usado só nos vídeos de casas e na foto da seção Sobre. Os trabalhos NÃO usam arco: retângulos de cantos largos (o cliente pediu, em 2026-11-11, uma forma diferente da seção de casas).
+- **Pílula** (`999px`): botões, menu fixo, linhas do contato, botão Fechar.
+- **Raio médio / grande** (`--r`, `--r-lg`): painéis de vidro, fotos, blocos de planos, base do hero, topo do rodapé.
 
-- **Grid de Destaques:** 12 colunas em desktop, migrando para layout empilhado responsivo em telas mobile.
-- **Carrossel do Portfólio:** Track horizontal com `scroll-snap` e suporte a touch nativo, exibindo os cards com proporções verticais (4:5 / 9:16) inspiradas em reprodução de vídeo social e tela de cinema.
+## Glass
+Vidro (fundo translúcido + `backdrop-filter`) é permitido, a pedido do cliente, em quatro lugares e só neles:
+- Menu fixo: transparente no topo; ao rolar, areia a 80% com desfoque de 18px.
+- Frase do hero e legendas dos vídeos: azul-noite a 42–50% com desfoque, texto em `paper`.
+- Fundo do player: azul-noite a 88% com desfoque.
+No celular as legendas dos vídeos não usam desfoque (fundo a 72%), para ficar leve. O texto sobre vidro precisa passar em contraste AA.
 
-## Elevation & Depth
+## Imagery
+- Só material próprio. As fotos de varanda, porta, mesa e coco NÃO são do cliente e saíram do site em 2026-11-10 (os arquivos continuam em `img/`, sem uso): não reutilizar. Falta confirmar se a foto do hero (`p1raia`) e a da correção de cor (`9682`) são dele.
+- Vídeos de casas: versões leves para web em `videos/` (720×1280, H.264, 6–17 MB), geradas a partir dos originais em `comercial/videos/`; capas em `img/capas/`.
+- **Cada vídeo aparece no formato em que foi filmado:** a miniatura e o player assumem a proporção de `--ar` / `data-ar` (9:16 = 0.5625; scope ≈ 2.1). Vídeo novo: copiar um `<li class="tile">` em `#grid` (tira dos trabalhos) ou `#grid-casas` e trocar `data-src`, `data-t` (segundo inicial da prévia), `--ar`, `data-ar` e a capa em `img/capas/`.
+- Véu escuro neutro permitido apenas sob texto em cima de foto (hero).
 
-### **The Film Grain & Glow Rule**
-Profundidade é construída via atmosfera de iluminação e textura, ao invés de sombras projetadas genéricas.
+## Motion
+Bibliotecas locais em `vendor/`: GSAP 3.12.5 + ScrollTrigger e Lenis 1.1.14. Só `transform` e `opacity`.
+- **Entrada (uma sequência):** a foto assenta de 1.12 para 1, o nome sobe por trás da máscara (CSS, já no primeiro quadro), depois frase, botão e menu.
+- **Rolagem:** Lenis só no computador; revelação em cascata (`.rv`, 80ms entre itens, uma vez); parallax leve no hero, na foto da seção Sobre (`data-parallax`) e no nome do rodapé (só no computador); barra de progresso no topo.
+- **Menu:** vidro ao sair do topo, some ao descer e volta ao subir.
+- **Vídeos:** capa em imagem, `preload="none"`, o arquivo só é baixado na primeira prévia. Prévia sem som ao passar o mouse (computador) ou no vídeo mais central da tela (celular), uma por vez. O player cresce a partir da miniatura e volta para ela.
+- **Microinterações:** botões sobem 3px e afundam no clique; links com sublinhado que desliza; legendas e setas respondem ao mouse.
+- **Curva:** `cubic-bezier(.16,1,.3,1)` / `expo.out`.
+- **`prefers-reduced-motion`:** site estático, sem Lenis, sem prévias. Sem JavaScript o conteúdo também aparece inteiro.
+- Nada se move em volta de um vídeo que está tocando.
 
-- **Film Grain Overlay:** Camada sutil em `SVG turbulence` (`opacity: 0.03 - 0.06`) com `mix-blend-mode` que adiciona textura física e orgânica de pelicula cinematográfica às superfícies.
-- **Atmospheric Lighting:** Blur difuso de fundo (`blur-[140px]`) em tons ambarino (`bg-primary/5`) para simular projeção de luz de estúdio.
-- **Interactive Glow:** Botões de acionamento de vídeo/play utilizam `box-shadow: 0 0 25px rgba(200, 122, 42, 0.3)` que expande no hover.
-
-## Shapes
-- **Container Cards:** Cantos arredondados generosos (`rounded-[32px]`) criando caixas de projeção.
-- **Botões e Tags:** Cantos ligeiramente contidos (`rounded-sm` ou `border-radius: 4px`), garantindo precisão técnica.
-
-## Components
-
-### 1. Header Navigation Frame
-- Barra de navegação integrada no topo do container principal, com logo em barras de equalizador audiovisual e links com tipografia mono com `letter-spacing` amplo.
-
-### 2. Video Portfolio Cards (`.carousel-card`)
-- Aspect ratio 4:5 ou vertical com preview de vídeo e overlay gradiente para garantir leitura das legendas e títulos sobrepostos.
-- Botão Play centralizado com transição suave de escala e glow ambarino ao passar o mouse.
-
-### 3. Primary CTA Button (`.btn-main`, `.btn-primary`)
-- Fundo ambar/dourado com texto escuro em caixa alta e peso bold, transicionando para fundo claro no hover.
-
-## Do's and Don'ts
-
-### Do's
-- **DO:** Manter alto contraste entre textos e fundos.
-- **DO:** Utilizar letras em caixa alta para labels técnicos e títulos Display.
-- **DO:** Garantir suporte fluido a gestos de scroll e touch no carrossel de vídeos em dispositivos móveis.
-
-### Don'ts
-- **DON'T:** Usar fundos brancos frios puros (`#FFFFFF`) sem textura ou intenção de superfície.
-- **DON'T:** Misturar múltiplas famílias tipográficas genéricas sem papéis bem definidos (ex: Inter + Space Grotesk + Roboto simultaneamente).
-- **DON'T:** Usar sombras pesadas pretas sem difusão e iluminação coerentes.
+## Do / Don't
+- **Do:** preencher espaço com escala, conteúdo real e fotos próprias.
+- **Don't:** gradientes decorativos, sombras em repouso, vidro fora dos quatro usos acima, bordas finas, cantos retos, segunda cor de destaque, âmbar/terracota (identidade anterior, guardada em `_direcoes/index-anterior.html`).

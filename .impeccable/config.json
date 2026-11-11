@@ -1,3 +1,18 @@
 {
-  "buildPath": "code"
+  "buildPath": "code",
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "cream-palette",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-11-09T22:19:39.299Z",
+        "reason": "DESIGN.md colors.ground #ECE3D3 (sand) is the client-approved surface of the \"name as monument\" direction, taken from the subject (Trancoso sand + door blue); sanctioned exception"
+      }
+    ]
+  }
 }

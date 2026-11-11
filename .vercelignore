@@ -1,0 +1,13 @@
+# O mesmo que o .gitignore, para quando o deploy for feito pela linha de comando
+._*
+.DS_Store
+_direcoes/
+.taste-skill/
+comercial/videos/05 CASA*
+comercial/videos/07 CASA*
+comercial/videos/Bahia Homes - Casa*
+comercial/videos/CASA Laura*
+img/arte-*
+img/coco-*
+img/porta-*
+img/varanda-*

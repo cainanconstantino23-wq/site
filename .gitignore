@@ -1,0 +1,20 @@
+# Metadados do macOS (o SSD cria um ._arquivo para cada arquivo)
+._*
+.DS_Store
+
+# Trabalho local: backups das versões, relatórios de teste e cache
+_direcoes/
+.taste-skill/
+.impeccable/hook.cache.json
+
+# Originais dos vídeos de casas (pesados). O site usa as versões leves em videos/
+comercial/videos/05 CASA*
+comercial/videos/07 CASA*
+comercial/videos/Bahia Homes - Casa*
+comercial/videos/CASA Laura*
+
+# Fotos que não são da Daime (não usar)
+img/arte-*
+img/coco-*
+img/porta-*
+img/varanda-*

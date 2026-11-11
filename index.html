@@ -1,1056 +1,721 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Daime Filmes — Audiovisual estratégico para clínicas</title>
-<meta name="description" content="Produtora audiovisual para clínicas, estética e bem-estar. Cinema com estratégia de performance para transformar a sua autoridade." />
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
-
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          ink: '#F8F5F0',
-          darkInk: '#110F0E',
-          cream: '#1C1917',
-          primary: '#C87A2A',
-          ember: '#B8531E',
-          muted: '#78716C',
-          border: '#E5DFD7',
-          card: '#FFFFFF',
-          cardAlt: '#F1ECE4',
-          emeraldAccent: '#0D9488',
-        },
-        fontFamily: {
-          sans: ['Inter', 'system-ui', 'sans-serif'],
-          serif: ['Cormorant Garamond', 'Georgia', 'serif'],
-          display: ['Bebas Neue', 'impact', 'sans-serif'],
-          mono: ['Space Grotesk', 'monospace'],
-        }
-      }
-    }
-  }
-</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daime Filmes — Produtora audiovisual no sul da Bahia</title>
+<meta name="description" content="Produtora audiovisual no sul da Bahia. Filmes institucionais, Reels, eventos e vídeos de imóveis com linguagem de cinema.">
+<meta name="theme-color" content="#ece3d3">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="favicon.ico">
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="img/p1raia-2400.jpg" imagesrcset="img/p1raia-1200.jpg 1200w, img/p1raia-2400.jpg 2400w" imagesizes="100vw">
+<!-- A classe "js" liga os estados iniciais das animações. Sem JavaScript, tudo aparece normalmente. -->
+<script>document.documentElement.classList.add('js')</script>
+<!-- Bibliotecas de movimento, guardadas na pasta vendor/ (o site não depende de CDN) -->
+<script defer src="vendor/gsap.min.js"></script>
+<script defer src="vendor/ScrollTrigger.min.js"></script>
+<script defer src="vendor/lenis.min.js"></script>
 <style>
-  @font-face {
-    font-family: 'Thunder-Black';
-    src: url('Thunder-ExtraBoldLC') format('opentype');
-  }
+/* ───────── Tokens: areia de praia + o azul das portas de Trancoso ───────── */
+:root{
+  --bg:#ece3d3; --surface:#e0d3bc; --surface-2:#d3c4a9;
+  --ink:#123c8c; --ink-deep:#0c2c6b; --ink-mid:#34549f; --muted:#3d5d9c;
+  --paper:#f3ede2;
+  --m:clamp(16px,2.4vw,32px);
+  --gap:clamp(120px,15vw,220px);
+  --small:.9375rem;
+  --body:clamp(1.0625rem,1rem + .25vw,1.1875rem);
+  --lead:clamp(1.25rem,1.1rem + .7vw,1.625rem);
+  --head:clamp(2rem,1.3rem + 3.2vw,4rem);
+  --name:clamp(52px,10.4vw,210px);
+  --ease:cubic-bezier(.16,1,.3,1);
+  /* Formas: pílula nos botões, cantos largos nos blocos e o arco (portas e janelas coloniais) nas mídias verticais */
+  --r:clamp(20px,2.2vw,32px);
+  --r-lg:clamp(28px,3.4vw,52px);
+  --arch:999px 999px var(--r) var(--r);
+  --glass-dark:rgba(8,18,48,.5);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{background:var(--bg);-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+html.lenis{scroll-behavior:auto}
+html.lenis-stopped{overflow:hidden}
+body{margin:0;overflow-x:hidden;color:var(--ink);font:400 var(--body)/1.5 'Switzer',system-ui,-apple-system,'Segoe UI',sans-serif;letter-spacing:-.005em}
+h1,h2,h3,p,ul,figure{margin:0}
+ul{padding:0;list-style:none}
+img,video{display:block;width:100%;height:100%;object-fit:cover}
+a{color:inherit;text-underline-offset:.18em;text-decoration-thickness:.08em}
+button{font:inherit;color:inherit;letter-spacing:inherit;background:none;border:0;padding:0;cursor:pointer;text-align:inherit}
+a,button{touch-action:manipulation;-webkit-tap-highlight-color:rgba(18,60,140,.18)}
+::selection{background:var(--ink);color:var(--bg)}
+:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.on-dark :focus-visible,.on-dark:focus-visible{outline-color:var(--paper)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;font-size:1rem;line-height:1;letter-spacing:0}
+.skip{position:absolute;left:var(--m);top:-80px;z-index:60;background:var(--ink);color:var(--bg);padding:12px 20px;border-radius:999px}
+.skip:focus{top:12px}
+h2{font-weight:600;font-size:var(--head);letter-spacing:-.04em;line-height:.98;text-wrap:balance}
+p{text-wrap:pretty}
+section{padding:var(--gap) var(--m) 0}
 
-    /* Refinamento de Tipografia Geral - Hanken Grotesk para corpo, mantendo elegância */
-    body { background:#F8F5F0; color:#1C1917; font-family:'Hanken Grotesk', sans-serif; }
-    h1, h2, h3 { font-family: 'Thunder-Black', 'Bebas Neue', sans-serif; }
-    .font-serif { font-family: 'Cormorant Garamond', Georgia, serif; }
+/* ───────── Microinterações (só transform e opacity) ───────── */
+.btn{display:inline-block;background:var(--ink);color:var(--bg);padding:15px 26px;border-radius:999px;font-weight:500;text-decoration:none;transition:transform .45s var(--ease)}
+.btn:hover{transform:translateY(-3px)}
+.btn:active{transform:scale(.96);transition-duration:.12s}
+.btn--paper{background:var(--paper);color:var(--ink)}
+/* Sublinhado que desliza nos links de texto */
+.lnk{position:relative;text-decoration:none}
+.lnk::after{content:"";position:absolute;left:0;right:0;bottom:-3px;height:2px;border-radius:2px;background:currentColor;transform:scaleX(0);transform-origin:right;transition:transform .5s var(--ease)}
+.lnk:hover::after,.lnk:focus-visible::after{transform:scaleX(1);transform-origin:left}
 
-  body { background:#F8F5F0; color:#1C1917; font-family:'Inter',sans-serif; }
-  .font-serif { font-family:'Cormorant Garamond', Georgia, serif; }
-  .font-display { font-family:'Bebas Neue', impact, sans-serif; }
-  .font-mono { font-family:'Space Grotesk', monospace; }
-  .letter-tight { letter-spacing:-0.03em; }
-  .letter-wide { letter-spacing:0.25em; }
-  .grain::after{content:"";position:absolute;inset:0;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");opacity:.4;mix-blend-mode:multiply;}
-  html{scroll-behavior:smooth;}
-  .reveal{opacity:0;transform:translateY(30px);transition:opacity .9s ease, transform .9s cubic-bezier(.22,1,.36,1);}
-  .reveal.in{opacity:1;transform:none;}
-  
-  /* CAROUSEL STYLES */
-  .carousel-track {
-    display: flex;
-    gap: 1.5rem;
-    overflow-x: auto;
-    overflow-y: hidden;
-    touch-action: pan-y;
-    scroll-snap-type: x proximity;
-    overscroll-behavior-x: contain;
-    overscroll-behavior-y: auto;
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    cursor: default;
-  }
-  .carousel-track::-webkit-scrollbar { display: none; }
-  
-  /* Garantir dimensionamento correto em todas as telas */
-  .carousel-card { 
-    flex: 0 0 82%; 
-    scroll-snap-align: start; 
-    box-sizing: border-box;
-  }
-  @media (min-width: 640px) { .carousel-card { flex: 0 0 calc(45% - 1rem); } }
-    /* Otimização da Seção de Vídeos */
-    .carousel-card video {
-      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
-    }
-    .carousel-card:hover video {
-      transform: scale(1.05);
-      opacity: 1;
-    }
-    .carousel-card .text-overlay {
-      background: linear-gradient(to top, rgba(17, 15, 14, 0.9) 0%, rgba(17, 15, 14, 0.3) 60%, transparent 100%);
-    }
-    .carousel-card .play-icon {
-      opacity: 0;
-      transform: scale(0.8);
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .carousel-card:hover .play-icon {
-      opacity: 1;
-      transform: scale(1);
-    }
+/* ───────── Barra de progresso da página ───────── */
+.progress{position:fixed;inset:0 0 auto;height:3px;z-index:45;background:var(--ink);transform:scaleX(0);transform-origin:left;pointer-events:none}
 
-  @media (min-width: 1024px) { .carousel-card { flex: 0 0 calc(31% - 1rem); } }
+/* ───────── Menu fixo com vidro: transparente no topo, translúcido ao rolar ───────── */
+.top{position:fixed;inset:12px var(--m) auto;z-index:30;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:8px 8px 8px 24px;min-height:56px;border-radius:999px;color:var(--paper);transition:transform .6s var(--ease)}
+.top::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:rgba(236,227,211,.8);-webkit-backdrop-filter:blur(18px) saturate(1.5);backdrop-filter:blur(18px) saturate(1.5);opacity:0;transition:opacity .45s}
+.top.is-stuck{color:var(--ink)}
+.top.is-stuck::before{opacity:1}
+.top.is-hidden{transform:translateY(-160%)}
+.brand{font-weight:600;text-decoration:none;letter-spacing:-.02em;white-space:nowrap}
+.top nav{display:flex;gap:clamp(18px,2.4vw,34px)}
+.top__end{display:flex;align-items:center;gap:6px}
+.top__cta{padding:10px 18px;background:var(--ink);color:var(--bg);opacity:0;visibility:hidden;transition:transform .45s var(--ease),opacity .35s,visibility 0s .35s}
+.top.is-stuck .top__cta{opacity:1;visibility:visible;transition-delay:0s}
+.menu-btn{display:none;padding:10px 16px;font-weight:500;border-radius:999px}
 
-  /* Impede que a tag de vídeo intercepte o scroll do mouse */
-  .carousel-card video {
-    pointer-events: none;
-  }
+/* ───────── Hero: o nome como título de filme na borda de baixo ───────── */
+.hero{position:relative;display:flex;align-items:flex-end;height:100svh;min-height:600px;padding:28px 16px;padding-inline:var(--m);overflow:hidden;color:var(--paper);background:#0b1430;border-radius:0 0 var(--r-lg) var(--r-lg)}
+.hero__media{position:absolute;inset:0}
+.hero__img{object-position:62% 60%}
+.hero::after{content:"";position:absolute;inset:auto 0 0;height:70%;background:linear-gradient(to top,rgba(8,13,32,.78),rgba(8,13,32,.4) 48%,rgba(8,13,32,0))} /* taste-skill-ignore: véu neutro sob o texto da foto */
+.hero::before{content:"";position:absolute;inset:0 0 auto;height:22%;z-index:1;pointer-events:none;background:linear-gradient(rgba(8,13,32,.42),rgba(8,13,32,0))} /* taste-skill-ignore: véu neutro sob o menu */
+/* Base do hero: título à esquerda, frase e botão à direita */
+.hero__foot{position:relative;z-index:2;flex:1;min-width:0;display:flex;justify-content:space-between;align-items:flex-end;gap:clamp(24px,4vw,64px)}
+.hero h1{font-weight:600}
+.hero__mask{display:block;overflow:hidden;font-size:var(--name);letter-spacing:-.055em;line-height:.9;white-space:nowrap;padding-right:.06em}
+.hero__name{display:block;animation:rise .95s var(--ease) both} /* o nome sobe por trás da máscara já no primeiro quadro, sem esperar o JavaScript */
+@keyframes rise{from{transform:translateY(105%)}}
+.hero__sub{display:block;margin-top:clamp(6px,.8vw,12px);font-size:var(--lead);font-weight:500;letter-spacing:-.02em;line-height:1.2}
+.hero__side{display:grid;gap:18px;justify-items:start;max-width:25rem;flex:none}
+/* Painel translúcido: mantém a frase legível em cima da foto */
+.hero__say{padding:16px 22px;border-radius:var(--r);background:rgba(8,18,48,.42);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);line-height:1.4}
+/* Estado inicial da sequência de entrada (o JavaScript anima a partir daqui) */
+.js [data-intro]{opacity:0}
 
-  .play-btn-glow {
-    box-shadow: 0 0 25px rgba(200, 122, 42, 0.3);
-    transition: all 0.4s ease;
-  }
-  .carousel-card:hover .play-btn-glow {
-    transform: scale(1.15);
-    box-shadow: 0 0 35px rgba(200, 122, 42, 0.6);
-    background-color: #1C1917;
-    color: #F8F5F0;
-  }
-  .carousel-card:hover .card-bg-zoom { transform: scale(1.05); }
+/* ───────── Vídeos: faixa que se abre nos trabalhos, grade de arcos nas casas ───────── */
+.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:clamp(10px,1.2vw,18px);margin-top:clamp(40px,5vw,72px)}
+.grid .tile:nth-child(even){margin-top:clamp(24px,3.4vw,52px)} /* colunas desencontradas: ritmo mais orgânico */
+/* Trabalhos: o filme institucional grande em cima e, abaixo, uma faixa em que cada vídeo se abre ao passar o mouse */
+.works{--h:clamp(420px,62svh,640px);display:flex;flex-wrap:wrap;gap:clamp(10px,1.2vw,18px);margin-top:clamp(40px,5vw,72px)}
+.works .tile--wide{flex:0 0 100%}
+.works .tile:not(.tile--wide){flex:1 1 0;min-width:0;transition:flex-grow .7s var(--ease)}
+.works .tile:not(.tile--wide):hover,.works .tile:not(.tile--wide):focus-within{flex-grow:1.85} /* aberto, o vídeo aparece inteiro em 9:16 */
+.works .tile:not(.tile--wide) .tile__btn{aspect-ratio:auto;height:var(--h);border-radius:var(--r-lg)}
+.works .tile:not(.tile--wide) .tile__cap svg{opacity:0;transition:opacity .4s}
+.works .tile:not(.tile--wide):hover .tile__cap svg,.works .tile:not(.tile--wide):focus-within .tile__cap svg{opacity:1}
+.tile__btn{position:relative;display:block;width:100%;aspect-ratio:var(--ar);overflow:hidden;border-radius:var(--arch);background:var(--ink-deep);color:var(--paper);transform:translateZ(0)}
+.tile--wide .tile__btn{border-radius:var(--r-lg)}
+.tile video{position:absolute;inset:0;transition:transform 1.4s var(--ease)}
+.tile__btn:hover video,.tile__btn:focus-visible video{transform:scale(1.045)}
+.tile__btn:active{transform:scale(.985)}
+/* Legenda em painel translúcido sobre o vídeo */
+.tile__cap{position:absolute;left:8px;right:8px;bottom:8px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:2px 10px;padding:10px 14px;border-radius:calc(var(--r) - 8px);background:var(--glass-dark);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);transition:transform .5s var(--ease)}
+.tile__btn:hover .tile__cap{transform:translateY(-4px)}
+.tile__cap b{font-weight:600;line-height:1.15;letter-spacing:-.02em}
+.tile__cap span{grid-column:1;font-size:var(--small);opacity:.92}
+.tile__cap svg{grid-row:1/3;grid-column:2;width:30px;height:30px;padding:9px;border-radius:50%;background:var(--paper);color:var(--ink)}
+.tile--wide .tile__cap{right:auto;left:clamp(10px,1.4vw,20px);bottom:clamp(10px,1.4vw,20px);padding:14px 20px;gap:2px 18px}
+.tile--wide .tile__cap b{font-size:var(--lead)}
+.tile__desc{margin-top:10px;padding:0 6px;font-size:var(--small);line-height:1.35;color:var(--muted)}
 
-  .hero-headline {
-    text-shadow: 0 10px 30px rgba(28,25,23,0.15);
-  }
-  .hero-line {
-    display: block;
-    font-family: 'Thunder-Black', 'Bebas Neue', sans-serif;
-    line-height: 0.82;
-    letter-spacing: 0.01em;
-    text-transform: uppercase;
-  }
+/* ───────── A produtora ───────── */
+.about{display:grid;grid-template-columns:5fr 6fr;gap:clamp(24px,6vw,96px);align-items:center}
+.about__ph{aspect-ratio:4/5;overflow:hidden;background:var(--surface);border-radius:var(--arch)}
+.about__txt{display:grid;gap:26px;max-width:36rem}
+.about__txt p{max-width:58ch}
+.about__lead{font-size:var(--lead);line-height:1.35;letter-spacing:-.015em}
 
-  @media (max-width: 640px) {
-    .hero-headline {
-      line-height: 0.8;
-    }
-    .hero-line {
-      font-size: clamp(3.1rem, 17vw, 6.1rem) !important;
-      letter-spacing: 0.01em;
-    }
-  }
+/* ───────── Imóveis: vídeos de casas, no mesmo formato de arco ───────── */
+.estate__intro{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,6vw,96px);align-items:end}
+.estate__intro p{max-width:46ch}
+/* mesma grade dos trabalhos, com o desencontro invertido */
+.grid--alt .tile:nth-child(even){margin-top:0}
+.grid--alt .tile:nth-child(odd){margin-top:clamp(24px,3.4vw,52px)}
+.estate__list{display:flex;flex-wrap:wrap;gap:8px 40px;margin-top:clamp(28px,3vw,44px);font-weight:500}
+
+/* ───────── Método: linhas em escada ───────── */
+.steps{display:grid;grid-template-columns:repeat(12,1fr);row-gap:clamp(40px,4vw,56px);column-gap:16px}
+.step{grid-column:var(--c)/-1}
+.step h2,.step h3{font-weight:600;font-size:var(--head);letter-spacing:-.045em;line-height:1;margin:0}
+.step p{margin-top:12px;max-width:36ch;color:var(--muted)}
+
+/* ───────── Planos: blocos que sobem ───────── */
+.plans{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(8px,1vw,14px);align-items:end;min-height:700px}
+.plans h2{position:absolute;left:0;top:0;width:calc(33.33% - 8px)}
+.plan{display:flex;flex-direction:column;min-height:var(--h);border-radius:var(--r-lg);overflow:hidden}
+.plan__in{padding:clamp(24px,2.4vw,34px);flex:1;display:grid;gap:8px;align-content:start}
+.plan h3{font-size:var(--lead);font-weight:600;letter-spacing:-.03em;line-height:1.1}
+.plan__fig{font-size:var(--head);font-weight:600;letter-spacing:-.045em;line-height:1}
+.plan__for{margin-bottom:14px}
+.plan li{padding:3px 0}
+.plan__go{display:flex;align-items:center;min-height:68px;padding:18px clamp(24px,2.4vw,34px);font-weight:500;text-decoration:none}
+.plan__go span{transition:transform .5s var(--ease)}
+.plan__go:hover span{transform:translateX(10px)}
+.plan--1{--h:430px;background:var(--surface)}.plan--1 .plan__go{background:var(--surface-2)}
+.plan--2{--h:560px;background:var(--ink-mid);color:var(--paper)}.plan--2 .plan__go{background:#2a468c}
+.plan--3{--h:700px;background:var(--ink);color:var(--paper)}.plan--3 .plan__go{background:var(--ink-deep)}
+
+/* ───────── Contato: linhas em tamanho de título, em cápsulas ───────── */
+.contact h2{padding-bottom:clamp(28px,3vw,44px)}
+.contact ul{display:grid;gap:clamp(6px,.8vw,10px)}
+.crow{display:flex;align-items:stretch;min-height:clamp(84px,10.4vw,150px);padding:0 28px;padding-inline:clamp(26px,4.4vw,64px);border-radius:999px;background:var(--surface);font-size:var(--head);letter-spacing:-.045em;line-height:1}
+.crow>*{display:flex;align-items:center;flex:1;padding:14px 0;text-decoration:none;transition:transform .55s var(--ease)}
+.crow>a:hover{transform:translateX(14px)}
+.crow--go{background:var(--ink);color:var(--paper);font-weight:600}
+.crow--go>a{gap:.28em}
+.crow--go svg{width:.82em;height:.82em;flex:none;padding:.2em;border-radius:50%;background:var(--paper);color:var(--ink);transition:transform .55s var(--ease)}
+.crow--go:hover svg{transform:translateX(.2em)}
+
+/* ───────── Rodapé: convite sobre o nome cortado ───────── */
+footer{margin-top:var(--gap);background:var(--ink);color:var(--paper);padding:clamp(48px,6vw,88px) var(--m) 0;overflow:hidden;border-radius:var(--r-lg) var(--r-lg) 0 0}
+.foot__top{display:grid;grid-template-columns:7fr 3fr;gap:32px;align-items:start}
+.foot__inv{font-weight:600;font-size:var(--head);letter-spacing:-.045em;line-height:1;max-width:14ch;margin-bottom:32px}
+.foot__links{display:grid;gap:10px;justify-items:start}
+.foot__legal{display:flex;justify-content:space-between;gap:16px;margin-top:clamp(56px,8vw,120px);font-size:var(--small)}
+.foot__name{font-weight:600;font-size:14.6vw;letter-spacing:-.055em;line-height:.76;white-space:nowrap;text-align:center;transform:translateY(16%);margin-top:-.02em}
+
+/* ───────── Player: abre a partir da miniatura ───────── */
+#player{position:fixed;inset:0;z-index:50;display:none;place-items:center;padding:16px}
+#player.open{display:grid}
+#player__bg{position:absolute;inset:0;background:rgba(8,18,48,.88);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+#shell{--ar:.5625;--maxw:520px;--pad:2rem;--vh:100vh;position:relative;aspect-ratio:var(--ar);width:min(var(--maxw),100%,calc((var(--vh) - var(--pad))*var(--ar)));background:#000;overflow:hidden;border-radius:var(--r);will-change:transform}
+@supports (height:100dvh){#shell{--vh:100dvh}}
+@media (min-width:768px){#shell{--pad:5rem}}
+#close{position:absolute;top:14px;right:14px;z-index:2;padding:10px 18px;border-radius:999px;background:var(--paper);color:var(--ink);font-weight:500;transition:transform .45s var(--ease)}
+#close:hover{transform:translateY(-2px)}
+#close:active{transform:scale(.95)}
+
+/* ───────── Menu do celular ───────── */
+#menu{position:fixed;inset:0;z-index:40;display:none;flex-direction:column;justify-content:flex-end;gap:6px;padding:var(--m);background:var(--ink);color:var(--paper)}
+#menu.open{display:flex}
+#menu a{font-weight:600;font-size:13vw;letter-spacing:-.05em;line-height:1.05;text-decoration:none}
+#menu button{position:absolute;top:20px;right:var(--m);padding:10px 16px;font-weight:500;border-radius:999px}
+
+/* ───────── Revelação ao rolar: estado inicial (o JavaScript anima) ───────── */
+.js .rv{opacity:0}
+
+/* ───────── Quem desativa animações vê o site estático ───────── */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition-duration:.01ms!important}
+  .js .rv,.js [data-intro]{opacity:1}
+}
+
+/* ───────── Celular: efeitos mais leves ───────── */
+@media (max-width:820px){
+  .top{padding-left:20px}
+  .top nav{display:none}.menu-btn{display:block}
+  .top__cta{opacity:1;visibility:visible;background:var(--paper);color:var(--ink)}
+  .top.is-stuck .top__cta{background:var(--ink);color:var(--bg)}
+  .hero__img{object-position:68% 55%}
+  :root{--name:13.6vw}
+  .hero__foot{flex-direction:column;align-items:stretch;gap:18px}
+  .hero__side{max-width:none}
+  .hero__say{padding:14px 18px}
+  .hero__cta{display:none}
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .works{display:grid;grid-template-columns:repeat(2,1fr)}
+  .works .tile--wide{grid-column:1/-1}
+  .works .tile:not(.tile--wide) .tile__btn{aspect-ratio:var(--ar);height:auto}
+  .tile:nth-child(even){margin-top:0}
+  .tile:nth-child(odd):not(.tile--wide){margin-top:28px}
+  /* sem desfoque nas legendas dos vídeos: mais leve em telas pequenas */
+  .tile__cap{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(8,18,48,.72);padding:8px 12px}
+  .tile__cap svg{display:none}
+  .about,.estate__intro,.foot__top{grid-template-columns:1fr}
+  .about__ph{aspect-ratio:4/4.4}
+  .grid--alt .tile:nth-child(odd){margin-top:0}
+  .grid--alt .tile:nth-child(even){margin-top:28px}
+  .steps{grid-template-columns:1fr}
+  .step{grid-column:1;padding-left:calc(var(--i)*6vw)}
+  .plans{grid-template-columns:1fr;min-height:0;gap:28px}
+  .plans h2{position:static;width:auto;margin-bottom:4px}
+  .plan{min-height:0}
+  .foot__legal{flex-direction:column}
+}
+@media (max-width:400px){.crow{font-size:7.4vw}}
+@media (max-width:360px){.top{padding-left:14px;gap:6px;font-size:var(--small)}.top__cta{padding:9px 12px}.menu-btn{padding:10px 8px}}
 </style>
 </head>
-<body class="antialiased bg-[#F8F5F0] text-cream">
+<body>
+<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+<div class="progress" id="progress" aria-hidden="true"></div>
 
-<!-- MAIN HERO CONTAINER FRAME -->
-<section class="p-2 sm:p-4 lg:p-6 min-h-screen flex flex-col justify-between">
-  
-  <!-- HERO CARD CONTAINER WITH ROUNDED CORNERS -->
-  <div class="relative w-full rounded-2xl sm:rounded-3xl lg:rounded-[32px] overflow-hidden bg-[#F1ECE4] border border-border min-h-[92vh] flex flex-col justify-between p-6 sm:p-10 lg:p-12 grain">
-    
-    <!-- BACKGROUND ARTWORK & ATMOSPHERIC LIGHTING -->
-    <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-      <img src="praia.jpg" 
-           alt="Cenário Cinematográfico Daime Filmes" 
-           class="w-full h-full object-cover object-center scale-105 filter brightness-[1.02] contrast-[0.98] saturate-[0.9] opacity-100" />
-      
-      <div class="absolute inset-0 bg-gradient-to-tr from-[#F8F5F0]/60 via-[#F8F5F0]/20 to-transparent"></div>
-      <div class="absolute inset-0 bg-gradient-to-b from-[#F8F5F0]/20 via-transparent to-[#F8F5F0]/50"></div>
-      
-      <div class="absolute -top-32 -left-32 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[140px]"></div>
-      <div class="absolute bottom-0 right-0 w-[800px] h-[500px] bg-amber-200/15 rounded-full blur-[160px]"></div>
-    </div>
-
-    <!-- TOP BAR / NAVIGATION INSIDE HERO CARD -->
-    <header class="relative z-20 flex items-center justify-between w-full">
-      <a href="#" class="flex items-center gap-2 group">
-        <div class="flex items-end gap-[3px] h-6">
-          <span class="w-[5px] h-6 bg-cream group-hover:bg-primary transition-colors"></span>
-          <span class="w-[5px] h-6 bg-cream group-hover:bg-primary transition-colors"></span>
-          <span class="w-[5px] h-6 bg-cream group-hover:bg-primary transition-colors"></span>
-        </div>
-        <span class="font-mono text-xs font-bold tracking-tighter text-cream group-hover:text-primary transition-colors">DAIME FILMES</span>
-      </a>
-
-      <nav class="hidden md:flex items-center gap-8 font-mono text-[11px] uppercase tracking-[0.25em] text-cream/80">
-        <a href="#sobre" class="hover:text-primary transition">Sobre</a>
-        <a href="#portfolio" class="hover:text-primary transition">Portfólio</a>
-        <a href="#planos" class="hover:text-primary transition">Planos</a>
-      </nav>
-
-      <div class="flex items-center gap-4">
-        <a href="#contato" class="hidden sm:inline-block font-mono text-[10px] uppercase tracking-[0.2em] border border-cream/30 text-cream px-3 py-1.5 hover:bg-cream hover:text-ink transition">
-          Falar com a Daime
-        </a>
-        <button aria-label="Abrir Menu" class="w-10 h-8 flex flex-col justify-center items-end gap-1.5 text-cream hover:text-primary transition">
-          <span class="w-7 h-[2px] bg-current"></span>
-          <span class="w-5 h-[2px] bg-current"></span>
-        </button>
-      </div>
-    </header>
-
-    <!-- HERO MAIN CONTENT GRID -->
-    <div class="relative z-10 grid lg:grid-cols-12 gap-8 items-start my-auto pt-16 pb-8">
-      <div class="lg:col-span-8 reveal"> 
-        <h1 class="text-[13vw] sm:text-[15vw] lg:text-[8.8rem] xl:text-[10rem] leading-[0.82] uppercase hero-headline select-none">
-          <span class="hero-line text-cream opacity-100" style="font-size: clamp(4.5rem, 8vw, 9.5rem);">
-            CINEMA COM
-          </span>
-          <span class="hero-line text-white opacity-70" style="font-size: clamp(4.1rem, 7.2vw, 8.8rem);">
-            ESTRATÉGIA
-          </span>
-        </h1>
-      </div>
-
-      <div class="lg:col-span-4 flex flex-col justify-start space-y-8 lg:pl-6 reveal">
-        <div class="space-y-2 font-serif text-[12px] sm:text-sm uppercase border-l-2 border-primary/80 pl-3">
-          <p class="font-bold text-primary opacity-100 tracking-wider">
-            Audiovisual de Performance
-          </p>
-          <p class="text-muted opacity-80 tracking-widest">
-            Para clínicas premium.
-          </p>
-        </div>
-
-        <div class="max-w-md font-serif text-[13px] sm:text-[16px] leading-relaxed text-muted opacity-85">
-          Transformamos sua autoridade clínica em resultados concretos através de cinema de alto impacto.
-        </div>
-
-        <a href="#contato" class="inline-block border border-primary text-primary font-bold text-[11px] uppercase tracking-[0.2em] px-8 py-4 hover:bg-primary hover:text-ink transition-all duration-300">
-          Agendar Consultoria
-        </a>
-
-      </div>
-    </div>
-
-    <div class="relative z-10 flex flex-col sm:flex-row items-start sm:items-end justify-between gap-6 pt-4"></div>
-
+<header class="top" id="top" data-intro>
+  <a class="brand" href="#conteudo" translate="no">Daime Filmes</a>
+  <nav aria-label="Menu principal">
+    <a class="lnk" href="#trabalhos">Trabalhos</a>
+    <a class="lnk" href="#imoveis">Imóveis</a>
+    <a class="lnk" href="#planos">Planos</a>
+    <a class="lnk" href="#contato">Contato</a>
+  </nav>
+  <div class="top__end">
+    <a class="btn top__cta" href="https://wa.me/5573991419330?text=Ol%C3%A1%2C+quero+um+or%C3%A7amento+com+a+Daime+Filmes" target="_blank" rel="noopener noreferrer">Orçamento</a>
+    <button class="menu-btn" id="menu-btn" type="button" aria-expanded="false" aria-controls="menu">Menu</button>
   </div>
-</section>
+</header>
 
-<!-- ABOUT SECTION -->
-<section id="sobre" class="relative py-28 md:py-36 grain overflow-hidden">
-  <div class="max-w-[1400px] mx-auto px-6 md:px-10 grid md:grid-cols-12 gap-12 md:gap-20 items-start">
-    <div class="md:col-span-5 md:sticky md:top-32 reveal">
-      <div class="flex items-center gap-4 mb-8 font-serif">
-        <span class="italic text-primary text-sm font-semibold">01</span>
-        <span class="h-px w-10 bg-primary/40"></span>
-        <span class="text-[10px] uppercase tracking-[0.3em] text-muted">A Produtora</span>
-      </div>
-      <h2 class="md:text-6xl text-cream letter-tight leading-[1.05] font-serif text-3xl">
-        Cinema com <span class="italic text-primary">propósito</span> de venda.
-      </h2>
+<main id="conteudo" tabindex="-1">
+
+<section class="hero on-dark" id="hero">
+  <div class="hero__media" id="hero-media">
+    <img class="hero__img" id="hero-img" src="img/p1raia-2400.jpg" srcset="img/p1raia-1200.jpg 1200w, img/p1raia-2400.jpg 2400w" sizes="100vw" width="2400" height="1600" alt="Barco de madeira ancorado ao entardecer, com o céu laranja e azul refletido na água" fetchpriority="high">
+  </div>
+  <div class="hero__foot">
+    <div class="hero__title">
+      <h1><span class="hero__mask"><span class="hero__name" translate="no">DAIME FILMES</span></span> <span class="hero__sub" data-intro>Produtora audiovisual</span></h1>
     </div>
-    <div class="md:col-span-7 space-y-8 reveal">
-      <p class="text-lg md:text-xl text-cream/90 font-light leading-relaxed">
-        A <span class="text-primary font-medium">Daime Filmes</span> nasce da fusão entre linguagem cinematográfica e estratégia de performance. Cada frame é pensado para construir autoridade — e cada vídeo, para gerar resultado.
-      </p>
-      <p class="text-base md:text-lg text-muted leading-relaxed">
-        Nosso trabalho começa muito antes da câmera ligar. Mergulhamos no modelo de negócio do cliente, estudamos a concorrência e desenhamos um posicionamento único — para que cada peça produzida atraia o paciente certo, com real potencial de fechamento.
-      </p>
-      <div class="grid grid-cols-3 gap-6 pt-8 border-t border-border mt-12">
-        <div><div class="font-serif text-3xl md:text-5xl text-primary font-bold">+30</div><div class="text-[10px] uppercase tracking-[0.2em] text-muted mt-2 font-mono">Projetos<br/>entregues</div></div>
-        <div><div class="font-serif text-3xl md:text-5xl text-primary font-bold">100%</div><div class="text-[10px] uppercase tracking-[0.2em] text-muted mt-2 font-mono">Foco em<br/>conversão</div></div>
-        <div><div class="font-serif text-3xl md:text-5xl text-primary font-bold">4K</div><div class="text-[10px] uppercase tracking-[0.2em] text-muted mt-2 font-mono">Padrão<br/>cinematográfico</div></div>
-      </div>
+    <div class="hero__side">
+      <p class="hero__say" data-intro>Filmes para marcas e imóveis no sul da Bahia, com linguagem de cinema.</p>
+      <div class="hero__cta" data-intro><a class="btn btn--paper" href="https://wa.me/5573991419330?text=Ol%C3%A1%2C+quero+um+or%C3%A7amento+com+a+Daime+Filmes" target="_blank" rel="noopener noreferrer">Pedir um orçamento</a></div>
     </div>
   </div>
 </section>
 
-<!-- METHOD -->
-<section id="metodo" class="relative py-28 md:py-36 bg-cardAlt/60 overflow-hidden border-y border-border">
-  <div class="max-w-[1400px] mx-auto px-6 md:px-10">
-    <div class="flex items-center gap-4 mb-8 font-serif reveal">
-      <span class="italic text-primary text-sm font-semibold">02</span>
-      <span class="h-px w-10 bg-primary/40"></span>
-      <span class="text-[10px] uppercase tracking-[0.3em] text-muted font-mono">Nosso Método</span>
-    </div>
-    <div class="grid md:grid-cols-12 gap-12 md:gap-16 items-center">
-      <div class="md:col-span-6 order-2 md:order-1 reveal">
-        <div class="aspect-[4/5] relative rounded-2xl border border-border overflow-hidden shadow-lg bg-card">
-          <img src="9682.jpg" alt="Color Grading e Edição" class="w-full h-full object-cover opacity-85" />
-          <div class="absolute inset-0 bg-gradient-to-t from-cream/90 via-cream/30 to-transparent"></div>
-          <div class="absolute bottom-6 left-6 right-6 font-serif italic text-cream font-medium text-lg md:text-xl">
-            "Cada vídeo é uma engrenagem de uma máquina maior: a sua marca."
-          </div>
-        </div>
-      </div>
-      <div class="md:col-span-6 order-1 md:order-2 reveal">
-        <h2 class="md:text-6xl text-cream letter-tight leading-[1.05] font-serif text-3xl mb-8">
-          Estratégia primeiro. <span class="italic text-primary">Câmera depois.</span>
-        </h2>
-        <p class="text-lg text-muted leading-relaxed mb-12">Unimos audiovisual e performance para transformar a identidade da sua clínica em um ativo que gera lucro.</p>
-        <div class="space-y-8">
-          <div class="flex gap-6 p-6 rounded-xl bg-card border border-border/70 shadow-sm">
-            <div class="font-serif text-4xl text-primary font-semibold leading-none">01</div>
-            <div><h3 class="font-serif text-2xl text-cream mb-2 font-medium">Imersão estratégica</h3><p class="text-muted text-sm leading-relaxed">Análise profunda do modelo de negócio e dos concorrentes para desenhar um posicionamento único e inquestionável.</p></div>
-          </div>
-          <div class="flex gap-6 p-6 rounded-xl bg-card border border-border/70 shadow-sm">
-            <div class="font-serif text-4xl text-primary font-semibold leading-none">02</div>
-            <div><h3 class="font-serif text-2xl text-cream mb-2 font-medium">Conteúdo com intenção</h3><p class="text-muted text-sm leading-relaxed">Roteiro estratégico e entrega final focada em autoridade, visando atrair pacientes com real potencial de fechamento.</p></div>
-          </div>
-        </div>
-      </div>
+<section id="trabalhos">
+  <h2 class="rv">Trabalhos recentes</h2>
+  <!-- Vídeo novo: copie um <li class="tile">, troque data-src (arquivo), data-t (segundo em que a prévia começa),
+       --ar e data-ar (largura ÷ altura: 9:16 = 0.5625) e a capa em poster. -->
+  <ul class="works" id="grid">
+    <li class="tile tile--wide rv">
+      <button class="tile__btn" type="button" style="--ar:2.1056" data-src="coletividade.mp4" data-t="14" data-ar="2.1056">
+        <video poster="img/capas/coletividade.jpg" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
+        <span class="tile__cap"><b translate="no">Coletividade</b><span>Institucional · 01:56</span><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+      </button>
+      <p class="tile__desc">Filme institucional de arquitetura</p>
+    </li>
+    <li class="tile rv">
+      <button class="tile__btn" type="button" style="--ar:.5625" data-src="bt.mp4" data-t="3" data-ar="0.5625">
+        <video poster="img/capas/bt.jpg" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
+        <span class="tile__cap"><b>Beach Tennis</b><span>00:56</span><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+      </button>
+      <p class="tile__desc">Torneio em Trancoso</p>
+    </li>
+    <li class="tile rv">
+      <button class="tile__btn" type="button" style="--ar:.5625" data-src="anonovo.mp4" data-t="2" data-ar="0.5625">
+        <video poster="img/capas/anonovo.jpg" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
+        <span class="tile__cap"><b translate="no">Porto Beer</b><span>00:24</span><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+      </button>
+      <p class="tile__desc">Chamada de fim de ano do restaurante</p>
+    </li>
+    <li class="tile rv">
+      <button class="tile__btn" type="button" style="--ar:.5625" data-src="organic.mp4" data-t="14" data-ar="0.5625">
+        <video poster="img/capas/organic.jpg" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
+        <span class="tile__cap"><b>Encontro Gastronômico</b><span>00:51</span><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+      </button>
+      <p class="tile__desc">Cultura e consciência ambiental</p>
+    </li>
+    <li class="tile rv">
+      <button class="tile__btn" type="button" style="--ar:.5625" data-src="V1_c1.mp4" data-t="4" data-ar="0.5625">
+        <video poster="img/capas/V1_c1.jpg" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
+        <span class="tile__cap"><b>Pilates Day</b><span>00:51</span><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+      </button>
+      <p class="tile__desc">Um dia de aulas ao ar livre</p>
+    </li>
+    <li class="tile rv">
+      <button class="tile__btn" type="button" style="--ar:.5625" data-src="move.mp4" data-t="1" data-ar="0.5625">
+        <video poster="img/capas/move.jpg" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
+        <span class="tile__cap"><b>Campanha de Pilates</b><span>00:05</span><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+      </button>
+      <p class="tile__desc">Vídeo para anúncio do estúdio</p>
+    </li>
+    <li class="tile rv">
+      <button class="tile__btn" type="button" style="--ar:.572" data-src="gian.mp4" data-t="4" data-ar="0.572">
+        <video poster="img/capas/gian.jpg" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
+        <span class="tile__cap"><b>Pílulas de Autoridade</b><span>00:16</span><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+      </button>
+      <p class="tile__desc">Série de vídeos curtos para redes</p>
+    </li>
+  </ul>
+</section>
+
+<section id="sobre">
+  <div class="about">
+    <div class="about__ph rv" data-parallax><img src="img/9682-1400.jpg" width="933" height="1400" loading="lazy" decoding="async" alt="Tela de correção de cor durante a edição de um filme"></div>
+    <div class="about__txt">
+      <h2 class="rv">Estratégia primeiro. Câmera depois.</h2>
+      <p class="about__lead rv">A Daime nasce da união entre linguagem de cinema e estratégia. Cada vídeo tem um trabalho a fazer: atrair o cliente certo e ajudar a fechar.</p>
+      <p class="rv">Antes de ligar a câmera, a gente entende o seu negócio, estuda a concorrência e define o que o filme precisa dizer. Já são mais de 30 projetos entregues, de torneios e restaurantes a filmes institucionais, todos captados em 4K.</p>
+      <p class="rv">Hoje, um dos nossos focos é o mercado imobiliário: imóveis filmados para despertar desejo, e não só para listar metragens.</p>
     </div>
   </div>
 </section>
 
-<!-- PORTFOLIO WITH INTERACTIVE VIDEO CAROUSEL -->
-<section id="portfolio" class="relative py-28 md:py-36 bg-ink overflow-hidden">
-  <div class="max-w-[1400px] mx-auto px-6 md:px-10">
-    
-    <div class="grid md:grid-cols-12 gap-8 mb-12 items-end">
-      <div class="md:col-span-8 reveal">
-        <div class="flex items-center gap-4 mb-6 font-serif">
-          <span class="italic text-primary text-sm font-semibold">03</span>
-          <span class="h-px w-10 bg-primary/40"></span>
-          <span class="text-[10px] uppercase tracking-[0.3em] text-muted font-mono">Showcase de Produções</span>
-        </div>
-        <h2 class="md:text-6xl text-cream letter-tight leading-[1.05] font-serif text-3xl">
-          Estética cinematográfica para <br class="hidden sm:block"/>
-          <span class="italic text-primary">marcas que cuidam.</span>
-        </h2>
-      </div>
+<section id="imoveis">
+  <div class="estate__intro">
+    <h2 class="rv">Imóveis filmados como cinema.</h2>
+    <p class="rv">Para imobiliárias, corretores e casas de temporada. A varanda aberta, a piscina entre os coqueiros, o mar no fim do terreno: é isso que faz alguém querer visitar.</p>
+  </div>
+  <ul class="grid grid--alt" id="grid-casas">
+    <li class="tile rv">
+      <button class="tile__btn" type="button" style="--ar:.5625" data-src="videos/casa-06.mp4" data-t="18" data-ar="0.5625">
+        <video poster="img/capas/casa-06.jpg" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
+        <span class="tile__cap"><b>Casa 06</b><span>01:13</span><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+      </button>
+      <p class="tile__desc">Tour do imóvel</p>
+    </li>
+    <li class="tile rv">
+      <button class="tile__btn" type="button" style="--ar:.5625" data-src="videos/casa-110.mp4" data-t="10" data-ar="0.5625">
+        <video poster="img/capas/casa-110.jpg" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
+        <span class="tile__cap"><b>Casa 110</b><span>01:12</span><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+      </button>
+      <p class="tile__desc">Vila dos Coqueiros</p>
+    </li>
+    <li class="tile rv">
+      <button class="tile__btn" type="button" style="--ar:.5625" data-src="videos/casa-32.mp4" data-t="18" data-ar="0.5625">
+        <video poster="img/capas/casa-32.jpg" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
+        <span class="tile__cap"><b>Casa 32</b><span>01:01</span><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+      </button>
+      <p class="tile__desc">Reels para a Bahia Homes</p>
+    </li>
+    <li class="tile rv">
+      <button class="tile__btn" type="button" style="--ar:.5625" data-src="videos/casa-laura.mp4" data-t="1" data-ar="0.5625">
+        <video poster="img/capas/casa-laura.jpg" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
+        <span class="tile__cap"><b>Casa do Vale</b><span>01:13</span><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+      </button>
+      <p class="tile__desc">Tour do imóvel</p>
+    </li>
+    <li class="tile rv">
+      <button class="tile__btn" type="button" style="--ar:.5625" data-src="videos/casa-110-pilula-1.mp4" data-t="10" data-ar="0.5625">
+        <video poster="img/capas/casa-110-pilula-1.jpg" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
+        <span class="tile__cap"><b>Casa 110 · Pílula 1</b><span>00:32</span><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+      </button>
+      <p class="tile__desc">Vídeo curto para redes</p>
+    </li>
+    <li class="tile rv">
+      <button class="tile__btn" type="button" style="--ar:.5625" data-src="videos/casa-110-pilula-2.mp4" data-t="1" data-ar="0.5625">
+        <video poster="img/capas/casa-110-pilula-2.jpg" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
+        <span class="tile__cap"><b>Casa 110 · Pílula 2</b><span>00:32</span><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+      </button>
+      <p class="tile__desc">Vídeo curto para redes</p>
+    </li>
+  </ul>
+  <ul class="estate__list rv">
+    <li>Tour cinematográfico do imóvel</li>
+    <li>Vídeo vertical para anúncio</li>
+    <li>Imagens de drone</li>
+    <li>Série de lançamento</li>
+  </ul>
+</section>
 
-      <div class="md:col-span-4 flex items-center justify-between md:justify-end gap-4 reveal">
-        <div class="text-xs uppercase tracking-[0.2em] text-muted font-mono">
-          <span id="current-slide-num" class="text-primary font-bold">01</span> / <span id="total-slides-num">07</span>
-        </div>
-        <div class="flex items-center gap-3">
-          <button id="prev-btn" aria-label="Vídeo Anterior" class="w-12 h-12 rounded-xl border border-border bg-card flex items-center justify-center text-cream hover:border-primary hover:text-primary transition shadow-sm">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 19l-7-7 7-7"/></svg>
-          </button>
-          <button id="next-btn" aria-label="Próximo Vídeo" class="w-12 h-12 rounded-xl border border-border bg-card flex items-center justify-center text-cream hover:border-primary hover:text-primary transition shadow-sm">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7"/></svg>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Category Filters -->
-    <div class="flex items-center gap-3 overflow-x-auto pb-4 mb-10 no-scrollbar reveal">
-      <button class="filter-btn active-filter text-xs uppercase tracking-[0.2em] px-5 py-2.5 rounded-lg border border-primary bg-primary text-ink font-semibold transition" data-category="all">Todos</button>
-      <button class="filter-btn text-xs uppercase tracking-[0.2em] px-5 py-2.5 rounded-lg border border-border bg-card text-muted hover:text-cream hover:border-primary/50 transition" data-category="institucional">Institucional</button>
-      <button class="filter-btn text-xs uppercase tracking-[0.2em] px-5 py-2.5 rounded-lg border border-border bg-card text-muted hover:text-cream hover:border-primary/50 transition" data-category="estetica">Sport & Fitness</button>
-      <button class="filter-btn text-xs uppercase tracking-[0.2em] px-5 py-2.5 rounded-lg border border-border bg-card text-muted hover:text-cream hover:border-primary/50 transition" data-category="reels">Reels & Performance</button>
-      <button class="filter-btn text-xs uppercase tracking-[0.2em] px-5 py-2.5 rounded-lg border border-border bg-card text-muted hover:text-cream hover:border-primary/50 transition" data-category="bastidores">Bastidores</button>
-    </div>
-
-    <!-- CAROUSEL TRACK -->
-    <div id="video-carousel" class="carousel-track py-4">
-      
-      <!-- Video Card 1 -->
-      <div class="carousel-card carousel-item reveal" data-category="institucional" data-video-src="coletividade.mp4">
-        <div class="relative aspect-[9/16] rounded-2xl overflow-hidden border border-border bg-card cursor-pointer group shadow-sm">
-          <video 
-            src="coletividade.mp4#t=4" 
-            poster="poster.png"
-            autoplay 
-            loop 
-            muted 
-            playsinline 
-            class="w-full h-full object-cover opacity-90 transition duration-700">
-          </video>
-          <!-- Gradiente de Leitura Aprimorado -->
-          <div class="absolute inset-0 text-overlay"></div>
-          
-          <!-- Ícone de Play -->
-          <div class="absolute inset-0 flex items-center justify-center play-icon pointer-events-none">
-            <div class="w-16 h-16 rounded-full bg-primary/20 backdrop-blur-md border border-primary/50 flex items-center justify-center">
-               <svg class="w-8 h-8 text-primary ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </div>
-          </div>
-          <span class="absolute top-4 left-4 text-[10px] uppercase tracking-[0.2em] bg-card/90 backdrop-blur text-primary border border-primary/30 px-3 py-1 rounded-full font-mono font-semibold">
-            Institucional 4K
-          </span>
-          <span class="absolute top-4 right-4 text-[10px] font-mono text-cream/80 bg-card/90 backdrop-blur px-2.5 py-1 rounded">
-            01:45
-          </span>
-          <div class="absolute bottom-0 inset-x-0 p-6">
-            <p class="text-[10px] uppercase tracking-[0.3em] text-muted mb-1 font-mono">Coletividade</p>
-            <h3 class="font-serif text-2xl text-cream group-hover:text-primary transition font-medium">Arquitetura</h3>
-            <p class="text-xs text-muted mt-2 line-clamp-2">Apresentação cinematográfica institucional do coletivo.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Video Card 2 -->
-      <div class="carousel-card carousel-item reveal" data-category="estetica" data-video-src="bt.mp4">
-        <div class="relative aspect-[9/16] rounded-2xl overflow-hidden border border-border bg-card cursor-pointer group shadow-sm">
-          <video 
-            src="bt.mp4" 
-            poster="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=800&q=80"
-            autoplay 
-            loop 
-            muted 
-            playsinline 
-            class="card-bg-zoom w-full h-full object-cover opacity-85 transition duration-700">
-          </video>
-          <div class="absolute inset-0 bg-gradient-to-t from-cream via-cream/30 to-transparent"></div>
-          <span class="absolute top-4 left-4 text-[10px] uppercase tracking-[0.2em] bg-card/90 backdrop-blur text-primary border border-primary/30 px-3 py-1 rounded-full font-mono font-semibold">
-            Esporte & Fitness
-          </span>
-          <span class="absolute top-4 right-4 text-[10px] font-mono text-cream/80 bg-card/90 backdrop-blur px-2.5 py-1 rounded">
-            00:58
-          </span>
-          <div class="absolute bottom-0 inset-x-0 p-6">
-            <p class="text-[10px] uppercase tracking-[0.3em] text-muted mb-1 font-mono">BORA Esportes de Praia</p>
-            <h3 class="font-serif text-2xl text-cream group-hover:text-primary transition font-medium">Campeonato de Beach Tennis</h3>
-            <p class="text-xs text-muted mt-2 line-clamp-2">Captação em forma de Reels para torneio em Trancoso.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Video Card 3 -->
-      <div class="carousel-card carousel-item reveal" data-category="reels" data-video-src="anonovo.mp4">
-        <div class="relative aspect-[9/16] rounded-2xl overflow-hidden border border-border bg-card cursor-pointer group shadow-sm">
-          <video 
-            src="anonovo.mp4#t=1" 
-            poster="https://images.unsplash.com/photo-1512290900673-3e08f5d027e8?auto=format&fit=crop&w=800&q=80"
-            autoplay 
-            loop 
-            muted 
-            playsinline 
-            class="card-bg-zoom w-full h-full object-cover opacity-85 transition duration-700">
-          </video>
-          <div class="absolute inset-0 bg-gradient-to-t from-cream via-cream/30 to-transparent"></div>
-          <span class="absolute top-4 left-4 text-[10px] uppercase tracking-[0.2em] bg-card/90 backdrop-blur text-primary border border-primary/30 px-3 py-1 rounded-full font-mono font-semibold">
-            Reels & Performance
-          </span>
-          <span class="absolute top-4 right-4 text-[10px] font-mono text-cream/80 bg-card/90 backdrop-blur px-2.5 py-1 rounded">
-            00:30
-          </span>
-          <div class="absolute bottom-0 inset-x-0 p-6">
-            <p class="text-[10px] uppercase tracking-[0.3em] text-muted mb-1 font-mono">Campanha Final de Ano</p>
-            <h3 class="font-serif text-2xl text-cream group-hover:text-primary transition font-medium">Chamada para o Final de Ano do Porto Beer.</h3>
-            <p class="text-xs text-muted mt-2 line-clamp-2">Video curto para promocionar Restaurante.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Video Card 4 -->
-      <div class="carousel-card carousel-item reveal" data-category="Reels" data-video-src="move.mp4">
-        <div class="relative aspect-[9/16] rounded-2xl overflow-hidden border border-border bg-card cursor-pointer group shadow-sm">
-          <video 
-            src="move.mp4#t=1" 
-            poster="https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?auto=format&fit=crop&w=800&q=80"
-            autoplay 
-            loop 
-            muted 
-            playsinline 
-            class="card-bg-zoom w-full h-full object-cover opacity-85 transition duration-700">
-          </video>
-          <div class="absolute inset-0 bg-gradient-to-t from-cream via-cream/30 to-transparent"></div>
-          <span class="absolute top-4 left-4 text-[10px] uppercase tracking-[0.2em] bg-card/90 backdrop-blur text-primary border border-primary/30 px-3 py-1 rounded-full font-mono font-semibold">
-            Performance
-          </span>
-          <span class="absolute top-4 right-4 text-[10px] font-mono text-cream/80 bg-card/90 backdrop-blur px-2.5 py-1 rounded">
-            01:12
-          </span>
-          <div class="absolute bottom-0 inset-x-0 p-6">
-            <p class="text-[10px] uppercase tracking-[0.3em] text-muted mb-1 font-mono">MOVE PORTO</p>
-            <h3 class="font-serif text-2xl text-cream group-hover:text-primary transition font-medium">Video & Performance</h3>
-            <p class="text-xs text-muted mt-2 line-clamp-2">Video para campanha de marketing da clínica de pilates</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Video Card 5 -->
-      <div class="carousel-card carousel-item reveal" data-category="estetica" data-video-src="V1_c1.mp4">
-        <div class="relative aspect-[9/16] rounded-2xl overflow-hidden border border-border bg-card cursor-pointer group shadow-sm">
-          <video 
-            src="V1_c1.mp4#t=1" 
-            poster="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=800&q=80"
-            autoplay 
-            loop 
-            muted 
-            playsinline 
-            class="card-bg-zoom w-full h-full object-cover opacity-85 transition duration-700">
-          </video>
-          <div class="absolute inset-0 bg-gradient-to-t from-cream via-cream/30 to-transparent"></div>
-          <span class="absolute top-4 left-4 text-[10px] uppercase tracking-[0.2em] bg-card/90 backdrop-blur text-primary border border-primary/30 px-3 py-1 rounded-full font-mono font-semibold">
-            Sport & Fitness
-          </span>
-          <span class="absolute top-4 right-4 text-[10px] font-mono text-cream/80 bg-card/90 backdrop-blur px-2.5 py-1 rounded">
-            00:42
-          </span>
-          <div class="absolute bottom-0 inset-x-0 p-6">
-            <p class="text-[10px] uppercase tracking-[0.3em] text-muted mb-1 font-mono">Performance & Movimento</p>
-            <h3 class="font-serif text-2xl text-cream group-hover:text-primary transition font-medium">Pilates Day</h3>
-            <p class="text-xs text-muted mt-2 line-clamp-2">Um dia de Wellness e bem-estar com aulas de pilates ao ar livre. </p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Video Card 6 -->
-      <div class="carousel-card carousel-item reveal" data-category="Reels" data-video-src="organic.mp4">
-        <div class="relative aspect-[9/16] rounded-2xl overflow-hidden border border-border bg-card cursor-pointer group shadow-sm">
-          <video 
-            src="organic.mp4#t=1" 
-            poster="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=800&q=80"
-            autoplay 
-            loop 
-            muted 
-            playsinline 
-            class="card-bg-zoom w-full h-full object-cover opacity-85 transition duration-700">
-          </video>
-          <div class="absolute inset-0 bg-gradient-to-t from-cream via-cream/30 to-transparent"></div>
-          <span class="absolute top-4 left-4 text-[10px] uppercase tracking-[0.2em] bg-card/90 backdrop-blur text-primary border border-primary/30 px-3 py-1 rounded-full font-mono font-semibold">
-            Reels & Performance
-          </span>
-          <span class="absolute top-4 right-4 text-[10px] font-mono text-cream/80 bg-card/90 backdrop-blur px-2.5 py-1 rounded">
-            02:05
-          </span>
-          <div class="absolute bottom-0 inset-x-0 p-6">
-            <p class="text-[10px] uppercase tracking-[0.3em] text-muted mb-1 font-mono">Organic Festival</p>
-            <h3 class="font-serif text-2xl text-cream group-hover:text-primary transition font-medium">Encontro Gastronômico</h3>
-            <p class="text-xs text-muted mt-2 line-clamp-2">Cultura e consciência ambiental.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Video Card 7 -->
-      <div class="carousel-card carousel-item reveal" data-category="reels" data-video-src="gian.mp4">
-        <div class="relative aspect-[9/16] rounded-2xl overflow-hidden border border-border bg-card cursor-pointer group shadow-sm">
-          <video 
-            src="gian.mp4#t=1" 
-            poster="https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=800&q=80"
-            autoplay 
-            loop 
-            muted 
-            playsinline 
-            class="card-bg-zoom w-full h-full object-cover opacity-85 transition duration-700">
-          </video>
-          <div class="absolute inset-0 bg-gradient-to-t from-cream via-cream/30 to-transparent"></div>
-          <span class="absolute top-4 left-4 text-[10px] uppercase tracking-[0.2em] bg-card/90 backdrop-blur text-primary border border-primary/30 px-3 py-1 rounded-full font-mono font-semibold">
-            Reels & Performance
-          </span>
-          <span class="absolute top-4 right-4 text-[10px] font-mono text-cream/80 bg-card/90 backdrop-blur px-2.5 py-1 rounded">
-            00:45
-          </span>
-          <div class="absolute bottom-0 inset-x-0 p-6">
-            <p class="text-[10px] uppercase tracking-[0.3em] text-muted mb-1 font-mono">Talking Heads</p>
-            <h3 class="font-serif text-2xl text-cream group-hover:text-primary transition font-medium">Pílulas de Autoridade</h3>
-            <p class="text-xs text-muted mt-2 line-clamp-2">Iluminação profissional e roteiros que aproximam do espectador.</p>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Carousel Progress Indicator -->
-    <div class="mt-8 flex items-center justify-center gap-2">
-      <div id="carousel-dots" class="flex gap-2"></div>
-    </div>
-
+<section id="metodo" aria-label="Como trabalhamos">
+  <div class="steps">
+    <div class="step rv" style="--c:1;--i:0"><h2>Primeiro, a gente escuta.</h2><p>Uma conversa para entender o público, o posicionamento e a meta do projeto.</p></div>
+    <div class="step rv" style="--c:3;--i:1"><h3>Depois, escreve o roteiro.</h3><p>A narrativa e o plano de gravação ficam prontos antes do dia de filmar.</p></div>
+    <div class="step rv" style="--c:5;--i:2"><h3>Então filma, em 4K.</h3><p>Captação com luz e áudio de padrão publicitário.</p></div>
+    <div class="step rv" style="--c:7;--i:3"><h3>Por fim, entrega.</h3><p>Edição e cor de cinema, nos formatos de cada rede e de cada anúncio.</p></div>
   </div>
 </section>
 
-<!-- DIFFERENTIALS -->
-<section id="diferenciais" class="relative py-28 md:py-36 overflow-hidden">
-  <div class="max-w-[1400px] mx-auto px-6 md:px-10">
-    <div class="max-w-3xl mb-16 reveal">
-      <div class="flex items-center gap-4 mb-6 font-serif">
-        <span class="italic text-primary text-sm font-semibold">04</span>
-        <span class="h-px w-10 bg-primary/40"></span>
-        <span class="text-[10px] uppercase tracking-[0.3em] text-muted font-mono">Diferenciais</span>
+<section id="planos">
+  <div class="plans">
+    <h2 class="rv">Três planos, três fases.</h2>
+    <article class="plan plan--1 rv">
+      <div class="plan__in">
+        <h3>Essencial</h3>
+        <p class="plan__fig">4 vídeos por mês</p>
+        <p class="plan__for">Para quem está começando a aparecer em vídeo.</p>
+        <ul><li>Briefing estratégico inicial</li><li>Roteiro e direção</li><li>Captação de meia diária</li><li>Edição com identidade visual</li><li>Relatório mensal simplificado</li></ul>
       </div>
-      <h2 class="md:text-6xl text-cream letter-tight leading-[1.05] font-serif text-3xl">
-        O que faz a Daime ser <span class="italic text-primary">diferente.</span>
-      </h2>
-    </div>
-    <div class="grid md:grid-cols-2 gap-6">
-      <div class="bg-card border border-border rounded-2xl p-8 md:p-10 relative overflow-hidden shadow-sm hover:border-primary/50 transition reveal">
-        <div class="absolute top-0 right-0 font-serif text-[8rem] text-primary/[0.08] leading-none -mt-4 -mr-2 select-none">01</div>
-        <div class="flex items-center gap-3 mb-6"><span class="font-serif italic text-primary font-semibold">01</span><span class="h-px w-8 bg-primary/40"></span></div>
-        <h3 class="font-serif text-3xl text-cream mb-3 letter-tight">Acompanhamento integral</h3>
-        <p class="text-muted leading-relaxed text-sm sm:text-base">Da produção à análise de resultados, presença contínua ao seu lado em cada etapa do processo.</p>
+      <a class="plan__go" href="https://wa.me/5573991419330?text=Ol%C3%A1%2C+quero+saber+mais+sobre+o+plano+Essencial" target="_blank" rel="noopener noreferrer"><span>Quero o Essencial</span></a>
+    </article>
+    <article class="plan plan--2 on-dark rv">
+      <div class="plan__in">
+        <h3>Autoridade</h3>
+        <p class="plan__fig">6 a 8 vídeos por mês</p>
+        <p class="plan__for">Para quem quer dominar o mercado local.</p>
+        <ul><li>Análise profunda de concorrência</li><li>Captação de meia diária</li><li>Coloração cinematográfica</li><li>Plataforma de aprovação</li><li>Relatório estratégico mensal</li><li>Acompanhamento de performance</li></ul>
       </div>
-      <div class="bg-card border border-border rounded-2xl p-8 md:p-10 relative overflow-hidden shadow-sm hover:border-primary/50 transition reveal">
-        <div class="absolute top-0 right-0 font-serif text-[8rem] text-primary/[0.08] leading-none -mt-4 -mr-2 select-none">02</div>
-        <div class="flex items-center gap-3 mb-6"><span class="font-serif italic text-primary font-semibold">02</span><span class="h-px w-8 bg-primary/40"></span></div>
-        <h3 class="font-serif text-3xl text-cream mb-3 letter-tight">Entrega de resultados</h3>
-        <p class="text-muted leading-relaxed text-sm sm:text-base">Cada peça audiovisual tem objetivo claro: atrair, converter e fidelizar novos pacientes.</p>
+      <a class="plan__go" href="https://wa.me/5573991419330?text=Ol%C3%A1%2C+quero+saber+mais+sobre+o+plano+Autoridade" target="_blank" rel="noopener noreferrer"><span>Quero o Autoridade</span></a>
+    </article>
+    <article class="plan plan--3 on-dark rv">
+      <div class="plan__in">
+        <h3>Performance</h3>
+        <p class="plan__fig">12 vídeos ou mais</p>
+        <p class="plan__for">Vídeo, tráfego pago e conversão no mesmo plano.</p>
+        <ul><li>Tudo do plano Autoridade</li><li>Landing page otimizada</li><li>Gestão de tráfego pago (Meta Ads)</li><li>Estratégia de funil de aquisição</li><li>Reuniões quinzenais de performance</li><li>Suporte prioritário</li></ul>
       </div>
-      <div class="bg-card border border-border rounded-2xl p-8 md:p-10 relative overflow-hidden shadow-sm hover:border-primary/50 transition reveal">
-        <div class="absolute top-0 right-0 font-serif text-[8rem] text-primary/[0.08] leading-none -mt-4 -mr-2 select-none">03</div>
-        <div class="flex items-center gap-3 mb-6"><span class="font-serif italic text-primary font-semibold">03</span><span class="h-px w-8 bg-primary/40"></span></div>
-        <h3 class="font-serif text-3xl text-cream mb-3 letter-tight">Conteúdo orientado a conversão</h3>
-        <p class="text-muted leading-relaxed text-sm sm:text-base">Cada vídeo é pensado para gerar agendamentos e fechamentos — não apenas curtidas.</p>
-      </div>
-      <div class="bg-card border border-border rounded-2xl p-8 md:p-10 relative overflow-hidden shadow-sm hover:border-primary/50 transition reveal">
-        <div class="absolute top-0 right-0 font-serif text-[8rem] text-primary/[0.08] leading-none -mt-4 -mr-2 select-none">04</div>
-        <div class="flex items-center gap-3 mb-6"><span class="font-serif italic text-primary font-semibold">04</span><span class="h-px w-8 bg-primary/40"></span></div>
-        <h3 class="font-serif text-3xl text-cream mb-3 letter-tight">Plataforma própria de aprovação</h3>
-        <p class="text-muted leading-relaxed text-sm sm:text-base">Todos os meses entregamos relatórios detalhados de progresso em um app exclusivo para você.</p>
-      </div>
-    </div>
+      <a class="plan__go" href="https://wa.me/5573991419330?text=Ol%C3%A1%2C+quero+saber+mais+sobre+o+plano+Performance" target="_blank" rel="noopener noreferrer"><span>Quero o Performance</span></a>
+    </article>
   </div>
 </section>
 
-<!-- COMBINED SECTION: PROCESSO & ECOSSISTEMA DE SERVIÇOS -->
-<section id="processo-servicos" class="relative py-28 md:py-36 bg-cardAlt/40 border-y border-border overflow-hidden">
-  <div class="max-w-[1400px] mx-auto px-6 md:px-10">
-    <div class="max-w-3xl mb-16 reveal">
-      <div class="flex items-center gap-4 mb-6 font-serif">
-        <span class="italic text-primary text-sm font-semibold">05</span>
-        <span class="h-px w-10 bg-primary/40"></span>
-        <span class="text-[10px] uppercase tracking-[0.3em] text-muted font-mono">Do Método às Entregas</span>
-      </div>
-      <h2 class="md:text-6xl text-cream letter-tight leading-[1.05] font-serif text-3xl">
-        Como atuamos e o <span class="italic text-primary">nosso ecossistema.</span>
-      </h2>
-      <p class="mt-4 text-muted text-base md:text-lg">
-        Entendemos sua empresa do começo ao fim, garantindo resultados concretos e sustentáveis.
-      </p>
-    </div>
+<section id="contato" class="contact">
+  <h2 class="rv">Contato</h2>
+  <ul>
+    <li class="crow rv" translate="no"><span>Daime Filmes</span></li>
+    <li class="crow rv"><span>Sul da Bahia, Brasil</span></li>
+    <li class="crow rv"><a href="https://wa.me/5573991419330?text=Ol%C3%A1%2C+quero+um+or%C3%A7amento+com+a+Daime+Filmes" target="_blank" rel="noopener noreferrer">+55 73 99141-9330</a></li>
+    <li class="crow rv"><a href="mailto:daimefilmes@gmail.com">daimefilmes@gmail.com</a></li>
+    <li class="crow crow--go on-dark rv"><a href="https://wa.me/5573991419330?text=Ol%C3%A1%2C+quero+um+or%C3%A7amento+com+a+Daime+Filmes" target="_blank" rel="noopener noreferrer">Vamos conversar
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+  </ul>
+</section>
 
-    <!-- PROCESS STEPS -->
-    <div class="mb-20">
-      <h3 class="text-xs uppercase tracking-[0.25em] font-mono text-primary font-bold mb-8">Etapas da Jornada</h3>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="bg-card p-6 rounded-xl border border-border shadow-sm reveal">
-          <div class="font-serif text-4xl text-primary font-bold mb-3">01</div>
-          <h4 class="font-serif text-xl text-cream mb-2 font-medium">Diagnóstico</h4>
-          <p class="text-muted text-xs leading-relaxed">Imersão estratégica para alinhar público, posicionamento e metas da sua empresa.</p>
-        </div>
-        <div class="bg-card p-6 rounded-xl border border-border shadow-sm reveal">
-          <div class="font-serif text-4xl text-primary font-bold mb-3">02</div>
-          <h4 class="font-serif text-xl text-cream mb-2 font-medium">Roteiro</h4>
-          <p class="text-muted text-xs leading-relaxed">Desenvolvimento da narrativa persuasiva e planejamento das gravações.</p>
-        </div>
-        <div class="bg-card p-6 rounded-xl border border-border shadow-sm reveal">
-          <div class="font-serif text-4xl text-primary font-bold mb-3">03</div>
-          <h4 class="font-serif text-xl text-cream mb-2 font-medium">Produção</h4>
-          <p class="text-muted text-xs leading-relaxed">Captação cinematográfica em 4K com luz e áudio de padrão publicitário.</p>
-        </div>
-        <div class="bg-card p-6 rounded-xl border border-border shadow-sm reveal">
-          <div class="font-serif text-4xl text-primary font-bold mb-3">04</div>
-          <h4 class="font-serif text-xl text-cream mb-2 font-medium">Distribuição</h4>
-          <p class="text-muted text-xs leading-relaxed">Edição com foco em retenção e veiculação otimizada para aquisição.</p>
-        </div>
-      </div>
-    </div>
+</main>
 
-    <!-- SERVICES ECOSYSTEM -->
+<footer class="on-dark">
+  <div class="foot__top">
     <div>
-      <h3 class="text-xs uppercase tracking-[0.25em] font-mono text-primary font-bold mb-8">O que entregamos</h3>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="p-8 bg-card rounded-xl border border-border hover:border-primary/60 transition shadow-sm reveal">
-          <p class="text-[10px] uppercase tracking-[0.25em] text-primary font-mono font-semibold mb-2">01. Estratégia</p>
-          <h4 class="font-serif text-2xl text-cream mb-3">Branding & Roteiro</h4>
-          <p class="text-xs text-muted leading-relaxed">Briefing criativo, diretrizes narrativas e estudo de concorrência.</p>
-        </div>
-        <div class="p-8 bg-card rounded-xl border border-border hover:border-primary/60 transition shadow-sm reveal">
-          <p class="text-[10px] uppercase tracking-[0.25em] text-primary font-mono font-semibold mb-2">02. Audiovisual</p>
-          <h4 class="font-serif text-2xl text-cream mb-3">Captação & Edição</h4>
-          <p class="text-xs text-muted leading-relaxed">Produção cinematográfica 4K para fortalecer autoridade e imagem.</p>
-        </div>
-        <div class="p-8 bg-card rounded-xl border border-border hover:border-primary/60 transition shadow-sm reveal">
-          <p class="text-[10px] uppercase tracking-[0.25em] text-primary font-mono font-semibold mb-2">03. Conversão</p>
-          <h4 class="font-serif text-2xl text-cream mb-3">Landing Pages</h4>
-          <p class="text-xs text-muted leading-relaxed">Páginas de alta conversão estruturadas para transformar cliques em agendamentos.</p>
-        </div>
-        <div class="p-8 bg-card rounded-xl border border-border hover:border-primary/60 transition shadow-sm reveal">
-          <p class="text-[10px] uppercase tracking-[0.25em] text-primary font-mono font-semibold mb-2">04. Aquisição</p>
-          <h4 class="font-serif text-2xl text-cream mb-3">Tráfego Pago</h4>
-          <p class="text-xs text-muted leading-relaxed">Campanhas segmentadas para atrair pacientes qualificados continuamente.</p>
-        </div>
-      </div>
+      <p class="foot__inv">Vamos filmar o seu próximo projeto?</p>
+      <a class="btn btn--paper" href="https://wa.me/5573991419330?text=Ol%C3%A1%2C+quero+um+or%C3%A7amento+com+a+Daime+Filmes" target="_blank" rel="noopener noreferrer">Pedir um orçamento</a>
+    </div>
+    <div class="foot__links">
+      <a class="lnk" href="#trabalhos">Trabalhos</a>
+      <a class="lnk" href="#imoveis">Imóveis</a>
+      <a class="lnk" href="#planos">Planos</a>
+      <a class="lnk" href="mailto:daimefilmes@gmail.com">E-mail</a>
     </div>
   </div>
-</section>
-
-
-<!-- PLANS -->
-<section id="planos" class="relative py-28 md:py-36 bg-cardAlt/50 border-t border-border">
-  <div class="max-w-[1400px] mx-auto px-6 md:px-10">
-    <div class="max-w-3xl mb-16 reveal">
-      <div class="flex items-center gap-4 mb-6 font-serif">
-        <span class="italic text-primary text-sm font-semibold">06</span>
-        <span class="h-px w-10 bg-primary/40"></span>
-        <span class="text-[10px] uppercase tracking-[0.3em] text-muted font-mono">Escopos</span>
-      </div>
-      <h2 class="md:text-6xl text-cream letter-tight leading-[1.05] font-serif text-3xl">
-        Escopos sob medida para cada <span class="italic text-primary">fase da sua marca.</span>
-      </h2>
-      <p class="mt-4 text-muted text-base md:text-lg">
-        Planos flexíveis desenhados para a realidade de cada empresa.
-      </p>
-    </div>
-
-    <div class="grid md:grid-cols-3 gap-8 items-stretch">
-      <!-- PLAN 1 -->
-      <div class="bg-card border border-border rounded-2xl p-8 sm:p-10 flex flex-col justify-between shadow-sm hover:border-primary/50 transition reveal">
-        <div>
-          <h3 class="font-serif text-3xl md:text-4xl text-cream mb-2 font-medium">Essencial</h3>
-          <p class="text-muted text-sm leading-relaxed mb-8">Para empresas iniciando a presença audiovisual</p>
-          <div class="h-px bg-border my-6"></div>
-          <p class="text-xs font-mono uppercase tracking-widest text-primary font-bold mb-4">O QUE ESTÁ INCLUSO</p>
-          <ul class="space-y-3.5 text-sm text-cream/90">
-            <li class="flex items-start gap-3"><span class="text-primary font-bold">✓</span><span>Briefing estratégico inicial</span></li>
-            <li class="flex items-start gap-3"><span class="text-primary font-bold">✓</span><span>4 vídeos curtos por mês (Reels/Shorts)</span></li>
-            <li class="flex items-start gap-3"><span class="text-primary font-bold">✓</span><span>Roteiro e direção</span></li>
-            <li class="flex items-start gap-3"><span class="text-primary font-bold">✓</span><span>Captação 1/2 Diária</span></li>
-            <li class="flex items-start gap-3"><span class="text-primary font-bold">✓</span><span>Edição com identidade visual</span></li>
-            <li class="flex items-start gap-3"><span class="text-primary font-bold">✓</span><span>Relatório mensal simplificado</span></li>
-          </ul>
-        </div>
-        <div class="mt-10 pt-6 border-t border-border">
-          <a href="https://wa.me/5573991419330?text=Ol%C3%A1%2C+quero+mais+informa%C3%A7%C3%B5es+sobre+os+planos+de+filmes+e+propostas" target="_blank" rel="noopener noreferrer" class="block w-full text-center py-4 px-6 rounded-xl border border-cream/30 font-mono text-xs uppercase tracking-[0.2em] text-cream hover:bg-cream hover:text-ink font-semibold transition">
-            QUERO ESTE PLANO
-          </a>
-        </div>
-      </div>
-
-      <!-- PLAN 2 -->
-      <div class="bg-cream text-ink rounded-2xl p-8 sm:p-10 flex flex-col justify-between shadow-xl relative scale-100 md:-translate-y-2 border-2 border-primary reveal">
-        <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-primary text-ink text-[10px] uppercase font-mono tracking-[0.25em] font-bold px-4 py-1 rounded-full shadow-md">
-          MAIS ESCOLHIDO
-        </div>
-        <div>
-          <h3 class="font-serif text-3xl md:text-4xl text-ink mb-2 font-medium pt-2">Autoridade</h3>
-          <p class="text-ink/80 text-sm leading-relaxed mb-8">Para quem quer dominar o nicho local</p>
-          <div class="h-px bg-ink/15 my-6"></div>
-          <p class="text-xs font-mono uppercase tracking-widest text-primary font-bold mb-4">O QUE ESTÁ INCLUSO</p>
-          <ul class="space-y-3.5 text-sm text-ink/90 font-medium">
-            <li class="flex items-start gap-3"><span class="text-primary font-bold">✓</span><span>Análise profunda de concorrência</span></li>
-            <li class="flex items-start gap-3"><span class="text-primary font-bold">✓</span><span>6-8 vídeos mensais</span></li>
-            <li class="flex items-start gap-3"><span class="text-primary font-bold">✓</span><span>Captação 1/2 Diária</span></li>
-            <li class="flex items-start gap-3"><span class="text-primary font-bold">✓</span><span>Coloração cinematográfica</span></li>
-            <li class="flex items-start gap-3"><span class="text-primary font-bold">✓</span><span>Acesso à plataforma de aprovação</span></li>
-            <li class="flex items-start gap-3"><span class="text-primary font-bold">✓</span><span>Relatório estratégico mensal</span></li>
-            <li class="flex items-start gap-3"><span class="text-primary font-bold">✓</span><span>Acompanhamento de performance</span></li>
-          </ul>
-        </div>
-        <div class="mt-10 pt-6 border-t border-ink/15">
-          <a href="https://wa.me/5573991419330?text=Ol%C3%A1%2C+quero+mais+informa%C3%A7%C3%B5es+sobre+os+planos+de+filmes+e+propostas" target="_blank" rel="noopener noreferrer" class="block w-full text-center py-4 px-6 rounded-xl bg-primary text-ink font-mono text-xs uppercase tracking-[0.2em] font-bold hover:bg-darkInk hover:text-ink transition shadow-md">
-            QUERO ESTE PLANO
-          </a>
-        </div>
-      </div>
-
-      <!-- PLAN 3 -->
-      <div class="bg-card border border-border rounded-2xl p-8 sm:p-10 flex flex-col justify-between shadow-sm hover:border-primary/50 transition reveal">
-        <div>
-          <h3 class="font-serif text-3xl md:text-4xl text-cream mb-2 font-medium">Performance</h3>
-          <p class="text-muted text-sm leading-relaxed mb-8">Audiovisual + tráfego pago + conversão</p>
-          <div class="h-px bg-border my-6"></div>
-          <p class="text-xs font-mono uppercase tracking-widest text-primary font-bold mb-4">O QUE ESTÁ INCLUSO</p>
-          <ul class="space-y-3.5 text-sm text-cream/90">
-            <li class="flex items-start gap-3"><span class="text-primary font-bold">✓</span><span>Tudo do plano Autoridade</span></li>
-            <li class="flex items-start gap-3"><span class="text-primary font-bold">✓</span><span>12+ vídeos mensais</span></li>
-            <li class="flex items-start gap-3"><span class="text-primary font-bold">✓</span><span>Landing page otimizada inclusa</span></li>
-            <li class="flex items-start gap-3"><span class="text-primary font-bold">✓</span><span>Gestão de tráfego pago (Meta Ads)</span></li>
-            <li class="flex items-start gap-3"><span class="text-primary font-bold">✓</span><span>Estratégia de funil de aquisição</span></li>
-            <li class="flex items-start gap-3"><span class="text-primary font-bold">✓</span><span>Reuniões quinzenais de performance</span></li>
-            <li class="flex items-start gap-3"><span class="text-primary font-bold">✓</span><span>Suporte prioritário</span></li>
-          </ul>
-        </div>
-        <div class="mt-10 pt-6 border-t border-border">
-          <a href="https://wa.me/5573991419330?text=Ol%C3%A1%2C+quero+mais+informa%C3%A7%C3%B5es+sobre+os+planos+de+filmes+e+propostas" target="_blank" rel="noopener noreferrer" class="block w-full text-center py-4 px-6 rounded-xl border border-cream/30 font-mono text-xs uppercase tracking-[0.2em] text-cream hover:bg-cream hover:text-ink font-semibold transition">
-            QUERO ESTE PLANO
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section id="contato" class="relative py-28 md:py-36 overflow-hidden bg-card">
-  <div class="max-w-[1100px] mx-auto px-6 md:px-10 text-center reveal">
-    <div class="flex items-center justify-center gap-4 mb-8 font-serif">
-      <span class="italic text-primary text-sm font-semibold">07</span>
-      <span class="h-px w-10 bg-primary/40"></span>
-      <span class="text-[10px] uppercase tracking-[0.3em] text-muted font-mono">Próximo passo</span>
-    </div>
-    <h2 class="font-serif text-4xl md:text-7xl text-cream letter-tight leading-[1.05]">
-      Vamos transformar empresa em uma <span class="italic text-primary">marca inesquecível.</span>
-    </h2>
-    <p class="mt-8 text-lg text-muted max-w-2xl mx-auto leading-relaxed">
-      Conte um pouco sobre o seu negócio e preparamos uma proposta personalizada para sua realidade.
-    </p>
-    <div class="mt-12 flex flex-wrap justify-center gap-4">
-      <a href="mailto:daimegfilmes@gmail.com" class="bg-primary text-ink px-8 py-4 rounded-xl text-xs uppercase tracking-[0.2em] font-mono font-bold hover:bg-cream hover:text-ink transition shadow-md">daimefilmes@gmail.com</a>
-      <a href="https://wa.me/5573991419330?text=Ol%C3%A1%2C+quero+mais+informa%C3%A7%C3%B5es+sobre+os+planos+de+filmes+e+propostas" target="_blank" rel="noopener noreferrer" class="border border-cream/30 text-cream px-8 py-4 rounded-xl text-xs uppercase tracking-[0.2em] font-mono hover:bg-cream hover:text-ink transition">WhatsApp</a>
-    </div>
-  </div>
-</section>
-
-<footer class="border-t border-border py-10 text-center text-xs uppercase tracking-[0.2em] text-muted font-mono bg-ink">
-  © Daime Filmes · Audiovisual estratégico
+  <div class="foot__legal"><span>© 2026 <span translate="no">Daime Filmes</span></span><span>Produtora audiovisual · Sul da Bahia</span></div>
+  <div class="foot__name" id="foot-name" aria-hidden="true" translate="no">DAIME FILMES</div>
 </footer>
 
-<!-- VIDEO MODAL LIGHTBOX -->
-<div id="video-modal" class="fixed inset-0 z-50 bg-cream/80 backdrop-blur-md hidden items-center justify-center p-4 md:p-10 transition-opacity duration-300 opacity-0">
-  <div id="video-modal-shell" class="relative w-full max-w-[520px] aspect-[9/16] bg-darkInk rounded-2xl overflow-hidden shadow-2xl border border-border">
-    <button id="close-modal-btn" aria-label="Fechar Vídeo" class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-cream/90 text-darkInk flex items-center justify-center hover:bg-primary hover:text-ink transition">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-    </button>
-    <iframe id="modal-iframe" class="w-full h-full hidden" src="" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
-    <video id="modal-video" class="w-full h-full hidden object-cover" controls playsinline controlsList="nodownload"></video>
+<div id="menu" class="on-dark" role="dialog" aria-modal="true" aria-label="Menu">
+  <button type="button" id="menu-close">Fechar</button>
+  <a href="#trabalhos">Trabalhos</a>
+  <a href="#imoveis">Imóveis</a>
+  <a href="#planos">Planos</a>
+  <a href="#contato">Contato</a>
+</div>
+
+<div id="player" class="on-dark" role="dialog" aria-modal="true" aria-label="Player de vídeo">
+  <div id="player__bg"></div>
+  <div id="shell">
+    <button id="close" type="button">Fechar</button>
+    <video id="player-video" controls playsinline controlsList="nodownload"></video>
   </div>
 </div>
 
 <script>
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('in');
-        io.unobserve(e.target);
+/* ════════════════════════════════════════════════════════════════════
+   MOVIMENTO E INTERAÇÃO
+   1. Menu fixo + barra de progresso      4. Revelação ao rolar + parallax
+   2. Rolagem suave (só no computador)    5. Prévias dos vídeos
+   3. Sequência de entrada do hero        6. Player (abre da miniatura) e menu do celular
+   Tudo anima apenas transform e opacity.
+   ════════════════════════════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const root = document.documentElement;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const desktop = matchMedia('(min-width: 821px) and (hover: hover) and (pointer: fine)').matches;
+  const G = window.gsap;                       // GSAP (pode faltar se o arquivo não carregar)
+  const animate = !!G && !reduce;              // com animações desativadas, o site fica estático
+  if (!animate) root.classList.remove('js');   // mostra tudo de imediato
+  if (G && window.ScrollTrigger) G.registerPlugin(ScrollTrigger);
+
+  /* ── 1. Menu fixo com vidro + barra de progresso ───────────────── */
+  const top = $('#top'), bar = $('#progress');
+  let lastY = scrollY, ticking = false;
+  function onScroll() {
+    const y = scrollY, max = root.scrollHeight - innerHeight;
+    bar.style.transform = `scaleX(${max > 0 ? Math.min(1, y / max) : 0})`;
+    top.classList.toggle('is-stuck', y > 60);                               // vidro aparece ao sair do topo
+    top.classList.toggle('is-hidden', y > lastY && y > innerHeight * .9);   // some ao descer, volta ao subir
+    lastY = y; ticking = false;
+  }
+  addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
+  top.addEventListener('focusin', () => top.classList.remove('is-hidden'));
+  onScroll();
+
+  /* ── 2. Rolagem suave (Lenis), só no computador ────────────────── */
+  let lenis = null;
+  if (animate && desktop && window.Lenis) {
+    lenis = new Lenis({
+      duration: 1.1,
+      // Se a página pulou por fora do Lenis (tecla End, busca do navegador), ressincroniza antes de rolar
+      virtualScroll: () => {
+        if (!lenis.isScrolling && Math.abs(scrollY - lenis.animatedScroll) > 2) lenis.animatedScroll = lenis.targetScroll = scrollY;
+        return true;
       }
     });
-  }, { rootMargin: '-80px' });
-
-  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-
-  // CAROUSEL FUNCTIONALITY
-  const carousel = document.getElementById('video-carousel');
-  const prevBtn = document.getElementById('prev-btn');
-  const nextBtn = document.getElementById('next-btn');
-  const currentSlideSpan = document.getElementById('current-slide-num');
-  const totalSlidesSpan = document.getElementById('total-slides-num');
-  const dotsContainer = document.getElementById('carousel-dots');
-  const filterBtns = document.querySelectorAll('.filter-btn');
-
-  let carouselItems = document.querySelectorAll('.carousel-card');
-
-  // PERMITIR SCROLL VERTICAL SEM TRANCAR NO CARROSSEL
-  carousel.addEventListener('wheel', (evt) => {
-    if (evt.deltaY !== 0) {
-      return; 
-    }
-  }, { passive: true });
-
-  function getVisibleCards() {
-    return Array.from(carouselItems).filter(card => card.style.display !== 'none');
+    lenis.on('scroll', ScrollTrigger.update);
+    // Salto feito por fora durante a animação (tecla End/Home, foco pelo teclado): o Lenis acompanha em vez de desfazer
+    addEventListener('scroll', () => {
+      if (lenis.isScrolling === 'smooth' && Math.abs(scrollY - lenis.animatedScroll) > 4) lenis.scrollTo(scrollY, { immediate: true, force: true });
+    }, { passive: true });
+    G.ticker.add(t => lenis.raf(t * 1000));
+    G.ticker.lagSmoothing(0);
+    $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
+      const target = $(a.getAttribute('href'));
+      if (!target) return;
+      e.preventDefault();
+      lenis.scrollTo(target);
+      history.replaceState(null, '', a.getAttribute('href'));
+    }));
   }
 
-  let autoScrollResumeTimer = null;
+  if (animate) {
+    /* ── 3. Sequência de entrada: foto e nome (o nome sobe via CSS) → subtítulo → frase → botão → menu ── */
+    G.timeline({ defaults: { ease: 'expo.out' } })
+      .fromTo('#hero-img', { scale: 1.12 }, { scale: 1, duration: 2.4, ease: 'power3.out' }, 0)
+      .fromTo('.hero__sub', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: .9 }, .3)
+      .fromTo('.hero__say', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: .9 }, .42)
+      .fromTo('.hero__cta', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: .9 }, .54)
+      .fromTo('#top', { opacity: 0 }, { opacity: 1, duration: .8, ease: 'power2.out' }, .68);
 
-  function goToCarouselCard(index) {
-    const visibleCards = getVisibleCards();
-    if (!visibleCards.length) return;
+    /* ── 4. Revelação ao rolar, em cascata ─────────────────────────── */
+    const rise = desktop ? 34 : 18;            // deslocamento menor no celular
+    G.set('.rv', { y: rise });
+    ScrollTrigger.batch('.rv', {
+      start: 'top 90%', once: true,
+      onEnter: els => G.to(els, { opacity: 1, y: 0, duration: desktop ? 1 : .7, ease: 'expo.out', stagger: .08, overwrite: true })
+    });
 
-    const targetIndex = Math.min(Math.max(index, 0), visibleCards.length - 1);
-    const targetCard = visibleCards[targetIndex];
-    if (!targetCard) return;
-
-    stopAutoScroll();
-    const targetScrollLeft = Math.max(0, targetCard.offsetLeft - 24);
-    carousel.scrollLeft = targetScrollLeft;
-    updateCarouselState();
-
-    if (autoScrollResumeTimer) clearTimeout(autoScrollResumeTimer);
-    autoScrollResumeTimer = setTimeout(() => {
-      startAutoScroll();
-    }, 1800);
-  }
-
-  function updateCarouselState() {
-    const visibleCards = getVisibleCards();
-    totalSlidesSpan.textContent = String(visibleCards.length).padStart(2, '0');
-
-    dotsContainer.innerHTML = '';
-    visibleCards.forEach((_, index) => {
-      const dot = document.createElement('button');
-      dot.type = 'button';
-      dot.setAttribute('aria-label', `Ir para o vídeo ${index + 1}`);
-      dot.className = `h-1.5 rounded-full transition-all duration-300 ${index === 0 ? 'w-8 bg-primary' : 'w-2 bg-border'}`;
-      dot.addEventListener('click', () => {
-        goToCarouselCard(index);
+    /* Parallax leve, só no computador */
+    if (desktop) {
+      G.to('#hero-media', { yPercent: 12, ease: 'none', scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: true } });
+      $$('[data-parallax] img').forEach((img, i) => {
+        const d = i % 2 ? 5 : 7;               // alterna a intensidade entre fotos vizinhas
+        G.set(img, { scale: 1.16 });
+        G.fromTo(img, { yPercent: -d }, { yPercent: d, ease: 'none', scrollTrigger: { trigger: img.parentElement, start: 'top bottom', end: 'bottom top', scrub: true } });
       });
-      dotsContainer.appendChild(dot);
-    });
-
-    if (visibleCards.length === 0) {
-      currentSlideSpan.textContent = '00';
-      return;
+      G.fromTo('#foot-name', { yPercent: 46 }, { yPercent: 16, ease: 'none', scrollTrigger: { trigger: 'footer', start: 'top bottom', end: 'bottom bottom', scrub: true } });
     }
+  }
 
-    const cardWidth = visibleCards[0]?.getBoundingClientRect().width || 0;
-    const scrollPosition = carousel.scrollLeft;
-    const activeIndex = Math.min(
-      Math.round(scrollPosition / (cardWidth + 24)),
-      visibleCards.length - 1
-    );
-
-    currentSlideSpan.textContent = String(Math.max(1, activeIndex + 1)).padStart(2, '0');
-
-    Array.from(dotsContainer.children).forEach((dot, idx) => {
-      if (idx === activeIndex) {
-        dot.className = 'h-1.5 w-8 rounded-full bg-primary transition-all duration-300';
-      } else {
-        dot.className = 'h-1.5 w-2 rounded-full bg-border/80 transition-all duration-300';
-      }
+  /* ── 5. Prévias dos vídeos: carregam sob demanda, sem som, uma por vez ── */
+  const tiles = $$('.tile__btn');
+  let playing = null;
+  tiles.forEach(b => b.setAttribute('aria-label', `Assistir: ${$('b', b).textContent}`));
+  function preview(btn) {
+    if (playing === btn || reduce || $('#player').classList.contains('open')) return;
+    stopPreview();
+    const v = $('video', btn);
+    if (!v.src) v.src = `${btn.dataset.src}#t=${btn.dataset.t}`;   // só baixa o vídeo neste momento
+    playing = btn;
+    v.play().catch(() => {});
+  }
+  function stopPreview() {
+    if (playing) $('video', playing).pause();
+    playing = null;
+  }
+  if (matchMedia('(hover: hover)').matches) {
+    // Computador: toca ao passar o mouse ou ao focar pelo teclado
+    tiles.forEach(b => {
+      b.addEventListener('mouseenter', () => preview(b));
+      b.addEventListener('mouseleave', stopPreview);
+      b.addEventListener('focus', () => preview(b));
+      b.addEventListener('blur', stopPreview);
     });
-  }
-
-  nextBtn.addEventListener('click', () => {
-    stopAutoScroll();
-    const cardWidth = carouselItems[0].getBoundingClientRect().width + 24;
-    carousel.scrollLeft += cardWidth;
-    updateCarouselState();
-    if (autoScrollResumeTimer) clearTimeout(autoScrollResumeTimer);
-    autoScrollResumeTimer = setTimeout(() => {
-      startAutoScroll();
-    }, 1800);
-  });
-
-  prevBtn.addEventListener('click', () => {
-    stopAutoScroll();
-    const cardWidth = carouselItems[0].getBoundingClientRect().width + 24;
-    carousel.scrollLeft -= cardWidth;
-    updateCarouselState();
-    if (autoScrollResumeTimer) clearTimeout(autoScrollResumeTimer);
-    autoScrollResumeTimer = setTimeout(() => {
-      startAutoScroll();
-    }, 1800);
-  });
-
-  carousel.addEventListener('scroll', updateCarouselState);
-
-  let autoScrollTimer = null;
-
-  function startAutoScroll() {
-    if (autoScrollTimer) return;
-    autoScrollTimer = setInterval(() => {
-      const maxScrollLeft = carousel.scrollWidth - carousel.clientWidth;
-      if (carousel.scrollLeft >= maxScrollLeft - 2) {
-        carousel.scrollLeft = 0;
-        return;
-      }
-      carousel.scrollLeft += 1;
-    }, 20);
-  }
-
-  function stopAutoScroll() {
-    if (!autoScrollTimer) return;
-    clearInterval(autoScrollTimer);
-    autoScrollTimer = null;
-  }
-
-  startAutoScroll();
-  carousel.addEventListener('mouseenter', stopAutoScroll);
-  carousel.addEventListener('mouseleave', startAutoScroll);
-  carousel.addEventListener('touchstart', stopAutoScroll, { passive: true });
-
-  filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      filterBtns.forEach(b => {
-        b.classList.remove('bg-primary', 'text-ink', 'font-semibold', 'border-primary');
-        b.classList.add('text-muted', 'border-border/80');
+  } else {
+    // Celular: toca o vídeo mais próximo do centro da tela
+    const seen = new Set();
+    const pick = () => {
+      let best = null, dist = Infinity;
+      seen.forEach(b => {
+        const r = b.getBoundingClientRect(), d = Math.abs(r.top + r.height / 2 - innerHeight / 2);
+        if (d < dist) { dist = d; best = b; }
       });
+      best ? preview(best) : stopPreview();
+    };
+    const vio = new IntersectionObserver(es => {
+      es.forEach(e => e.intersectionRatio >= .6 ? seen.add(e.target) : seen.delete(e.target));
+      pick();
+    }, { threshold: [0, .3, .6, .9] });
+    tiles.forEach(b => vio.observe(b));
+  }
 
-      btn.classList.add('bg-primary', 'text-ink', 'font-semibold', 'border-primary');
-      btn.classList.remove('text-muted', 'border-border/80');
+  /* ── 6. Player: cresce a partir da miniatura e volta para ela ───── */
+  const player = $('#player'), bg = $('#player__bg'), shell = $('#shell'), pv = $('#player-video'), closeBtn = $('#close');
+  const regions = [$('main'), $('footer'), top, $('.skip')];
+  let opener = null, closing = false;
 
-      const category = btn.getAttribute('data-category');
-
-      carouselItems.forEach(card => {
-        if (category === 'all' || card.getAttribute('data-category') === category) {
-          card.style.display = ''; // Mantém a estrutura Flex natural do CSS
-        } else {
-          card.style.display = 'none';
-        }
-      });
-
-      carousel.scrollLeft = 0;
-      updateCarouselState();
-    });
-  });
-
-  // VIDEO MODAL LIGHTBOX
-  const videoModal = document.getElementById('video-modal');
-  const videoModalShell = document.getElementById('video-modal-shell');
-  const modalIframe = document.getElementById('modal-iframe');
-  const modalVideo = document.getElementById('modal-video');
-  const closeModalBtn = document.getElementById('close-modal-btn');
-
-  function openVideoModal(src) {
-    const isLocalMP4 = typeof src === 'string' && src.toLowerCase().endsWith('.mp4');
-
-    if (isLocalMP4) {
-      videoModalShell.classList.remove('aspect-video', 'max-w-5xl');
-      videoModalShell.classList.add('aspect-[9/16]', 'max-w-[420px]', 'md:max-w-[500px]');
-
-      modalIframe.classList.add('hidden');
-      modalIframe.src = '';
-      modalVideo.classList.remove('hidden');
-      try { modalVideo.pause(); modalVideo.removeAttribute('src'); } catch (e) {}
-      modalVideo.src = src;
-
-      const startAt = 4;
-      const onLoaded = () => {
-        try { modalVideo.currentTime = startAt; } catch (e) {}
-        modalVideo.removeEventListener('loadedmetadata', onLoaded);
-        modalVideo.play().catch(() => {});
-      };
-      modalVideo.addEventListener('loadedmetadata', onLoaded);
-    } else {
-      videoModalShell.classList.remove('aspect-[9/16]', 'max-w-[420px]', 'md:max-w-[500px]');
-      videoModalShell.classList.add('aspect-video', 'max-w-5xl');
-
-      modalVideo.pause();
-      modalVideo.classList.add('hidden');
-      modalVideo.src = '';
-      modalIframe.classList.remove('hidden');
-      modalIframe.src = src;
+  function lock(on) {                           // trava a página por trás de player e menu
+    regions.forEach(el => { el.inert = on; });
+    document.body.style.overflow = on ? 'hidden' : '';
+    if (lenis) on ? lenis.stop() : lenis.start();
+  }
+  function shape(ar) {                          // o player segue a proporção do vídeo
+    if (!ar || !isFinite(ar)) return;
+    shell.style.setProperty('--ar', ar.toFixed(4));
+    shell.style.setProperty('--maxw', ar < .9 ? '520px' : ar <= 1.1 ? '760px' : '1200px');
+  }
+  function flight(btn) {                        // posição da miniatura em relação ao player
+    const a = btn.getBoundingClientRect(), b = shell.getBoundingClientRect();
+    return { x: a.left + a.width / 2 - (b.left + b.width / 2), y: a.top + a.height / 2 - (b.top + b.height / 2), scale: a.width / b.width };
+  }
+  function openPlayer(btn) {
+    if (player.classList.contains('open')) return;
+    opener = btn;
+    stopPreview();
+    shape(parseFloat(btn.dataset.ar));
+    pv.poster = $('video', btn).poster;
+    shell.style.background = `#000 url("${$('video', btn).poster}") center / cover`;   // a capa aparece durante o voo, antes do vídeo carregar
+    pv.src = btn.dataset.src;
+    // O vídeo só começa quando o voo termina: durante a transição aparece a mesma capa da miniatura
+    let landed = !animate, loaded = false;
+    const start = () => { if (landed && loaded && player.classList.contains('open')) pv.play().catch(() => {}); };
+    pv.addEventListener('loadedmetadata', () => { loaded = true; start(); }, { once: true });
+    player.classList.add('open');
+    lock(true);
+    if (animate) {
+      G.set(shell, { clearProps: 'transform' });
+      G.fromTo(shell, flight(btn), { x: 0, y: 0, scale: 1, duration: .8, ease: 'expo.out' });
+      G.delayedCall(.5, () => { landed = true; start(); });
+      G.fromTo(bg, { opacity: 0 }, { opacity: 1, duration: .5, ease: 'power2.out' });
+      btn.style.visibility = 'hidden';          // a miniatura "vira" o player
     }
-
-    videoModal.classList.remove('hidden');
-    videoModal.classList.add('flex');
-    setTimeout(() => {
-      videoModal.classList.remove('opacity-0');
-      videoModal.classList.add('opacity-100');
-    }, 10);
+    closeBtn.focus({ preventScroll: true });
   }
-
-  function closeVideoModal() {
-    videoModal.classList.remove('opacity-100');
-    videoModal.classList.add('opacity-0');
-    setTimeout(() => {
-      videoModal.classList.remove('flex');
-      videoModal.classList.add('hidden');
-      modalIframe.src = '';
-      try { modalVideo.pause(); } catch (e) {}
-      modalVideo.src = '';
-      videoModalShell.classList.remove('aspect-[9/16]', 'max-w-[420px]', 'md:max-w-[500px]');
-      videoModalShell.classList.add('aspect-[9/16]', 'max-w-[420px]', 'md:max-w-[500px]');
-    }, 300);
+  function closePlayer() {
+    if (closing || !player.classList.contains('open')) return;
+    pv.pause();
+    const done = () => {
+      player.classList.remove('open');
+      pv.removeAttribute('src'); pv.load();
+      lock(false);
+      if (opener) { opener.style.visibility = ''; opener.focus({ preventScroll: true }); }
+      closing = false;
+    };
+    if (animate && opener) {
+      closing = true;
+      G.set(shell, { clearProps: 'transform' });
+      G.to(shell, { ...flight(opener), duration: .55, ease: 'power3.inOut', onComplete: done });
+      G.to(bg, { opacity: 0, duration: .45, ease: 'power2.in' });
+    } else done();
   }
+  tiles.forEach(b => b.addEventListener('click', () => openPlayer(b)));
+  closeBtn.addEventListener('click', closePlayer);
+  bg.addEventListener('click', closePlayer);
 
-  carouselItems.forEach(card => {
-    card.addEventListener('click', () => {
-      const src = card.getAttribute('data-video-src');
-      if (src) {
-        openVideoModal(src);
+  /* Menu do celular */
+  const menu = $('#menu'), menuBtn = $('#menu-btn'), menuClose = $('#menu-close');
+  function setMenu(open) {
+    menu.classList.toggle('open', open);
+    menuBtn.setAttribute('aria-expanded', open);
+    lock(open);
+    (open ? menuClose : menuBtn).focus();
+  }
+  menuBtn.addEventListener('click', () => setMenu(true));
+  menuClose.addEventListener('click', () => setMenu(false));
+  $$('a', menu).forEach(a => a.addEventListener('click', () => setMenu(false)));
+
+  document.addEventListener('keydown', e => {
+    if (player.classList.contains('open')) {
+      if (e.key === 'Escape') closePlayer();
+      if (e.key === 'Tab') {                    // mantém o foco dentro do player
+        const f = [closeBtn, pv], i = f.indexOf(document.activeElement);
+        e.preventDefault();
+        f[(i + (e.shiftKey ? -1 : 1) + f.length) % f.length].focus();
       }
-    });
+    } else if (menu.classList.contains('open') && e.key === 'Escape') setMenu(false);
   });
-
-  closeModalBtn.addEventListener('click', closeVideoModal);
-
-  videoModal.addEventListener('click', (e) => {
-    if (e.target === videoModal) {
-      closeVideoModal();
-    }
-  });
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !videoModal.classList.contains('hidden')) {
-      closeVideoModal();
-    }
-  });
-
-  window.addEventListener('load', updateCarouselState);
-  window.addEventListener('resize', updateCarouselState);
+});
 </script>
 </body>
 </html>
