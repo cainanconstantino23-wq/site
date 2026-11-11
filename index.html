@@ -397,7 +397,7 @@ footer{margin-top:var(--gap);background:var(--ink);color:var(--paper);padding:cl
   <ul class="works" id="grid">
     <li class="tile tile--wide rv">
       <div class="tile__frame">
-        <button class="tile__btn" type="button" style="--ar:2.1056" data-src="coletividade.mp4" data-t="14" data-ar="2.1056">
+        <button class="tile__btn" type="button" style="--ar:2.1056" data-src="coletividade.mp4" data-t="4" data-start="4" data-ar="2.1056">
           <video poster="img/capas/coletividade.jpg" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
           <span class="tile__cap"><b translate="no">Coletividade</b><span>Institucional&nbsp;· Arquitetura&nbsp;· 01:56</span><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></span>
         </button>
@@ -941,7 +941,7 @@ document.addEventListener('DOMContentLoaded', () => {
     shape(parseFloat(btn.dataset.ar));
     pv.poster = $('video', btn).poster;
     shell.style.background = `#000 url("${$('video', btn).poster}") center / cover`;   // a capa aparece durante o voo, antes do vídeo carregar
-    pv.src = btn.dataset.src;
+    pv.src = btn.dataset.start ? `${btn.dataset.src}#t=${btn.dataset.start}` : btn.dataset.src;   // data-start: segundo em que o filme começa no player
     // O vídeo só começa quando o voo termina: durante a transição aparece a mesma capa da miniatura
     let landed = !animate, loaded = false;
     const start = () => { if (landed && loaded && player.classList.contains('open')) pv.play().catch(() => {}); };
