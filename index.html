@@ -138,6 +138,7 @@ html::before{content:"";position:fixed;inset:0;z-index:99999;pointer-events:none
 .tile--wide .tile__cap{right:auto;left:clamp(10px,1.4vw,20px);bottom:clamp(10px,1.4vw,20px);padding:14px 20px;gap:2px 18px}
 .tile--wide .tile__cap b{font-size:var(--lead)}
 .works__title{text-align:center}
+.works .tile__desc{text-align:center} /* descrição centralizada sob cada vídeo */
 .tile__desc{margin-top:10px;padding:0 6px;font-size:var(--small);line-height:1.35;color:var(--muted)}
 
 /* ───────── "Como foi feito": a tela sobe por cima do vídeo e conta o trabalho do começo ao fim ───────── */
@@ -218,17 +219,19 @@ html::before{content:"";position:fixed;inset:0;z-index:99999;pointer-events:none
 
 /* ───────── Bastidores: etapas do set + foto que se revela, e a faixa de prova ───────── */
 /* A foto nova sobe como uma cortina (clip-path) com um leve zoom saindo; a anterior fica por baixo. */
-.bts{display:grid;grid-template-columns:auto minmax(260px,420px);justify-content:space-evenly;gap:clamp(24px,4vw,64px);align-items:center;margin-top:clamp(40px,5vw,72px)}
-.bts__list{display:grid;gap:2px;margin:0;padding:0;list-style:none}
-.bts__btn{display:flex;align-items:baseline;gap:16px;width:100%;padding:10px 0;font-size:var(--lead);font-weight:600;letter-spacing:-.03em;line-height:1.1;opacity:.36;transition:opacity .4s,transform .6s var(--ease)}
-.bts__btn:hover,.bts__btn[aria-pressed="true"]{opacity:1}
-.bts__btn[aria-pressed="true"]{transform:translateX(12px)}
-.bts__n{font-size:var(--small);font-weight:500;letter-spacing:0;font-variant-numeric:tabular-nums}
-.bts__stage{position:relative;aspect-ratio:4/5;overflow:hidden;border-radius:var(--r-lg);background:var(--surface);transform:translateZ(0)}
-.bts__imgs{position:absolute;inset:0;isolation:isolate}
-.bts__imgs>*{position:absolute;inset:0;clip-path:inset(100% 0 0 0);transform:scale(1.12);transition:clip-path .9s var(--ease),transform 1.4s var(--ease)}
-.bts__imgs>.on{clip-path:inset(0 0 0 0);transform:scale(1)}
-.bts__cap{position:absolute;z-index:1;left:clamp(10px,1.4vw,20px);bottom:clamp(10px,1.4vw,20px);padding:10px 16px;border-radius:999px;background:var(--glass-dark);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);color:var(--paper);font-size:var(--small);font-weight:500}
+/* Uma moldura só, com o dobro da largura de um vídeo vertical (9:16). Dentro dela, todas as cenas em fatias verticais lado a lado.
+   Ao passar o mouse, a cena sob o cursor se revela e ocupa a moldura; as outras viram filetes. Sem mouse, voltam as fatias. */
+.band{--bh:clamp(480px,78svh,760px);display:flex;gap:2px;height:var(--bh);width:min(100%,calc(var(--bh)*9/16*2)); /* o dobro de um vídeo 9:16 */margin:clamp(40px,5vw,72px) auto 0;overflow:hidden;border-radius:var(--r-lg);background:var(--paper);isolation:isolate}
+.band__item{flex:1 1 0;min-width:0;transition:flex-grow .7s var(--ease)}
+.band.has-open .band__item{flex-grow:.035}   /* filetes */
+.band.has-open .band__item.is-open{flex-grow:1} /* a cena revelada ocupa a moldura */
+/* título e texto centralizados sobre a moldura */
+.bts__intro{display:grid;justify-items:center;gap:clamp(16px,2vw,24px);text-align:center}
+.bts__intro p{max-width:46ch}
+.band__btn{position:relative;display:block;width:100%;height:100%;overflow:hidden;background:var(--ink-deep);transform:translateZ(0)}
+.band__btn video,.band__btn img{position:absolute;inset:0;transition:transform 1.4s var(--ease)}
+.band__cap{position:absolute;left:clamp(10px,1.4vw,20px);bottom:clamp(10px,1.4vw,20px);padding:10px 16px;border-radius:999px;background:var(--glass-dark);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);color:var(--paper);font-size:var(--small);font-weight:500;white-space:nowrap;opacity:0;transform:translateY(8px);transition:opacity .3s,transform .5s var(--ease)}
+.band__item.is-open .band__cap{opacity:1;transform:none;transition-delay:.25s}
 .proof{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(8px,1vw,14px);margin-top:clamp(40px,5vw,72px)}
 .proof__item{padding:clamp(24px,2.4vw,34px);border-radius:var(--r-lg);background:var(--surface)}
 .proof__item--main{background:var(--ink);color:var(--paper)}
@@ -331,13 +334,10 @@ footer{margin-top:var(--gap);background:var(--ink);color:var(--paper);padding:cl
   .case.is-open{clip-path:inset(0)}
   .case__grid{grid-template-columns:1fr}
   .case__shots{grid-template-columns:repeat(2,1fr)}
-  .about,.estate__intro,.foot__top,.svc__body,.bts,.proof{grid-template-columns:1fr}
-  /* Bastidores no celular: foto em cima, etapas viram cápsulas que rolam de lado */
-  .bts__stage{order:-1;width:100%;max-width:440px;justify-self:center}
-  .bts__list{display:flex;gap:8px;overflow-x:auto;margin:0 calc(var(--m)*-1);padding:0 var(--m);scrollbar-width:none}
-  .bts__list::-webkit-scrollbar{display:none}
-  .bts__btn{flex:none;width:auto;padding:10px 16px;border-radius:999px;background:var(--surface);font-size:var(--small);letter-spacing:0;opacity:1;white-space:nowrap}
-  .bts__btn[aria-pressed="true"]{transform:none;background:var(--ink);color:var(--paper)}
+  .about,.estate__intro,.foot__top,.svc__body,.proof{grid-template-columns:1fr}
+  /* Bastidores no celular: mesma faixa, mais baixa; toque abre a cena e elas também passam sozinhas */
+  .band{--bh:min(80svh,640px)}
+  .band__cap{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(8,18,48,.72);padding:8px 12px}
   .about__ph{aspect-ratio:4/4.4}
   .grid--alt .tile:nth-child(odd){margin-top:0}
   .grid--alt .tile:nth-child(even){margin-top:28px}
@@ -442,11 +442,11 @@ footer{margin-top:var(--gap);background:var(--ink);color:var(--paper);padding:cl
       <p class="tile__desc">Torneio no <span translate="no">BORA</span>, em Trancoso</p>
     </li>
     <li class="tile rv">
-      <button class="tile__btn" type="button" style="--ar:.5625" data-src="anonovo.mp4" data-t="2" data-ar="0.5625">
-        <video poster="img/capas/anonovo.jpg" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
-        <span class="tile__cap"><b translate="no">Porto Beer</b><span>Gastronomia&nbsp;· 00:24</span><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+      <button class="tile__btn" type="button" style="--ar:.5625" data-src="yasmin.mp4" data-t="32" data-ar="0.5625">
+        <video poster="img/capas/yasmin.jpg" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
+        <span class="tile__cap"><b>História da Yasmin</b><span>Filme&nbsp;· 01:37</span><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></span>
       </button>
-      <p class="tile__desc">Chamada de fim de ano do <span translate="no">Porto Beer</span>, em Porto Seguro</p>
+      <p class="tile__desc">Feito para o <span translate="no">Move Pilates</span>, em Porto Seguro</p>
     </li>
     <li class="tile rv">
       <button class="tile__btn" type="button" style="--ar:.5625" data-src="organic.mp4" data-t="14" data-ar="0.5625">
@@ -594,30 +594,44 @@ footer{margin-top:var(--gap);background:var(--ink);color:var(--paper);padding:cl
 </section>
 
 <section id="bastidores">
-  <div class="estate__intro">
+  <div class="bts__intro">
     <h2 class="rv">Bastidores.</h2>
     <p class="rv">Por trás de cada filme tem roteiro, luz, set, drone e cor. É essa estrutura que faz o resultado aparecer na tela.</p>
   </div>
-  <div class="bts">
-    <ol class="bts__list rv" aria-label="Cenas de bastidores">
-      <li><button class="bts__btn" type="button" data-i="0" data-label="Entrevista na varanda" aria-pressed="true"><span class="bts__n">01</span>Entrevista na varanda</button></li>
-      <li><button class="bts__btn" type="button" data-i="1" data-label="Monitor e foco" aria-pressed="false"><span class="bts__n">02</span>Monitor e foco</button></li>
-      <li><button class="bts__btn" type="button" data-i="2" data-label="Externa na praia" aria-pressed="false"><span class="bts__n">03</span>Externa na praia</button></li>
-      <li><button class="bts__btn" type="button" data-i="3" data-label="Conferindo o take" aria-pressed="false"><span class="bts__n">04</span>Conferindo o take</button></li>
-      <li><button class="bts__btn" type="button" data-i="4" data-label="Direção de cena" aria-pressed="false"><span class="bts__n">05</span>Direção de cena</button></li>
-    </ol>
-    <!-- Cenas do set: vídeos (.mp4 + capa .jpg, verticais, sem som, até ~10s) e fotos em img/bastidores/, na mesma ordem da lista -->
-    <div class="bts__stage rv" id="bts-stage">
-      <div class="bts__imgs">
-        <video class="on" poster="img/bastidores/varanda.jpg" data-src="img/bastidores/varanda.mp4" muted loop playsinline preload="none" aria-label="Monitor da câmera mostrando uma entrevista gravada em uma varanda"></video>
-        <video poster="img/bastidores/monitor.jpg" data-src="img/bastidores/monitor.mp4" muted loop playsinline preload="none" aria-label="Câmera e monitor gravando uma entrevista em um estúdio de pilates"></video>
-        <video poster="img/bastidores/praia.jpg" data-src="img/bastidores/praia.mp4" muted loop playsinline preload="none" aria-label="Câmera gravando uma modelo em um deque de frente para o mar"></video>
-        <img src="img/bastidores/05.jpg" width="360" height="640" loading="lazy" decoding="async" alt="Cinegrafista conferindo a imagem na tela da câmera">
-        <img src="img/bastidores/07.jpg" width="360" height="640" loading="lazy" decoding="async" alt="Diretor ajustando o microfone de lapela em uma participante">
-      </div>
-      <p class="bts__cap" aria-live="polite" id="bts-cap">01 · Entrevista na varanda</p>
-    </div>
-  </div>
+  <!-- Cenas do set numa moldura vertical: cada cena é uma fatia; ao passar o mouse (ou tocar), a cena se revela inteira.
+       Vídeos (.mp4 + capa .jpg, verticais, sem som, até ~10s) e fotos ficam em img/bastidores/. -->
+  <ul class="band rv" id="bts-band" aria-label="Cenas de bastidores">
+    <li class="band__item">
+      <button class="band__btn" type="button" aria-pressed="false" aria-label="Entrevista na varanda: Monitor da câmera mostrando uma entrevista gravada em uma varanda">
+        <video poster="img/bastidores/varanda.jpg" data-src="img/bastidores/varanda.mp4" muted loop playsinline preload="none" aria-hidden="true"></video>
+        <span class="band__cap">Entrevista na varanda</span>
+      </button>
+    </li>
+    <li class="band__item">
+      <button class="band__btn" type="button" aria-pressed="false" aria-label="Monitor e foco: Câmera e monitor gravando uma entrevista em um estúdio de pilates">
+        <video poster="img/bastidores/monitor.jpg" data-src="img/bastidores/monitor.mp4" muted loop playsinline preload="none" aria-hidden="true"></video>
+        <span class="band__cap">Monitor e foco</span>
+      </button>
+    </li>
+    <li class="band__item">
+      <button class="band__btn" type="button" aria-pressed="false" aria-label="Externa na praia: Câmera gravando uma modelo em um deque de frente para o mar">
+        <video poster="img/bastidores/praia.jpg" data-src="img/bastidores/praia.mp4" muted loop playsinline preload="none" aria-hidden="true"></video>
+        <span class="band__cap">Externa na praia</span>
+      </button>
+    </li>
+    <li class="band__item">
+      <button class="band__btn" type="button" aria-pressed="false" aria-label="Conferindo o take: Cinegrafista conferindo a imagem na tela da câmera">
+        <img src="img/bastidores/05.jpg" width="360" height="640" loading="lazy" decoding="async" alt="">
+        <span class="band__cap">Conferindo o take</span>
+      </button>
+    </li>
+    <li class="band__item">
+      <button class="band__btn" type="button" aria-pressed="false" aria-label="Direção de cena: Diretor ajustando o microfone de lapela em uma participante">
+        <img src="img/bastidores/07.jpg" width="360" height="640" loading="lazy" decoding="async" alt="">
+        <span class="band__cap">Direção de cena</span>
+      </button>
+    </li>
+  </ul>
   <!-- Prova: números que contam ao aparecer. Só use números reais. -->
   <ul class="proof">
     <li class="proof__item rv"><p class="proof__fig"><span data-count="30">30</span>+</p><p>projetos entregues</p></li>
@@ -985,49 +999,50 @@ document.addEventListener('DOMContentLoaded', () => {
     svc.classList.add('is-ready');
   }
 
-  /* Bastidores: a cena troca ao passar pelas etapas ou ao deslizar o mouse sobre ela; no celular, passa sozinha.
-     Vídeos tocam sem som e em loop só enquanto a seção está na tela; quem desativa animações vê só a capa. */
-  const stage = $('#bts-stage');
-  if (stage) {
-    const scenes = $$('.bts__imgs > *', stage), btns = $$('.bts__btn'), cap = $('#bts-cap');
-    let cur = 0, z = 1, auto = null, inView = false;
-    scenes[0].style.zIndex = 1;
-    const play = el => {
-      if (el.tagName !== 'VIDEO' || reduce || !inView) return;
-      if (!el.getAttribute('src')) el.src = el.dataset.src;   // só baixa quando a cena aparece
-      el.play().catch(() => { if (touch) unload(el); });
+  /* Bastidores: moldura vertical com as cenas fatiadas. A posição do mouse na moldura escolhe a cena,
+     que se revela e toca; ao sair, voltam as fatias. No celular, as cenas se revelam sozinhas em sequência
+     e um toque escolhe uma. Vídeos sem som, só com a moldura na tela; quem desativa animações vê só as capas. */
+  const band = $('#bts-band');
+  if (band) {
+    const items = $$('.band__item', band);
+    let cur = -1, auto = null, inView = false;
+    const media = it => $('video', it);
+    const play = it => {
+      const v = media(it);
+      if (!v || reduce || !inView) return;
+      if (!v.getAttribute('src')) v.src = v.dataset.src;   // só baixa quando a cena se revela
+      v.play().catch(() => { if (touch) unload(v); });
     };
-    const pause = el => { if (el.tagName === 'VIDEO') halt(el); };
-    const show = i => {
+    const pause = it => { const v = media(it); if (v) halt(v); };
+    const open = i => {                                   // i = -1: todas em fatias
       if (i === cur) return;
-      const el = scenes[i], prev = scenes[cur];
-      el.style.transition = 'none'; el.classList.remove('on'); void el.offsetWidth;   // volta para baixo sem animar
-      el.style.transition = ''; el.style.zIndex = ++z; el.classList.add('on');       // e sobe por cima da atual
-      play(el);
-      setTimeout(() => { if (scenes[cur] !== prev) pause(prev); }, 900);            // a anterior para depois da cortina
-      btns.forEach((b, k) => b.setAttribute('aria-pressed', k === i));
-      cap.textContent = `${String(i + 1).padStart(2, '0')} · ${btns[i].dataset.label}`;
+      if (cur >= 0) { items[cur].classList.remove('is-open'); $('.band__btn', items[cur]).setAttribute('aria-pressed', 'false'); pause(items[cur]); }
+      band.classList.toggle('has-open', i >= 0);
+      if (i >= 0) { items[i].classList.add('is-open'); $('.band__btn', items[i]).setAttribute('aria-pressed', 'true'); play(items[i]); }
       cur = i;
     };
     const stopAuto = () => { clearInterval(auto); auto = null; };
-    btns.forEach((b, i) => {
-      b.addEventListener('click', () => { stopAuto(); show(i); });
-      b.addEventListener('mouseenter', () => show(i));
-      b.addEventListener('focus', () => show(i));
-    });
     if (!touch) {
-      stage.addEventListener('mousemove', e => {
-        const r = stage.getBoundingClientRect();
-        show(Math.min(scenes.length - 1, Math.floor((e.clientX - r.left) / r.width * scenes.length)));
+      // a moldura é dividida em partes iguais pela posição do mouse (não pela largura atual das fatias)
+      band.addEventListener('mousemove', e => {
+        const r = band.getBoundingClientRect();
+        open(Math.min(items.length - 1, Math.max(0, Math.floor((e.clientX - r.left) / r.width * items.length))));
       });
+      band.addEventListener('mouseleave', () => open(-1));
     }
+    items.forEach((it, i) => {
+      const btn = $('.band__btn', it);
+      btn.addEventListener('focus', () => open(i));
+      btn.addEventListener('click', () => { stopAuto(); open(cur === i && touch ? -1 : i); });
+    });
+    band.addEventListener('focusout', e => { if (!band.contains(e.relatedTarget)) open(-1); });
     new IntersectionObserver(([e]) => {
       inView = e.isIntersecting;
       if (inView) {
-        play(scenes[cur]);
-        if (touch && !reduce && !auto) auto = setInterval(() => show((cur + 1) % scenes.length), 4200);
-      } else { pause(scenes[cur]); stopAuto(); }
-    }, { threshold: .4 }).observe(stage);
+        if (cur >= 0) play(items[cur]);
+        if (touch && !reduce && !auto) auto = setInterval(() => open((cur + 1) % items.length), 3600);
+      } else { if (cur >= 0) pause(items[cur]); stopAuto(); }
+    }, { threshold: .4 }).observe(band);
   }
 
   /* Prova: os números contam do zero quando aparecem */
