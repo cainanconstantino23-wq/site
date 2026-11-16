@@ -276,48 +276,110 @@ textarea.notes{min-height:70px}
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script>
-// ===== NÚCLEO DE TEXTOS (igual no programa e no robô) =====
+// ===== NÚCLEO DE TEXTOS =====
 // Nenhum texto fala em prazo de gravação, pacote ou valor: o pedido é só visitar o site.
+// Cada mensagem segue uma ABORDAGEM tirada dos livros (notas em prospeccao-interno/livros/).
+// "Gerar outra versão" passa para a próxima abordagem; dentro dela, alguns trechos também variam.
+// A abordagem 0 de cada etapa é o texto padrão.
 var LINKS = { imoveis: 'https://www.daimefilmes.com.br/#imoveis', trabalhos: 'https://www.daimefilmes.com.br/#trabalhos' };
 var ASSINATURA = 'Cainan Constantino\nDaime Filmes · Trancoso, BA\nWhatsApp (73) 99141-9330\nwww.daimefilmes.com.br';
 var RODAPE = 'Se não fizer sentido para vocês, é só me avisar e eu não escrevo mais.';
-var FECHO = 'Se gostarem do que virem, me respondam por aqui e a gente conversa sobre o que faria sentido para vocês.';
-var OQUE_INCORPORADORA = 'Para lançamentos, também faço o acompanhamento da obra em vídeo e drone e o conteúdo de vendas para as redes.';
+var GANHO_INCORPORADORA = [
+  'Para lançamentos, filmo o andamento da obra em vídeo e drone e faço o conteúdo de vendas para as redes. Assim o comprador acompanha tudo de longe e chega mais seguro na hora de fechar.',
+  'Em lançamento, o vídeo da obra com drone mantém o comprador por perto até a entrega e vira material de venda pronto para as redes.'
+];
 
 var MODELOS = {
   villas: { nome: 'Casas e villas de temporada', link: 'imoveis',
-    assunto: 'Os filmes de casas que fiz em Trancoso',
-    vitrine: 'Reuni nesta página os imóveis que filmei na região, com tour, drone e vídeos curtos para redes:',
-    oque: '', curto: 'as casas que filmei na região', parecido: 'o filme de uma casa parecida com as de vocês' },
+    assuntos: ['Os filmes de casas que fiz em Trancoso', 'Casas de Trancoso em vídeo'],
+    faz: 'casas de temporada aqui em Trancoso', deles: 'as casas de vocês',
+    porque: ['Escrevo para vocês porque, em casa de temporada, o hóspede decide pelo que vê antes de reservar.',
+             'Escrevo porque quem aluga casa em Trancoso quase sempre está longe e precisa sentir a casa antes de fechar.'],
+    ganho: ['Um filme curto de cada casa deixa o hóspede se imaginar lá dentro, e o drone mostra a vista e o caminho até a praia.',
+            'Com um tour em vídeo, quem está longe entende a casa inteira em um minuto e chega à reserva com menos dúvidas.'],
+    imagem: 'Uma casa em Trancoso vista do alto, o caminho até a praia, a luz do fim da tarde entrando pela varanda.',
+    mercado: 'Quem aluga casa em Trancoso quase sempre está longe daqui e decide pelo celular, comparando várias casas em poucos minutos.',
+    pergunta: 'Hoje, como o hóspede que está longe conhece as casas de vocês antes de reservar?',
+    dica: 'um vídeo de 20 segundos por casa, com a vista e o caminho até a praia, costuma responder sozinho boa parte das perguntas que chegam antes da reserva.',
+    vitrine: 'Reuni nesta página os imóveis que filmei na região:',
+    curto: 'as casas que filmei na região', parecido: 'o filme de uma casa parecida com as de vocês' },
   pousadas: { nome: 'Pousadas e hotéis', link: 'trabalhos',
-    assunto: '{{Empresa}}: um filme para a temporada',
+    assuntos: ['{{Empresa}}: um filme para a temporada', '{{Empresa}} em vídeo'],
+    faz: 'pousadas e hotéis aqui em Trancoso e região', deles: 'a pousada de vocês',
+    porque: ['Escrevo para vocês porque o hóspede escolhe onde ficar pelo que vê no Instagram e no site, antes de qualquer conversa.',
+             'Escrevo porque, na hora de escolher pousada, o hóspede compara tudo pelo celular, e quem se mostra melhor sai na frente.'],
+    ganho: ['O filme faz o hóspede sentir a pousada antes de reservar, e os vídeos verticais rendem conteúdo para a temporada inteira sem precisar gravar toda semana.',
+            'Com drone e vídeos curtos, a pousada aparece como ela é de verdade, o que ajuda a trazer reserva direta, sem depender só das plataformas.'],
+    imagem: 'A pousada vista do alto às seis da manhã, o café sendo servido, o caminho até a praia.',
+    mercado: 'Na alta temporada, quem procura pousada em Trancoso compara várias opções pelo celular em poucos minutos, e quem se mostra melhor em vídeo sai na frente.',
+    pergunta: 'Hoje, o que o hóspede vê da pousada de vocês antes de reservar?',
+    dica: 'um vídeo vertical curto fixado no topo do Instagram costuma ser a primeira coisa que o hóspede vê quando chega ao perfil.',
     vitrine: 'Os filmes mais recentes estão nesta página:',
-    oque: 'Faço filmes de hospedagem com drone, vídeos verticais para redes e fotos dos ambientes, para o site, o Instagram e os anúncios.',
     curto: 'meus trabalhos mais recentes', parecido: 'um filme de hospedagem como referência' },
   imoveis: { nome: 'Imobiliárias e incorporadoras', link: 'imoveis',
-    assunto: 'Os imóveis que filmei em Trancoso',
+    assuntos: ['Os imóveis que filmei em Trancoso', 'Imóveis de Trancoso em vídeo'],
+    faz: 'imóveis aqui em Trancoso e região', deles: 'os imóveis de vocês',
+    porque: ['Escrevo para vocês porque boa parte de quem compra imóvel em Trancoso mora longe e decide a primeira visita pelo vídeo.',
+             'Escrevo porque o comprador de fora quer entender o imóvel e o entorno antes de pegar um avião.'],
+    ganho: ['Com o tour em vídeo, o comprador de fora faz a primeira visita sem viajar, e quem vem até Trancoso já chega decidido.',
+            'O vídeo com drone mostra o terreno, a vista e o entorno, que é justamente o que a foto não consegue mostrar.'],
+    imagem: 'O imóvel visto do alto, o terreno inteiro, a distância até a praia e o pôr do sol do jeito que o comprador vai ver.',
+    mercado: 'Boa parte de quem compra imóvel em Trancoso mora em outra cidade ou fora do país e decide se vale a viagem pelo que vê na tela.',
+    pergunta: 'Hoje, como o comprador de fora faz a primeira visita aos imóveis de vocês?',
+    dica: 'um tour em vídeo de um minuto por imóvel filtra os curiosos: quem pede visita depois de ver o vídeo costuma chegar bem mais decidido.',
     vitrine: 'Reuni nesta página os imóveis que filmei na região:',
-    oque: 'Faço tour em vídeo, vídeo vertical para redes, fotos tratadas e imagens aéreas, tudo pronto para o anúncio.',
     curto: 'os imóveis que filmei na região', parecido: 'o tour de um imóvel parecido com os de vocês' },
   eventos: { nome: 'Casamentos e eventos', link: 'trabalhos',
-    assunto: 'Filmes de eventos em Trancoso',
+    assuntos: ['Filmes de eventos em Trancoso', 'Eventos de Trancoso em vídeo'],
+    faz: 'casamentos e eventos aqui em Trancoso', deles: 'os eventos de vocês',
+    porque: ['Escrevo para vocês porque um evento bem filmado continua trabalhando depois que acaba: vira a divulgação do próximo.',
+             'Escrevo porque quem contrata um evento em Trancoso quer ver antes como ele fica, e o vídeo mostra isso melhor do que qualquer foto.'],
+    ganho: ['O filme guarda o dia do jeito que ele foi, e os vídeos curtos ficam prontos para divulgar os próximos eventos.',
+            'Com drone e vídeos curtos, o evento vira material para mostrar a novos clientes o que vocês entregam.'],
+    imagem: 'A cerimônia vista do alto com o mar ao fundo, e os momentos que ninguém consegue registrar do chão.',
+    mercado: 'Quem planeja casamento ou evento em Trancoso escolhe fornecedor pelo que vê de eventos anteriores, quase sempre em vídeo curto no Instagram.',
+    pergunta: 'Hoje, como vocês mostram a novos clientes como é um evento de vocês?',
+    dica: 'um vídeo de 30 segundos de cada evento, publicado logo depois, costuma virar o melhor argumento para fechar o próximo.',
     vitrine: 'Os filmes mais recentes, incluindo eventos aqui na região, estão nesta página:',
-    oque: 'Faço a cobertura de eventos em vídeo, com drone, e vídeos curtos para as redes.',
     curto: 'os filmes de eventos que fiz na região', parecido: 'um filme de evento como referência' },
   gastro: { nome: 'Restaurantes e beach clubs', link: 'trabalhos',
-    assunto: '{{Empresa}}: um filme para as redes',
+    assuntos: ['{{Empresa}}: um filme para as redes', '{{Empresa}} em vídeo'],
+    faz: 'restaurantes e beach clubs aqui de Trancoso', deles: 'o lugar de vocês',
+    porque: ['Escrevo para vocês porque, na temporada, muita gente escolhe onde comer e passar o dia pelo que vê no Instagram.',
+             'Escrevo porque o clima de um lugar à beira-mar aparece muito melhor em vídeo do que em foto.'],
+    ganho: ['Vídeos curtos mostram o lugar, a comida e o clima melhor do que foto, e rendem conteúdo para a temporada inteira.',
+            'Com drone e vídeos verticais, quem está planejando a viagem já marca vocês como parada antes de chegar.'],
+    imagem: 'A mesa posta com o mar ao fundo, o drink sendo preparado, o lugar visto do alto no fim da tarde.',
+    mercado: 'Na temporada, muita gente decide onde almoçar ou passar o dia em Trancoso pelo que viu no Instagram na noite anterior.',
+    pergunta: 'Hoje, o que faz alguém que nunca veio escolher vocês: indicação, Instagram ou Google?',
+    dica: 'vídeos verticais curtos com o clima do lugar costumam alcançar muito mais gente do que foto de prato.',
     vitrine: 'Os filmes mais recentes, de marcas e eventos aqui da região, estão nesta página:',
-    oque: 'Faço filmes com drone e vídeos curtos, pensados para o Instagram e os anúncios.',
     curto: 'meus trabalhos mais recentes', parecido: 'um vídeo curto como referência' },
   obras: { nome: 'Arquitetura e construção', link: 'trabalhos',
-    assunto: 'O filme que fiz para um escritório de arquitetura',
+    assuntos: ['O filme que fiz para um escritório de arquitetura', 'Obras prontas, vistas do alto'],
+    faz: 'arquitetura e casas prontas aqui na região', deles: 'os projetos de vocês',
+    porque: ['Escrevo para vocês porque um projeto bem filmado depois de pronto vira o melhor portfólio para o próximo cliente.',
+             'Escrevo porque a obra entregue merece ser vista como ela vive no terreno, e isso só o vídeo mostra.'],
+    ganho: ['Filmar a obra pronta, com drone, mostra o projeto no terreno e na paisagem, e vira portfólio para os próximos clientes.',
+            'Um filme curto da obra entregue mostra luz, materiais e entorno de um jeito que a foto não alcança.'],
+    imagem: 'A casa pronta vista do alto, a implantação no terreno, a luz atravessando os ambientes ao longo do dia.',
+    mercado: 'Cliente de arquitetura em Trancoso costuma escolher o escritório pelo portfólio, e projeto em vídeo mostra o que a foto não mostra: escala, luz e entorno.',
+    pergunta: 'Hoje, como vocês mostram os projetos entregues para novos clientes?',
+    dica: 'filmar a obra pronta antes da mudança do cliente, com a casa ainda vazia e limpa, rende as melhores imagens de portfólio.',
     vitrine: 'Nesta página estão os filmes mais recentes, entre eles o institucional de um escritório de arquitetura aqui da região:',
-    oque: 'Também filmo casas prontas com drone, o que ajuda a mostrar a obra entregue.',
     curto: 'meus trabalhos mais recentes', parecido: 'o filme institucional completo como referência' },
   passeios: { nome: 'Passeios e experiências', link: 'trabalhos',
-    assunto: '{{Empresa}}: um filme da experiência',
+    assuntos: ['{{Empresa}}: um filme da experiência', '{{Empresa}} em vídeo'],
+    faz: 'passeios e experiências aqui na região', deles: 'os passeios de vocês',
+    porque: ['Escrevo para vocês porque experiência se vende pelo que a pessoa sente, e isso aparece melhor em vídeo do que em foto.',
+             'Escrevo porque quem planeja a viagem escolhe os passeios pelo que vê antes de chegar.'],
+    ganho: ['Um vídeo da experiência mostra o caminho, o mar e a sensação, e quem vê já quer reservar.',
+            'Com drone e vídeos curtos, o passeio aparece inteiro em poucos segundos, pronto para o Instagram e os anúncios.'],
+    imagem: 'O barco saindo, a água vista do alto, a cara de quem está vivendo o passeio pela primeira vez.',
+    mercado: 'Quem vem para Trancoso escolhe os passeios antes de chegar, pelo que vê no Instagram e nos sites de viagem.',
+    pergunta: 'Hoje, como quem ainda está planejando a viagem conhece os passeios de vocês?',
+    dica: 'um vídeo curto mostrando o passeio do começo ao fim costuma responder às dúvidas que fazem a pessoa adiar a reserva.',
     vitrine: 'Os filmes mais recentes estão nesta página:',
-    oque: 'Faço filmes com drone e vídeos curtos para redes, que mostram a experiência melhor do que fotos.',
     curto: 'meus trabalhos mais recentes', parecido: 'um filme como referência' }
 };
 
@@ -335,47 +397,150 @@ function tipoDoSegmento_(segmento) {
 
 function nomeCurto_(empresa) { return String(empresa || '').replace(/\s*\(.*?\)\s*/g, ' ').trim(); }
 function maiuscula_(t) { return t.charAt(0).toUpperCase() + t.slice(1); }
+function minuscula_(t) { return t.charAt(0).toLowerCase() + t.slice(1); }
 
-/** etapa: 0 = primeiro contato, 1 = lembrete 1, 2 = lembrete 2. canal: 'email', 'wa' ou 'ig'. */
-function montarMensagem_(lead, etapa, canal) {
+var SEM_MEDO = 'Sem medo da rejeição', FANATICA = 'Prospecção Fanática', CONCER = 'Vendas não ocorrem por acaso';
+
+/** Lista de abordagens para a etapa e o canal. Cada uma: { nome, livro, assunto, texto }. */
+function abordagens_(lead, etapa, canal, p) {
   var m = MODELOS[tipoDoSegmento_(lead.segmento)] || MODELOS.pousadas;
   var empresa = nomeCurto_(lead.empresa);
   var frase = String(lead.frase || '').trim();
   var link = LINKS[m.link];
-  var linkCurto = link.replace('https://www.', '');
-  var oque = String(lead.segmento || '').toLowerCase().indexOf('incorpor') >= 0 ? OQUE_INCORPORADORA : m.oque;
-  var assunto = m.assunto.replace(/{{Empresa}}/g, empresa);
-  var texto;
-  if (canal === 'email') {
-    if (etapa === 0) {
-      texto = 'Olá, equipe ' + empresa + ', tudo bem?\n\n' +
-        'Sou o Cainan, da Daime Filmes, produtora aqui de Trancoso.\n\n' +
-        (frase ? frase + '\n\n' : '') +
-        'Queria só que vocês vissem o trabalho. ' + m.vitrine + '\n\n' + link + '\n\n' +
-        (oque ? oque + '\n\n' : '') + FECHO + '\n\n' + ASSINATURA + '\n\n' + RODAPE;
-    } else if (etapa === 1) {
-      texto = 'Olá! Só retomando a mensagem abaixo.\n\n' +
-        'Caso não tenham conseguido abrir, ' + m.curto + ' estão aqui:\n\n' + link + '\n\n' +
-        'Se preferirem, mando por aqui ' + m.parecido + '.\n\n' + ASSINATURA;
-    } else {
-      texto = 'Olá! Esta é minha última mensagem para não incomodar.\n\n' +
-        'Os filmes continuam nesta página:\n\n' + link + '\n\n' +
-        'Quando fizer sentido falar sobre vídeo para vocês, é só responder este e-mail ou chamar no WhatsApp (73) 99141-9330.\n\n' + ASSINATURA;
-    }
-  } else if (etapa === 0) {
-    texto = canal === 'wa'
-      ? 'Oi! Sou o Cainan, da Daime Filmes, produtora aqui de Trancoso.' + (frase ? ' ' + frase : '') + '\n\n' +
-        maiuscula_(m.curto) + ' estão aqui:\n' + link + '\n\nSe gostarem, podemos conversar?'
-      : 'Oi! Sou o Cainan, da Daime Filmes, aqui de Trancoso.' + (frase ? ' ' + frase : '') +
-        ' Dá uma olhada em ' + m.curto + ': ' + linkCurto + '. Se gostarem, me chama e a gente conversa.';
-  } else if (etapa === 1) {
-    texto = 'Oi! Passando só para saber se conseguiram ver ' + m.curto + ': ' + (canal === 'wa' ? link : linkCurto) +
-      '. Se não for o momento, sem problema, é só me avisar.';
-  } else {
-    texto = 'Oi! Última mensagem para não incomodar. ' + maiuscula_(m.curto) + ' continuam em ' + linkCurto +
-      '. Quando fizer sentido, é só me chamar.';
+  var ganhos = String(lead.segmento || '').toLowerCase().indexOf('incorpor') >= 0 ? GANHO_INCORPORADORA : m.ganho;
+  var porque = frase || p(m.porque);
+  var ass = function (t) { return t.replace(/{{Empresa}}/g, empresa); };
+  var sign = '\n\n' + ASSINATURA;
+  var saud = function () { return p(['Olá, equipe ' + empresa + ', tudo bem?', 'Olá, ' + empresa + ', tudo certo?', 'Oi, pessoal! Tudo bem por aí?']); };
+  var quem = function () { return p(['Sou o Cainan, da Daime Filmes, e filmo ' + m.faz + '.', 'Aqui é o Cainan. Tenho uma produtora, a Daime Filmes, e filmo ' + m.faz + '.']); };
+  var oi = function () { return p(['Oi! Aqui é o Cainan, da Daime Filmes.', 'Oi, tudo bem? Sou o Cainan, da Daime Filmes.', 'Olá! Cainan aqui, da Daime Filmes.']); };
+  var A = function (nome, livro, assunto, texto) { return { nome: nome, livro: livro, assunto: assunto, texto: texto }; };
+
+  if (canal === 'email' && etapa === 0) return [
+    A('Porquê e benefício', FANATICA, ass(m.assuntos[0]),
+      saud() + '\n\n' + quem() + ' ' + p(['Vocês não me conhecem, então vou direto ao ponto.', 'Sei que é estranho receber e-mail de quem vocês não conhecem, então serei breve.']) + '\n\n' +
+      porque + '\n\n' + p(ganhos) + ' ' + m.vitrine + '\n\n' + link + '\n\n' +
+      p(['Vocês conseguem dar uma olhada esta semana? Se fizer sentido, me respondam aqui e eu conto como seria para vocês.',
+         'Dá uma olhada e me digam: algo assim faria sentido para vocês?']) + sign + '\n\n' + RODAPE),
+    A('Franqueza total', SEM_MEDO, 'Daime Filmes, produtora de Trancoso',
+      saud() + '\n\n' + 'Vou ser direto: sou o Cainan, tenho uma produtora aqui em Trancoso, a Daime Filmes, e queria mostrar meu trabalho para vocês. Não estou vendendo nada neste e-mail.' +
+      (frase ? '\n\n' + frase : '') + '\n\n' + 'Filmo ' + m.faz + '. ' + m.vitrine + '\n\n' + link + '\n\n' +
+      'Se gostarem, me respondam. Se não fizer sentido, também é só me dizer, sem problema nenhum.' + sign),
+    A('Despertar curiosidade', SEM_MEDO + ' / ' + FANATICA, ass(p(['Uma imagem para {{Empresa}}', '{{Empresa}}, do alto'])),
+      saud() + '\n\n' + m.imagem + '\n\n' + p(['É esse tipo de imagem que eu faço.', 'É isso que eu filmo.']) + ' Sou o Cainan, da Daime Filmes, e filmo ' + m.faz + '.' +
+      (frase ? ' ' + frase : '') + '\n\n' + 'Alguns filmes estão aqui:\n\n' + link + '\n\n' +
+      'Se bater a curiosidade de ver como ficaria com ' + m.deles + ', me respondam que eu conto.' + sign + '\n\n' + RODAPE),
+    A('Pedido pequeno', SEM_MEDO + ' / ' + FANATICA, 'Um minuto, um filme',
+      saud() + '\n\n' + 'Sou o Cainan, da Daime Filmes, aqui de Trancoso, e tenho um pedido pequeno: um minuto para verem um filme.' + '\n\n' +
+      'Não vou pedir reunião nem orçamento. ' + porque + '\n\n' + link + '\n\n' +
+      'Se depois desse minuto fizer sentido conversar, é só responder. Se não, tudo certo.' + sign),
+    A('Pergunta para abrir conversa', CONCER, ass('Uma pergunta para {{Empresa}}'),
+      saud() + '\n\n' + quem() + ' Queria fazer uma pergunta rápida.' + '\n\n' + m.pergunta + '\n\n' +
+      (frase ? frase + ' ' : '') + 'Pergunto porque é exatamente aí que o vídeo ajuda. ' + p(ganhos) + '\n\n' +
+      'Se quiserem ver como fica, os filmes estão aqui:\n\n' + link + '\n\n' +
+      'Mas fico curioso pela resposta, mesmo que vídeo não seja prioridade agora.' + sign),
+    A('Mostrar que conhece o mercado', CONCER + ' / ' + FANATICA, 'Antes da alta temporada',
+      saud() + '\n\n' + m.mercado + '\n\n' + quem() + ' ' + p(ganhos) + (frase ? '\n\n' + frase : '') + '\n\n' +
+      m.vitrine + '\n\n' + link + '\n\n' + 'Faz sentido para vocês ainda nesta temporada?' + sign + '\n\n' + RODAPE),
+    A('Quebrar a expectativa', FANATICA + ' / ' + SEM_MEDO, 'Talvez não seja agora',
+      saud() + '\n\n' + 'Não sei se vídeo é prioridade para vocês agora, e pode ser que não seja. Mesmo assim, queria deixar meu trabalho com vocês.' + '\n\n' +
+      quem() + ' ' + porque + '\n\n' + link + '\n\n' +
+      'Se um dia fizer sentido, sabem onde me encontrar. E se fizer sentido agora, melhor ainda: é só responder.' + sign)
+  ];
+
+  if (canal === 'email' && etapa === 1) { var re = 'Re: ' + ass(m.assuntos[0]); return [
+    A('Recuar para um pedido menor', SEM_MEDO, re,
+      p(['Olá! Retomo a mensagem abaixo, caso tenha se perdido na caixa de entrada.', 'Oi! Imagino que a semana esteja corrida, então só retomo a mensagem abaixo.']) + '\n\n' +
+      'Os filmes continuam aqui:\n\n' + link + '\n\n' +
+      'Se abrir a página toda for demais, posso mandar por aqui só ' + m.parecido + '. Leva um minuto para ver. Mando?' + sign),
+    A('Dar uma dica de presente', FANATICA + ' / ' + CONCER, re,
+      'Olá! Volto com uma ideia que talvez sirva mesmo que vocês nunca trabalhem comigo: ' + m.dica + '\n\n' +
+      'Se quiserem ver como eu faço isso, os filmes continuam aqui:\n\n' + link + sign),
+    A('Leveza e bom humor', SEM_MEDO, re,
+      'Oi! Sei que e-mail de quem a gente não conhece costuma ir para o fim da fila, então volto rapidinho.\n\n' +
+      'Só queria saber se conseguiram ver ' + m.curto + ':\n\n' + link + '\n\n' + 'Um sim, um não ou um "agora não" já me ajudam muito.' + sign),
+    A('Oferecer para tirar dúvidas', CONCER, re,
+      'Olá! Retomo a mensagem abaixo com uma pergunta só: ficou alguma dúvida que eu possa responder?\n\n' +
+      'Às vezes o que trava é não saber como funciona, e eu explico em duas linhas. Os filmes continuam aqui:\n\n' + link + sign)
+  ]; }
+
+  if (canal === 'email') { var re2 = 'Re: ' + ass(m.assuntos[0]); return [
+    A('Pedir indicação de outra pessoa', SEM_MEDO, re2,
+      'Olá! Esta é minha última mensagem, para não incomodar.\n\n' +
+      'Talvez quem cuide de vídeo e redes aí seja outra pessoa. Se puderem me indicar, eu agradeço.\n\n' +
+      'Os filmes continuam nesta página:\n\n' + link + '\n\n' +
+      'Quando fizer sentido falar de vídeo, é só responder este e-mail ou chamar no WhatsApp (73) 99141-9330.' + sign),
+    A('Perguntar a melhor época', CONCER, re2,
+      'Olá! Este é meu último e-mail.\n\n' +
+      'Se agora não for o momento, me digam só qual época faz mais sentido, antes da alta temporada, por exemplo, que eu volto a escrever só então.\n\n' +
+      'Os filmes continuam aqui:\n\n' + link + sign),
+    A('Perguntar o porquê, com leveza', SEM_MEDO, re2,
+      'Olá! Fecho por aqui para não lotar a caixa de vocês.\n\n' +
+      'Se puderem me ajudar com uma coisa só: é mais questão de momento, ou vídeo não é algo de que vocês precisam? Qualquer resposta me ajuda a não incomodar à toa.\n\n' +
+      link + sign),
+    A('Deixar a porta aberta', SEM_MEDO + ' / ' + CONCER, re2,
+      'Olá! Obrigado pela atenção até aqui. Este é meu último e-mail.\n\n' +
+      'Se um dia pensarem em vídeo para ' + m.deles + ', fico à disposição: é só responder aqui ou chamar no WhatsApp (73) 99141-9330.\n\n' +
+      link + sign)
+  ]; }
+
+  // WhatsApp (e Instagram, que usa o mesmo texto em um parágrafo só): nome e empresa na primeira linha, frases curtas, sem emoji.
+  if (etapa === 0) return [
+    A('Porquê e benefício', FANATICA, '',
+      oi() + ' Filmo ' + m.faz + '. ' + porque + '\n\n' + maiuscula_(m.curto) + ' estão aqui:\n' + link + '\n\n' +
+      p(['Se fizer sentido para vocês, me responde aqui que a gente conversa.', 'Consegue dar uma olhada? Se não for o momento, tudo bem, é só me avisar.'])),
+    A('Franqueza total', SEM_MEDO, '',
+      oi() + ' Vou ser direto: queria só mostrar meu trabalho para vocês, sem vender nada agora.' + (frase ? ' ' + frase : '') + '\n\n' + link + '\n\n' +
+      'Se não fizer sentido, é só me dizer.'),
+    A('Despertar curiosidade', SEM_MEDO + ' / ' + FANATICA, '',
+      oi() + ' ' + m.imagem + ' É isso que eu filmo, aqui em Trancoso.\n\n' + link + '\n\n' + 'Quer ver como ficaria com ' + m.deles + '?'),
+    A('Pedido pequeno', SEM_MEDO + ' / ' + FANATICA, '',
+      oi() + ' Tenho um pedido pequeno: um minuto para verem um filme. Não é reunião nem orçamento.\n\n' + link + '\n\n' +
+      'Se fizer sentido depois, a gente conversa.'),
+    A('Pergunta para abrir conversa', CONCER, '',
+      oi() + ' Filmo ' + m.faz + '. Uma pergunta rápida: ' + minuscula_(m.pergunta) + '\n\n' +
+      'Pergunto porque é aí que o vídeo ajuda. Meus filmes estão aqui:\n' + link)
+  ];
+  if (etapa === 1) return [
+    A('Recuar para um pedido menor', SEM_MEDO, '',
+      'Oi, é o Cainan, da Daime Filmes, de novo. Se for mais prático, te mando por aqui só ' + m.parecido + ', sem precisar abrir o site. Pode ser?'),
+    A('Dar uma dica de presente', FANATICA + ' / ' + CONCER, '',
+      'Oi, é o Cainan, da Daime Filmes. Uma ideia que talvez sirva mesmo sem mim: ' + m.dica + ' Se quiserem ver como eu faço: ' + link),
+    A('Oferecer para tirar dúvidas', CONCER, '',
+      'Oi, tudo bem? Cainan, da Daime Filmes. Ficou alguma dúvida sobre os filmes? Explico em duas linhas. ' + link)
+  ];
+  return [
+    A('Pedir indicação de outra pessoa', SEM_MEDO, '',
+      'Oi, Cainan da Daime Filmes. Última mensagem, prometo. Se for outra pessoa que cuida de vídeo aí, me indica? ' + maiuscula_(m.curto) + ' continuam em ' + link),
+    A('Perguntar a melhor época', CONCER, '',
+      'Oi! Cainan, da Daime Filmes. Fecho por aqui para não incomodar. Se não for o momento, me diz qual época faz mais sentido que eu volto a falar só então.'),
+    A('Perguntar o porquê, com leveza', SEM_MEDO, '',
+      'Oi, Cainan da Daime Filmes. Última mensagem. É mais questão de momento, ou vídeo não é algo de que vocês precisam? Qualquer resposta me ajuda a não incomodar à toa.'),
+    A('Deixar a porta aberta', SEM_MEDO + ' / ' + CONCER, '',
+      'Oi! Cainan, da Daime Filmes. Obrigado pela atenção até aqui. Se um dia pensarem em vídeo para ' + m.deles + ', é só me chamar. ' + link)
+  ];
+}
+
+/** etapa: 0 = primeiro contato, 1 = lembrete 1, 2 = lembrete 2. canal: 'email', 'wa' ou 'ig'.
+    tatica: índice da abordagem (padrão 0). sorteio(n) varia trechos dentro da abordagem; sem ele, sai a primeira opção. */
+function montarMensagem_(lead, etapa, canal, sorteio, tatica) {
+  var p = function (opcoes) { return opcoes[sorteio ? sorteio(opcoes.length) : 0]; };
+  var lista = abordagens_(lead, etapa, canal, p);
+  var i = ((tatica || 0) % lista.length + lista.length) % lista.length;
+  var a = lista[i];
+  var texto = a.texto, assunto = a.assunto;
+  if (canal !== 'email') {
+    var m = MODELOS[tipoDoSegmento_(lead.segmento)] || MODELOS.pousadas, link = LINKS[m.link];
+    assunto = (etapa > 0 ? 'Re: ' : '') + m.assuntos[0].replace(/{{Empresa}}/g, nomeCurto_(lead.empresa));
+    if (canal === 'ig') texto = texto.split(link + '\n').join(link + '.\n').split(link).join(link.replace('https://www.', '')).replace(/\s*\n+\s*/g, ' ');
   }
-  return { assunto: (etapa > 0 ? 'Re: ' : '') + assunto, texto: texto };
+  return { assunto: assunto, texto: texto, tatica: a.nome, livro: a.livro, idx: i, total: lista.length };
+}
+
+/** Próxima abordagem depois de `atual` (índice), com trechos sorteados. */
+function outraVersao_(lead, etapa, canal, atual) {
+  var sorteio = function (n) { return Math.floor(Math.random() * n); };
+  return montarMensagem_(lead, etapa, canal, sorteio, (atual || 0) + 1);
 }
 // ===== FIM DO NÚCLEO =====
 
@@ -414,9 +579,17 @@ function pillClass(s){ return s === 'Contatado' ? 's-contatado' : s.startsWith('
 function waDigits(n){ let d = String(n || '').replace(/\D/g,''); if (d.length === 10 || d.length === 11) d = '55' + d; return d; }
 function waPretty(n){ const d = waDigits(n); return d.length >= 12 ? '+' + d.slice(0,2) + ' ' + d.slice(2,4) + ' ' + d.slice(4) : '+' + d; }
 function dest(l, canal){ return canal === 'email' ? l.email : canal === 'wa' ? (l.wa ? waPretty(l.wa) : '') : (l.ig ? '@' + l.ig : ''); }
+// WhatsApp Web só aceita uma aba ativa: o painel abre sempre na mesma aba ("whatsapp") em vez de criar outra.
+// Sem rel=noopener, senão o navegador não encontra a aba pelo nome e abre uma nova.
+function alvo(canal){ return canal === 'wa' ? 'target="whatsapp"' : 'target="_blank" rel="noopener"'; }
 function openUrl(l, canal, m){
   if (canal === 'email') return l.email ? 'https://mail.google.com/mail/?view=cm&fs=1&to=' + encodeURIComponent(l.email) + '&su=' + encodeURIComponent(m.assunto) + '&body=' + encodeURIComponent(m.texto) : '';
-  if (canal === 'wa') return l.wa ? 'https://wa.me/' + waDigits(l.wa) + '?text=' + encodeURIComponent(m.texto) : '';
+  // No computador abre o WhatsApp Web (número da Daime); o app do Mac está no número Business. No celular, wa.me deixa escolher o app.
+  if (canal === 'wa') {
+    if (!l.wa) return '';
+    const t = encodeURIComponent(m.texto), n = waDigits(l.wa);
+    return matchMedia('(pointer: coarse)').matches ? 'https://wa.me/' + n + '?text=' + t : 'https://web.whatsapp.com/send?phone=' + n + '&text=' + t;
+  }
   return l.ig ? 'https://www.instagram.com/' + encodeURIComponent(l.ig) + '/' : '';
 }
 async function ok(promise, msgErro){
@@ -500,9 +673,10 @@ function qHtml(f, i){
     <div class="q-acts">
       ${isMail ? `<button class="btn primary small" type="button" data-qact="aprovar" data-id="${f.id}">Aprovar</button>`
         : `<button class="btn small" type="button" data-qact="copiar" data-id="${f.id}">Copiar</button>
-           ${url ? `<a class="btn small" href="${esc(url)}" target="_blank" rel="noopener" data-qact="abrir" data-id="${f.id}">Abrir ${CANAIS[f.canal]}</a>` : ''}
+           ${url ? `<a class="btn small" href="${esc(url)}" ${alvo(f.canal)} data-qact="abrir" data-id="${f.id}">Abrir ${CANAIS[f.canal]}</a>` : ''}
            <button class="btn primary small" type="button" data-qact="enviei" data-id="${f.id}">Já enviei</button>`}
       <button class="btn small" type="button" data-qact="editar" data-id="${f.id}">${open ? 'Fechar edição' : 'Ver e alterar'}</button>
+      <button class="btn small" type="button" data-qact="nova" data-id="${f.id}">Gerar outra versão</button>
       <button class="btn ghost small sp" type="button" data-qact="pular" data-id="${f.id}">Pular por 7 dias</button>
     </div></article>`;
 }
@@ -547,7 +721,8 @@ async function qAct(act, id, target){
   if (!f) return;
   if (act === 'editar') { openQ = openQ === id ? null : id; return render(); }
   if (act === 'copiar') return copy(msgOf(f).texto);
-  if (act === 'abrir') { target.href = openUrl(l, f.canal, msgOf(f)); if (f.canal === 'ig') copy(msgOf(f).texto); return; }
+  if (act === 'nova') { const d = drafts[id] = drafts[id] || {}, v = outraVersao_(l, f.etapa, f.canal, d.tat || 0); d.tat = v.idx; d.texto = v.texto; if (f.etapa === 0) d.assunto = v.assunto; render(); return toastAbordagem(v); }
+  if (act === 'abrir') { target.href = openUrl(l, f.canal, msgOf(f)); if (f.canal !== 'email') copy(msgOf(f).texto); return; }
   if (act === 'aprovar') { await saveQ(f, 'aprovada'); await fadeQ(id); toast('Aprovado. O robô envia em até 10 minutos.'); }
   if (act === 'enviei') { await saveQ(f, 'enviada'); await fadeQ(id); await loadAll(); toast('Registrado como enviado'); }
   if (act === 'desfazer') { await ok(SB.from('fila').update({ situacao:'pendente', decidido:null }).eq('id', id).eq('situacao', 'aprovada')); await loadAll(); toast('Voltou para a fila'); }
@@ -679,8 +854,9 @@ function renderDrawer(){
         ${cur.canal === 'email' ? `<input class="field" id="dsubj" aria-label="Assunto" value="${esc(m.assunto)}">` : ''}
         <textarea class="field" id="dtext" aria-label="Texto da mensagem">${esc(m.texto)}</textarea>
         <div class="acts">
+          <button class="btn" type="button" data-act="nova">Gerar outra versão</button>
           <button class="btn" type="button" data-act="copy">Copiar texto</button>
-          ${url ? `<a class="btn" href="${esc(url)}" target="_blank" rel="noopener" data-act="open">${cur.canal === 'email' ? 'Abrir no Gmail' : cur.canal === 'wa' ? 'Abrir WhatsApp' : 'Copiar e abrir perfil'}</a>` : ''}
+          ${url ? `<a class="btn" href="${esc(url)}" ${alvo(cur.canal)} data-act="open">${cur.canal === 'email' ? 'Abrir no Gmail' : cur.canal === 'wa' ? 'Abrir WhatsApp' : 'Copiar e abrir perfil'}</a>` : ''}
           ${cur.canal === 'email' && l.email && (!row || row.situacao !== 'enviada') ? '<button class="btn primary" type="button" data-act="aprovar">Aprovar para o robô</button>' : ''}
           ${!row || row.situacao !== 'enviada' ? `<button class="btn ${cur.canal === 'email' ? '' : 'primary'}" type="button" data-act="sent">Já enviei</button>` : ''}
         </div></div>
@@ -698,6 +874,7 @@ async function upsertMsg(situacao){
   toast(situacao === 'enviada' ? 'Registrado como enviado' : 'Aprovado. O robô envia em até 10 minutos.');
   cur.etapa = stageOf(getLead(cur.id)); renderDrawer(); renderNav();
 }
+function toastAbordagem(v){ toast('Abordagem ' + (v.idx + 1) + ' de ' + v.total + ': ' + v.tatica + ' (' + v.livro + ')'); }
 function copy(text){
   const done = () => toast('Texto copiado');
   const fb = () => { const t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select(); try { document.execCommand('copy'); done(); } catch(e) { toast('Não consegui copiar: selecione o texto e use Cmd+C'); } t.remove(); };
@@ -762,7 +939,8 @@ document.addEventListener('click', async e => {
     const a = t.dataset.act, l = cur && getLead(cur.id);
     if (a === 'close') return closeLead();
     if (a === 'copy') return copy(document.getElementById('dtext').value);
-    if (a === 'open') { const m = dMsg(l); t.href = openUrl(l, cur.canal, m); if (cur.canal === 'ig') copy(m.texto); return; }
+    if (a === 'nova') { const k = cur.canal + cur.etapa, v = outraVersao_(l, cur.etapa, cur.canal, dtxt['t' + k] || 0); dtxt['t' + k] = v.idx; dtxt[k] = v.texto; if (cur.etapa === 0) dtxt['s' + k] = v.assunto; renderDrawer(); return toastAbordagem(v); }
+    if (a === 'open') { const m = dMsg(l); t.href = openUrl(l, cur.canal, m); if (cur.canal !== 'email') copy(m.texto); return; }
     if (a === 'sent') return await upsertMsg('enviada');
     if (a === 'aprovar') return await upsertMsg('aprovada');
     if (a === 'novo') return newLeadForm();
