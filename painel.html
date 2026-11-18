@@ -363,6 +363,7 @@ kbd{font:600 11px/1 var(--body);padding:3px 6px;border-radius:6px;background:col
 .ev-fila .ev-b{background:transparent;border:1.5px dashed var(--line)}
 .ev-h{margin:0;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;font-size:13px;color:var(--muted)}
 .ev-h b{color:var(--ink);font-size:14px}
+.ev-de{font-size:12px}
 .ev-h a{margin-left:auto;font-weight:600;display:inline-flex;align-items:center;gap:4px}
 .ev-h a .ico{width:14px;height:14px}
 .ev-s{margin:0;font-weight:600;font-size:14px;overflow-wrap:anywhere}
@@ -768,7 +769,7 @@ function outraVersao_(lead, etapa, canal, atual) {
 // ------------------------------------------------------------ conexão
 // Estes dois valores são públicos por natureza. Quem protege os dados é o login + as regras do banco.
 const SB = supabase.createClient('https://prrqshhnhvehvyafitax.supabase.co', 'sb_publishable_25ymkT18mK9bmAnEo-t5gw_mzYqdUiT');
-let LEADS = [], FILA = [];
+let LEADS = [], FILA = [], MSGS = [];
 const drafts = {};   // textos editados na fila, ainda não salvos
 
 const AREAS = {
@@ -821,6 +822,9 @@ async function loadAll(){
   const [a, b] = await Promise.all([ SB.from('leads').select('*').order('nota', { ascending:false }).order('empresa'), SB.from('fila').select('*').order('criado') ]);
   if (a.error || b.error) { console.error(a.error || b.error); toast('Não foi possível carregar os dados.'); return; }
   LEADS = a.data; FILA = b.data;
+  // Mensagens recebidas dos clientes (o robô copia do Gmail). Se a tabela ainda não existir, segue sem elas.
+  const c = await SB.from('mensagens').select('*').order('data');
+  MSGS = c.error ? [] : c.data;
 }
 
 // ------------------------------------------------------------ navegação
@@ -922,7 +926,7 @@ function vHoje(){
   const tabs = [['agora','Agora',A.total],['proximos','Próximos',P.passos.length + P.robo.length],['feito','Feito hoje',env.length]];
   let corpo = '';
   if (hojeTab === 'agora') {
-    corpo = grupo('Responderam', A.respostas.map(l => itLead(l, esc(l.resposta ? l.resposta.replace(/\s+/g,' ').slice(0, 140) : 'Respondeu ao seu contato'), '', `<button class="btn primary small" type="button" data-open="${esc(l.id)}">Responder</button>`)), '', 'Responda enquanto o assunto está quente.')
+    corpo = grupo('Responderam', A.respostas.map(l => { const u = ultimaDoCliente(l, MSGS); return itLead(l, esc(u ? String(u.texto).replace(/\s+/g,' ').slice(0, 140) : 'Respondeu ao seu contato') + (u && u.data ? ' · ' + fmtDate(u.data) : ''), '', `<button class="btn primary small" type="button" data-open="${esc(l.id)}">Responder</button>`); }), '', 'Responda enquanto o assunto está quente.')
       + grupo('Para aprovar', A.aprovar.map(qHtml), A.aprovar.length > 1 ? `<button class="btn small" type="button" data-qact="aprovar-todos">${ico('ok')}Aprovar os ${A.aprovar.length}</button>` : '', 'O robô envia pelo seu Gmail até 10 minutos depois de aprovar.')
       + grupo('Enviar à mão', A.manual.map(qHtml), '', 'WhatsApp e Instagram você envia pessoalmente: o texto é copiado ao abrir.')
       + grupo('Próximos passos', A.passos.map(l => itLead(l, esc(l.proximo || 'Próximo passo'), `<span class="pill ${quando(l.proximo_em) === 'atrasado' ? 'due' : ''}">${quando(l.proximo_em) === 'atrasado' ? 'Atrasado · ' : ''}${esc(ddmm(l.proximo_em))}</span>`, `<button class="btn small" type="button" data-act="feito" data-id="${esc(l.id)}">${ico('ok')}Feito</button>`)))
@@ -997,6 +1001,7 @@ function gmailUrl(conversa){ return 'https://mail.google.com/mail/u/0/#all/' + e
 function evHtml(e, ultimo){
   const f = e.item;
   if (e.tipo === 'criado') return `<li class="ev ev-sis"><span class="ev-m"></span><div class="ev-b"><p class="ev-h"><b>Empresa cadastrada</b><span>${fmtDate(e.data)}</span></p></div></li>`;
+  if (e.tipo === 'cliente') return `<li class="ev ev-in"><span class="ev-m"></span><div class="ev-b"><p class="ev-h"><b>Cliente respondeu</b><span>E-mail · ${fmtDate(e.data)} · ${new Date(e.data).toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' })}</span>${e.item.de ? `<span class="ev-de">${esc(e.item.de.replace(/<.*>/, '').trim() || e.item.de)}</span>` : ''}</p><p class="ev-t">${esc(e.item.texto)}</p></div></li>`;
   if (e.tipo === 'resposta') { const l = getLead(cur.id);
     return `<li class="ev ev-in"><span class="ev-m"></span><div class="ev-b"><p class="ev-h"><b>Resposta do cliente</b></p><p class="ev-t">${esc(l.resposta)}</p></div></li>`; }
   if (e.tipo === 'enviada') {
@@ -1021,14 +1026,15 @@ function evHtml(e, ultimo){
 function vLead(){
   const l = getLead(cur.id); if (!l) return '<div class="view"><p class="empty">Empresa não encontrada.</p></div>';
   const hoje = hojeStr(), m = dMsg(l), url = openUrl(l, cur.canal, m), to = dest(l, cur.canal);
-  const ev = linhaDoTempo(l, FILA), env = ev.filter(e => e.tipo === 'enviada'), ultimaEnv = env.length ? env[env.length - 1].item : null;
+  const ev = linhaDoTempo(l, FILA, MSGS), env = ev.filter(e => e.tipo === 'enviada'), ultimaEnv = env.length ? env[env.length - 1].item : null;
   const row = FILA.find(f => f.lead_id === l.id && f.etapa === cur.etapa);
   const comFio = env.filter(e => e.item.conversa), conversa = comFio.length ? comFio[comFio.length - 1].item.conversa : l.conversa;
   // Foco: o que pede ação agora
   const foco = [];
-  if (l.status === 'Respondeu') foco.push(`<div class="foco-i"><div><b>Respondeu. Hora de responder.</b><p>${l.resposta ? 'Peça ao Claude um rascunho com o histórico e as suas regras.' : 'Cole a resposta do cliente para o Claude sugerir o retorno.'}</p></div>
+  const ultimaCli = ultimaDoCliente(l, MSGS), temMsgs = MSGS.some(x => x.lead_id === l.id);
+  if (l.status === 'Respondeu') foco.push(`<div class="foco-i"><div><b>Respondeu. Hora de responder.</b><p>${ultimaCli ? '“' + esc(String(ultimaCli.texto).replace(/\s+/g, ' ').slice(0, 160)) + (String(ultimaCli.texto).length > 160 ? '…' : '') + '”' : 'Cole a resposta do cliente para o Claude sugerir o retorno.'}</p></div>
     <div class="acts"><button class="btn primary small" type="button" data-act="sugerir">Sugerir resposta com o Claude</button>${conversa ? `<a class="btn small" href="${esc(gmailUrl(conversa))}" target="_blank" rel="noopener">Responder no Gmail${ico('fora')}</a>` : ''}</div>
-    <textarea class="field notes" id="dresp" aria-label="Resposta do cliente" placeholder="O que o cliente respondeu (o robô preenche sozinho)">${esc(l.resposta || '')}</textarea></div>`);
+    ${temMsgs ? '' : `<textarea class="field notes" id="dresp" aria-label="Resposta do cliente" placeholder="O que o cliente respondeu (o robô preenche sozinho)">${esc(l.resposta || '')}</textarea>`}</div>`);
   if (l.proximo && l.proximo_em && l.proximo_em <= hoje && !['Fechou','Sem interesse'].includes(l.status)) foco.push(`<div class="foco-i"><div><b>${l.proximo_em < hoje ? 'Próximo passo atrasado' : 'Próximo passo para hoje'}</b><p>${esc(l.proximo)} · ${esc(ddmm(l.proximo_em))}</p></div>
     <div class="acts"><button class="btn small" type="button" data-act="feito" data-id="${esc(l.id)}">${ico('ok')}Feito</button></div></div>`);
   if (l.status === 'Novo' && !ev.some(e => e.tipo === 'fila')) foco.push(`<div class="foco-i"><div><b>Ainda não contatada.</b><p>A primeira mensagem está pronta em “Nova mensagem”.</p></div></div>`);
@@ -1312,7 +1318,9 @@ document.addEventListener('click', async e => {
     if (a === 'nova') { const k = cur.canal + cur.etapa, v = outraVersao_(l, cur.etapa, cur.canal, dtxt['t' + k] || 0); dtxt['t' + k] = v.idx; dtxt[k] = v.texto; if (cur.etapa === 0) dtxt['s' + k] = v.assunto; renderDrawer(); return toastAbordagem(v); }
     if (a === 'open') { const m = dMsg(l); t.href = openUrl(l, cur.canal, m); if (cur.canal !== 'email') copy(m.texto); return; }
     if (a === 'pesquisar') return pedirAoClaude(promptPesquisa(l, MODELOS[l.area].nome));
-    if (a === 'sugerir') { const hist = FILA.filter(f => f.lead_id === l.id && f.situacao === 'enviada'); return pedirAoClaude(promptResposta(l, MODELOS[l.area].nome, resumoLead(l, hist, hojeStr()))); }
+    if (a === 'sugerir') { const hist = FILA.filter(f => f.lead_id === l.id && f.situacao === 'enviada'), dele = MSGS.filter(x => x.lead_id === l.id);
+      const resp = dele.length ? dele.map(x => fmtDate(x.data) + ':\n' + x.texto).join('\n\n') : l.resposta;
+      return pedirAoClaude(promptResposta(Object.assign({}, l, { resposta: resp }), MODELOS[l.area].nome, resumoLead(l, hist, hojeStr()))); }
     if (a === 'sent') return await upsertMsg('enviada');
     if (a === 'aprovar') return await upsertMsg('aprovada');
     if (a === 'novo') return newLeadForm();

@@ -5,7 +5,7 @@ import vm from 'node:vm';
 
 const ctx = {};
 vm.runInNewContext(readFileSync(new URL('../painel-logica.js', import.meta.url), 'utf8'), ctx);
-const { itensAgora, itensProximos, linhaDoTempo, VISOES, resultados, feitoNota } = ctx;
+const { itensAgora, itensProximos, linhaDoTempo, VISOES, resultados, feitoNota, ultimaDoCliente } = ctx;
 const ids = a => a.map(x => x.id);
 const plain = v => JSON.parse(JSON.stringify(v)); // objetos do vm vêm de outro contexto
 const HOJE = '2026-11-18';
@@ -98,4 +98,30 @@ test('resultados: respostas por canal do primeiro contato', () => {
 test('feito: registra o passo nas anotações com a data', () => {
   assert.equal(feitoNota('', 'Ligar para a gerente', HOJE), '18/11: feito — Ligar para a gerente');
   assert.equal(feitoNota('antes', 'x', HOJE), 'antes\n18/11: feito — x');
+});
+
+test('linha do tempo: mensagens do cliente entram na ordem da data, entre os envios', () => {
+  const l = { id: 'p1', status: 'Respondeu', resposta: 'última' };
+  const F = [
+    { id: 'a', lead_id: 'p1', situacao: 'enviada', enviado: '2026-11-05T10:00:00Z', etapa: 0 },
+    { id: 'b', lead_id: 'p1', situacao: 'enviada', enviado: '2026-11-12T10:00:00Z', etapa: 1 },
+  ];
+  const M = [
+    { id: 2, lead_id: 'p1', data: '2026-11-14T09:00:00Z', texto: 'segunda' },
+    { id: 1, lead_id: 'p1', data: '2026-11-07T09:00:00Z', texto: 'primeira' },
+    { id: 3, lead_id: 'outro', data: '2026-11-08T09:00:00Z', texto: 'x' },
+  ];
+  assert.deepEqual(plain(linhaDoTempo(l, F, M)).map(e => e.tipo + ':' + (e.item ? e.item.id : '')),
+    ['enviada:a', 'cliente:1', 'enviada:b', 'cliente:2']);
+});
+
+test('linha do tempo: sem mensagens guardadas, usa o campo resposta como antes', () => {
+  assert.deepEqual(plain(linhaDoTempo({ id: 'x', resposta: 'oi' }, [], [])).map(e => e.tipo), ['resposta']);
+});
+
+test('última mensagem do cliente', () => {
+  const M = [{ lead_id: 'p1', data: '2026-11-07T09:00:00Z', texto: 'a' }, { lead_id: 'p1', data: '2026-11-14T09:00:00Z', texto: 'b' }];
+  assert.equal(ultimaDoCliente({ id: 'p1' }, M).texto, 'b');
+  assert.equal(ultimaDoCliente({ id: 'p2', resposta: 'c' }, M).texto, 'c');
+  assert.equal(ultimaDoCliente({ id: 'p3' }, M), null);
 });

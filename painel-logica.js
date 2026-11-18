@@ -118,17 +118,28 @@ function itensProximos(leads, fila, hoje, dias) {
   };
 }
 
-/** Eventos do cliente, do mais antigo ao mais recente. */
-function linhaDoTempo(lead, fila) {
+/** Eventos do cliente, do mais antigo ao mais recente: envios e mensagens do cliente intercalados pela data. */
+function linhaDoTempo(lead, fila, msgs) {
   var meus = (fila || []).filter(function (f) { return f.lead_id === lead.id; });
+  var dele = (msgs || []).filter(function (m) { return m.lead_id === lead.id; });
   var ev = [];
   if (lead.criado) ev.push({ tipo: 'criado', data: lead.criado });
-  meus.filter(function (f) { return f.situacao === 'enviada'; }).sort(porData_('enviado'))
-    .forEach(function (f) { ev.push({ tipo: 'enviada', data: f.enviado, item: f }); });
+  var conversa = meus.filter(function (f) { return f.situacao === 'enviada'; })
+    .map(function (f) { return { tipo: 'enviada', data: f.enviado, item: f }; })
+    .concat(dele.map(function (m) { return { tipo: 'cliente', data: m.data, item: m }; }))
+    .sort(porData_('data'));
+  ev = ev.concat(conversa);
   meus.filter(function (f) { return ['pendente', 'aprovada', 'erro'].indexOf(f.situacao) >= 0; })
     .forEach(function (f) { ev.push({ tipo: 'fila', data: f.criado || null, item: f }); });
-  if (lead.resposta) ev.push({ tipo: 'resposta', data: null });
+  if (lead.resposta && !dele.length) ev.push({ tipo: 'resposta', data: null });
   return ev;
+}
+
+/** A mensagem mais recente do cliente: da tabela de mensagens ou, sem ela, do campo resposta. */
+function ultimaDoCliente(lead, msgs) {
+  var dele = (msgs || []).filter(function (m) { return m.lead_id === lead.id; }).sort(porData_('data'));
+  if (dele.length) return dele[dele.length - 1];
+  return lead.resposta ? { lead_id: lead.id, data: null, texto: lead.resposta } : null;
 }
 
 var VISOES = {
