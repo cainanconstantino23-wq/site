@@ -12,6 +12,33 @@
         ],
         "createdAt": "2026-11-09T22:19:39.299Z",
         "reason": "DESIGN.md colors.ground #ECE3D3 (sand) is the client-approved surface of the \"name as monument\" direction, taken from the subject (Trancoso sand + door blue); sanctioned exception"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "bricolage grotesque",
+        "files": [
+          "painel.html"
+        ],
+        "createdAt": "2026-11-18T01:50:30.279Z",
+        "reason": "pre-existing type system of the internal panel (painel.html), unchanged by this task"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "inter",
+        "files": [
+          "painel.html"
+        ],
+        "createdAt": "2026-11-18T01:50:30.295Z",
+        "reason": "pre-existing type system of the internal panel (painel.html), unchanged by this task"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "menlo",
+        "files": [
+          "painel.html"
+        ],
+        "createdAt": "2026-11-18T01:50:30.311Z",
+        "reason": "pre-existing type system of the internal panel (painel.html), unchanged by this task"
       }
     ]
   }

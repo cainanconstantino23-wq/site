@@ -183,6 +183,15 @@ code{font-family:ui-monospace,Menlo,monospace;font-size:13px;background:var(--bg
 .field{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg)}
 textarea.field{min-height:190px;resize:vertical;line-height:1.5;font-size:14px}
 textarea.notes{min-height:70px}
+.resumo{margin:0;font-size:13px;color:var(--muted);padding:10px 12px;border-radius:10px;background:var(--bg2);overflow-wrap:anywhere}
+.prox{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
+.motivo{border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--ink);padding:22px;width:min(360px,calc(100% - 32px))}
+.motivo::backdrop{background:rgba(6,12,18,.5)}
+.motivo h2{margin:0 0 14px;font-size:18px}
+.motivos{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.motivos .btn{justify-content:flex-start}
+.col.alvo{outline:2px dashed var(--accent);outline-offset:-2px}
+.card.arrastando{opacity:.4}
 .acts{display:flex;flex-wrap:wrap;gap:8px}
 .hist{margin:0;padding:0;list-style:none;font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:4px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -273,6 +282,11 @@ textarea.notes{min-height:70px}
 </div>
 <div class="scrim" id="scrim"></div>
 <aside class="drawer" id="drawer" aria-hidden="true"></aside>
+<dialog class="motivo" id="motivo" aria-labelledby="motivo-t">
+  <h2 id="motivo-t">Por que não deu certo?</h2>
+  <div class="motivos"></div>
+  <button class="btn ghost small" type="button" data-motivo="">Cancelar</button>
+</dialog>
 <div class="toast" id="toast" role="status"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
@@ -685,7 +699,7 @@ function qHtml(f, i){
 function vHoje(){
   const pend = FILA.filter(f => f.situacao === 'pendente'), apr = FILA.filter(f => f.situacao === 'aprovada'), err = FILA.filter(f => f.situacao === 'erro');
   const hoje = hojeStr(), env = FILA.filter(f => f.situacao === 'enviada' && f.enviado && new Date(f.enviado).toLocaleDateString('en-CA') === hoje);
-  const nMail = pend.filter(f => f.canal === 'email').length;
+  const nMail = pend.filter(f => f.canal === 'email').length, ph = paraHoje(LEADS, hoje);
   const hora = new Date().getHours(), oi = hora < 12 ? 'Bom dia' : hora < 18 ? 'Boa tarde' : 'Boa noite';
   const fds = [0,6].includes(new Date().getDay());
   const mini = f => { const l = getLead(f.lead_id); return l ? `<button type="button" class="row" style="--c:var(--a-${l.area})" data-open="${esc(l.id)}"><span class="dot"></span><span class="who"><b>${esc(l.empresa)}</b><span>${ETAPAS[f.etapa]} · ${CANAIS[f.canal]}${f.erro ? ' · ' + esc(f.erro) : ''}</span></span><span class="right">${f.situacao === 'aprovada' ? `<span class="btn ghost small" data-qact="desfazer" data-id="${f.id}">Desfazer</span>` : f.situacao === 'erro' ? `<span class="btn ghost small" data-qact="reaprovar" data-id="${f.id}">Tentar de novo</span>` : ''}</span></button>` : ''; };
@@ -699,6 +713,8 @@ function vHoje(){
       <div class="stat rise" style="--i:2"><b data-count="${env.length}">0</b><span>enviadas hoje</span></div>
       <div class="stat rise" style="--i:3"><b data-count="${LEADS.filter(replied).length}">0</b><span>empresas que responderam</span></div>
     </div>
+    ${ph.length ? `<section class="panel rise"><div class="sec"><h2>Para hoje</h2><span>${ph.length} próximo${ph.length > 1 ? 's passos' : ' passo'}</span></div><div class="rows">${ph.map(l =>
+      `<button type="button" class="row" style="--c:var(--a-${l.area})" data-open="${esc(l.id)}"><span class="dot"></span><span class="who"><b>${esc(l.empresa)}</b><span>${esc(l.proximo || 'Próximo passo')}</span></span><span class="right">${l.proximo_em < hoje ? '<span class="pill due">Atrasado</span>' : ''}${esc(ddmm(l.proximo_em))}</span></button>`).join('')}</div></section>` : ''}
     <div class="queue" id="queue">${pend.map(qHtml).join('')}</div>
     ${err.length ? `<section class="panel"><div class="sec"><h2>Não foi possível enviar</h2><span>${err.length}</span></div><div class="rows">${err.map(mini).join('')}</div></section>` : ''}
     ${apr.length ? `<section class="panel"><div class="sec"><h2>Aprovadas, aguardando o robô</h2><span>ele envia a cada 10 minutos, em dia útil</span></div><div class="rows">${apr.map(mini).join('')}</div></section>` : ''}
@@ -783,15 +799,18 @@ function vAcompanhar(){
       <p class="sub">Quem não respondeu em 4 dias entra na fila com um lembrete; em 9 dias, com o último. Depois disso, o robô não insiste.</p></div></div>
     <section class="panel rise"><div class="panel-head"><h2>Lembretes vencidos</h2><span>${dues.length} empresa${dues.length === 1 ? '' : 's'}</span></div>
       <div class="rows">${dues.map(rowHtml).join('') || '<p class="empty">Nenhum lembrete vencido.</p>'}</div></section>
+    <p class="sub">Arraste um cartão para outra coluna para mudar a situação.</p>
     <div class="board">${cols.map(([nome, sts], i) => { const a = LEADS.filter(l => sts.includes(l.status));
-      return `<div class="col rise" style="--i:${i + 1}"><h3><span>${nome}</span><span>${a.length}</span></h3>${a.map(l =>
-        `<button type="button" class="card" data-open="${esc(l.id)}"><b>${esc(l.empresa)}</b><span>${esc(MODELOS[l.area].nome)}${l.ultimo ? ' · ' + fmtDate(l.ultimo) : ''}</span></button>`).join('') || '<span class="count">Vazio</span>'}</div>`; }).join('')}</div></div>`;
+      const motivos = nome === 'Sem interesse' ? Object.entries(a.reduce((m, l) => (m[l.motivo_perda || 'Sem motivo'] = (m[l.motivo_perda || 'Sem motivo'] || 0) + 1, m), {})).map(([k, n]) => `${esc(k)}: ${n}`).join(' · ') : '';
+      return `<div class="col rise" style="--i:${i + 1}" data-col="${esc(sts[0])}" data-sts="${esc(sts.join('|'))}"><h3><span>${nome}</span><span>${a.length}</span></h3>${motivos ? `<span class="count">${motivos}</span>` : ''}${a.map(l =>
+        `<button type="button" class="card" draggable="true" data-drag="${esc(l.id)}" data-open="${esc(l.id)}"><b>${esc(l.empresa)}</b><span>${esc(MODELOS[l.area].nome)}${l.ultimo ? ' · ' + fmtDate(l.ultimo) : ''}</span>${l.status === 'Sem interesse' && l.motivo_perda ? `<span>${esc(l.motivo_perda)}</span>` : ''}${l.proximo ? `<span>Próximo: ${esc(l.proximo)}${l.proximo_em ? ' · ' + esc(ddmm(l.proximo_em)) : ''}</span>` : ''}</button>`).join('') || '<span class="count">Vazio</span>'}</div>`; }).join('')}</div></div>`;
 }
 function vRobo(){
   const n = LEADS.filter(l => l.email).length;
   return `<div class="view">
     <div class="head"><div><p class="eyebrow">Etapa 4</p><h1>Robô de e-mail</h1>
-      <p class="sub">O robô roda no seu Gmail. Toda manhã de dia útil ele monta a fila e te avisa por e-mail. Depois envia só o que você aprovou, e confere quem respondeu.</p></div></div>
+      <p class="sub">O robô roda no seu Gmail. Toda manhã de dia útil ele monta a fila e te avisa por e-mail. Depois envia só o que você aprovou, e confere quem respondeu.</p>
+      <p class="sub"><b>Novidade (17/11):</b> o robô agora guarda o texto da resposta do cliente. Se você ligou o robô antes dessa data, cole o <code>robo-painel.gs</code> de novo no Apps Script (com o mesmo token) e rode <code>ligar</code>.</p></div></div>
     <div class="cols">
       <section class="panel rise"><h2>Como ligar</h2>
         <ol class="steps">
@@ -844,10 +863,20 @@ function renderDrawer(){
         ${l.site ? `<a href="${esc(l.site)}" target="_blank" rel="noopener">${esc(l.site.replace(/^https?:\/\/(www\.)?/,'').slice(0,38))}</a>` : ''}</div>
     </div>
     <div class="d-body">
+      <p class="resumo">${esc(resumoLead(l, hist, hojeStr()))}</p>
       ${l.sobre ? `<div class="block"><span class="label">Como a empresa se descreve</span><p class="about">${esc(l.sobre)}</p></div>` : ''}
       ${l.obs ? `<div class="block"><span class="label">Observação</span><p class="obs">${esc(l.obs)}</p></div>` : ''}
       <div class="block"><span class="label">Situação</span>
-        <select class="field" id="dstatus">${STATUS.map(x => `<option ${l.status === x ? 'selected' : ''}>${x}</option>`).join('')}</select></div>
+        <select class="field" id="dstatus">${STATUS.map(x => `<option ${l.status === x ? 'selected' : ''}>${x}</option>`).join('')}</select>
+        ${l.status === 'Sem interesse' && l.motivo_perda ? `<span class="count">Motivo: ${esc(l.motivo_perda)}</span>` : ''}</div>
+      <div class="block"><span class="label">Próximo passo</span>
+        <div class="prox"><input class="field" id="dprox" placeholder="Ex.: ligar para a gerente" value="${esc(l.proximo || '')}"><input class="field" type="date" id="dproxem" aria-label="Data do próximo passo" value="${esc(l.proximo_em || '')}"></div></div>
+      ${replied(l) ? `<div class="block"><span class="label">O que o cliente respondeu</span>
+        <textarea class="field notes" id="dresp" placeholder="O robô preenche sozinho; você também pode colar aqui.">${esc(l.resposta || '')}</textarea>
+        <div class="acts"><button class="btn primary" type="button" data-act="sugerir">Sugerir resposta com o Claude</button></div></div>` : ''}
+      <div class="block"><span class="label">Pesquisa sobre a empresa</span>
+        <textarea class="field notes" id="dpesq" placeholder="Cole aqui o que o Claude encontrou.">${esc(l.pesquisa || '')}</textarea>
+        <div class="acts"><button class="btn" type="button" data-act="pesquisar">Pesquisar com o Claude</button></div></div>
       <div class="block"><span class="label">Frase personalizada</span><textarea class="field notes" id="dfrase">${esc(l.frase)}</textarea></div>
       <div class="block"><span class="label">Mensagem</span>
         <div class="seg" role="tablist">${ETAPAS.map((t,i) => `<button type="button" role="tab" aria-selected="${cur.etapa === i}" data-etapa="${i}">${t}</button>`).join('')}</div>
@@ -881,6 +910,36 @@ function copy(text){
   const done = () => toast('Texto copiado');
   const fb = () => { const t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select(); try { document.execCommand('copy'); done(); } catch(e) { toast('Não consegui copiar: selecione o texto e use Cmd+C'); } t.remove(); };
   try { navigator.clipboard.writeText(text).then(done, fb); } catch(e) { fb(); }
+}
+const MOTIVOS = ['Sem orçamento','Já tem filmmaker','Não respondeu','Pediu para sair','E-mail inválido','Outro'];
+/** Abre o diálogo de motivo da perda. Devolve o motivo escolhido ou null se cancelar. */
+function pedirMotivo(){
+  const d = document.getElementById('motivo');
+  d.querySelector('.motivos').innerHTML = MOTIVOS.map(m => `<button class="btn" type="button" data-motivo="${esc(m)}">${esc(m)}</button>`).join('');
+  return new Promise(res => {
+    const fim = v => { d.removeEventListener('click', clique); d.removeEventListener('cancel', esc_); if (d.open) d.close(); res(v); };
+    const clique = e => { const b = e.target.closest('[data-motivo]'); if (b) fim(b.dataset.motivo || null); else if (e.target === d) fim(null); };
+    const esc_ = e => { e.preventDefault(); fim(null); };
+    d.addEventListener('click', clique); d.addEventListener('cancel', esc_); d.showModal();
+  });
+}
+/** Muda a situação de um lead, com as mesmas regras em toda parte. Devolve false se nada mudou. */
+async function moverLead(id, status){
+  const l = getLead(id); if (!l || l.status === status) return false;
+  const patch = { status };
+  if (status === 'Sem interesse') { const m = await pedirMotivo(); if (!m) return false; patch.motivo_perda = m; }
+  if (status !== 'Novo' && !l.primeiro) patch.primeiro = patch.ultimo = new Date().toISOString();
+  await ok(SB.from('leads').update(patch).eq('id', l.id), 'Situação não salva'); Object.assign(l, patch);
+  if (!['Novo','Contatado','Lembrete 1'].includes(l.status)) { await SB.from('fila').delete().eq('lead_id', l.id).in('situacao', ['pendente','aprovada']); FILA = FILA.filter(f => !(f.lead_id === l.id && ['pendente','aprovada'].includes(f.situacao))); }
+  toast('Situação: ' + l.status + (patch.motivo_perda ? ' (' + patch.motivo_perda + ')' : ''));
+  return true;
+}
+function salvarCampo(l, campo, valor, msgErro){
+  l[campo] = valor; debounce(campo + l.id, () => SB.from('leads').update({ [campo]: valor || null }).eq('id', l.id).then(r => r.error && toast(msgErro)));
+}
+function pedirAoClaude(texto){
+  copy(texto); window.open('https://claude.ai/new', '_blank', 'noopener');
+  toast('Pedido copiado. Cole no Claude e traga o resultado para cá.');
 }
 const later = {}; function debounce(key, fn){ clearTimeout(later[key]); later[key] = setTimeout(fn, 700); }
 
@@ -943,6 +1002,8 @@ document.addEventListener('click', async e => {
     if (a === 'copy') return copy(document.getElementById('dtext').value);
     if (a === 'nova') { const k = cur.canal + cur.etapa, v = outraVersao_(l, cur.etapa, cur.canal, dtxt['t' + k] || 0); dtxt['t' + k] = v.idx; dtxt[k] = v.texto; if (cur.etapa === 0) dtxt['s' + k] = v.assunto; renderDrawer(); return toastAbordagem(v); }
     if (a === 'open') { const m = dMsg(l); t.href = openUrl(l, cur.canal, m); if (cur.canal !== 'email') copy(m.texto); return; }
+    if (a === 'pesquisar') return pedirAoClaude(promptPesquisa(l, MODELOS[l.area].nome));
+    if (a === 'sugerir') { const hist = FILA.filter(f => f.lead_id === l.id && f.situacao === 'enviada'); return pedirAoClaude(promptResposta(l, MODELOS[l.area].nome, resumoLead(l, hist, hojeStr()))); }
     if (a === 'sent') return await upsertMsg('enviada');
     if (a === 'aprovar') return await upsertMsg('aprovada');
     if (a === 'novo') return newLeadForm();
@@ -960,6 +1021,9 @@ document.addEventListener('input', e => {
   const l = getLead(cur.id), k = cur.canal + cur.etapa;
   if (id === 'dtext') dtxt[k] = el.value;
   if (id === 'dsubj') dtxt['s' + k] = el.value;
+  if (id === 'dprox') salvarCampo(l, 'proximo', el.value, 'Próximo passo não salvo');
+  if (id === 'dpesq') salvarCampo(l, 'pesquisa', el.value, 'Pesquisa não salva');
+  if (id === 'dresp') salvarCampo(l, 'resposta', el.value, 'Resposta não salva');
   if (id === 'dnotes') { l.notas = el.value; debounce('n' + l.id, () => SB.from('leads').update({ notas: l.notas }).eq('id', l.id).then(r => r.error && toast('Anotação não salva'))); }
   if (id === 'dfrase') { l.frase = el.value; debounce('f' + l.id, () => SB.from('leads').update({ frase: l.frase }).eq('id', l.id).then(r => { if (r.error) toast('Frase não salva'); else if (cur && cur.id === l.id && dtxt[cur.canal + cur.etapa] == null) { const t = document.getElementById('dtext'); if (t) t.value = dMsg(l).texto; } })); }
 });
@@ -969,10 +1033,10 @@ document.addEventListener('change', async e => {
     if (id === 'fstatus') { filter.status = el.value; render(); }
     if (id === 'fsort') { filter.sort = el.value; render(); }
     if (el.dataset.qcanal) { const f = FILA.find(x => x.id === el.dataset.qcanal); delete drafts[f.id]; await ok(SB.from('fila').update({ canal: el.value, assunto:null, texto:null }).eq('id', f.id)); f.canal = el.value; f.assunto = f.texto = null; render(); }
-    if (id === 'dstatus' && cur) { const l = getLead(cur.id), patch = { status: el.value }; if (el.value !== 'Novo' && !l.primeiro) patch.primeiro = patch.ultimo = new Date().toISOString();
-      await ok(SB.from('leads').update(patch).eq('id', l.id)); Object.assign(l, patch);
-      if (!['Novo','Contatado','Lembrete 1'].includes(l.status)) { await SB.from('fila').delete().eq('lead_id', l.id).in('situacao', ['pendente','aprovada']); FILA = FILA.filter(f => !(f.lead_id === l.id && ['pendente','aprovada'].includes(f.situacao))); }
-      cur.etapa = stageOf(l); renderDrawer(); renderNav(); toast('Situação: ' + l.status); }
+    if (id === 'dstatus' && cur) { const l = getLead(cur.id), antes = l.status;
+      if (!(await moverLead(l.id, el.value))) { el.value = antes; return; }
+      cur.etapa = stageOf(l); renderDrawer(); renderNav(); }
+    if (id === 'dproxem' && cur) { const l = getLead(cur.id); l.proximo_em = el.value || null; await ok(SB.from('leads').update({ proximo_em: l.proximo_em }).eq('id', l.id), 'Data não salva'); renderDrawer(); }
   } catch(err) {}
 });
 document.addEventListener('submit', async e => {
@@ -985,6 +1049,17 @@ document.addEventListener('submit', async e => {
     if (error) { err.textContent = /invalid/i.test(error.message) ? 'Senha incorreta.' : 'Não foi possível entrar. Tente de novo.'; return; }
     document.getElementById('l-senha').value = ''; boot();
   }
+});
+// Funil: arrastar cartões entre colunas
+let arrastado = null;
+document.addEventListener('dragstart', e => { const c = e.target.closest && e.target.closest('[data-drag]'); if (!c) return; arrastado = c.dataset.drag; c.classList.add('arrastando'); e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', arrastado); });
+document.addEventListener('dragend', () => { arrastado = null; document.querySelectorAll('.arrastando,.col.alvo').forEach(x => x.classList.remove('arrastando', 'alvo')); });
+document.addEventListener('dragover', e => { const col = arrastado && e.target.closest('[data-col]'); if (!col) return; e.preventDefault(); document.querySelectorAll('.col.alvo').forEach(x => x !== col && x.classList.remove('alvo')); col.classList.add('alvo'); });
+document.addEventListener('drop', async e => {
+  const col = arrastado && e.target.closest('[data-col]'); if (!col) return; e.preventDefault();
+  const id = arrastado, l = getLead(id); col.classList.remove('alvo');
+  if (!l || col.dataset.sts.split('|').includes(l.status)) return;
+  try { if (await moverLead(id, col.dataset.col)) { renderNav(); render(); } } catch (err) {}
 });
 document.getElementById('scrim').addEventListener('click', closeLead);
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && document.getElementById('drawer').classList.contains('open')) closeLead(); });
