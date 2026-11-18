@@ -7,29 +7,32 @@
 <title>Painel · Daime Filmes</title>
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Inter:wght@400;500;600&display=swap">
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600&display=swap">
 <style>
 
 /* Layout: barra lateral com as etapas, área de trabalho à direita, ficha do lead em painel deslizante. */
+/* Areia e azul: a mesma identidade do site (DESIGN.md), em versão de ferramenta de trabalho. */
 :root{
-  --bg:#f3f6f8; --bg2:#e9eef2; --surface:#ffffff; --ink:#0e1a24; --muted:#5a6a78; --line:#dbe2e8;
-  --accent:#0b7d6e; --accent-ink:#ffffff; --soft:#e2f2ef; --hot:#d9482b; --hot-soft:#fde9e3; --ok:#23803a;
-  --a-villas:#0b7d6e; --a-pousadas:#2867c9; --a-imoveis:#7a4fd0; --a-eventos:#c9418a; --a-gastro:#d9612b; --a-obras:#a67a12; --a-passeios:#0f8fb3;
-  --shadow:0 1px 2px rgba(14,26,36,.05),0 8px 24px -12px rgba(14,26,36,.18);
-  --display:"Bricolage Grotesque",system-ui,sans-serif; --body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --ease:cubic-bezier(.2,.8,.2,1);
+  --bg:#F3EDE2; --bg2:#ECE3D3; --surface:#FBF8F2; --ink:#0C2C6B; --muted:#3D5D9C; --line:#E0D3BC;
+  --accent:#123C8C; --accent-ink:#F3EDE2; --soft:#E1E0E2; --hot:#B42318; --hot-soft:#F6DDD5; --ok:#2E6B45;
+  --a-villas:#123C8C; --a-pousadas:#2C7573; --a-imoveis:#5E4A8E; --a-eventos:#9B3F66; --a-gastro:#8A5A2E; --a-obras:#6B6530; --a-passeios:#2A7AA0;
+  --shadow:0 1px 2px rgba(12,44,107,.06),0 10px 28px -16px rgba(12,44,107,.28);
+  --display:"Switzer",system-ui,-apple-system,"Segoe UI",sans-serif; --body:"Switzer",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1);
+  accent-color:var(--accent); color-scheme:light;
 }
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
-  --bg:#0a1117; --bg2:#0f1820; --surface:#131d26; --ink:#e8eef3; --muted:#8c9dab; --line:#22303c;
-  --accent:#3ecfb5; --accent-ink:#04201b; --soft:#143029; --hot:#ff8663; --hot-soft:#3a1c14; --ok:#6fd487;
-  --a-villas:#3ecfb5; --a-pousadas:#6ea2ff; --a-imoveis:#b092ff; --a-eventos:#ff7fbf; --a-gastro:#ff9a63; --a-obras:#e3b84a; --a-passeios:#4cc9ee;
-  --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 32px -14px rgba(0,0,0,.6); color-scheme:dark } }
+  --bg:#0B1730; --bg2:#081226; --surface:#112142; --ink:#F3EDE2; --muted:#AEBBD8; --line:#1F3360;
+  --accent:#E6D7BA; --accent-ink:#0B1730; --soft:#22324F; --hot:#FF8F80; --hot-soft:#3B1D27; --ok:#8FD3A6;
+  --a-villas:#9DB7F0; --a-pousadas:#7CC9C3; --a-imoveis:#B9A6E8; --a-eventos:#E8A0C0; --a-gastro:#E2B48A; --a-obras:#D2C98A; --a-passeios:#8CCBEA;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 14px 34px -16px rgba(0,0,0,.65); color-scheme:dark } }
 :root[data-theme="dark"]{
-  --bg:#0a1117; --bg2:#0f1820; --surface:#131d26; --ink:#e8eef3; --muted:#8c9dab; --line:#22303c;
-  --accent:#3ecfb5; --accent-ink:#04201b; --soft:#143029; --hot:#ff8663; --hot-soft:#3a1c14; --ok:#6fd487;
-  --a-villas:#3ecfb5; --a-pousadas:#6ea2ff; --a-imoveis:#b092ff; --a-eventos:#ff7fbf; --a-gastro:#ff9a63; --a-obras:#e3b84a; --a-passeios:#4cc9ee;
-  --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 32px -14px rgba(0,0,0,.6); color-scheme:dark }
+  --bg:#0B1730; --bg2:#081226; --surface:#112142; --ink:#F3EDE2; --muted:#AEBBD8; --line:#1F3360;
+  --accent:#E6D7BA; --accent-ink:#0B1730; --soft:#22324F; --hot:#FF8F80; --hot-soft:#3B1D27; --ok:#8FD3A6;
+  --a-villas:#9DB7F0; --a-pousadas:#7CC9C3; --a-imoveis:#B9A6E8; --a-eventos:#E8A0C0; --a-gastro:#E2B48A; --a-obras:#D2C98A; --a-passeios:#8CCBEA;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 14px 34px -16px rgba(0,0,0,.65); color-scheme:dark }
 
 *{box-sizing:border-box}
 html,body{height:100%}
@@ -59,10 +62,9 @@ a{color:var(--accent)}
 
 /* área de trabalho */
 .main{padding:34px clamp(16px,4vw,48px) 80px;min-width:0}
-.view{max-width:1080px;margin:0 auto;display:flex;flex-direction:column;gap:26px;animation:viewIn .5s var(--ease) both}
+.view{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:26px;animation:viewIn .5s var(--ease) both}
 @keyframes viewIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 .head{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:flex-end;justify-content:space-between}
-.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:600;margin:0 0 4px}
 h1{font-family:var(--display);font-size:clamp(28px,4vw,38px);font-weight:600;letter-spacing:-.02em;line-height:1.08;margin:0;text-wrap:balance}
 h2{font-family:var(--display);font-size:20px;font-weight:600;letter-spacing:-.01em;margin:0}
 .sub{color:var(--muted);margin:6px 0 0;max-width:62ch}
@@ -141,7 +143,7 @@ h2{font-family:var(--display);font-size:20px;font-weight:600;letter-spacing:-.01
 .count{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
 
 /* quadro */
-.board{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(230px,1fr);gap:14px;overflow-x:auto;padding-bottom:8px}
+.board{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(158px,1fr);gap:14px;overflow-x:auto;padding-bottom:8px}
 .col{background:var(--bg2);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px;min-height:120px}
 .col h3{margin:0;font-size:13px;font-weight:600;display:flex;justify-content:space-between;color:var(--muted)}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:4px;transition:transform .2s var(--ease),box-shadow .2s}
@@ -252,6 +254,57 @@ textarea.notes{min-height:70px}
 .sec span{font-size:13px;color:var(--muted)}
 .tokenbox{display:flex;gap:8px;flex-wrap:wrap}
 .tokenbox input{flex:1 1 220px;min-width:0;font-family:ui-monospace,Menlo,monospace;font-size:12px}
+
+/* ---- Areia e azul: refinamentos (17/11) ---- */
+body{letter-spacing:-.005em}
+::selection{background:var(--accent);color:var(--accent-ink)}
+*{scrollbar-color:color-mix(in srgb,var(--ink) 25%,transparent) transparent}
+h1{font-size:34px;letter-spacing:-.03em;line-height:1.05}
+h2{font-size:19px;letter-spacing:-.015em}
+.label,.nav small{font-size:13px;letter-spacing:0;text-transform:none;font-weight:600;color:var(--muted)}
+.mark{background:var(--accent);color:var(--accent-ink);border-radius:999px;font-weight:600}
+.brand b{letter-spacing:-.02em}
+.side{border-right:0}
+.btn{border-radius:999px}
+.btn.primary:hover{background:color-mix(in srgb,var(--accent) 88%,var(--ink))}
+.panel,.q,.col,.card{border-color:transparent}
+.panel{background:var(--surface)}
+.card{background:var(--surface);box-shadow:0 1px 0 color-mix(in srgb,var(--ink) 6%,transparent)}
+.field{background:var(--surface);border-color:var(--line)}
+.field:focus{outline:2px solid var(--accent);outline-offset:0;border-color:transparent}
+input[type=date].field{font-variant-numeric:tabular-nums}
+/* contagem do dia: uma linha, sem cartões iguais */
+.tally{display:flex;flex-wrap:wrap;gap:4px 34px;margin:0;padding:2px 0 4px}
+.tally div{display:flex;flex-direction:column-reverse;gap:0}
+.tally dd{margin:0;font-size:30px;font-weight:600;letter-spacing:-.03em;line-height:1.1;font-variant-numeric:tabular-nums;color:var(--ink)}
+.tally dt{font-size:13px;color:var(--muted)}
+.tally .hot dd{color:var(--hot)}
+.tally .zero dd{color:color-mix(in srgb,var(--muted) 55%,transparent)}
+/* ficha: cabeçalho fixo com situação e próximo passo, depois abas */
+.drawer{display:block;overflow-y:auto;overscroll-behavior:contain}
+.d-head{gap:12px;padding-bottom:0;background:var(--surface)}
+.d-head .resumo{margin-top:2px}
+.d-ctrl{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.6fr);gap:12px}
+.drawer .d-body{overflow:visible}
+.tabs{display:flex;gap:22px;margin:4px 0 0}
+.tabs button{border:0;background:transparent;padding:10px 0 12px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs button[aria-selected=true]{color:var(--ink);border-bottom-color:var(--accent)}
+.tabs button span{font-size:12px;font-variant-numeric:tabular-nums;padding:1px 7px;border-radius:999px;background:var(--bg2);margin-left:4px}
+.tabs button:focus-visible{outline-offset:-2px}
+/* conversa */
+.thread{display:flex;flex-direction:column;gap:12px}
+.msg{border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;max-width:94%}
+.msg.out{background:var(--bg);align-self:flex-start}
+.msg.in{background:color-mix(in srgb,var(--accent) 9%,var(--surface));align-self:flex-end;width:94%}
+.msg header{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;font-size:13px;color:var(--muted)}
+.msg header b{color:var(--ink);font-weight:600}
+.msg header a{margin-left:auto;font-weight:600;text-underline-offset:3px}
+.msg-subj{margin:0;font-weight:600;font-size:14px;overflow-wrap:anywhere}
+.msg-text{margin:0;font-size:14px;white-space:pre-wrap;overflow-wrap:anywhere}
+.msg.in .field{background:var(--surface)}
+.compose{display:flex;flex-direction:column;gap:8px;padding-top:18px;margin-top:6px;border-top:1px solid var(--line)}
+.compose h3{margin:0;font-size:16px;letter-spacing:-.01em}
+@media (max-width:860px){ .d-ctrl{grid-template-columns:minmax(0,1fr)} .tally{gap:4px 22px} .tally dd{font-size:24px} }
 </style>
 </head>
 <body>
@@ -704,15 +757,11 @@ function vHoje(){
   const fds = [0,6].includes(new Date().getDay());
   const mini = f => { const l = getLead(f.lead_id); return l ? `<button type="button" class="row" style="--c:var(--a-${l.area})" data-open="${esc(l.id)}"><span class="dot"></span><span class="who"><b>${esc(l.empresa)}</b><span>${ETAPAS[f.etapa]} · ${CANAIS[f.canal]}${f.erro ? ' · ' + esc(f.erro) : ''}</span></span><span class="right">${f.situacao === 'aprovada' ? `<span class="btn ghost small" data-qact="desfazer" data-id="${f.id}">Desfazer</span>` : f.situacao === 'erro' ? `<span class="btn ghost small" data-qact="reaprovar" data-id="${f.id}">Tentar de novo</span>` : ''}</span></button>` : ''; };
   return `<div class="view">
-    <div class="head"><div><p class="eyebrow">Aprovar hoje</p><h1>${oi}, Cainan.</h1>
+    <div class="head"><div><h1>${oi}, Cainan.</h1>
       <p class="sub">${pend.length ? `${pend.length} mensage${pend.length > 1 ? 'ns esperam' : 'm espera'} a sua aprovação. Nada é enviado antes de você aprovar.` : fds ? 'Hoje é fim de semana: o robô não monta fila nem envia.' : 'Nada pendente. A próxima fila chega amanhã de manhã.'}</p></div>
       ${nMail > 1 ? `<button class="btn primary" type="button" data-qact="aprovar-todos">Aprovar os ${nMail} e-mails</button>` : ''}</div>
-    <div class="stats">
-      <div class="stat rise ${pend.length ? 'hot' : ''}" style="--i:0"><b data-count="${pend.length}">0</b><span>esperando aprovação</span></div>
-      <div class="stat rise" style="--i:1"><b data-count="${apr.length}">0</b><span>aprovadas, na vez do robô</span></div>
-      <div class="stat rise" style="--i:2"><b data-count="${env.length}">0</b><span>enviadas hoje</span></div>
-      <div class="stat rise" style="--i:3"><b data-count="${LEADS.filter(replied).length}">0</b><span>empresas que responderam</span></div>
-    </div>
+    <dl class="tally">${[[pend.length,'esperando aprovação',pend.length ? 'hot' : ''],[ph.length,'para hoje',ph.some(l => l.proximo_em < hoje) ? 'hot' : ''],[apr.length,'na vez do robô',''],[env.length,'enviadas hoje',''],[LEADS.filter(replied).length,'responderam','']]
+      .map(([n, t, c]) => `<div class="${c} ${n ? '' : 'zero'}"><dt>${t}</dt><dd data-count="${n}">0</dd></div>`).join('')}</dl>
     ${ph.length ? `<section class="panel rise"><div class="sec"><h2>Para hoje</h2><span>${ph.length} próximo${ph.length > 1 ? 's passos' : ' passo'}</span></div><div class="rows">${ph.map(l =>
       `<button type="button" class="row" style="--c:var(--a-${l.area})" data-open="${esc(l.id)}"><span class="dot"></span><span class="who"><b>${esc(l.empresa)}</b><span>${esc(l.proximo || 'Próximo passo')}</span></span><span class="right">${l.proximo_em < hoje ? '<span class="pill due">Atrasado</span>' : ''}${esc(ddmm(l.proximo_em))}</span></button>`).join('')}</div></section>` : ''}
     <div class="queue" id="queue">${pend.map(qHtml).join('')}</div>
@@ -757,7 +806,7 @@ async function qAct(act, id, target){
 function vAreas(){
   const C = 2 * Math.PI * 26;
   return `<div class="view">
-    <div class="head"><div><p class="eyebrow">Etapa 1</p><h1>Escolha uma área para prospectar</h1>
+    <div class="head"><div><h1>Escolha uma área para prospectar</h1>
       <p class="sub">Cada área tem um texto próprio e leva o lead para a parte certa do seu site.</p></div></div>
     <div class="areas">${Object.keys(AREAS).map((k,i) => { const a = LEADS.filter(l => l.area === k), c = a.filter(contacted).length, r = a.filter(replied).length, p = a.length ? c / a.length : 0;
       return `<button type="button" class="area rise" style="--i:${i};--c:var(--a-${k})" data-area="${k}">
@@ -778,7 +827,7 @@ function filtered(){
 function vLeads(){
   const L = filtered();
   return `<div class="view">
-    <div class="head"><div><p class="eyebrow">Etapa 2</p><h1>Leads e mensagens</h1>
+    <div class="head"><div><h1>Leads e mensagens</h1>
       <p class="sub">Clique numa empresa para ver a ficha e a mensagem pronta para e-mail, WhatsApp e Instagram.</p></div>
       <button class="btn" type="button" data-act="novo">+ Adicionar empresa</button></div>
     <div class="tools">
@@ -795,7 +844,7 @@ function vAcompanhar(){
   const dues = LEADS.filter(due);
   const cols = [['Contatado',['Contatado']],['Lembretes enviados',['Lembrete 1','Lembrete 2']],['Respondeu',['Respondeu']],['Reunião',['Reunião']],['Fechou',['Fechou']],['Sem interesse',['Sem interesse']]];
   return `<div class="view">
-    <div class="head"><div><p class="eyebrow">Etapa 3</p><h1>Acompanhamento</h1>
+    <div class="head"><div><h1>Acompanhamento</h1>
       <p class="sub">Quem não respondeu em 4 dias entra na fila com um lembrete; em 9 dias, com o último. Depois disso, o robô não insiste.</p></div></div>
     <section class="panel rise"><div class="panel-head"><h2>Lembretes vencidos</h2><span>${dues.length} empresa${dues.length === 1 ? '' : 's'}</span></div>
       <div class="rows">${dues.map(rowHtml).join('') || '<p class="empty">Nenhum lembrete vencido.</p>'}</div></section>
@@ -808,7 +857,7 @@ function vAcompanhar(){
 function vRobo(){
   const n = LEADS.filter(l => l.email).length;
   return `<div class="view">
-    <div class="head"><div><p class="eyebrow">Etapa 4</p><h1>Robô de e-mail</h1>
+    <div class="head"><div><h1>Robô de e-mail</h1>
       <p class="sub">O robô roda no seu Gmail. Toda manhã de dia útil ele monta a fila e te avisa por e-mail. Depois envia só o que você aprovou, e confere quem respondeu.</p>
       <p class="sub"><b>Novidade (17/11):</b> o robô agora guarda o texto da resposta do cliente. Se você ligou o robô antes dessa data, cole o <code>robo-painel.gs</code> de novo no Apps Script (com o mesmo token) e rode <code>ligar</code>.</p></div></div>
     <div class="cols">
@@ -852,48 +901,64 @@ function dMsg(l){
   const k = cur.canal + cur.etapa, base = montarMensagem_(l, cur.etapa, cur.canal), row = FILA.find(f => f.lead_id === l.id && f.etapa === cur.etapa && f.canal === cur.canal);
   return { assunto: dtxt['s' + k] != null ? dtxt['s' + k] : (row && row.assunto) || base.assunto, texto: dtxt[k] != null ? dtxt[k] : (row && row.texto) || base.texto };
 }
+function gmailUrl(conversa){ return 'https://mail.google.com/mail/u/0/#all/' + encodeURIComponent(conversa); }
 function renderDrawer(){
   const l = getLead(cur.id), m = dMsg(l), url = openUrl(l, cur.canal, m), to = dest(l, cur.canal);
-  const hist = FILA.filter(f => f.lead_id === l.id && f.situacao === 'enviada').sort((a,b) => (b.enviado || '').localeCompare(a.enviado || ''));
+  const hist = FILA.filter(f => f.lead_id === l.id && f.situacao === 'enviada').sort((a,b) => (a.enviado || '').localeCompare(b.enviado || ''));
   const row = FILA.find(f => f.lead_id === l.id && f.etapa === cur.etapa);
+  const tab = cur.tab || 'conversa';
+  const fio = hist.map(h => `<article class="msg out">
+      <header><b>${ETAPAS[h.etapa]}</b><span>${CANAIS[h.canal]} · ${fmtDate(h.enviado)}</span>${h.conversa ? `<a href="${esc(gmailUrl(h.conversa))}" target="_blank" rel="noopener">Abrir no Gmail</a>` : ''}</header>
+      ${h.canal === 'email' && h.assunto ? `<p class="msg-subj">${esc(h.assunto)}</p>` : ''}
+      <p class="msg-text">${esc(h.texto || 'Texto não registrado.')}</p></article>`).join('');
+  const resposta = replied(l) ? `<article class="msg in">
+      <header><b>Resposta do cliente</b><span>o robô preenche sozinho; você também pode colar</span></header>
+      <textarea class="field notes" id="dresp" aria-label="Resposta do cliente" placeholder="Cole aqui o que o cliente respondeu.">${esc(l.resposta || '')}</textarea>
+      <div class="acts"><button class="btn primary" type="button" data-act="sugerir">Sugerir resposta com o Claude</button></div></article>` : '';
+  const compositor = `<section class="compose" aria-label="Próxima mensagem">
+      <h3>${hist.length ? 'Próxima mensagem' : 'Primeira mensagem'}</h3>
+      <div class="seg" role="tablist" aria-label="Etapa">${ETAPAS.map((t,i) => `<button type="button" role="tab" aria-selected="${cur.etapa === i}" data-etapa="${i}">${t}</button>`).join('')}</div>
+      <div class="seg" role="tablist" aria-label="Canal">${Object.keys(CANAIS).map(k => `<button type="button" role="tab" class="${dest(l, k) ? '' : 'off'}" aria-selected="${cur.canal === k}" data-canal="${k}">${CANAIS[k]}</button>`).join('')}</div>
+      <div class="to">${to ? `Para: <code>${esc(to)}</code>` : 'Este contato não está cadastrado. O texto fica pronto caso você o encontre.'}${row ? ` · ${row.situacao === 'enviada' ? 'já enviada em ' + fmtDate(row.enviado) : row.situacao === 'aprovada' ? 'aprovada, aguardando o robô' : row.situacao === 'pendente' ? 'na fila de aprovação' : 'erro no envio'}` : ''}</div>
+      ${cur.canal === 'email' ? `<input class="field" id="dsubj" aria-label="Assunto" value="${esc(m.assunto)}">` : ''}
+      <textarea class="field" id="dtext" aria-label="Texto da mensagem">${esc(m.texto)}</textarea>
+      <div class="acts">
+        <button class="btn" type="button" data-act="nova">Gerar outra versão</button>
+        <button class="btn" type="button" data-act="copy">Copiar texto</button>
+        ${url ? `<a class="btn" href="${esc(url)}" ${alvo(cur.canal)} data-act="open">${cur.canal === 'email' ? 'Abrir no Gmail' : cur.canal === 'wa' ? 'Abrir WhatsApp' : 'Copiar e abrir perfil'}</a>` : ''}
+        ${cur.canal === 'email' && l.email && (!row || row.situacao !== 'enviada') ? '<button class="btn primary" type="button" data-act="aprovar">Aprovar para o robô</button>' : ''}
+        ${!row || row.situacao !== 'enviada' ? `<button class="btn ${cur.canal === 'email' ? '' : 'primary'}" type="button" data-act="sent">Já enviei</button>` : ''}
+      </div></section>`;
+  const detalhes = `
+      ${l.sobre ? `<div class="block"><span class="label">Como a empresa se descreve</span><p class="about">${esc(l.sobre)}</p></div>` : ''}
+      ${l.obs ? `<div class="block"><span class="label">Observação</span><p class="obs">${esc(l.obs)}</p></div>` : ''}
+      <div class="block"><span class="label">Pesquisa sobre a empresa</span>
+        <textarea class="field notes" id="dpesq" placeholder="Cole aqui o que o Claude encontrou.">${esc(l.pesquisa || '')}</textarea>
+        <div class="acts"><button class="btn" type="button" data-act="pesquisar">Pesquisar com o Claude</button></div></div>
+      <div class="block"><span class="label">Frase personalizada</span><textarea class="field notes" id="dfrase">${esc(l.frase)}</textarea></div>
+      <div class="block"><span class="label">Anotações</span><textarea class="field notes" id="dnotes" placeholder="Com quem falou, o que combinaram...">${esc(l.notas || '')}</textarea></div>
+      ${l.custom ? '<button class="btn ghost small" type="button" data-act="del">Excluir esta empresa</button>' : ''}`;
   document.getElementById('drawer').innerHTML = `
     <div class="d-head" style="--c:var(--a-${l.area})">
       <div class="d-top"><h2>${esc(l.empresa)}</h2><button class="x" type="button" data-act="close" aria-label="Fechar">✕</button></div>
       <div class="d-meta"><span class="pill"><span class="dot"></span>${esc(MODELOS[l.area].nome)}</span><span>${esc(l.cidade)}</span><span>Nota <b class="score">${l.nota}</b>/10</span>
         ${l.site ? `<a href="${esc(l.site)}" target="_blank" rel="noopener">${esc(l.site.replace(/^https?:\/\/(www\.)?/,'').slice(0,38))}</a>` : ''}</div>
-    </div>
-    <div class="d-body">
       <p class="resumo">${esc(resumoLead(l, hist, hojeStr()))}</p>
-      ${l.sobre ? `<div class="block"><span class="label">Como a empresa se descreve</span><p class="about">${esc(l.sobre)}</p></div>` : ''}
-      ${l.obs ? `<div class="block"><span class="label">Observação</span><p class="obs">${esc(l.obs)}</p></div>` : ''}
-      <div class="block"><span class="label">Situação</span>
-        <select class="field" id="dstatus">${STATUS.map(x => `<option ${l.status === x ? 'selected' : ''}>${x}</option>`).join('')}</select>
-        ${l.status === 'Sem interesse' && l.motivo_perda ? `<span class="count">Motivo: ${esc(l.motivo_perda)}</span>` : ''}</div>
-      <div class="block"><span class="label">Próximo passo</span>
-        <div class="prox"><input class="field" id="dprox" placeholder="Ex.: ligar para a gerente" value="${esc(l.proximo || '')}"><input class="field" type="date" id="dproxem" aria-label="Data do próximo passo" value="${esc(l.proximo_em || '')}"></div></div>
-      ${replied(l) ? `<div class="block"><span class="label">O que o cliente respondeu</span>
-        <textarea class="field notes" id="dresp" placeholder="O robô preenche sozinho; você também pode colar aqui.">${esc(l.resposta || '')}</textarea>
-        <div class="acts"><button class="btn primary" type="button" data-act="sugerir">Sugerir resposta com o Claude</button></div></div>` : ''}
-      <div class="block"><span class="label">Pesquisa sobre a empresa</span>
-        <textarea class="field notes" id="dpesq" placeholder="Cole aqui o que o Claude encontrou.">${esc(l.pesquisa || '')}</textarea>
-        <div class="acts"><button class="btn" type="button" data-act="pesquisar">Pesquisar com o Claude</button></div></div>
-      <div class="block"><span class="label">Frase personalizada</span><textarea class="field notes" id="dfrase">${esc(l.frase)}</textarea></div>
-      <div class="block"><span class="label">Mensagem</span>
-        <div class="seg" role="tablist">${ETAPAS.map((t,i) => `<button type="button" role="tab" aria-selected="${cur.etapa === i}" data-etapa="${i}">${t}</button>`).join('')}</div>
-        <div class="seg" role="tablist">${Object.keys(CANAIS).map(k => `<button type="button" role="tab" class="${dest(l, k) ? '' : 'off'}" aria-selected="${cur.canal === k}" data-canal="${k}">${CANAIS[k]}</button>`).join('')}</div>
-        <div class="to">${to ? `Para: <code>${esc(to)}</code>` : 'Este contato não está cadastrado. O texto fica pronto caso você o encontre.'}${row ? ` · ${row.situacao === 'enviada' ? 'já enviada em ' + fmtDate(row.enviado) : row.situacao === 'aprovada' ? 'aprovada, aguardando o robô' : row.situacao === 'pendente' ? 'na fila de aprovação' : 'erro no envio'}` : ''}</div>
-        ${cur.canal === 'email' ? `<input class="field" id="dsubj" aria-label="Assunto" value="${esc(m.assunto)}">` : ''}
-        <textarea class="field" id="dtext" aria-label="Texto da mensagem">${esc(m.texto)}</textarea>
-        <div class="acts">
-          <button class="btn" type="button" data-act="nova">Gerar outra versão</button>
-          <button class="btn" type="button" data-act="copy">Copiar texto</button>
-          ${url ? `<a class="btn" href="${esc(url)}" ${alvo(cur.canal)} data-act="open">${cur.canal === 'email' ? 'Abrir no Gmail' : cur.canal === 'wa' ? 'Abrir WhatsApp' : 'Copiar e abrir perfil'}</a>` : ''}
-          ${cur.canal === 'email' && l.email && (!row || row.situacao !== 'enviada') ? '<button class="btn primary" type="button" data-act="aprovar">Aprovar para o robô</button>' : ''}
-          ${!row || row.situacao !== 'enviada' ? `<button class="btn ${cur.canal === 'email' ? '' : 'primary'}" type="button" data-act="sent">Já enviei</button>` : ''}
-        </div></div>
-      <div class="block"><span class="label">Anotações</span><textarea class="field notes" id="dnotes" placeholder="Com quem falou, o que combinaram...">${esc(l.notas || '')}</textarea></div>
-      ${hist.length ? `<div class="block"><span class="label">Histórico</span><ul class="hist">${hist.map(h => `<li>${fmtDate(h.enviado)} · ${ETAPAS[h.etapa]} por ${CANAIS[h.canal]}</li>`).join('')}</ul></div>` : ''}
-      ${l.custom ? '<button class="btn ghost small" type="button" data-act="del">Excluir esta empresa</button>' : ''}
+      <div class="d-ctrl">
+        <label class="block"><span class="label">Situação</span>
+          <select class="field" id="dstatus">${STATUS.map(x => `<option ${l.status === x ? 'selected' : ''}>${x}</option>`).join('')}</select>
+          ${l.status === 'Sem interesse' && l.motivo_perda ? `<span class="count">Motivo: ${esc(l.motivo_perda)}</span>` : ''}</label>
+        <div class="block"><span class="label">Próximo passo</span>
+          <div class="prox"><input class="field" id="dprox" aria-label="Próximo passo" placeholder="Ex.: ligar para a gerente" value="${esc(l.proximo || '')}"><input class="field" type="date" id="dproxem" aria-label="Data do próximo passo" value="${esc(l.proximo_em || '')}"></div></div>
+      </div>
+      <div class="tabs" role="tablist" aria-label="Ficha">
+        <button type="button" role="tab" data-tab="conversa" aria-selected="${tab === 'conversa'}">Conversa${hist.length ? ` <span>${hist.length}</span>` : ''}</button>
+        <button type="button" role="tab" data-tab="detalhes" aria-selected="${tab === 'detalhes'}">Pesquisa e notas</button>
+      </div>
+    </div>
+    <div class="d-body">${tab === 'conversa'
+      ? `<div class="thread">${fio || '<p class="empty">Nada enviado ainda. A primeira mensagem está pronta abaixo.</p>'}${resposta}</div>${compositor}`
+      : detalhes}
     </div>`;
 }
 async function upsertMsg(situacao){
@@ -988,13 +1053,14 @@ function toast(msg){ const t = document.getElementById('toast'); t.textContent =
 
 // ------------------------------------------------------------ eventos
 document.addEventListener('click', async e => {
-  const t = e.target.closest('[data-qact],[data-go],[data-open],[data-area],[data-farea],[data-act],[data-etapa],[data-canal]'); if (!t) return;
+  const t = e.target.closest('[data-qact],[data-go],[data-open],[data-area],[data-farea],[data-act],[data-etapa],[data-canal],[data-tab]'); if (!t) return;
   try {
     if (t.dataset.qact) { if (t.dataset.qact !== 'abrir') e.preventDefault(); e.stopPropagation(); return await qAct(t.dataset.qact, t.dataset.id, t); }
     if (t.dataset.go) return go(t.dataset.go);
     if (t.dataset.open) return openLead(t.dataset.open);
     if (t.dataset.area) return go('leads', { area: t.dataset.area, status:'todos', q:'' });
     if (t.dataset.farea) { filter.area = t.dataset.farea; return render(); }
+    if (t.dataset.tab) { cur.tab = t.dataset.tab; return renderDrawer(); }
     if (t.dataset.etapa) { cur.etapa = +t.dataset.etapa; return renderDrawer(); }
     if (t.dataset.canal) { cur.canal = t.dataset.canal; return renderDrawer(); }
     const a = t.dataset.act, l = cur && getLead(cur.id);
