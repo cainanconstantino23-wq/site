@@ -564,8 +564,15 @@ async function continuarEnvio(e) {
       const { url } = await api('/api/drive/envio', { method: 'POST', body: JSON.stringify({ ...e.destino, nome: e.arquivo.name, tipo: e.arquivo.type || 'application/octet-stream', tamanho: e.arquivo.size }) });
       e.url = url;
     }
-    let inicio = e.enviado, tentativas = 0;
+    let inicio = e.enviado, tentativas = 0, perguntar = e.enviado > 0;
     for (;;) {
+      if (perguntar) { // retomada manual: o Google pode já ter mais bytes do que achamos
+        perguntar = false;
+        const q = await putEnvio(e, 0, true);
+        if (q.status === 200 || q.status === 201) { e.resultado = q.json || {}; e.enviado = e.total; break; }
+        if (q.status === 404 || q.status === 410) { e.url = null; e.enviado = 0; throw new Error('O envio expirou; comece de novo.'); }
+        if (q.status === 308) inicio = inicioDoRange(q.range);
+      }
       let r = await putEnvio(e, inicio);
       if (r.status === 200 || r.status === 201) { e.resultado = r.json || {}; e.enviado = e.total; break; }
       if (r.status === 404 || r.status === 410) { e.url = null; e.enviado = 0; throw new Error('O envio expirou; comece de novo.'); }
@@ -598,7 +605,7 @@ const PODE_PASTA = 'showDirectoryPicker' in window, PODE_ARQ = 'showSaveFilePick
 let TOKEN_DL = null;
 async function tokenDownload(forcar = false) {
   if (!forcar && tokenValido(TOKEN_DL, Date.now())) return TOKEN_DL.token;
-  try { TOKEN_DL = await api('/api/drive/meu-token'); return TOKEN_DL.token; }
+  try { TOKEN_DL = await api('/api/drive/meu-token' + (forcar ? '?forcar=1' : '')); return TOKEN_DL.token; }
   catch (e) { if (e.codigo === 'google_editor' && DRIVE) { DRIVE.google_editor = null; renderTopo(); } throw e; }
 }
 const erroFinal = msg => Object.assign(new Error(msg), { final: true });
@@ -620,15 +627,13 @@ async function pedirArquivo(id, inicio) {
   return r;
 }
 /** Grava um arquivo do Drive no handle. Devolve 'pulado' | 'baixado'. aoProgredir(bytesNoDisco). */
-async function gravar(item, fh, aoProgredir) {
-  const atual = await fh.getFile().catch(() => null);
-  const plano = item.tamanho == null ? { acao: 'do_zero', inicio: 0 } : planoRetomada(atual ? atual.size : null, item.tamanho);
-  if (plano.acao === 'pular') { aoProgredir(item.tamanho); return 'pulado'; }
-  const w = await fh.createWritable({ keepExistingData: plano.inicio > 0 });
-  let feito = plano.inicio, tentativas = 0;
+async function gravar(item, fh, aoProgredir, sempre = false) {
+  const atual = sempre ? null : await fh.getFile().catch(() => null);
+  if (!sempre && planoRetomada(atual ? atual.size : null, item.tamanho).acao === 'pular') { aoProgredir(item.tamanho); return 'pulado'; }
+  const w = await fh.createWritable({ keepExistingData: false });
+  let feito = 0, tentativas = 0;
   try {
-    if (feito) await w.seek(feito);
-    aoProgredir(feito);
+    aoProgredir(0);
     for (;;) {
       try {
         const r = await pedirArquivo(item.id, feito);
@@ -642,7 +647,7 @@ async function gravar(item, fh, aoProgredir) {
         if (item.tamanho != null && feito < item.tamanho) throw new Error('O download veio incompleto.');
         break;
       } catch (err) {
-        if (err.final || ++tentativas > 5) throw err;
+        if (!deveRepetir(err, ++tentativas)) throw err;
         await espera(esperaTentativa(tentativas)); // internet caiu: espera e continua do byte `feito`
       }
     }
@@ -699,18 +704,20 @@ async function baixarArquivo(item) {
 /** Baixa a lista (todos ou só as falhas), SIMULTANEOS de cada vez. */
 async function rodarBaixa(lista) {
   const b = BAIXA;
-  b.fase = 'baixando'; b.erro = ''; renderBaixa();
+  b.fase = 'baixando'; b.erro = ''; b.parar = false; renderBaixa();
   addEventListener('beforeunload', avisoSaida);
   await emParalelo(lista, async a => {
     const chave = a.item.id;
     let antes = 0;
+    if (b.parar) { b.falhas.push({ ...a, erro: MSG.google_editor }); return; }
     b.atuais.set(chave, { nome: a.nome, feito: 0, total: a.item.tamanho || 0 }); renderBaixa();
     try {
       const fh = a.fh || await a.dir.getFileHandle(a.nome, { create: true });
-      const r = await gravar(a.item, fh, feito => { b.baixado += feito - antes; antes = feito; b.atuais.get(chave).feito = feito; renderBaixa(); });
+      const r = await gravar(a.item, fh, feito => { b.baixado += feito - antes; antes = feito; b.atuais.get(chave).feito = feito; renderBaixa(); }, Boolean(a.fh));
       if (r === 'pulado') b.pulados++; else b.feitos++;
     } catch (err) {
       b.baixado -= antes;
+      if (err.codigo === 'google_editor') { b.parar = true; b.erro = MSG.google_editor; }
       b.falhas.push({ ...a, erro: MSG[err.codigo] || err.message || 'Falhou' });
     }
     b.atuais.delete(chave); renderBaixa();

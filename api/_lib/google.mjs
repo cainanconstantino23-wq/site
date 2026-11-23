@@ -74,11 +74,11 @@ export async function tokenGoogle() {
 }
 
 /** Token da conta Google do editor (renova quando falta menos de 5 minutos). */
-export async function tokenDoEditor(userId) {
+export async function tokenDoEditor(userId, forcar = false) {
   const linhas = await sb(`/rest/v1/drive_editor?user_id=eq.${encodeURIComponent(userId)}&select=*`);
   const c = linhas?.[0];
   if (!c) throw new GoogleEditorDesconectado();
-  if (c.access_token && c.expira_em && Date.parse(c.expira_em) - Date.now() > 5 * 60_000) return { token: c.access_token, expira_em: c.expira_em, email: c.email };
+  if (!forcar && c.access_token && c.expira_em && Date.parse(c.expira_em) - Date.now() > 5 * 60_000) return { token: c.access_token, expira_em: c.expira_em, email: c.email };
   let novo;
   try {
     novo = await pedirToken({ refresh_token: c.refresh_token, grant_type: 'refresh_token' });

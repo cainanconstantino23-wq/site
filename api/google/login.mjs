@@ -20,7 +20,7 @@ export async function GET(request) {
     status: 302,
     headers: {
       Location: urlLogin(origem, state, escoposDe(usuario.papel)),
-      'Set-Cookie': `daime_google_state=${state}.${cookieEstado(state, usuario.id)}; Path=/api/google; HttpOnly; SameSite=Lax; Max-Age=600${seguro}`,
+      'Set-Cookie': `daime_google_state=${state}.${cookieEstado(state, usuario.id, usuario.papel)}; Path=/api/google; HttpOnly; SameSite=Lax; Max-Age=600${seguro}`,
     },
   });
 }

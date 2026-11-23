@@ -23,15 +23,16 @@ export function conferirAssinatura(id, t, agora = Date.now()) {
   return esperado.length === recebido.length && timingSafeEqual(esperado, recebido);
 }
 
-/** Cookie do login Google: liga o `state` ao usuário do painel, assinado, vale 10 minutos. */
-export function cookieEstado(state, userId, agora = Date.now()) {
-  return `${userId}~${assinar(`${state}|${userId}`, 600, agora)}`;
+/** Cookie do login Google: liga o `state` ao usuário e ao papel dele, assinado, vale 10 minutos. */
+export function cookieEstado(state, userId, papel, agora = Date.now()) {
+  return `${userId}~${papel}~${assinar(`${state}|${userId}|${papel}`, 600, agora)}`;
 }
 
-/** Devolve o userId do cookie se ele bate com o `state` e ainda vale; senão null. */
+/** { userId, papel } se o cookie bate com o `state` e ainda vale; senão null. */
 export function lerCookieEstado(valor, state, agora = Date.now()) {
-  const i = typeof valor === 'string' ? valor.indexOf('~') : -1;
-  if (i <= 0 || typeof state !== 'string' || !state) return null;
-  const userId = valor.slice(0, i);
-  return conferirAssinatura(`${state}|${userId}`, valor.slice(i + 1), agora) ? userId : null;
+  const partes = typeof valor === 'string' ? valor.split('~') : [];
+  if (partes.length !== 3 || !partes[0] || typeof state !== 'string' || !state) return null;
+  const [userId, papel, t] = partes;
+  if (papel !== 'dono' && papel !== 'editor') return null;
+  return conferirAssinatura(`${state}|${userId}|${papel}`, t, agora) ? { userId, papel } : null;
 }

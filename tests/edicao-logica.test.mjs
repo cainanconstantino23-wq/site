@@ -5,7 +5,7 @@ import vm from 'node:vm';
 
 const ctx = {};
 vm.runInNewContext(readFileSync(new URL('../edicao-logica.js', import.meta.url), 'utf8'), ctx);
-const { ETAPAS, etapaDe, caminhoTarefa, timecode, ehPastaSaida, tamanhoLegivel, prazoInfo, nomeWindows, nomesUnicos, planoRetomada, inicioDoRange, tokenValido, esperaTentativa, ehNativoGoogle } = ctx;
+const { ETAPAS, etapaDe, caminhoTarefa, timecode, ehPastaSaida, tamanhoLegivel, prazoInfo, nomeWindows, nomesUnicos, planoRetomada, inicioDoRange, tokenValido, esperaTentativa, ehNativoGoogle, deveRepetir } = ctx;
 
 test('ETAPAS na ordem da linha do tempo', () => {
   assert.deepEqual(Array.from(ETAPAS, (e) => e.id), ['a_fazer', 'em_edicao', 'para_revisar', 'ajustes', 'reenviado', 'aprovado']);
@@ -110,13 +110,23 @@ test('nomesUnicos numera repetidos antes da extensão, sem diferenciar maiúscul
   assert.deepEqual(Array.from(nomesUnicos(['x:y', 'x?y'])), ['x_y', 'x_y (2)']);
 });
 
-test('planoRetomada', () => {
+test('planoRetomada: só pula com o mesmo tamanho; arquivo diferente no disco nunca é completado', () => {
   assert.deepEqual({ ...planoRetomada(null, 500) }, { acao: 'do_zero', inicio: 0 });
   assert.deepEqual({ ...planoRetomada(500, 500) }, { acao: 'pular', inicio: 500 });
-  assert.deepEqual({ ...planoRetomada(200, 500) }, { acao: 'continuar', inicio: 200 });
+  assert.deepEqual({ ...planoRetomada(200, 500) }, { acao: 'do_zero', inicio: 0 });
   assert.deepEqual({ ...planoRetomada(0, 500) }, { acao: 'do_zero', inicio: 0 });
   assert.deepEqual({ ...planoRetomada(900, 500) }, { acao: 'do_zero', inicio: 0 });
   assert.deepEqual({ ...planoRetomada(0, 0) }, { acao: 'pular', inicio: 0 });
+  assert.deepEqual({ ...planoRetomada(500, null) }, { acao: 'do_zero', inicio: 0 });
+});
+
+test('deveRepetir: conta Google desconectada e erros finais não insistem', () => {
+  const rede = new Error('rede');
+  assert.equal(deveRepetir(rede, 1), true);
+  assert.equal(deveRepetir(rede, 5), true);
+  assert.equal(deveRepetir(rede, 6), false);
+  assert.equal(deveRepetir(Object.assign(new Error('x'), { codigo: 'google_editor' }), 1), false);
+  assert.equal(deveRepetir(Object.assign(new Error('x'), { final: true }), 1), false);
 });
 
 test('inicioDoRange lê o Range do Google', () => {

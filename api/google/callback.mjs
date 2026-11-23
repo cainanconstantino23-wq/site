@@ -15,9 +15,10 @@ export async function GET(request) {
   const cookie = (request.headers.get('cookie') || '').match(/daime_google_state=([^;]+)/)?.[1] || '';
   const ponto = cookie.indexOf('.');
   const state = url.searchParams.get('state') || '';
-  const userId = ponto > 0 && cookie.slice(0, ponto) === state ? lerCookieEstado(cookie.slice(ponto + 1), state) : null;
-  if (!userId) return voltar('drive', 'erro');
-  const editor = (await sb(`/rest/v1/editores?user_id=eq.${encodeURIComponent(userId)}&select=user_id`).catch(() => []))?.length > 0;
+  // o papel vem do cookie assinado no login: nunca de uma consulta que possa falhar
+  const quem = ponto > 0 && cookie.slice(0, ponto) === state ? lerCookieEstado(cookie.slice(ponto + 1), state) : null;
+  if (!quem) return voltar('drive', 'erro');
+  const { userId } = quem, editor = quem.papel === 'editor';
   const chave = editor ? 'google' : 'drive';
   if (url.searchParams.get('error')) return voltar(chave, 'cancelado');
   try {

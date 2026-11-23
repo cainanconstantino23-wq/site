@@ -110,11 +110,19 @@ function nomesUnicos(nomes) {
   });
 }
 
-/** O que fazer com um arquivo que talvez já exista no disco. tamanhoLocal null = não existe. */
+/** O que fazer com um arquivo que talvez já exista no disco (tamanhoLocal null = não existe).
+ *  Mesmo tamanho = já baixado. Qualquer outro caso baixa do zero: um arquivo menor no disco pode ser outro
+ *  arquivo com o mesmo nome, e completar ele corromperia o vídeo. (Se a internet cair no meio, o download
+ *  continua do byte em que parou dentro da mesma sessão, em gravar().) */
 function planoRetomada(tamanhoLocal, tamanhoDrive) {
-  if (tamanhoLocal === tamanhoDrive) return { acao: 'pular', inicio: tamanhoDrive };
-  if (tamanhoLocal && tamanhoLocal < tamanhoDrive) return { acao: 'continuar', inicio: tamanhoLocal };
+  if (tamanhoDrive != null && tamanhoLocal === tamanhoDrive) return { acao: 'pular', inicio: tamanhoDrive };
   return { acao: 'do_zero', inicio: 0 };
+}
+
+/** Vale tentar de novo depois deste erro? Conta Google desconectada e erros finais não insistem. */
+function deveRepetir(err, tentativas) {
+  if (err && (err.final || err.codigo === 'google_editor')) return false;
+  return tentativas <= 5;
 }
 
 /** Cabeçalho Range do Google ("bytes=0-999") → próximo byte a enviar. */

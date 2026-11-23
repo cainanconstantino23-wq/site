@@ -43,11 +43,14 @@ test('ehPastaSaida do servidor segue a mesma regra da página', () => {
 
 const { cookieEstado, lerCookieEstado } = await import('../api/_lib/assinatura.mjs');
 
-test('cookie de estado devolve o usuário só com o state certo e dentro do prazo', () => {
-  const c = cookieEstado('estadoXYZ', 'user-123', 1_000_000);
-  assert.equal(lerCookieEstado(c, 'estadoXYZ', 1_000_000 + 60_000), 'user-123');
+test('cookie de estado devolve usuário e papel só com o state certo e dentro do prazo', () => {
+  const c = cookieEstado('estadoXYZ', 'user-123', 'editor', 1_000_000);
+  assert.deepEqual(lerCookieEstado(c, 'estadoXYZ', 1_000_000 + 60_000), { userId: 'user-123', papel: 'editor' });
+  assert.deepEqual(lerCookieEstado(cookieEstado('s', 'u-1', 'dono', 1_000_000), 's', 1_000_000), { userId: 'u-1', papel: 'dono' });
   assert.equal(lerCookieEstado(c, 'outroState', 1_000_000), null);
   assert.equal(lerCookieEstado(c, 'estadoXYZ', 1_000_000 + 601_000), null);
   assert.equal(lerCookieEstado(c.replace('user-123', 'user-999'), 'estadoXYZ', 1_000_000), null);
+  // trocar o papel no cookie (editor → dono) invalida a assinatura
+  assert.equal(lerCookieEstado(c.replace('~editor~', '~dono~'), 'estadoXYZ', 1_000_000), null);
   assert.equal(lerCookieEstado('', 'estadoXYZ', 1_000_000), null);
 });
