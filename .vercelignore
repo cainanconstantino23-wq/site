@@ -20,3 +20,11 @@ prospeccao-interno/
 
 # Código das Edge Functions (vai para o Supabase, não para o site)
 supabase/
+
+# Segredos locais: NUNCA publicar
+.env*
+
+# Só para desenvolvimento (servidor local, testes, documentação)
+dev.mjs
+tests/
+docs/
