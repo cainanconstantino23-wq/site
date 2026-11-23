@@ -26,9 +26,10 @@ export function presign({ metodo, host, caminho, regiao, servico, acesso, segred
   return `https://${host}${caminho}?${query}&X-Amz-Signature=${createHmac('sha256', kAssinatura).update(paraAssinar).digest('hex')}`;
 }
 
+// .trim(): valor colado na Vercel com espaço ou quebra de linha no fim quebraria a assinatura
 const env = () => ({
-  conta: process.env.R2_ACCOUNT_ID, acesso: process.env.R2_ACCESS_KEY_ID,
-  segredo: process.env.R2_SECRET_ACCESS_KEY, bucket: process.env.R2_BUCKET,
+  conta: process.env.R2_ACCOUNT_ID?.trim(), acesso: process.env.R2_ACCESS_KEY_ID?.trim(),
+  segredo: process.env.R2_SECRET_ACCESS_KEY?.trim(), bucket: process.env.R2_BUCKET?.trim(),
 });
 export const r2Configurado = () => Object.values(env()).every(Boolean);
 
