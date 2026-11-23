@@ -143,3 +143,9 @@ function esperaTentativa(n) { return 1000 * Math.pow(2, n - 1); }
 function ehNativoGoogle(mime) {
   return /^application\/vnd\.google-apps\./.test(mime || '') && mime !== 'application/vnd.google-apps.folder';
 }
+
+/** Mesmo critério de excluir_versao no Supabase: editor só a última antes da revisão; dono qualquer uma. */
+function podeExcluirVersao(papel, status, numero, ultima) {
+  if (papel === 'dono') return true;
+  return papel === 'editor' && status === 'para_revisar' && numero === ultima;
+}

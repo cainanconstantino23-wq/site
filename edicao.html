@@ -245,7 +245,7 @@ const ICO = {
   arquivo:'<path d="M13.5 3.5H7a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9z"/><path d="M13.5 3.5V9H19"/>', baixar:'<path d="M12 4v11M7 10.5l5 5 5-5M5 20h14"/>',
   abrir:'<path d="M14 4.5h5.5V10M19.5 4.5 11 13"/><path d="M18 14v4.5a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 4 18.5v-11A1.5 1.5 0 0 1 5.5 6H10"/>', enviar:'<path d="M12 20V9M7 13.5l5-5 5 5M5 4h14"/>',
   sair:'<path d="M15 4.5h3.5A1.5 1.5 0 0 1 20 6v12a1.5 1.5 0 0 1-1.5 1.5H15M10 16.5 14.5 12 10 7.5M14.5 12H4"/>', voltar:'<path d="m14.5 6-6 6 6 6"/>',
-  x:'<path d="M6 6l12 12M18 6 6 18"/>', drive:'<path d="m8.5 4 7 0 5 8.5-3.5 6h-10l-3.5-6z"/><path d="M8.5 4 12 10M15.5 4 8 16.5M3.5 12.5H17"/>'
+  x:'<path d="M6 6l12 12M18 6 6 18"/>', lixo:'<path d="M4.5 7h15M10 11v6M14 11v6M6 7l1 12a1.5 1.5 0 0 0 1.5 1.4h7A1.5 1.5 0 0 0 17 19l1-12M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>', drive:'<path d="m8.5 4 7 0 5 8.5-3.5 6h-10l-3.5-6z"/><path d="M8.5 4 12 10M15.5 4 8 16.5M3.5 12.5H17"/>'
 };
 const ico = (k, cls = '') => `<svg class="i ${cls}" viewBox="0 0 24 24" aria-hidden="true">${ICO[k] || ''}</svg>`;
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[c]);
@@ -404,6 +404,7 @@ function renderDetalhe() {
       <div class="acoes">
         ${t.status === 'a_fazer' ? `<button class="btn prim" type="button" data-act="comecar">${ico('em_edicao')} Começar edição</button>` : ''}
         <a class="btn peq" href="${esc(noDrive(`https://drive.google.com/drive/folders/${t.casa_pasta_id}`))}" target="_blank" rel="noopener">${ico('abrir')} Pasta no Drive</a>
+        ${EU.papel === 'dono' ? `<button class="btn peq" type="button" data-act="excluir-tarefa">${ico('lixo')} Excluir tarefa</button>` : ''}
       </div>
     </div>
     ${t.instrucoes ? `<p class="instr">${esc(t.instrucoes)}</p>` : ''}
@@ -429,6 +430,7 @@ function abaVideo(t) {
         : `<p class="sem">${t.versoes.length ? 'Carregando o vídeo…' : 'Ainda não há vídeo enviado.'}</p>`}</div>
       ${t.versoes.length > 1 ? `<div class="versoes" role="tablist" aria-label="Versões">${t.versoes.map(v => `<button type="button" role="tab" data-versao="${v.numero}" aria-selected="${v.numero === vista}">V${v.numero}${v.numero === atual ? ' · atual' : ''}</button>`).join('')}</div>` : ''}
       ${versao ? `<p class="dica">${esc(versao.nome)} · ${esc(tamanhoLegivel(versao.tamanho))} · enviada por ${esc(versao.enviada_por)} em ${quando(versao.enviada_em)}${versao.nota ? ` · “${esc(versao.nota)}”` : ''}</p>` : ''}
+      ${versao && podeExcluirVersao(EU.papel, t.status, versao.numero, atual) ? `<div class="acoes"><button class="btn peq" type="button" data-act="excluir-versao" data-numero="${versao.numero}">${ico('lixo')} Excluir V${versao.numero}</button></div>` : ''}
       ${!dono && !fechada ? `<div class="caixa">
           <h4>${t.versoes.length ? 'Enviar nova versão' : 'Enviar o vídeo para revisão'}</h4>
           <input class="campo" id="nota-versao" placeholder="O que mudou? (opcional)" maxlength="300">
@@ -804,6 +806,16 @@ document.addEventListener('click', async e => {
     case 'baixar-pasta': return ARQ.dados ? baixarPasta(ARQ.dados.pasta.id, ARQ.dados.pasta.nome) : undefined;
     case 'baixar-repetir': return BAIXA ? rodarBaixa(BAIXA.falhas.splice(0)) : undefined;
     case 'comecar': return rpc('comecar_edicao', { p_tarefa: t.id }, 'Edição começou.');
+    case 'excluir-versao': {
+      const n = Number(d.numero);
+      if (!confirm(`Excluir a V${n} de ${t.casa_nome}? Ela some do site com os comentários dela. O arquivo continua no Drive.`)) return;
+      versaoVista = null;
+      return rpc('excluir_versao', { p_tarefa: t.id, p_numero: n }, `V${n} excluída.`);
+    }
+    case 'excluir-tarefa':
+      if (!confirm(`Excluir a tarefa ${t.casa_nome} · ${t.tipo}? Some do site com versões, comentários e histórico. Nada é apagado no Drive.`)) return;
+      versaoVista = null;
+      return rpc('excluir_tarefa', { p_tarefa: t.id }, 'Tarefa excluída.');
     case 'aprovar': if (confirm(`Aprovar a V${t.versoes.at(-1)?.numero} de ${t.casa_nome}?`)) return rpc('aprovar_tarefa', { p_tarefa: t.id }, 'Vídeo aprovado.'); return;
     case 'ajustes': return rpc('pedir_ajustes', { p_tarefa: t.id, p_texto: document.getElementById('txt-ajustes')?.value || '' }, 'Ajustes enviados para o editor.');
   }

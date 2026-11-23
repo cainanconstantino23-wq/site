@@ -5,7 +5,7 @@ import vm from 'node:vm';
 
 const ctx = {};
 vm.runInNewContext(readFileSync(new URL('../edicao-logica.js', import.meta.url), 'utf8'), ctx);
-const { ETAPAS, etapaDe, caminhoTarefa, timecode, ehPastaSaida, tamanhoLegivel, prazoInfo, nomeWindows, nomesUnicos, planoRetomada, inicioDoRange, tokenValido, esperaTentativa, ehNativoGoogle, deveRepetir } = ctx;
+const { ETAPAS, etapaDe, caminhoTarefa, timecode, ehPastaSaida, tamanhoLegivel, prazoInfo, nomeWindows, nomesUnicos, planoRetomada, inicioDoRange, tokenValido, esperaTentativa, ehNativoGoogle, deveRepetir, podeExcluirVersao } = ctx;
 
 test('ETAPAS na ordem da linha do tempo', () => {
   assert.deepEqual(Array.from(ETAPAS, (e) => e.id), ['a_fazer', 'em_edicao', 'para_revisar', 'ajustes', 'reenviado', 'aprovado']);
@@ -150,4 +150,14 @@ test('ehNativoGoogle', () => {
   assert.equal(ehNativoGoogle('application/vnd.google-apps.document'), true);
   assert.equal(ehNativoGoogle('application/vnd.google-apps.folder'), false);
   assert.equal(ehNativoGoogle('video/mp4'), false);
+});
+
+test('podeExcluirVersao: editor só a última antes da revisão; dono qualquer uma', () => {
+  assert.equal(podeExcluirVersao('editor', 'para_revisar', 2, 2), true);
+  assert.equal(podeExcluirVersao('editor', 'para_revisar', 1, 2), false);
+  assert.equal(podeExcluirVersao('editor', 'ajustes', 2, 2), false);
+  assert.equal(podeExcluirVersao('editor', 'aprovado', 2, 2), false);
+  assert.equal(podeExcluirVersao('dono', 'aprovado', 1, 2), true);
+  assert.equal(podeExcluirVersao('dono', 'para_revisar', 2, 2), true);
+  assert.equal(podeExcluirVersao(null, 'para_revisar', 2, 2), false);
 });
