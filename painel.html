@@ -953,6 +953,7 @@ const VIEWS = [
 ];
 const ICONS = {
   hoje:'<path d="M3.5 13.5h4.2l1.8 2.6h5l1.8-2.6h4.2"/><path d="M5.6 5.5h12.8l2.1 8v5h-17v-5z"/>',
+  edicao:'<rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="M10 9.5v5l4.3-2.5z"/>',
   leads:'<path d="M9 7h11M9 12h11M9 17h11"/><path d="M4.5 7h.01M4.5 12h.01M4.5 17h.01" stroke-width="2.6"/>',
   funil:'<rect x="3.5" y="4.5" width="4.6" height="15" rx="1.6"/><rect x="9.7" y="4.5" width="4.6" height="10.5" rx="1.6"/><rect x="15.9" y="4.5" width="4.6" height="6.5" rx="1.6"/>',
   resultados:'<path d="M4 20V11M10 20V5M16 20v-6M21 20H3"/>',
@@ -980,6 +981,7 @@ function renderNav(){
   const n = itensAgora(LEADS, FILA, hojeStr()).total, ativo = view === 'lead' ? prevView : view;
   document.getElementById('nav').innerHTML = VIEWS.map(v =>
     `<button type="button" data-go="${v.id}" ${v.id === ativo ? 'aria-current="page"' : ''}>${ico(v.icon)}<span>${v.label}</span>${v.id === 'hoje' && n ? `<span class="badge">${n}</span>` : v.id === 'prospectar' && ACHADOS.length ? `<span class="badge">${ACHADOS.length}</span>` : ''}</button>`).join('')
+    + `<button type="button" data-act="edicao">${ico('edicao')}<span>Edição</span></button>`
     + `<button type="button" class="nav-busca" data-act="busca">${ico('busca')}<span>Buscar</span><kbd>${/Mac|iPhone|iPad/.test(navigator.platform) ? '⌘' : 'Ctrl'} K</kbd></button>`;
 }
 
@@ -1569,6 +1571,7 @@ function toast(msg){ const t = document.getElementById('toast'); t.textContent =
 document.addEventListener('click', async e => {
   const t = e.target.closest('[data-qact],[data-go],[data-bopen],[data-open],[data-area],[data-act],[data-etapa],[data-canal],[data-htab],[data-visao]'); if (!t) return;
   try {
+    if (t.dataset.act === 'edicao') { location.href = 'edicao.html'; return; }
     if (t.dataset.qact) { if (t.dataset.qact !== 'abrir') e.preventDefault(); e.stopPropagation(); return await qAct(t.dataset.qact, t.dataset.id, t); }
     if (t.dataset.go) return go(t.dataset.go);
     if (t.dataset.bopen) { document.getElementById('busca').close(); return openLead(t.dataset.bopen); }
@@ -1672,6 +1675,9 @@ function showGate(msg){ document.getElementById('app').hidden = true; document.g
 async function boot(){
   const { data: { session } } = await SB.auth.getSession();
   if (!session) return showGate();
+  // um login só: o dono fica no painel; o editor vai para o espaço de Edição
+  const papel = await SB.rpc('papel');
+  if (!papel.error && papel.data === 'editor') return location.replace('edicao.html');
   const dono = await SB.rpc('eh_dono');
   if (dono.error || dono.data !== true) { await SB.auth.signOut(); return showGate('Esta conta não tem acesso ao painel.'); }
   document.getElementById('gate').hidden = true; document.getElementById('app').hidden = false; gradienteLogin(false);
