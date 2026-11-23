@@ -30,3 +30,11 @@ web
 - **Tom de voz:** Sofisticado, seguro, cinematográfico, direto. Fala de "clientes", "marca", "empreendimento", nunca de "pacientes".
 - **Imobiliário:** vender pelo desejo e pela atmosfera (luz, arquitetura, estilo de vida), não por listas de metragem.
 - **Estética visual:** ver DESIGN.md (areia + azul das portas de Trancoso, o nome DAIME como título de filme).
+
+## Espaço de Edição (`edicao.html`, nov/2026)
+- Um login só em `painel.html`: dono (tabela `donos`) fica no painel de prospecção, que tem a aba **Edição**; editor (tabela `editores`) vai direto para `edicao.html`. Função `papel()` no Supabase.
+- Tarefas por casa (pasta do Drive dentro da pasta de trabalho), etapas A fazer · Em edição · Para revisar · Ajustes pedidos · Reenviado · Aprovado (`edicao-logica.js`, testes em `tests/`).
+- Drive da conta daimefilmes conectado pelo dono (OAuth, tokens em `drive_conexao`, só o servidor lê). Funções Vercel em `api/` (sem dependências): listar pastas, envio "resumable" direto do navegador para o Google, vídeo em partes com link assinado, registrar versão. Regra: o app nunca apaga, move ou renomeia nada no Drive.
+- Entrega do editor vai para a pasta `06 Saída` da casa (criada se faltar) e vira V1, V2…; o dono comenta no minuto do vídeo, pede ajustes ou aprova.
+- Banco: `supabase/migrations/20261123_edicao.sql` (rodar no SQL Editor do projeto daime-prospeccao).
+- Local: preencher `.env.local` (GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, SUPABASE_SERVICE_ROLE_KEY, ASSINATURA_SECRET, SITE_URL) e rodar `node dev.mjs` → http://localhost:3005. Na Vercel: as mesmas variáveis (SITE_URL = https://daimefilmes.com.br).
