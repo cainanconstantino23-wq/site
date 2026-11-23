@@ -59,3 +59,29 @@ function prazoInfo(prazo, hoje) {
   if (prazo === hoje) return { texto: 'hoje', atrasado: false };
   return prazo < hoje ? { texto: 'venceu ' + dm, atrasado: true } : { texto: 'até ' + dm, atrasado: false };
 }
+
+/**
+ * "Subir casa": a partir dos arquivos da pasta escolhida no computador (caminho relativo "CASA/01 Brutas/A001.MP4"),
+ * devolve o nome da casa, as subpastas a criar (pais antes dos filhos) e os arquivos com a pasta de destino.
+ * Ignora ocultos do Mac e de sistema (qualquer parte do caminho começando com ".").
+ */
+function planoDaCasa(entradas) {
+  var casa = '', pastas = {}, arquivos = [], total = 0;
+  (entradas || []).forEach(function (e) {
+    var partes = String(e.caminho || '').split('/').filter(Boolean);
+    if (partes.length < 2) return;
+    if (!casa) casa = partes[0];
+    if (partes.some(function (p) { return p.charAt(0) === '.'; })) return;
+    var dirs = partes.slice(1, -1);
+    for (var i = 1; i <= dirs.length; i++) pastas[dirs.slice(0, i).join('/')] = true;
+    arquivos.push({ pasta: dirs.join('/'), nome: partes[partes.length - 1], tamanho: Number(e.tamanho) || 0, arquivo: e.arquivo });
+    total += Number(e.tamanho) || 0;
+  });
+  if (!casa && entradas && entradas[0]) casa = String(entradas[0].caminho || '').split('/')[0];
+  return { casa: casa, pastas: Object.keys(pastas).sort(), arquivos: arquivos, total: total };
+}
+
+/** O arquivo já está no Drive (mesmo nome e tamanho)? */
+function jaNoDrive(arquivo, itens) {
+  return (itens || []).some(function (i) { return i.tipo !== 'pasta' && i.nome === arquivo.nome && Number(i.tamanho) === Number(arquivo.tamanho); });
+}

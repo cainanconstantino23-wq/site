@@ -52,3 +52,43 @@ test('prazoInfo', () => {
   assert.deepEqual({ ...prazoInfo('2026-11-23', '2026-11-23') }, { texto: 'hoje', atrasado: false });
   assert.equal(prazoInfo(null, '2026-11-23'), null);
 });
+
+const { planoDaCasa, jaNoDrive } = ctx;
+
+test('planoDaCasa: nome da casa, pastas em ordem e arquivos ocultos fora', () => {
+  const plano = planoDaCasa([
+    { caminho: '09 CASA 12 RB/01 Brutas/A001.MP4', tamanho: 100 },
+    { caminho: '09 CASA 12 RB/01 Brutas/Drone/DJI_01.MP4', tamanho: 50 },
+    { caminho: '09 CASA 12 RB/.DS_Store', tamanho: 6 },
+    { caminho: '09 CASA 12 RB/01 Brutas/._A001.MP4', tamanho: 4 },
+    { caminho: '09 CASA 12 RB/07 Roteiro/roteiro.pdf', tamanho: 10 },
+    { caminho: '09 CASA 12 RB/.git/config', tamanho: 1 },
+  ]);
+  assert.equal(plano.casa, '09 CASA 12 RB');
+  assert.deepEqual(Array.from(plano.pastas), ['01 Brutas', '01 Brutas/Drone', '07 Roteiro']);
+  assert.deepEqual(Array.from(plano.arquivos, (a) => [a.pasta, a.nome, a.tamanho]), [
+    ['01 Brutas', 'A001.MP4', 100],
+    ['01 Brutas/Drone', 'DJI_01.MP4', 50],
+    ['07 Roteiro', 'roteiro.pdf', 10],
+  ]);
+  assert.equal(plano.total, 160);
+});
+
+test('planoDaCasa: arquivo direto na pasta da casa fica na raiz da casa', () => {
+  const plano = planoDaCasa([{ caminho: 'CASA/leia.txt', tamanho: 3 }]);
+  assert.deepEqual(Array.from(plano.pastas), []);
+  assert.equal(plano.arquivos[0].pasta, '');
+});
+
+test('planoDaCasa vazio', () => {
+  const plano = planoDaCasa([]);
+  assert.equal(plano.casa, '');
+  assert.equal(plano.arquivos.length, 0);
+});
+
+test('jaNoDrive compara nome e tamanho', () => {
+  const itens = [{ nome: 'A001.MP4', tamanho: 100, tipo: 'video' }, { nome: 'Drone', tipo: 'pasta', tamanho: null }];
+  assert.equal(jaNoDrive({ nome: 'A001.MP4', tamanho: 100 }, itens), true);
+  assert.equal(jaNoDrive({ nome: 'A001.MP4', tamanho: 99 }, itens), false);
+  assert.equal(jaNoDrive({ nome: 'Drone', tamanho: null }, itens), false);
+});

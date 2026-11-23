@@ -222,6 +222,7 @@ dialog::backdrop{background:rgb(24 50 58 / .35);backdrop-filter:blur(3px)}
 
 <dialog id="dlg-tarefa"><form class="dlg" id="f-tarefa" method="dialog"></form></dialog>
 <dialog id="dlg-raiz"><div class="dlg" id="raiz-corpo"></div></dialog>
+<dialog id="dlg-subir"><div class="dlg" id="subir-corpo"></div></dialog>
 <div class="envios" id="envios" aria-live="polite"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
@@ -320,6 +321,7 @@ function renderTopo() {
          <button class="btn peq" type="button" data-act="raiz">${DRIVE.raiz ? 'Pasta: ' + esc(DRIVE.raiz.nome) : 'Escolher pasta de trabalho'}</button>`
       : `<button class="btn aviso" type="button" data-act="conectar">${ico('drive')} Conectar Google Drive</button>`;
     html += `<a class="btn" href="painel.html">${ico('voltar')} Prospecção</a>`;
+    html += `<button class="btn" type="button" data-act="subir" ${DRIVE?.raiz ? '' : 'disabled title="Conecte o Drive e escolha a pasta de trabalho"'}>${ico('enviar')} Subir casa</button>`;
     html += `<button class="btn prim" type="button" data-act="nova" ${DRIVE?.raiz ? '' : 'disabled title="Conecte o Drive e escolha a pasta de trabalho"'}>${ico('mais')} Nova tarefa</button>`;
   } else {
     if (!DRIVE?.conectado) html += `<span class="chip off">Drive desconectado: avise o Cainan</span>`;
@@ -536,7 +538,7 @@ async function continuarEnvio(e) {
       else if (r.ok) { e.resultado = await r.json().catch(() => ({})); e.enviado = e.total; }
       else if (r.status === 404 || r.status === 410) { e.url = null; e.enviado = 0; throw new Error('O envio expirou; comece de novo.'); }
       else throw new Error(`O Google respondeu ${r.status}.`);
-      renderEnvios();
+      renderEnvios(); e.aoProgredir?.();
     }
     e.estado = 'feito'; renderEnvios();
     setTimeout(() => { if (ENVIOS.get(e.id)?.estado === 'feito') { ENVIOS.delete(e.id); renderEnvios(); } }, 8000);
@@ -593,6 +595,9 @@ document.addEventListener('click', async e => {
     case 'conectar': location.href = `/api/google/login?token=${encodeURIComponent(await token())}`; return;
     case 'raiz': return abrirRaiz();
     case 'nova': return abrirNovaTarefa();
+    case 'subir': return abrirSubir();
+    case 'subir-comecar': return comecarSubida();
+    case 'subir-repetir': return comecarSubida(true);
     case 'comecar': return rpc('comecar_edicao', { p_tarefa: t.id }, 'Edição começou.');
     case 'aprovar': if (confirm(`Aprovar a V${t.versoes.at(-1)?.numero} de ${t.casa_nome}?`)) return rpc('aprovar_tarefa', { p_tarefa: t.id }, 'Vídeo aprovado.'); return;
     case 'ajustes': return rpc('pedir_ajustes', { p_tarefa: t.id, p_texto: document.getElementById('txt-ajustes')?.value || '' }, 'Ajustes enviados para o editor.');
@@ -624,6 +629,7 @@ document.addEventListener('submit', async e => {
 });
 
 document.addEventListener('change', async e => {
+  if (e.target.id === 'subir-pasta') return escolheuPasta(e.target.files);
   const t = tarefaSel(); if (!t) return;
   if (e.target.id === 'arq-versao' && e.target.files[0]) {
     const arquivo = e.target.files[0], nota = document.getElementById('nota-versao')?.value || '';
@@ -638,6 +644,99 @@ document.addEventListener('change', async e => {
     if (sel === t.id) abrirPasta(t, pasta);
   }
 });
+
+// ------------------------------------------------------------ subir casa (pasta inteira do computador → Drive)
+let SUBIDA = null; // { plano, fase, feitos, pulados, falhas:[], enviado, atuais:Set, casaId, erro }
+function abrirSubir() {
+  if (SUBIDA && SUBIDA.fase === 'subindo') { document.getElementById('dlg-subir').showModal(); return renderSubir(); }
+  SUBIDA = null;
+  document.getElementById('dlg-subir').showModal();
+  renderSubir();
+}
+function escolheuPasta(lista) {
+  const plano = planoDaCasa([...lista].map(f => ({ caminho: f.webkitRelativePath || f.name, tamanho: f.size, arquivo: f })));
+  SUBIDA = { plano, fase: 'pronto', feitos: 0, pulados: 0, falhas: [], enviado: 0, atuais: new Map(), casaId: null, erro: '' };
+  renderSubir();
+}
+function renderSubir() {
+  const c = document.getElementById('subir-corpo'), s = SUBIDA;
+  const fechar = `<button class="btn" type="button" onclick="this.closest('dialog').close()">${s?.fase === 'subindo' ? 'Esconder' : 'Fechar'}</button>`;
+  if (!s) {
+    c.innerHTML = `<h2>Subir casa</h2>
+      <p class="dica" style="margin:0">Escolha a pasta da casa no seu computador, já organizada (01 Brutas, 02 Audio…). Ela vai para <b>${esc(DRIVE.raiz.nome)}</b> com o mesmo nome e as mesmas subpastas. Se a casa já existir lá, o que já subiu (mesmo nome e tamanho) é pulado.</p>
+      <label class="btn prim" style="width:fit-content">${ico('pasta')} Escolher pasta da casa<input type="file" id="subir-pasta" webkitdirectory directory multiple hidden></label>
+      <div class="acoes" style="justify-content:flex-end">${fechar}</div>`;
+    return;
+  }
+  const p = s.plano;
+  if (!p.casa || !p.arquivos.length) { SUBIDA = null; c.innerHTML = `<h2>Subir casa</h2><p class="aviso-box erro">Essa pasta está vazia.</p><div class="acoes">${fechar}</div>`; return; }
+  const pct = p.total ? Math.round(s.enviado / p.total * 100) : 0;
+  const resumo = `<p style="margin:0"><b>${esc(p.casa)}</b></p>
+    <p class="dica" style="margin:0">${p.arquivos.length} arquivos · ${tamanhoLegivel(p.total)} · ${p.pastas.length} subpastas (${esc(p.pastas.filter(x => !x.includes('/')).join(', ') || '—')})</p>`;
+  if (s.fase === 'pronto') {
+    c.innerHTML = `<h2>Subir casa</h2>${resumo}
+      <p class="dica" style="margin:0">Deixe esta aba aberta até terminar. Se a internet cair, é só subir de novo: o que já chegou é pulado.</p>
+      <div class="acoes" style="justify-content:flex-end">${fechar}<button class="btn prim" type="button" data-act="subir-comecar">${ico('enviar')} Subir para o Drive</button></div>`;
+    return;
+  }
+  const atuais = [...s.atuais.values()].map(e => `<li class="dica" style="margin:2px 0">${esc(e.arquivo.name)} · ${e.total ? Math.round(e.enviado / e.total * 100) : 0}%</li>`).join('');
+  c.innerHTML = `<h2>${s.fase === 'feito' ? 'Casa no Drive' : s.fase === 'erro' ? 'Subida parou' : 'Subindo a casa…'}</h2>${resumo}
+    <div class="prog" style="height:8px"><i style="width:${s.fase === 'feito' ? 100 : pct}%;${s.fase === 'feito' && !s.falhas.length ? 'background:var(--e-aprovado)' : ''}"></i></div>
+    <p class="dica" style="margin:0">${s.feitos + s.pulados} de ${p.arquivos.length} arquivos · ${tamanhoLegivel(s.enviado)} de ${tamanhoLegivel(p.total)} · ${pct}%${s.pulados ? ` · ${s.pulados} já estavam no Drive` : ''}</p>
+    ${atuais ? `<ul style="margin:0;padding-left:18px">${atuais}</ul>` : ''}
+    ${s.erro ? `<p class="aviso-box erro" style="margin:0">${esc(s.erro)}</p>` : ''}
+    ${s.falhas.length && s.fase !== 'subindo' ? `<p class="aviso-box erro" style="margin:0">${s.falhas.length} ${s.falhas.length === 1 ? 'arquivo não subiu' : 'arquivos não subiram'}: ${esc(s.falhas.slice(0, 3).map(f => f.nome).join(', '))}${s.falhas.length > 3 ? '…' : ''}</p>` : ''}
+    ${s.fase === 'feito' && !s.falhas.length ? `<p class="aviso-box ok" style="margin:0">Pronto: a casa já aparece em “Nova tarefa”.</p>` : ''}
+    <div class="acoes" style="justify-content:flex-end">${fechar}
+      ${s.fase !== 'subindo' && (s.falhas.length || s.erro) ? `<button class="btn prim" type="button" data-act="subir-repetir">Tentar de novo</button>` : ''}
+      ${s.fase === 'feito' && s.casaId ? `<a class="btn" href="https://drive.google.com/drive/folders/${esc(s.casaId)}" target="_blank" rel="noopener">${ico('abrir')} Ver no Drive</a>` : ''}</div>`;
+}
+const avisoSaida = ev => { ev.preventDefault(); ev.returnValue = ''; };
+async function comecarSubida(repetir = false) {
+  const s = SUBIDA; if (!s) return;
+  const p = s.plano;
+  Object.assign(s, { fase: 'subindo', feitos: 0, pulados: 0, falhas: [], enviado: 0, erro: '' });
+  s.atuais.clear(); renderSubir();
+  addEventListener('beforeunload', avisoSaida);
+  try {
+    // 1. pastas: a da casa dentro da pasta de trabalho, depois as subpastas (pais antes dos filhos)
+    const ids = { '': (s.casaId = (await api('/api/drive/pasta', { method: 'POST', body: JSON.stringify({ pai: DRIVE.raiz.id, nome: p.casa }) })).id) };
+    for (const caminho of p.pastas) {
+      const pai = caminho.includes('/') ? caminho.slice(0, caminho.lastIndexOf('/')) : '';
+      ids[caminho] = (await api('/api/drive/pasta', { method: 'POST', body: JSON.stringify({ pai: ids[pai], nome: caminho.split('/').pop() }) })).id;
+    }
+    // 2. o que já está em cada pasta (para pular)
+    const existentes = {};
+    for (const caminho of ['', ...p.pastas]) existentes[caminho] = (await api(`/api/drive?pasta=${encodeURIComponent(ids[caminho])}`)).itens;
+    // 3. arquivos, 2 de cada vez
+    const fila = [];
+    for (const a of p.arquivos) {
+      if (jaNoDrive(a, existentes[a.pasta])) { s.pulados++; s.enviado += a.tamanho; } else fila.push(a);
+    }
+    renderSubir();
+    const trabalhar = async () => {
+      while (fila.length) {
+        const a = fila.shift();
+        const e = { id: ++envioSeq, arquivo: a.arquivo, destino: { pasta: ids[a.pasta] }, total: a.tamanho, enviado: 0, estado: 'enviando', url: null };
+        let antes = 0;
+        e.aoProgredir = () => { s.enviado += e.enviado - antes; antes = e.enviado; renderSubir(); };
+        s.atuais.set(e.id, e); renderSubir();
+        await continuarEnvio(e);
+        s.atuais.delete(e.id);
+        if (e.estado === 'feito') { s.feitos++; s.enviado += e.total - antes; } else { s.falhas.push(a); s.enviado -= antes; }
+        renderSubir();
+      }
+    };
+    await Promise.all([trabalhar(), trabalhar()]);
+    s.fase = s.falhas.length ? 'erro' : 'feito';
+  } catch (err) {
+    s.fase = 'erro';
+    s.erro = MSG[err.codigo] || 'Não foi possível criar as pastas no Drive. Tente de novo.';
+  }
+  removeEventListener('beforeunload', avisoSaida);
+  renderSubir();
+  if (s.fase === 'feito') aviso(`${p.casa} está no Drive.`, 'ok');
+}
 
 // ------------------------------------------------------------ nova tarefa
 async function abrirNovaTarefa() {
