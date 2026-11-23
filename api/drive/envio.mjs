@@ -4,7 +4,7 @@
 import { exigir, falha } from '../_lib/acesso.mjs';
 import { naRaiz, tokenGoogle } from '../_lib/google.mjs';
 import { pastaSaida } from '../_lib/saida.mjs';
-import { DRIVE_ID, json, lerJson, origemDe } from '../_lib/http.mjs';
+import { DRIVE_ID, json, lerJson, origemDoNavegador } from '../_lib/http.mjs';
 
 export async function POST(request) {
   const { erro } = await exigir(request);
@@ -25,7 +25,7 @@ export async function POST(request) {
         'X-Upload-Content-Type': typeof tipo === 'string' && tipo ? tipo : 'application/octet-stream',
         'X-Upload-Content-Length': String(tamanho),
         // a sessão aceita o envio vindo do navegador nesta origem
-        Origin: origemDe(request),
+        Origin: origemDoNavegador(request),
       },
       body: JSON.stringify({ name: nome.trim(), parents: [destino] }),
     });

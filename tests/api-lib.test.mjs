@@ -54,3 +54,12 @@ test('cookie de estado devolve usuário e papel só com o state certo e dentro d
   assert.equal(lerCookieEstado(c.replace('~editor~', '~dono~'), 'estadoXYZ', 1_000_000), null);
   assert.equal(lerCookieEstado('', 'estadoXYZ', 1_000_000), null);
 });
+
+test('origemDoNavegador usa o endereço real (www), não o SITE_URL', async () => {
+  const antes = process.env.SITE_URL;
+  process.env.SITE_URL = 'https://daimefilmes.com.br';
+  const { origemDoNavegador } = await import('../api/_lib/http.mjs');
+  assert.equal(origemDoNavegador(new Request('https://www.daimefilmes.com.br/api/drive/envio', { method: 'POST' })), 'https://www.daimefilmes.com.br');
+  assert.equal(origemDoNavegador(new Request('http://localhost:3005/api/drive/envio', { method: 'POST' })), 'http://localhost:3005');
+  if (antes === undefined) delete process.env.SITE_URL; else process.env.SITE_URL = antes;
+});
