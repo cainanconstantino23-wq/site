@@ -304,6 +304,7 @@ const MSG = {
   nao_e_video: 'Escolha um arquivo de vídeo.',
   sem_raiz: 'Falta escolher a pasta de trabalho no Drive.',
   google_editor: 'Conecte sua conta Google (botão no topo) para baixar.',
+  sem_acesso_pasta: 'Sua conta Google não tem acesso a esta pasta.',
 };
 function aviso(texto, tom = '') {
   const el = document.getElementById('avisos');
@@ -493,6 +494,7 @@ function abaArquivos(t) {
     <div class="arq-barra">
       <span class="dica" style="margin:0">${d.itens.length} ${d.itens.length === 1 ? 'item' : 'itens'}</span>
       <span class="acoes">
+        <button class="btn peq prim" type="button" data-act="cyberduck">${ico('abrir')} Abrir no Cyberduck</button>
         ${PODE_PASTA ? `<button class="btn peq" type="button" data-act="baixar-pasta">${ico('baixar')} Baixar pasta</button>` : ''}
         <a class="btn peq" href="${esc(noDrive(d.pasta.link))}" target="_blank" rel="noopener">${ico('abrir')} Abrir no Drive</a>
         <label class="btn peq prim">${ico('enviar')} Enviar arquivos<input type="file" multiple id="arq-envio" hidden></label>
@@ -832,6 +834,20 @@ function desenharBaixa() {
     <div class="acoes" style="justify-content:flex-end">${fechar}${b.falhas.length && !rodando ? '<button class="btn prim" type="button" data-act="baixar-repetir">Tentar de novo</button>' : ''}</div>`;
 }
 
+// ------------------------------------------------------------ abrir no Cyberduck
+// Baixa um atalho .duck desta pasta; abrindo o arquivo, o Cyberduck entra direto nela (envio e download na velocidade dele).
+async function abrirNoCyberduck(pastaId) {
+  if (!pastaId) return;
+  try {
+    const r = await fetch(`/api/drive/cyberduck?pasta=${encodeURIComponent(pastaId)}`, { headers: { Authorization: `Bearer ${await token()}` } });
+    if (!r.ok) { const d = await r.json().catch(() => ({})); return aviso(MSG[d.erro] || 'Não foi possível criar o atalho do Cyberduck.', 'erro'); }
+    const nome = decodeURIComponent((r.headers.get('content-disposition') || '').match(/filename\*=UTF-8''([^;]+)/)?.[1] || 'pasta.duck');
+    const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(await r.blob()), download: nome });
+    document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 10000);
+    aviso(`Atalho “${nome}” baixado. Abra o arquivo e o Cyberduck entra direto na pasta.`, 'ok');
+  } catch { aviso('Não foi possível criar o atalho do Cyberduck.', 'erro'); }
+}
+
 // ------------------------------------------------------------ ações
 async function recarregar(manterAba = true) {
   await carregarTarefas();
@@ -893,6 +909,7 @@ document.addEventListener('click', async e => {
       if (BAIXA && !['montando', 'baixando'].includes(BAIXA.fase)) BAIXA = null;
       return renderEnvios();
     case 'subir-tarefa': document.getElementById('dlg-subir').close(); return abrirNovaTarefa({ id: SUBIDA.casaId, nome: SUBIDA.plano.casa });
+    case 'cyberduck': return abrirNoCyberduck(ARQ.pasta);
     case 'baixar-pasta': return ARQ.dados ? baixarPasta(ARQ.dados.pasta.id, ARQ.dados.pasta.nome) : undefined;
     case 'baixar-repetir': return BAIXA ? rodarBaixa(BAIXA.falhas.splice(0)) : undefined;
     case 'comecar': return rpc('comecar_edicao', { p_tarefa: t.id }, 'Edição começou.');
