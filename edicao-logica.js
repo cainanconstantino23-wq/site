@@ -85,3 +85,53 @@ function planoDaCasa(entradas) {
 function jaNoDrive(arquivo, itens) {
   return (itens || []).some(function (i) { return i.tipo !== 'pasta' && i.nome === arquivo.nome && Number(i.tamanho) === Number(arquivo.tamanho); });
 }
+
+// ------------------------------------------------------------ transferências (envio e download)
+
+/** Nome aceito pelo Windows: troca os proibidos por "_", tira ponto/espaço do fim, evita nomes reservados. */
+function nomeWindows(nome) {
+  var n = String(nome || '').replace(/[<>:"/\\|?*\u0000-\u001f]/g, '_').replace(/[. ]+$/, '');
+  if (!n) return '_';
+  if (/^(con|prn|aux|nul|com[1-9]|lpt[1-9])(\.|$)/i.test(n)) n = '_' + n;
+  return n;
+}
+
+/** Nomes do Windows sem repetição na mesma pasta (o Windows não diferencia maiúsculas): "a (2).mp4". */
+function nomesUnicos(nomes) {
+  var vistos = {};
+  return nomes.map(function (original) {
+    var n = nomeWindows(original), chave = n.toLowerCase();
+    if (!vistos[chave]) { vistos[chave] = 1; return n; }
+    var ponto = n.lastIndexOf('.'), base = ponto > 0 ? n.slice(0, ponto) : n, ext = ponto > 0 ? n.slice(ponto) : '';
+    var k = vistos[chave], candidato;
+    do { k++; candidato = base + ' (' + k + ')' + ext; } while (vistos[candidato.toLowerCase()]);
+    vistos[chave] = k; vistos[candidato.toLowerCase()] = 1;
+    return candidato;
+  });
+}
+
+/** O que fazer com um arquivo que talvez já exista no disco. tamanhoLocal null = não existe. */
+function planoRetomada(tamanhoLocal, tamanhoDrive) {
+  if (tamanhoLocal === tamanhoDrive) return { acao: 'pular', inicio: tamanhoDrive };
+  if (tamanhoLocal && tamanhoLocal < tamanhoDrive) return { acao: 'continuar', inicio: tamanhoLocal };
+  return { acao: 'do_zero', inicio: 0 };
+}
+
+/** Cabeçalho Range do Google ("bytes=0-999") → próximo byte a enviar. */
+function inicioDoRange(cabecalho) {
+  var m = /bytes=\d+-(\d+)/.exec(cabecalho || '');
+  return m ? Number(m[1]) + 1 : 0;
+}
+
+/** Token guardado ainda vale por mais de 5 minutos? */
+function tokenValido(guardado, agora) {
+  return Boolean(guardado && guardado.token && Date.parse(guardado.expira_em) - agora > 5 * 60000);
+}
+
+/** Espera antes da tentativa n (1..5): 1 s, 2 s, 4 s, 8 s, 16 s. */
+function esperaTentativa(n) { return 1000 * Math.pow(2, n - 1); }
+
+/** Docs, Planilhas etc. (não são arquivos para baixar). Pasta não conta. */
+function ehNativoGoogle(mime) {
+  return /^application\/vnd\.google-apps\./.test(mime || '') && mime !== 'application/vnd.google-apps.folder';
+}

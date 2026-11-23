@@ -5,7 +5,7 @@ import vm from 'node:vm';
 
 const ctx = {};
 vm.runInNewContext(readFileSync(new URL('../edicao-logica.js', import.meta.url), 'utf8'), ctx);
-const { ETAPAS, etapaDe, caminhoTarefa, timecode, ehPastaSaida, tamanhoLegivel, prazoInfo } = ctx;
+const { ETAPAS, etapaDe, caminhoTarefa, timecode, ehPastaSaida, tamanhoLegivel, prazoInfo, nomeWindows, nomesUnicos, planoRetomada, inicioDoRange, tokenValido, esperaTentativa, ehNativoGoogle } = ctx;
 
 test('ETAPAS na ordem da linha do tempo', () => {
   assert.deepEqual(Array.from(ETAPAS, (e) => e.id), ['a_fazer', 'em_edicao', 'para_revisar', 'ajustes', 'reenviado', 'aprovado']);
@@ -91,4 +91,53 @@ test('jaNoDrive compara nome e tamanho', () => {
   assert.equal(jaNoDrive({ nome: 'A001.MP4', tamanho: 100 }, itens), true);
   assert.equal(jaNoDrive({ nome: 'A001.MP4', tamanho: 99 }, itens), false);
   assert.equal(jaNoDrive({ nome: 'Drone', tamanho: null }, itens), false);
+});
+
+// ------------------------------------------------------------ transferências
+test('nomeWindows troca caracteres proibidos e trata o fim e os reservados', () => {
+  assert.equal(nomeWindows('Casa: Vilas'), 'Casa_ Vilas');
+  assert.equal(nomeWindows('foto?.jpg'), 'foto_.jpg');
+  assert.equal(nomeWindows('a<b>c"d|e*f\\g/h'), 'a_b_c_d_e_f_g_h');
+  assert.equal(nomeWindows('Pasta. '), 'Pasta');
+  assert.equal(nomeWindows('...'), '_');
+  assert.equal(nomeWindows('CON'), '_CON');
+  assert.equal(nomeWindows('nul.txt'), '_nul.txt');
+  assert.equal(nomeWindows('DJI_0001.MP4'), 'DJI_0001.MP4');
+});
+
+test('nomesUnicos numera repetidos antes da extensão, sem diferenciar maiúsculas', () => {
+  assert.deepEqual(Array.from(nomesUnicos(['a.mp4', 'A.MP4', 'a.mp4', 'b'])), ['a.mp4', 'A (2).MP4', 'a (3).mp4', 'b']);
+  assert.deepEqual(Array.from(nomesUnicos(['x:y', 'x?y'])), ['x_y', 'x_y (2)']);
+});
+
+test('planoRetomada', () => {
+  assert.deepEqual({ ...planoRetomada(null, 500) }, { acao: 'do_zero', inicio: 0 });
+  assert.deepEqual({ ...planoRetomada(500, 500) }, { acao: 'pular', inicio: 500 });
+  assert.deepEqual({ ...planoRetomada(200, 500) }, { acao: 'continuar', inicio: 200 });
+  assert.deepEqual({ ...planoRetomada(0, 500) }, { acao: 'do_zero', inicio: 0 });
+  assert.deepEqual({ ...planoRetomada(900, 500) }, { acao: 'do_zero', inicio: 0 });
+  assert.deepEqual({ ...planoRetomada(0, 0) }, { acao: 'pular', inicio: 0 });
+});
+
+test('inicioDoRange lê o Range do Google', () => {
+  assert.equal(inicioDoRange('bytes=0-999'), 1000);
+  assert.equal(inicioDoRange(null), 0);
+  assert.equal(inicioDoRange('lixo'), 0);
+});
+
+test('tokenValido exige mais de 5 minutos', () => {
+  const agora = Date.parse('2026-11-23T12:00:00Z');
+  assert.equal(tokenValido({ token: 't', expira_em: '2026-11-23T12:06:00Z' }, agora), true);
+  assert.equal(tokenValido({ token: 't', expira_em: '2026-11-23T12:04:00Z' }, agora), false);
+  assert.equal(tokenValido(null, agora), false);
+});
+
+test('esperaTentativa dobra a cada tentativa', () => {
+  assert.deepEqual([1, 2, 3, 4, 5].map(esperaTentativa), [1000, 2000, 4000, 8000, 16000]);
+});
+
+test('ehNativoGoogle', () => {
+  assert.equal(ehNativoGoogle('application/vnd.google-apps.document'), true);
+  assert.equal(ehNativoGoogle('application/vnd.google-apps.folder'), false);
+  assert.equal(ehNativoGoogle('video/mp4'), false);
 });
