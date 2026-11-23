@@ -30,3 +30,5 @@ prospeccao-interno/
 
 # segredos locais do espaço de edição (node dev.mjs)
 .env.local
+.vercel
+.env*
