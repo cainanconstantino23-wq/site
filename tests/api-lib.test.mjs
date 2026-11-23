@@ -34,3 +34,9 @@ test('dentroDaRaiz: fora da raiz, ciclo e raiz vazia', async () => {
   assert.equal(await dentroDaRaiz('ciclo1', 'raiz', parents), false);
   assert.equal(await dentroDaRaiz('casa', '', parents), false);
 });
+
+const { ehPastaSaida } = await import('../api/_lib/saida.mjs');
+test('ehPastaSaida do servidor segue a mesma regra da página', () => {
+  for (const nome of ['06 Saída', '06 Saida', '06 SAÍDA', '6 saida']) assert.equal(ehPastaSaida(nome), true, nome);
+  for (const nome of ['05 Projetos', 'Saída antiga', '06 Saídas velhas']) assert.equal(ehPastaSaida(nome), false, nome);
+});

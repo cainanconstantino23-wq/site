@@ -27,3 +27,6 @@ comercial/videos/Essta_yasmin*
 
 # Prospecção: lista de leads e mensagens. NUNCA publicar (dados internos)
 prospeccao-interno/
+
+# segredos locais do espaço de edição (node dev.mjs)
+.env.local
