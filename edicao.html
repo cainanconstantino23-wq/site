@@ -190,7 +190,22 @@ dialog::backdrop{background:rgb(24 50 58 / .35);backdrop-filter:blur(3px)}
 .subidos li{display:flex;justify-content:space-between;gap:12px;font-size:12.5px;min-width:0}
 .subidos li .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
 .subidos li .dica{margin:0;white-space:nowrap}
-.envios{position:fixed;right:16px;bottom:16px;z-index:50;width:min(360px,calc(100vw - 32px));display:grid;gap:8px}
+.envios{position:fixed;right:16px;bottom:16px;z-index:50;width:min(420px,calc(100vw - 32px))}
+.transf{padding:0;overflow:hidden}
+.transf-topo{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line, rgba(0,0,0,.08));font-size:13px}
+.transf-topo span{display:flex;gap:6px;align-items:center}
+.transf-lista{max-height:min(50vh,420px);overflow:auto}
+.tr{display:grid;grid-template-columns:22px 1fr auto;gap:10px;align-items:start;padding:12px 14px;font-size:12.5px;border-bottom:1px solid var(--line, rgba(0,0,0,.06))}
+.tr:last-child{border-bottom:0}
+.tr .seta{font-size:16px;line-height:1.2;color:var(--accent);font-weight:700}
+.tr.feito .seta{color:var(--e-aprovado)} .tr.erro .seta{color:var(--danger)}
+.tr .nm{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tr .lin{margin-top:6px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.tr .atual{margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600;color:var(--ink)}
+.tr.erro .prog i{background:var(--danger)} .tr.feito .prog i{background:var(--e-aprovado)}
+.tr .bts{display:grid;gap:6px;justify-items:end}
+.transf-min{display:flex;align-items:center;gap:10px;width:100%;padding:10px 14px;font-size:12.5px;cursor:pointer;border:0;text-align:left}
+.transf-min .prog{flex:1;margin:0}
 .envio{padding:12px 14px;border-radius:var(--r-control);font-size:12.5px}
 .envio .nm{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .prog{height:5px;border-radius:3px;background:var(--muted);margin-top:8px;overflow:hidden}
@@ -547,16 +562,66 @@ function putEnvio(e, inicio, perguntar = false) {
 }
 let envioSeq = 0;
 const ENVIOS = new Map();
-function renderEnvios() {
-  document.getElementById('envios').innerHTML = [...ENVIOS.values()].map(e => {
-    const pct = e.total ? Math.round(e.enviado / e.total * 100) : 0;
-    return `<div class="envio cartao ${e.estado}">
-      <div class="nm" title="${esc(e.arquivo.name)}">${esc(e.arquivo.name)}</div>
-      <div class="prog"><i style="width:${e.estado === 'feito' ? 100 : pct}%"></i></div>
-      <div class="lin"><span>${e.estado === 'feito' ? 'Enviado' : e.estado === 'erro' ? esc(e.erro || 'Falhou') : `${tamanhoLegivel(e.enviado)} de ${tamanhoLegivel(e.total)} · ${pct}%`}</span>
-        ${e.estado === 'erro' ? `<button class="btn peq" type="button" data-retomar="${e.id}">Tentar de novo</button>` : e.estado === 'feito' ? `<button class="x" type="button" data-fechar-envio="${e.id}" aria-label="Fechar">${ico('x')}</button>` : ''}</div>
-    </div>`;
-  }).join('');
+// ---- painel de transferências (como o do Cyberduck): tudo que sobe e desce, com velocidade e tempo restante
+const FEITAS = [];          // concluídas nesta sessão (até fechar a página)
+const AMOSTRAS = new Map(); // chave → amostras de progresso (velocidade)
+let painelMin = false, quadroTransf = 0;
+function linhaSubida() {
+  const s = SUBIDA;
+  if (!s?.plano || !['subindo', 'feito', 'erro'].includes(s.fase)) return null;
+  const atual = [...s.atuais.values()][0];
+  return { chave: 'subida', tipo: 'up', nome: s.plano.casa, feito: s.enviado, total: s.plano.total, estado: s.fase === 'subindo' ? 'rodando' : s.fase, fim: s.fim,
+    atual: atual ? 'Enviando ' + atual.arquivo.name : '', detalhes: 'transf-subir', repetir: s.fase === 'erro' ? 'subir-repetir' : '' };
+}
+function linhaBaixa() {
+  const b = BAIXA;
+  if (!b) return null;
+  const atual = [...b.atuais.values()][0];
+  return { chave: 'baixa', tipo: 'down', nome: b.nome, feito: b.baixado, total: b.total, estado: ['montando', 'baixando'].includes(b.fase) ? 'rodando' : b.fase, fim: b.fim,
+    atual: b.fase === 'montando' ? 'Lendo as pastas no Drive…' : atual ? 'Baixando ' + atual.nome : '', detalhes: 'transf-baixar', repetir: b.fase === 'erro' && b.falhas.length ? 'baixar-repetir' : '' };
+}
+const linhaEnvio = e => ({ chave: 'envio' + e.id, tipo: 'up', nome: e.arquivo.name, feito: e.enviado, total: e.total, estado: e.estado === 'enviando' ? 'rodando' : e.estado, fim: e.fim,
+  atual: e.estado === 'erro' ? e.erro || 'Falhou' : '', retomar: e.estado === 'erro' ? e.id : 0 });
+function arquivar(l) { if (l && l.estado !== 'rodando') FEITAS.unshift({ ...l, chave: 'feita' + FEITAS.length + Date.now(), detalhes: '', repetir: '', retomar: 0, fim: l.fim || new Date() }); }
+function renderEnvios() { if (!quadroTransf) quadroTransf = requestAnimationFrame(() => { quadroTransf = 0; desenharTransf(); }); }
+setInterval(() => { if (document.querySelector('#envios .tr.rodando')) renderEnvios(); }, 1000); // velocidade e tempo andam mesmo sem evento
+function desenharTransf() {
+  const el = document.getElementById('envios');
+  const ativas = [linhaSubida(), linhaBaixa(), ...[...ENVIOS.values()].map(linhaEnvio)].filter(Boolean);
+  const todas = [...ativas, ...FEITAS];
+  if (!todas.length) { el.innerHTML = ''; return; }
+  const agora = Date.now();
+  for (const l of ativas) { if (l.estado === 'rodando') AMOSTRAS.set(l.chave, amostrar(AMOSTRAS.get(l.chave), agora, l.feito)); else AMOSTRAS.delete(l.chave); }
+  const rodando = ativas.filter(l => l.estado === 'rodando');
+  if (painelMin) {
+    const f = rodando.reduce((n, l) => n + l.feito, 0), t = rodando.reduce((n, l) => n + l.total, 0);
+    const sobe = rodando.filter(l => l.tipo === 'up').length, desce = rodando.length - sobe;
+    el.innerHTML = `<button class="transf-min cartao" type="button" data-act="transf-min" aria-label="Abrir transferências">
+      <b>${rodando.length ? `${sobe ? '↑ ' + sobe : ''}${sobe && desce ? ' · ' : ''}${desce ? '↓ ' + desce : ''}` : 'Transferências'}</b>
+      <span class="prog"><i style="width:${t ? Math.floor(f / t * 100) : 100}%"></i></span><span>${rodando.length ? (t ? Math.floor(f / t * 100) : 0) + '%' : 'concluídas'}</span></button>`;
+    return;
+  }
+  const hora = d => new Date(d).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }).replace(',', ' às');
+  el.innerHTML = `<div class="cartao transf" role="region" aria-label="Transferências">
+    <div class="transf-topo"><b>Transferências</b><span>
+      ${todas.some(l => l.estado !== 'rodando') ? '<button class="btn peq" type="button" data-act="transf-limpar">Limpar concluídas</button>' : ''}
+      <button class="x" type="button" data-act="transf-min" aria-label="Recolher">–</button></span></div>
+    <div class="transf-lista">${todas.map(l => {
+      const pct = l.estado === 'feito' ? 100 : l.total ? Math.floor(l.feito / l.total * 100) : 0;
+      const texto = l.estado === 'feito' ? `Concluída · ${tamanhoLegivel(l.total)} · ${hora(l.fim)}`
+        : l.estado === 'erro' ? `Parou · ${textoProgresso(l.feito, l.total, 0)}`
+        : textoProgresso(l.feito, l.total, velocidade(AMOSTRAS.get(l.chave)));
+      return `<div class="tr ${l.estado}">
+        <span class="seta" aria-label="${l.tipo === 'up' ? 'Envio' : 'Download'}">${l.tipo === 'up' ? '↑' : '↓'}</span>
+        <div style="min-width:0"><div class="nm" title="${esc(l.nome)}">${esc(l.nome)}</div>
+          <div class="prog"><i style="width:${pct}%"></i></div>
+          <div class="lin">${esc(texto)}</div>
+          ${l.atual ? `<div class="atual" title="${esc(l.atual)}">${esc(l.atual)}</div>` : ''}</div>
+        <div class="bts">${l.repetir ? `<button class="btn peq prim" type="button" data-act="${l.repetir}">Tentar de novo</button>` : ''}
+          ${l.retomar ? `<button class="btn peq prim" type="button" data-retomar="${l.retomar}">Tentar de novo</button>` : ''}
+          ${l.detalhes ? `<button class="btn peq" type="button" data-act="${l.detalhes}">Detalhes</button>` : ''}</div>
+      </div>`;
+    }).join('')}</div></div>`;
 }
 async function enviarArquivo(arquivo, destino) {
   const e = { id: ++envioSeq, arquivo, destino, total: arquivo.size, enviado: 0, estado: 'enviando', url: null, resultado: null };
@@ -597,8 +662,9 @@ async function continuarEnvio(e) {
       if (e.enviado === e.total && e.resultado) break;
       e.enviado = inicio; renderEnvios(); e.aoProgredir?.();
     }
-    e.estado = 'feito'; renderEnvios();
-    setTimeout(() => { if (ENVIOS.get(e.id)?.estado === 'feito') { ENVIOS.delete(e.id); renderEnvios(); } }, 8000);
+    e.estado = 'feito'; e.fim = new Date();
+    if (ENVIOS.has(e.id)) { arquivar(linhaEnvio(e)); ENVIOS.delete(e.id); }
+    renderEnvios();
   } catch (err) {
     e.estado = 'erro'; e.erro = MSG[err.codigo] || err.message || 'Falhou'; renderEnvios();
   }
@@ -676,6 +742,7 @@ async function baixarPasta(pastaId, nome) {
   let raiz;
   try { raiz = await showDirectoryPicker({ mode: 'readwrite', id: 'daime-baixar' }); } catch { return; }
   try { await tokenDownload(); } catch (e) { return aviso(MSG[e.codigo] || 'Não foi possível baixar.', 'erro'); }
+  arquivar(linhaBaixa());
   BAIXA = novaBaixa(nome);
   const b = BAIXA;
   document.getElementById('dlg-baixar').showModal(); renderBaixa();
@@ -703,6 +770,7 @@ async function baixarArquivo(item) {
   if (emAndamento()) return;
   let fh;
   try { fh = await showSaveFilePicker({ suggestedName: nomeWindows(item.nome), id: 'daime-baixar' }); } catch { return; }
+  arquivar(linhaBaixa());
   BAIXA = novaBaixa(item.nome);
   BAIXA.arquivos.push({ item, fh, nome: item.nome }); BAIXA.total = item.tamanho || 0;
   document.getElementById('dlg-baixar').showModal();
@@ -730,11 +798,11 @@ async function rodarBaixa(lista) {
     b.atuais.delete(chave); renderBaixa();
   });
   removeEventListener('beforeunload', avisoSaida);
-  b.fase = b.falhas.length ? 'erro' : 'feito'; renderBaixa();
+  b.fase = b.falhas.length ? 'erro' : 'feito'; b.fim = new Date(); renderBaixa();
   if (b.fase === 'feito') aviso(`${b.nome} baixado.`, 'ok');
 }
 let quadroBaixa = 0;
-function renderBaixa() { if (!quadroBaixa) quadroBaixa = requestAnimationFrame(() => { quadroBaixa = 0; desenharBaixa(); }); }
+function renderBaixa() { renderEnvios(); if (!quadroBaixa) quadroBaixa = requestAnimationFrame(() => { quadroBaixa = 0; desenharBaixa(); }); }
 function desenharBaixa() {
   const c = document.getElementById('baixar-corpo'), b = BAIXA;
   if (!b) return;
@@ -808,6 +876,14 @@ document.addEventListener('click', async e => {
     case 'subir': return abrirSubir();
     case 'subir-comecar': return comecarSubida();
     case 'subir-repetir': return comecarSubida(true);
+    case 'transf-subir': document.getElementById('dlg-subir').showModal(); return renderSubir();
+    case 'transf-baixar': document.getElementById('dlg-baixar').showModal(); return renderBaixa();
+    case 'transf-min': painelMin = !painelMin; return renderEnvios();
+    case 'transf-limpar':
+      FEITAS.length = 0;
+      if (SUBIDA && SUBIDA.fase !== 'subindo') SUBIDA = null;
+      if (BAIXA && !['montando', 'baixando'].includes(BAIXA.fase)) BAIXA = null;
+      return renderEnvios();
     case 'subir-tarefa': document.getElementById('dlg-subir').close(); return abrirNovaTarefa({ id: SUBIDA.casaId, nome: SUBIDA.plano.casa });
     case 'baixar-pasta': return ARQ.dados ? baixarPasta(ARQ.dados.pasta.id, ARQ.dados.pasta.nome) : undefined;
     case 'baixar-repetir': return BAIXA ? rodarBaixa(BAIXA.falhas.splice(0)) : undefined;
@@ -872,7 +948,8 @@ document.addEventListener('change', async e => {
 let SUBIDA = null; // { plano, fase, feitos, pulados, falhas:[], enviado, atuais:Set, casaId, erro }
 function abrirSubir() {
   if (SUBIDA && SUBIDA.fase === 'subindo') { document.getElementById('dlg-subir').showModal(); return renderSubir(); }
-  SUBIDA = null;
+  arquivar(linhaSubida());
+  SUBIDA = null; renderEnvios();
   document.getElementById('dlg-subir').showModal();
   renderSubir();
 }
@@ -882,6 +959,7 @@ function escolheuPasta(lista) {
   renderSubir();
 }
 function renderSubir() {
+  renderEnvios();
   const c = document.getElementById('subir-corpo'), s = SUBIDA;
   const fechar = `<button class="btn" type="button" onclick="this.closest('dialog').close()">${s?.fase === 'subindo' ? 'Esconder' : 'Fechar'}</button>`;
   if (!s) {
@@ -957,6 +1035,7 @@ async function comecarSubida(repetir = false) {
     s.erro = MSG[err.codigo] || 'Não foi possível criar as pastas no Drive. Tente de novo.';
   }
   removeEventListener('beforeunload', avisoSaida);
+  s.fim = new Date();
   renderSubir();
   if (s.fase === 'feito') aviso(`${p.casa} está no Drive.`, 'ok');
 }

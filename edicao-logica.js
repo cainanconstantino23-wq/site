@@ -157,3 +157,35 @@ function linhasSubida(arquivos) {
     return { rotulo: (a.pasta ? a.pasta + '/' : '') + a.nome, tamanho: a.tamanho, estado: a.estado || 'subiu' };
   }).sort(function (x, y) { return x.rotulo.localeCompare(y.rotulo, 'pt', { numeric: true }); });
 }
+
+// ------------------------------------------------------------ painel de transferências (velocidade, tempo restante)
+
+/** Guarda {t, b} (ms, bytes) dos últimos 5 s, no máximo uma a cada 250 ms. Se o progresso voltar, recomeça. */
+function amostrar(amostras, t, b) {
+  var a = amostras || [], ultima = a[a.length - 1];
+  if (ultima && b < ultima.b) return [{ t: t, b: b }];
+  if (ultima && t - ultima.t < 250) return a;
+  return a.concat([{ t: t, b: b }]).filter(function (x) { return x.t >= t - 5000; });
+}
+
+/** Bytes por segundo entre a primeira e a última amostra. */
+function velocidade(amostras) {
+  if (!amostras || amostras.length < 2) return 0;
+  var i = amostras[0], f = amostras[amostras.length - 1];
+  return f.t > i.t ? (f.b - i.b) / (f.t - i.t) * 1000 : 0;
+}
+
+/** Segundos → "8 s", "2 min 5 s", "1 h 3 min". */
+function tempoLegivel(seg) {
+  var s = Math.max(1, Math.ceil(seg));
+  if (s < 60) return s + ' s';
+  if (s < 3600) return Math.floor(s / 60) + ' min' + (s % 60 ? ' ' + (s % 60) + ' s' : '');
+  return Math.floor(s / 3600) + ' h' + (Math.floor(s % 3600 / 60) ? ' ' + Math.floor(s % 3600 / 60) + ' min' : '');
+}
+
+/** "17,3 MB de 67,3 MB (25%, 6,4 MB/s, 8 s restantes)" */
+function textoProgresso(feito, total, bps) {
+  var pct = total > 0 ? Math.floor(feito / total * 100) : 100;
+  var extra = bps > 0 && total > feito ? ', ' + tamanhoLegivel(bps) + '/s, ' + tempoLegivel((total - feito) / bps) + ' restantes' : '';
+  return tamanhoLegivel(feito) + ' de ' + tamanhoLegivel(total) + ' (' + pct + '%' + extra + ')';
+}

@@ -5,7 +5,7 @@ import vm from 'node:vm';
 
 const ctx = {};
 vm.runInNewContext(readFileSync(new URL('../edicao-logica.js', import.meta.url), 'utf8'), ctx);
-const { ETAPAS, etapaDe, caminhoTarefa, timecode, ehPastaSaida, tamanhoLegivel, prazoInfo, nomeWindows, nomesUnicos, planoRetomada, inicioDoRange, tokenValido, esperaTentativa, ehNativoGoogle, deveRepetir, podeExcluirVersao, linhasSubida } = ctx;
+const { ETAPAS, etapaDe, caminhoTarefa, timecode, ehPastaSaida, tamanhoLegivel, prazoInfo, nomeWindows, nomesUnicos, planoRetomada, inicioDoRange, tokenValido, esperaTentativa, ehNativoGoogle, deveRepetir, podeExcluirVersao, linhasSubida, velocidade, tempoLegivel, textoProgresso, amostrar } = ctx;
 
 test('ETAPAS na ordem da linha do tempo', () => {
   assert.deepEqual(Array.from(ETAPAS, (e) => e.id), ['a_fazer', 'em_edicao', 'para_revisar', 'ajustes', 'reenviado', 'aprovado']);
@@ -172,4 +172,37 @@ test('linhasSubida: caminho dentro da casa, ordenado, com o estado de cada arqui
   assert.deepEqual(Array.from(linhas, l => l.rotulo), ['01 Brutas/Drone/DJI_0001.MP4', '01 Brutas/Drone/DJI_0002.MP4', '02 Audio/trilha.wav', 'capa.jpg']);
   assert.deepEqual(Array.from(linhas, l => l.estado), ['subiu', 'falhou', 'subiu', 'pulado']);
   assert.equal(linhas[0].tamanho, 20);
+});
+
+// ------------------------------------------------------------ painel de transferências
+test('amostrar guarda só os últimos 5 s e recomeça se o progresso voltar', () => {
+  let a = [];
+  a = amostrar(a, 0, 0); a = amostrar(a, 100, 10); // menos de 250 ms: ignora
+  assert.equal(a.length, 1);
+  a = amostrar(a, 1000, 100); a = amostrar(a, 3000, 300);
+  assert.deepEqual(Array.from(a, x => x.t), [0, 1000, 3000]);
+  a = amostrar(a, 6500, 700); // mais de 5 s: as antigas saem
+  assert.deepEqual(Array.from(a, x => x.t), [3000, 6500]);
+  a = amostrar(a, 7000, 50); // tentou de novo do começo
+  assert.deepEqual(Array.from(a, x => x.b), [50]);
+});
+
+test('velocidade em bytes por segundo na janela', () => {
+  assert.equal(velocidade([{ t: 0, b: 0 }, { t: 2000, b: 2_000_000 }]), 1_000_000);
+  assert.equal(velocidade([{ t: 0, b: 0 }]), 0);
+  assert.equal(velocidade([]), 0);
+});
+
+test('tempoLegivel', () => {
+  assert.equal(tempoLegivel(8), '8 s');
+  assert.equal(tempoLegivel(0.4), '1 s');
+  assert.equal(tempoLegivel(125), '2 min 5 s');
+  assert.equal(tempoLegivel(3780), '1 h 3 min');
+});
+
+test('textoProgresso como no Cyberduck', () => {
+  const mb = 1024 * 1024;
+  assert.equal(textoProgresso(17.3 * mb, 67.3 * mb, 6.4 * mb), '17,3 MB de 67,3 MB (25%, 6,4 MB/s, 8 s restantes)');
+  assert.equal(textoProgresso(0, 67.3 * mb, 0), '0 B de 67,3 MB (0%)');
+  assert.equal(textoProgresso(5, 0, 0), '5 B de 0 B (100%)');
 });
