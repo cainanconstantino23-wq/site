@@ -85,3 +85,23 @@ test('chaveDaTarefa recusa outra tarefa e caminhos forjados', () => {
   assert.equal(r2.chaveDaTarefa('edicao/12/../13/x.mov', 12), false);
   assert.equal(r2.chaveDaTarefa(undefined, 12), false);
 });
+
+const limpeza = await import('../api/_lib/limpeza.mjs');
+
+test('paraRemover: aprovação mais recente há mais de 30 dias, só R2 e ainda não removido', () => {
+  const agora = Date.parse('2026-12-31T00:00:00Z');
+  const versoes = [
+    { id: 1, tarefa_id: 1, r2_key: 'a', video_removido_em: null, status: 'aprovado' },
+    { id: 2, tarefa_id: 1, r2_key: null, video_removido_em: null, status: 'aprovado' },
+    { id: 3, tarefa_id: 2, r2_key: 'b', video_removido_em: null, status: 'aprovado' },
+    { id: 4, tarefa_id: 3, r2_key: 'c', video_removido_em: null, status: 'ajustes' },
+    { id: 5, tarefa_id: 1, r2_key: 'd', video_removido_em: '2026-12-01T00:00:00Z', status: 'aprovado' },
+  ];
+  const eventos = [
+    { tarefa_id: 1, tipo: 'aprovada', criado_em: '2026-11-20T00:00:00Z' },
+    { tarefa_id: 2, tipo: 'aprovada', criado_em: '2026-11-01T00:00:00Z' },
+    { tarefa_id: 2, tipo: 'aprovada', criado_em: '2026-12-20T00:00:00Z' }, // reaprovada: conta a mais recente
+    { tarefa_id: 3, tipo: 'aprovada', criado_em: '2026-10-01T00:00:00Z' },
+  ];
+  assert.deepEqual(Array.from(limpeza.paraRemover(versoes, eventos, agora), v => v.id), [1]);
+});

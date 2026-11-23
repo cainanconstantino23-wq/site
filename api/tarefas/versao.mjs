@@ -2,13 +2,14 @@
 // GET ?tarefa=<id>  → links do player para cada versão (R2: link assinado de 6 h; Drive: repasse assinado).
 // POST { tarefa, r2, nome, nota } → registra o vídeo já enviado ao R2 como nova versão para revisar.
 // POST { tarefa, arquivo, nota } → idem com um vídeo que já está no Drive, dentro da casa ("Enviar para revisão").
+// DELETE ?tarefa=&numero= → exclui a versão (regra no SQL, como o usuário) e apaga o vídeo dela no R2.
 import { exigir, falha } from '../_lib/acesso.mjs';
 import { assinar } from '../_lib/assinatura.mjs';
 import { driveJson, paisDe } from '../_lib/google.mjs';
 import { dentroDaRaiz } from '../_lib/raiz.mjs';
-import { sb } from '../_lib/supabase.mjs';
+import { rpcComoUsuario, sb } from '../_lib/supabase.mjs';
 import { DRIVE_ID, json, lerJson } from '../_lib/http.mjs';
-import { assinarUrl, chaveDaTarefa, existe } from '../_lib/r2.mjs';
+import { apagar, assinarUrl, chaveDaTarefa, existe } from '../_lib/r2.mjs';
 
 const tarefaDe = async (id) => (await sb(`/rest/v1/tarefas?id=eq.${Number(id) || 0}&select=*`))?.[0] || null;
 
@@ -59,5 +60,21 @@ export async function POST(request) {
     return json({ numero });
   } catch (e) {
     return falha(e, 'Falha ao registrar a versão:');
+  }
+}
+
+export async function DELETE(request) {
+  const { erro } = await exigir(request);
+  if (erro) return erro;
+  const url = new URL(request.url);
+  const tarefa = Number(url.searchParams.get('tarefa')) || 0, numero = Number(url.searchParams.get('numero')) || 0;
+  try {
+    const v = (await sb(`/rest/v1/versoes?tarefa_id=eq.${tarefa}&numero=eq.${numero}&select=r2_key`))?.[0];
+    const r = await rpcComoUsuario(request, 'excluir_versao', { p_tarefa: tarefa, p_numero: numero });
+    if (!r.ok) return json({ erro: 'nao_excluiu', detalhe: r.erro }, 400);
+    if (v?.r2_key && !(await apagar(v.r2_key).catch(() => false))) console.error('R2: não apagou', v.r2_key);
+    return json({ ok: true });
+  } catch (e) {
+    return falha(e, 'Falha ao excluir a versão:');
   }
 }

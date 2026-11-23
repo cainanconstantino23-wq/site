@@ -40,3 +40,16 @@ export async function usuarioDaRequisicao(request) {
   }
   return { id, email, papel: valor, nome };
 }
+
+/** Chama uma função do banco COMO o usuário do pedido (a permissão continua sendo decidida no SQL). */
+export async function rpcComoUsuario(request, nome, args) {
+  const auth = request.headers.get('authorization') || '';
+  const r = await fetch(`${URL_SB}/rest/v1/rpc/${nome}`, {
+    method: 'POST',
+    headers: { apikey: PUBLICA, Authorization: auth, 'Content-Type': 'application/json' },
+    body: JSON.stringify(args),
+  });
+  if (r.ok) return { ok: true };
+  const corpo = await r.json().catch(() => ({}));
+  return { ok: false, erro: corpo.message || String(r.status) };
+}
