@@ -304,6 +304,10 @@ const MSG = {
   nao_e_video: 'Escolha um arquivo de vídeo.',
   sem_raiz: 'Falta escolher a pasta de trabalho no Drive.',
   google_editor: 'Conecte sua conta Google (botão no topo) para baixar.',
+  r2_nao_configurado: 'O armazenamento de vídeos ainda não foi configurado.',
+  r2_nao_chegou: 'O vídeo não chegou ao armazenamento. Tente de novo.',
+  tamanho_invalido: 'O vídeo passa de 5 GB.',
+  ja_aprovada: 'Esta tarefa já foi aprovada.',
 };
 function aviso(texto, tom = '') {
   const el = document.getElementById('avisos');
@@ -331,7 +335,7 @@ async function assinaturas(t) {
   if (!t.versoes.length) return;
   try {
     const { versoes } = await api(`/api/tarefas/versao?tarefa=${t.id}`);
-    players[t.id] = Object.fromEntries(versoes.map(v => [v.numero, v.video]));
+    players[t.id] = Object.fromEntries(versoes.map(v => [v.numero, v.removido ? { removido: v.removido } : v.video]));
   } catch (e) { players[t.id] = {}; }
 }
 
@@ -439,7 +443,7 @@ function abaVideo(t) {
   const dono = EU.papel === 'dono';
   const atual = t.versoes.at(-1)?.numero;
   const vista = versaoVista ?? atual;
-  const url = players[t.id]?.[vista];
+  const p = players[t.id]?.[vista], url = typeof p === 'string' ? p : null, removido = p?.removido;
   const coments = t.comentarios.filter(c => c.versao === vista && (c.enviado || dono));
   const rasc = t.comentarios.filter(c => !c.enviado && c.versao === atual);
   const versao = t.versoes.find(v => v.numero === vista);
@@ -447,6 +451,7 @@ function abaVideo(t) {
   return `<div class="video-grade">
     <div>
       <div class="player">${url ? `<video id="player" controls preload="metadata" playsinline src="${esc(url)}"></video>`
+        : removido ? `<p class="sem">Vídeo removido em ${diaMes(removido)} (1 mês depois da aprovação).</p>`
         : `<p class="sem">${t.versoes.length ? 'Carregando o vídeo…' : 'Ainda não há vídeo enviado.'}</p>`}</div>
       ${t.versoes.length > 1 ? `<div class="versoes" role="tablist" aria-label="Versões">${t.versoes.map(v => `<button type="button" role="tab" data-versao="${v.numero}" aria-selected="${v.numero === vista}">V${v.numero}${v.numero === atual ? ' · atual' : ''}</button>`).join('')}</div>` : ''}
       ${versao ? `<p class="dica">${esc(versao.nome)} · ${esc(tamanhoLegivel(versao.tamanho))} · enviada por ${esc(versao.enviada_por)} em ${quando(versao.enviada_em)}${versao.nota ? ` · “${esc(versao.nota)}”` : ''}</p>` : ''}
@@ -455,7 +460,7 @@ function abaVideo(t) {
           <h4>${t.versoes.length ? 'Enviar nova versão' : 'Enviar o vídeo para revisão'}</h4>
           <input class="campo" id="nota-versao" placeholder="O que mudou? (opcional)" maxlength="300">
           <div class="acoes"><label class="btn prim">${ico('enviar')} Escolher vídeo do computador<input type="file" accept="video/*" id="arq-versao" hidden></label></div>
-          <p class="dica">Vai para a pasta “06 Saída” da casa. Se você já subiu pelo Cyberduck, use “Enviar para revisão” na aba Arquivos.</p>
+          <p class="dica">O vídeo fica na plataforma para a revisão (não vai para o Drive). Some 1 mês depois da aprovação.</p>
         </div>` : ''}
     </div>
     <div>
@@ -832,6 +837,44 @@ function desenharBaixa() {
     <div class="acoes" style="justify-content:flex-end">${fechar}${b.falhas.length && !rodando ? '<button class="btn prim" type="button" data-act="baixar-repetir">Tentar de novo</button>' : ''}</div>`;
 }
 
+// ------------------------------------------------------------ versão de aprovação no R2 (não vai para o Drive)
+async function enviarVersaoR2(t, arquivo, nota) {
+  const e = { id: ++envioSeq, arquivo, total: arquivo.size, enviado: 0, estado: 'enviando', r2: { tarefa: t.id, chave: null, enviado: false, nota } };
+  ENVIOS.set(e.id, e); renderEnvios();
+  await continuarR2(e);
+}
+/** Envia (se ainda não foi) e registra a versão. "Tentar de novo" volta aqui: o que já chegou não é reenviado. */
+async function continuarR2(e) {
+  e.estado = 'enviando'; e.erro = ''; renderEnvios();
+  try {
+    if (!e.r2.enviado) {
+      const tipo = e.arquivo.type || 'video/mp4';
+      const { url, chave } = await api('/api/r2/envio', { method: 'POST', body: JSON.stringify({ tarefa: e.r2.tarefa, nome: e.arquivo.name, tipo, tamanho: e.arquivo.size }) });
+      e.r2.chave = chave; e.enviado = 0;
+      const st = await new Promise(ok => {
+        const x = new XMLHttpRequest(); e.xhr = x;
+        x.open('PUT', url); x.setRequestHeader('Content-Type', tipo);
+        x.upload.onprogress = ev => { e.enviado = ev.loaded; renderEnvios(); };
+        x.onload = () => ok(x.status); x.onerror = x.onabort = x.ontimeout = () => ok(0);
+        x.send(e.arquivo);
+      });
+      if (st < 200 || st >= 300) throw new Error(st ? `O armazenamento respondeu ${st}.` : 'A conexão caiu. Tente de novo.');
+      e.r2.enviado = true; e.enviado = e.total;
+    }
+    const { numero } = await api('/api/tarefas/versao', { method: 'POST', body: JSON.stringify({ tarefa: e.r2.tarefa, r2: e.r2.chave, nome: e.arquivo.name, nota: e.r2.nota }) });
+    e.estado = 'feito'; e.fim = new Date(); arquivar(linhaEnvio(e)); ENVIOS.delete(e.id); renderEnvios();
+    aviso(`V${numero} enviada para revisão.`, 'ok');
+    versaoVista = null; aba = 'video';
+    await recarregar();
+  } catch (err) {
+    e.estado = 'erro'; e.erro = MSG[err.codigo] || err.message || 'Falhou'; renderEnvios();
+  }
+}
+async function excluirPeloServidor(caminho, ok) {
+  try { await api(caminho, { method: 'DELETE' }); aviso(ok, 'ok'); await recarregar(); }
+  catch { aviso('Não foi possível excluir. Tente de novo.', 'erro'); }
+}
+
 // ------------------------------------------------------------ ações
 async function recarregar(manterAba = true) {
   await carregarTarefas();
@@ -869,7 +912,7 @@ document.addEventListener('click', async e => {
   if (d.apagar) return rpc('apagar_rascunho', { p_comentario: Number(d.apagar) });
   if (d.pasta && t) return abrirPasta(t, d.pasta);
   if (d.revisar && t) return registrarVersao(t, d.revisar);
-  if (d.retomar) { const en = ENVIOS.get(Number(d.retomar)); if (en) { await continuarEnvio(en); en.depois?.(en); } return; }
+  if (d.retomar) { const en = ENVIOS.get(Number(d.retomar)); if (en?.r2) await continuarR2(en); else if (en) { await continuarEnvio(en); en.depois?.(en); } return; }
   if (d.fecharEnvio) { ENVIOS.delete(Number(d.fecharEnvio)); renderEnvios(); return; }
   if (d.casa) { document.querySelectorAll('[data-casa]').forEach(b => b.setAttribute('aria-pressed', String(b === el))); document.getElementById('casa-escolhida').value = JSON.stringify({ id: d.casa, nome: el.dataset.nome }); return; }
   if (d.raizIr) return navegarRaiz(d.raizIr);
@@ -898,14 +941,14 @@ document.addEventListener('click', async e => {
     case 'comecar': return rpc('comecar_edicao', { p_tarefa: t.id }, 'Edição começou.');
     case 'excluir-versao': {
       const n = Number(d.numero);
-      if (!confirm(`Excluir a V${n} de ${t.casa_nome}? Ela some do site com os comentários dela. O arquivo continua no Drive.`)) return;
+      if (!confirm(`Excluir a V${n} de ${t.casa_nome}? Ela some do site com os comentários dela, e o vídeo é apagado da plataforma. Arquivos do Drive não são tocados.`)) return;
       versaoVista = null;
-      return rpc('excluir_versao', { p_tarefa: t.id, p_numero: n }, `V${n} excluída.`);
+      return excluirPeloServidor(`/api/tarefas/versao?tarefa=${t.id}&numero=${n}`, `V${n} excluída.`);
     }
     case 'excluir-tarefa':
-      if (!confirm(`Excluir a tarefa ${t.casa_nome} · ${t.tipo}? Some do site com versões, comentários e histórico. Nada é apagado no Drive.`)) return;
+      if (!confirm(`Excluir a tarefa ${t.casa_nome} · ${t.tipo}? Some do site com versões, comentários e histórico, e os vídeos de aprovação são apagados da plataforma. Nada é apagado no Drive.`)) return;
       versaoVista = null;
-      return rpc('excluir_tarefa', { p_tarefa: t.id }, 'Tarefa excluída.');
+      return excluirPeloServidor(`/api/tarefas?id=${t.id}`, 'Tarefa excluída.');
     case 'aprovar': if (confirm(`Aprovar a V${t.versoes.at(-1)?.numero} de ${t.casa_nome}?`)) return rpc('aprovar_tarefa', { p_tarefa: t.id }, 'Vídeo aprovado.'); return;
     case 'ajustes': return rpc('pedir_ajustes', { p_tarefa: t.id, p_texto: document.getElementById('txt-ajustes')?.value || '' }, 'Ajustes enviados para o editor.');
   }
@@ -941,9 +984,7 @@ document.addEventListener('change', async e => {
   if (e.target.id === 'arq-versao' && e.target.files[0]) {
     const arquivo = e.target.files[0], nota = document.getElementById('nota-versao')?.value || '';
     e.target.value = '';
-    const envio = await enviarArquivo(arquivo, { casa: t.casa_pasta_id });
-    envio.depois = async en => { if (en.estado === 'feito' && en.resultado?.id) await registrarVersao(t, en.resultado.id, nota); };
-    await envio.depois(envio);
+    await enviarVersaoR2(t, arquivo, nota);
   }
   if (e.target.id === 'arq-envio' && e.target.files.length) {
     const arquivos = [...e.target.files], pasta = ARQ.pasta; e.target.value = '';
