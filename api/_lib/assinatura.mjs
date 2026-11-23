@@ -22,3 +22,16 @@ export function conferirAssinatura(id, t, agora = Date.now()) {
   const recebido = Buffer.from(sig);
   return esperado.length === recebido.length && timingSafeEqual(esperado, recebido);
 }
+
+/** Cookie do login Google: liga o `state` ao usuário do painel, assinado, vale 10 minutos. */
+export function cookieEstado(state, userId, agora = Date.now()) {
+  return `${userId}~${assinar(`${state}|${userId}`, 600, agora)}`;
+}
+
+/** Devolve o userId do cookie se ele bate com o `state` e ainda vale; senão null. */
+export function lerCookieEstado(valor, state, agora = Date.now()) {
+  const i = typeof valor === 'string' ? valor.indexOf('~') : -1;
+  if (i <= 0 || typeof state !== 'string' || !state) return null;
+  const userId = valor.slice(0, i);
+  return conferirAssinatura(`${state}|${userId}`, valor.slice(i + 1), agora) ? userId : null;
+}

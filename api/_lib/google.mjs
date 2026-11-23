@@ -1,26 +1,30 @@
-// Google Drive da Daime Filmes: login OAuth (dono), tokens em drive_conexao e chamadas à API.
+// Google Drive da Daime Filmes: login OAuth (dono, e editor só leitura), tokens em drive_conexao/drive_editor e chamadas à API.
 // Regra: só listar, ler, criar pasta e enviar arquivo novo. Nunca apagar, mover ou renomear.
 import { sb } from './supabase.mjs';
 import { dentroDaRaiz } from './raiz.mjs';
 
 export const ESCOPOS = ['openid', 'email', 'https://www.googleapis.com/auth/drive'];
+// editor: só leitura, para baixar direto do Google no navegador dele
+export const ESCOPOS_EDITOR = ['openid', 'email', 'https://www.googleapis.com/auth/drive.readonly'];
+export const escoposDe = (papel) => (papel === 'editor' ? ESCOPOS_EDITOR : ESCOPOS);
 export const CALLBACK = '/api/google/callback';
 const API = 'https://www.googleapis.com/drive/v3';
 
 export class DriveDesconectado extends Error {}
+export class GoogleEditorDesconectado extends Error {}
 
 export function appGoogle() {
   const id = process.env.GOOGLE_CLIENT_ID, segredo = process.env.GOOGLE_CLIENT_SECRET;
   return id && segredo ? { id, segredo } : null;
 }
 
-export function urlLogin(origem, state) {
+export function urlLogin(origem, state, escopos = ESCOPOS) {
   const app = appGoogle();
   const url = new URL('https://accounts.google.com/o/oauth2/v2/auth');
   url.searchParams.set('client_id', app.id);
   url.searchParams.set('redirect_uri', origem + CALLBACK);
   url.searchParams.set('response_type', 'code');
-  url.searchParams.set('scope', ESCOPOS.join(' '));
+  url.searchParams.set('scope', escopos.join(' '));
   url.searchParams.set('access_type', 'offline');
   url.searchParams.set('prompt', 'consent');
   url.searchParams.set('state', state);
@@ -67,6 +71,26 @@ export async function tokenGoogle() {
     body: JSON.stringify({ access_token: novo.access_token, expira_em: new Date(Date.now() + novo.expires_in * 1000).toISOString(), atualizada_em: new Date().toISOString() }),
   });
   return novo.access_token;
+}
+
+/** Token da conta Google do editor (renova quando falta menos de 5 minutos). */
+export async function tokenDoEditor(userId) {
+  const linhas = await sb(`/rest/v1/drive_editor?user_id=eq.${encodeURIComponent(userId)}&select=*`);
+  const c = linhas?.[0];
+  if (!c) throw new GoogleEditorDesconectado();
+  if (c.access_token && c.expira_em && Date.parse(c.expira_em) - Date.now() > 5 * 60_000) return { token: c.access_token, expira_em: c.expira_em, email: c.email };
+  let novo;
+  try {
+    novo = await pedirToken({ refresh_token: c.refresh_token, grant_type: 'refresh_token' });
+  } catch {
+    throw new GoogleEditorDesconectado();
+  }
+  const expira_em = new Date(Date.now() + novo.expires_in * 1000).toISOString();
+  await sb(`/rest/v1/drive_editor?user_id=eq.${encodeURIComponent(userId)}`, {
+    method: 'PATCH',
+    body: JSON.stringify({ access_token: novo.access_token, expira_em, atualizada_em: new Date().toISOString() }),
+  });
+  return { token: novo.access_token, expira_em, email: c.email };
 }
 
 /** Chamada à API do Drive (GET por padrão). Lança DriveDesconectado em 401. */

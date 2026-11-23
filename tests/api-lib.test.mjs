@@ -40,3 +40,14 @@ test('ehPastaSaida do servidor segue a mesma regra da página', () => {
   for (const nome of ['06 Saída', '06 Saida', '06 SAÍDA', '6 saida']) assert.equal(ehPastaSaida(nome), true, nome);
   for (const nome of ['05 Projetos', 'Saída antiga', '06 Saídas velhas']) assert.equal(ehPastaSaida(nome), false, nome);
 });
+
+const { cookieEstado, lerCookieEstado } = await import('../api/_lib/assinatura.mjs');
+
+test('cookie de estado devolve o usuário só com o state certo e dentro do prazo', () => {
+  const c = cookieEstado('estadoXYZ', 'user-123', 1_000_000);
+  assert.equal(lerCookieEstado(c, 'estadoXYZ', 1_000_000 + 60_000), 'user-123');
+  assert.equal(lerCookieEstado(c, 'outroState', 1_000_000), null);
+  assert.equal(lerCookieEstado(c, 'estadoXYZ', 1_000_000 + 601_000), null);
+  assert.equal(lerCookieEstado(c.replace('user-123', 'user-999'), 'estadoXYZ', 1_000_000), null);
+  assert.equal(lerCookieEstado('', 'estadoXYZ', 1_000_000), null);
+});
