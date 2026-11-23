@@ -4,8 +4,9 @@ import { readFile, stat } from 'node:fs/promises';
 import { existsSync, readFileSync } from 'node:fs';
 import { extname, join, normalize } from 'node:path';
 import { Readable } from 'node:stream';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
-const raiz = new URL('.', import.meta.url).pathname;
+const raiz = fileURLToPath(new URL('.', import.meta.url));
 if (existsSync(join(raiz, '.env.local'))) {
   for (const linha of readFileSync(join(raiz, '.env.local'), 'utf8').split('\n')) {
     const m = /^\s*([A-Z0-9_]+)\s*=\s*(.*)\s*$/.exec(linha);
@@ -18,7 +19,7 @@ const TIPOS = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '
 async function funcao(caminho) {
   for (const arquivo of [`${caminho}.mjs`, join(caminho, 'index.mjs')]) {
     const completo = join(raiz, arquivo);
-    if (existsSync(completo)) return import(completo + `?v=${(await stat(completo)).mtimeMs}`);
+    if (existsSync(completo)) return import(pathToFileURL(completo).href + `?v=${(await stat(completo)).mtimeMs}`);
   }
   return null;
 }
@@ -42,7 +43,8 @@ createServer(async (req, res) => {
     if (arquivo.endsWith('/')) arquivo += 'index.html';
     const completo = join(raiz, arquivo);
     if (!completo.startsWith(raiz)) { res.writeHead(403).end(); return; }
-    res.writeHead(200, { 'Content-Type': TIPOS[extname(completo)] || 'application/octet-stream' }).end(await readFile(completo));
+    const conteudo = await readFile(completo);
+    res.writeHead(200, { 'Content-Type': TIPOS[extname(completo)] || 'application/octet-stream' }).end(conteudo);
   } catch (e) {
     if (e.code === 'ENOENT') { res.writeHead(404).end('não encontrado'); return; }
     console.error(e);
