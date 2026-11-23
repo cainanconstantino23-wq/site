@@ -552,6 +552,7 @@ async function emParalelo(itens, fn, n = SIMULTANEOS) {
 function putEnvio(e, inicio, perguntar = false) {
   return new Promise(resolve => {
     const xhr = new XMLHttpRequest();
+    e.xhr = xhr;
     xhr.open('PUT', e.url);
     xhr.setRequestHeader('Content-Range', perguntar ? `bytes */${e.total}` : `bytes ${inicio}-${e.total - 1}/${e.total}`);
     if (!perguntar) xhr.upload.onprogress = ev => { e.enviado = inicio + ev.loaded; renderEnvios(); e.aoProgredir?.(); };
@@ -568,10 +569,11 @@ const AMOSTRAS = new Map(); // chave → amostras de progresso (velocidade)
 let painelMin = false, quadroTransf = 0;
 function linhaSubida() {
   const s = SUBIDA;
-  if (!s?.plano || !['subindo', 'feito', 'erro'].includes(s.fase)) return null;
+  if (!s?.plano || !['subindo', 'feito', 'erro', 'parado'].includes(s.fase)) return null;
   const atual = [...s.atuais.values()][0];
-  return { chave: 'subida', tipo: 'up', nome: s.plano.casa, feito: s.enviado, total: s.plano.total, estado: s.fase === 'subindo' ? 'rodando' : s.fase, fim: s.fim,
-    atual: atual ? 'Enviando ' + atual.arquivo.name : '', detalhes: 'transf-subir', repetir: s.fase === 'erro' ? 'subir-repetir' : '' };
+  return { chave: 'subida', tipo: 'up', nome: s.plano.casa, feito: s.enviado, total: s.plano.total, estado: s.fase === 'subindo' ? 'rodando' : s.fase === 'parado' ? 'erro' : s.fase, fim: s.fim,
+    atual: s.fase === 'parado' ? 'Parada por você' : atual ? 'Enviando ' + atual.arquivo.name : '', detalhes: 'transf-subir',
+    repetir: ['erro', 'parado'].includes(s.fase) ? 'subir-repetir' : '', rotuloRepetir: s.fase === 'parado' ? 'Continuar' : '', parar: s.fase === 'subindo' && !s.parar ? 'subir-parar' : '' };
 }
 function linhaBaixa() {
   const b = BAIXA;
@@ -617,7 +619,8 @@ function desenharTransf() {
           <div class="prog"><i style="width:${pct}%"></i></div>
           <div class="lin">${esc(texto)}</div>
           ${l.atual ? `<div class="atual" title="${esc(l.atual)}">${esc(l.atual)}</div>` : ''}</div>
-        <div class="bts">${l.repetir ? `<button class="btn peq prim" type="button" data-act="${l.repetir}">Tentar de novo</button>` : ''}
+        <div class="bts">${l.parar ? `<button class="btn peq" type="button" data-act="${l.parar}">Parar</button>` : ''}
+          ${l.repetir ? `<button class="btn peq prim" type="button" data-act="${l.repetir}">${l.rotuloRepetir || 'Tentar de novo'}</button>` : ''}
           ${l.retomar ? `<button class="btn peq prim" type="button" data-retomar="${l.retomar}">Tentar de novo</button>` : ''}
           ${l.detalhes ? `<button class="btn peq" type="button" data-act="${l.detalhes}">Detalhes</button>` : ''}</div>
       </div>`;
@@ -637,7 +640,9 @@ async function continuarEnvio(e) {
       e.url = url;
     }
     let inicio = e.enviado, tentativas = 0, perguntar = e.enviado > 0;
+    const seParou = () => { if (e.cancelado) throw Object.assign(new Error('Parado.'), { parado: true }); };
     for (;;) {
+      seParou();
       if (perguntar) { // retomada manual: o Google pode já ter mais bytes do que achamos
         perguntar = false;
         const q = await putEnvio(e, 0, true);
@@ -646,6 +651,7 @@ async function continuarEnvio(e) {
         if (q.status === 308) inicio = inicioDoRange(q.range);
       }
       let r = await putEnvio(e, inicio);
+      seParou();
       if (r.status === 200 || r.status === 201) { e.resultado = r.json || {}; e.enviado = e.total; break; }
       if (r.status === 404 || r.status === 410) { e.url = null; e.enviado = 0; throw new Error('O envio expirou; comece de novo.'); }
       if (r.status !== 0 && r.status !== 308 && r.status < 500) throw new Error(`O Google respondeu ${r.status}.`);
@@ -654,6 +660,7 @@ async function continuarEnvio(e) {
       while (!retomou) {
         if (++tentativas > 5) { e.enviado = inicio; throw new Error('A conexão caiu várias vezes. Tente de novo.'); }
         await espera(esperaTentativa(tentativas));
+        seParou();
         r = await putEnvio(e, 0, true);
         if (r.status === 200 || r.status === 201) { e.resultado = r.json || {}; e.enviado = e.total; break; }
         if (r.status === 404 || r.status === 410) { e.url = null; e.enviado = 0; throw new Error('O envio expirou; comece de novo.'); }
@@ -666,7 +673,7 @@ async function continuarEnvio(e) {
     if (ENVIOS.has(e.id)) { arquivar(linhaEnvio(e)); ENVIOS.delete(e.id); }
     renderEnvios();
   } catch (err) {
-    e.estado = 'erro'; e.erro = MSG[err.codigo] || err.message || 'Falhou'; renderEnvios();
+    e.estado = err.parado ? 'parado' : 'erro'; e.erro = err.parado ? 'Parado.' : MSG[err.codigo] || err.message || 'Falhou'; renderEnvios();
   }
   return e;
 }
@@ -815,7 +822,7 @@ function desenharBaixa() {
     ${b.fase === 'montando'
       ? `<p class="dica" style="margin:0">Lendo as pastas no Drive… ${n} arquivos · ${tamanhoLegivel(b.total)}</p>`
       : `<div class="prog" style="height:8px"><i style="width:${b.fase === 'feito' ? 100 : pct}%;${b.fase === 'feito' ? 'background:var(--e-aprovado)' : ''}"></i></div>
-         <p class="dica" style="margin:0">${b.feitos + b.pulados} de ${n} arquivos · ${tamanhoLegivel(b.baixado)} de ${tamanhoLegivel(b.total)} · ${pct}%${b.pulados ? ` · ${b.pulados} já estavam no computador` : ''}</p>`}
+         <p class="dica" style="margin:0">${b.feitos + b.pulados} de ${n} arquivos · ${textoProgresso(b.baixado, b.total, b.fase === 'baixando' ? velocidade(AMOSTRAS.get('baixa')) : 0)}${b.pulados ? ` · ${b.pulados} já estavam no computador` : ''}</p>`}
     ${atuais ? `<ul style="margin:0;padding-left:18px">${atuais}</ul>` : ''}
     ${b.fase === 'baixando' ? '<p class="dica" style="margin:0">Deixe esta aba aberta até terminar. Se a internet cair, ele continua de onde parou.</p>' : ''}
     ${b.nativos ? `<p class="dica" style="margin:0">${b.nativos} ${b.nativos === 1 ? 'arquivo do Google Docs/Planilhas não foi baixado' : 'arquivos do Google Docs/Planilhas não foram baixados'}.</p>` : ''}
@@ -876,6 +883,7 @@ document.addEventListener('click', async e => {
     case 'subir': return abrirSubir();
     case 'subir-comecar': return comecarSubida();
     case 'subir-repetir': return comecarSubida(true);
+    case 'subir-parar': return pararSubida();
     case 'transf-subir': document.getElementById('dlg-subir').showModal(); return renderSubir();
     case 'transf-baixar': document.getElementById('dlg-baixar').showModal(); return renderBaixa();
     case 'transf-min': painelMin = !painelMin; return renderEnvios();
@@ -946,6 +954,13 @@ document.addEventListener('change', async e => {
 
 // ------------------------------------------------------------ subir casa (pasta inteira do computador → Drive)
 let SUBIDA = null; // { plano, fase, feitos, pulados, falhas:[], enviado, atuais:Set, casaId, erro }
+/** Para a subida: corta os envios em andamento e não começa os próximos. "Continuar" pula o que já subiu. */
+function pararSubida() {
+  const s = SUBIDA; if (!s || s.fase !== 'subindo') return;
+  s.parar = true;
+  for (const e of s.atuais.values()) { e.cancelado = true; e.xhr?.abort(); }
+  renderSubir();
+}
 function abrirSubir() {
   if (SUBIDA && SUBIDA.fase === 'subindo') { document.getElementById('dlg-subir').showModal(); return renderSubir(); }
   arquivar(linhaSubida());
@@ -981,17 +996,19 @@ function renderSubir() {
     return;
   }
   const atuais = [...s.atuais.values()].map(e => `<li class="dica" style="margin:2px 0">${esc(e.arquivo.name)} · ${e.total ? Math.round(e.enviado / e.total * 100) : 0}%</li>`).join('');
-  c.innerHTML = `<h2>${s.fase === 'feito' ? 'Casa no Drive' : s.fase === 'erro' ? 'Subida parou' : 'Subindo a casa…'}</h2>${resumo}
+  c.innerHTML = `<h2>${s.fase === 'feito' ? 'Casa no Drive' : s.fase === 'erro' ? 'Subida parou' : s.fase === 'parado' ? 'Subida parada' : s.parar ? 'Parando…' : 'Subindo a casa…'}</h2>${resumo}
     <div class="prog" style="height:8px"><i style="width:${s.fase === 'feito' ? 100 : pct}%;${s.fase === 'feito' && !s.falhas.length ? 'background:var(--e-aprovado)' : ''}"></i></div>
-    <p class="dica" style="margin:0">${s.feitos + s.pulados} de ${p.arquivos.length} arquivos · ${tamanhoLegivel(s.enviado)} de ${tamanhoLegivel(p.total)} · ${pct}%${s.pulados ? ` · ${s.pulados} já estavam no Drive` : ''}</p>
+    <p class="dica" style="margin:0">${s.feitos + s.pulados} de ${p.arquivos.length} arquivos · ${textoProgresso(s.enviado, p.total, s.fase === 'subindo' ? velocidade(AMOSTRAS.get('subida')) : 0)}${s.pulados ? ` · ${s.pulados} já estavam no Drive` : ''}</p>
     ${atuais ? `<ul style="margin:0;padding-left:18px">${atuais}</ul>` : ''}
     ${s.erro ? `<p class="aviso-box erro" style="margin:0">${esc(s.erro)}</p>` : ''}
     ${s.falhas.length && s.fase !== 'subindo' ? `<p class="aviso-box erro" style="margin:0">${s.falhas.length} ${s.falhas.length === 1 ? 'arquivo não subiu' : 'arquivos não subiram'}: ${esc(s.falhas.slice(0, 3).map(f => f.nome).join(', '))}${s.falhas.length > 3 ? '…' : ''}</p>` : ''}
     ${s.fase === 'feito' && !s.falhas.length ? `<p class="aviso-box ok" style="margin:0">Pronto: a casa está no Drive.</p>` : ''}
     ${s.fase !== 'subindo' && s.casaId ? `<details class="subidos" ${p.arquivos.length <= 12 ? 'open' : ''}><summary>Arquivos (${p.arquivos.length})</summary><ul>${linhasSubida(p.arquivos).map(l =>
-      `<li><span class="nm" title="${esc(l.rotulo)}">${esc(l.rotulo)}</span><span class="dica">${esc(tamanhoLegivel(l.tamanho))} · ${{ subiu: 'subiu', pulado: 'já estava', falhou: 'não subiu' }[l.estado]}</span></li>`).join('')}</ul></details>` : ''}
+      `<li><span class="nm" title="${esc(l.rotulo)}">${esc(l.rotulo)}</span><span class="dica">${esc(tamanhoLegivel(l.tamanho))} · ${{ subiu: 'subiu', pulado: 'já estava', falhou: 'não subiu', pendente: 'não enviado' }[l.estado]}</span></li>`).join('')}</ul></details>` : ''}
     <div class="acoes" style="justify-content:flex-end">${fechar}
-      ${s.fase !== 'subindo' && (s.falhas.length || s.erro) ? `<button class="btn prim" type="button" data-act="subir-repetir">Tentar de novo</button>` : ''}
+      ${s.fase === 'subindo' && !s.parar ? `<button class="btn" type="button" data-act="subir-parar">${ico('x')} Parar</button>` : ''}
+      ${s.fase === 'parado' ? `<button class="btn prim" type="button" data-act="subir-repetir">Continuar</button>`
+        : s.fase !== 'subindo' && (s.falhas.length || s.erro) ? `<button class="btn prim" type="button" data-act="subir-repetir">Tentar de novo</button>` : ''}
       ${s.fase === 'feito' && s.casaId ? `<a class="btn" href="${esc(noDrive(`https://drive.google.com/drive/folders/${s.casaId}`))}" target="_blank" rel="noopener">${ico('abrir')} Ver no Drive</a>
         <button class="btn prim" type="button" data-act="subir-tarefa">${ico('mais')} Criar tarefa para esta casa</button>` : ''}</div>`;
 }
@@ -999,7 +1016,7 @@ const avisoSaida = ev => { ev.preventDefault(); ev.returnValue = ''; };
 async function comecarSubida(repetir = false) {
   const s = SUBIDA; if (!s) return;
   const p = s.plano;
-  Object.assign(s, { fase: 'subindo', feitos: 0, pulados: 0, falhas: [], enviado: 0, erro: '' });
+  Object.assign(s, { fase: 'subindo', feitos: 0, pulados: 0, falhas: [], enviado: 0, erro: '', parar: false });
   s.atuais.clear(); renderSubir();
   addEventListener('beforeunload', avisoSaida);
   try {
@@ -1020,16 +1037,18 @@ async function comecarSubida(repetir = false) {
     }
     renderSubir();
     await emParalelo(fila, async a => {
+        if (s.parar) return; // parado por você: o resto fica para "Continuar"
         const e = { id: ++envioSeq, arquivo: a.arquivo, destino: { pasta: ids[a.pasta] }, total: a.tamanho, enviado: 0, estado: 'enviando', url: null };
         let antes = 0;
         e.aoProgredir = () => { s.enviado += e.enviado - antes; antes = e.enviado; renderSubir(); };
         s.atuais.set(e.id, e); renderSubir();
         await continuarEnvio(e);
         s.atuais.delete(e.id);
+        if (e.cancelado) { s.enviado -= antes; renderSubir(); return; }
         if (e.estado === 'feito') { a.estado = 'subiu'; s.feitos++; s.enviado += e.total - antes; } else { a.estado = 'falhou'; s.falhas.push(a); s.enviado -= antes; }
         renderSubir();
     });
-    s.fase = s.falhas.length ? 'erro' : 'feito';
+    s.fase = s.parar ? 'parado' : s.falhas.length ? 'erro' : 'feito';
   } catch (err) {
     s.fase = 'erro';
     s.erro = MSG[err.codigo] || 'Não foi possível criar as pastas no Drive. Tente de novo.';

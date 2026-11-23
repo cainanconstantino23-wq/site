@@ -144,17 +144,16 @@ function ehNativoGoogle(mime) {
   return /^application\/vnd\.google-apps\./.test(mime || '') && mime !== 'application/vnd.google-apps.folder';
 }
 
-/** Mesmo critério de excluir_versao no Supabase: editor só a última antes da revisão; dono qualquer uma. */
+/** Mesmo critério de excluir_versao no Supabase: dono e editor excluem qualquer versão, a qualquer momento. */
 function podeExcluirVersao(papel, status, numero, ultima) {
-  if (papel === 'dono') return true;
-  return papel === 'editor' && status === 'para_revisar' && numero === ultima;
+  return papel === 'dono' || papel === 'editor';
 }
 
 /** Lista do que foi para o Drive em "Subir casa": caminho dentro da casa, em ordem, com o estado
  *  ('subiu' | 'pulado' = já estava lá | 'falhou'). */
 function linhasSubida(arquivos) {
   return (arquivos || []).map(function (a) {
-    return { rotulo: (a.pasta ? a.pasta + '/' : '') + a.nome, tamanho: a.tamanho, estado: a.estado || 'subiu' };
+    return { rotulo: (a.pasta ? a.pasta + '/' : '') + a.nome, tamanho: a.tamanho, estado: a.estado || 'pendente' };
   }).sort(function (x, y) { return x.rotulo.localeCompare(y.rotulo, 'pt', { numeric: true }); });
 }
 

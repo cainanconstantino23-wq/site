@@ -152,11 +152,11 @@ test('ehNativoGoogle', () => {
   assert.equal(ehNativoGoogle('video/mp4'), false);
 });
 
-test('podeExcluirVersao: editor só a última antes da revisão; dono qualquer uma', () => {
+test('podeExcluirVersao: editor e dono excluem qualquer versão, a qualquer momento', () => {
   assert.equal(podeExcluirVersao('editor', 'para_revisar', 2, 2), true);
-  assert.equal(podeExcluirVersao('editor', 'para_revisar', 1, 2), false);
-  assert.equal(podeExcluirVersao('editor', 'ajustes', 2, 2), false);
-  assert.equal(podeExcluirVersao('editor', 'aprovado', 2, 2), false);
+  assert.equal(podeExcluirVersao('editor', 'para_revisar', 1, 2), true);
+  assert.equal(podeExcluirVersao('editor', 'ajustes', 2, 2), true);
+  assert.equal(podeExcluirVersao('editor', 'aprovado', 2, 2), true);
   assert.equal(podeExcluirVersao('dono', 'aprovado', 1, 2), true);
   assert.equal(podeExcluirVersao('dono', 'para_revisar', 2, 2), true);
   assert.equal(podeExcluirVersao(null, 'para_revisar', 2, 2), false);
@@ -170,7 +170,7 @@ test('linhasSubida: caminho dentro da casa, ordenado, com o estado de cada arqui
     { pasta: '01 Brutas/Drone', nome: 'DJI_0001.MP4', tamanho: 20 },
   ]);
   assert.deepEqual(Array.from(linhas, l => l.rotulo), ['01 Brutas/Drone/DJI_0001.MP4', '01 Brutas/Drone/DJI_0002.MP4', '02 Audio/trilha.wav', 'capa.jpg']);
-  assert.deepEqual(Array.from(linhas, l => l.estado), ['subiu', 'falhou', 'subiu', 'pulado']);
+  assert.deepEqual(Array.from(linhas, l => l.estado), ['pendente', 'falhou', 'subiu', 'pulado']); // sem estado = não foi enviado (ex.: parou antes)
   assert.equal(linhas[0].tamanho, 20);
 });
 
