@@ -50,3 +50,14 @@ export async function apagar(chave) {
   const r = await fetch(assinarUrl({ metodo: 'DELETE', chave, segundos: 300 }), { method: 'DELETE' });
   return r.ok || r.status === 404;
 }
+
+/** Chave de um vídeo de aprovação: edicao/<tarefa>/<quando>-<aleatório>.<ext> (o nome original fica só no banco). */
+export function chaveNova(tarefaId, nomeArquivo, agora = Date.now(), aleatorio = Math.random().toString(36).slice(2, 10)) {
+  const m = /\.([A-Za-z0-9]{1,5})$/.exec(String(nomeArquivo || ''));
+  return `edicao/${Number(tarefaId)}/${agora}-${aleatorio}.${m ? m[1].toLowerCase() : 'mp4'}`;
+}
+
+/** A chave pertence a esta tarefa (e não é forjada)? */
+export function chaveDaTarefa(chave, tarefaId) {
+  return typeof chave === 'string' && new RegExp(`^edicao/${Number(tarefaId)}/[0-9]+-[a-z0-9]+\\.[a-z0-9]{1,5}$`).test(chave);
+}

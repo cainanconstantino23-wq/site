@@ -73,3 +73,15 @@ test('presign reproduz o exemplo oficial da AWS', () => {
   assert.match(url, /X-Amz-Signature=aeeed9bbccd4d02ee5c0109b86d86835f995330da4c265957d157751f604d404$/);
   assert.match(url, /^https:\/\/examplebucket\.s3\.amazonaws\.com\/test\.txt\?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20130524%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20130524T000000Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=/);
 });
+
+test('chaveNova usa só a extensão saneada', () => {
+  assert.equal(r2.chaveNova(12, 'Casa Laura V2 final.MOV', 1000, 'abc123'), 'edicao/12/1000-abc123.mov');
+  assert.equal(r2.chaveNova(12, 'sem extensao', 1000, 'abc123'), 'edicao/12/1000-abc123.mp4');
+});
+
+test('chaveDaTarefa recusa outra tarefa e caminhos forjados', () => {
+  assert.equal(r2.chaveDaTarefa('edicao/12/1000-abc123.mov', 12), true);
+  assert.equal(r2.chaveDaTarefa('edicao/13/1000-abc123.mov', 12), false);
+  assert.equal(r2.chaveDaTarefa('edicao/12/../13/x.mov', 12), false);
+  assert.equal(r2.chaveDaTarefa(undefined, 12), false);
+});
