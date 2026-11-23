@@ -187,3 +187,35 @@ function feitoNota(notas, passo, hoje) {
   var linha = ddmm(hoje) + ': feito — ' + passo;
   return notas ? notas + '\n' + linha : linha;
 }
+
+// ------------------------------------------------------------ Prospectar (busca de empresas)
+/** 'https://www.Exemplo.com.br/pt/' → 'exemplo.com.br'. */
+function dominio(site) {
+  return String(site || '').trim().toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').split(/[/?#]/)[0];
+}
+function nomeChave_(s) {
+  return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/\b(pousada|hotel|boutique|villas?|casa|restaurante|imobiliaria|imoveis|ltda|me|trancoso)\b/g, '')
+    .replace(/[^a-z0-9]/g, '');
+}
+/** Lead já cadastrado que parece ser a mesma empresa (mesmo site, Instagram ou nome), ou null. */
+function duplicadoDe(achado, leads) {
+  var d = dominio(achado.site), ig = String(achado.ig || '').replace(/^@/, '').toLowerCase(), n = nomeChave_(achado.empresa);
+  return (leads || []).filter(function (l) {
+    if (d && dominio(l.site) === d) return true;
+    if (ig && String(l.ig || '').replace(/^@/, '').toLowerCase() === ig) return true;
+    return n.length >= 4 && nomeChave_(l.empresa) === n;
+  })[0] || null;
+}
+/** Linha da tabela leads a partir de um achado revisado. */
+function achadoParaLead(a, id, segmento) {
+  var obs = a.porque ? 'Busca: ' + a.porque : '';
+  if (a.ig_video === 'sim') obs += (obs ? ' ' : '') + 'Posta vídeos no Instagram.';
+  if (a.ig_video === 'não') obs += (obs ? ' ' : '') + 'Quase sem vídeo no Instagram.';
+  return {
+    id: id, custom: true, nota: a.nota, area: a.area, segmento: segmento || '', empresa: a.empresa, cidade: a.cidade || '',
+    site: a.site || '', email: a.email || '', ig: String(a.ig || '').replace(/^@/, ''), wa: String(a.wa || '').replace(/\D/g, ''),
+    video: a.video || '?', frase: a.frase || '', sobre: a.sobre || '', obs: obs,
+    telefone: a.telefone || '', endereco: a.endereco || ''
+  };
+}

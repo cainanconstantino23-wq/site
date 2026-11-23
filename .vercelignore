@@ -14,3 +14,9 @@ img/varanda-*
 
 # Prospecção: dados internos, nunca publicar
 prospeccao-interno/
+
+# Configuração do Claude Code (skills do projeto)
+.claude/
+
+# Código das Edge Functions (vai para o Supabase, não para o site)
+supabase/

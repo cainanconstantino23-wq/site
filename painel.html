@@ -452,6 +452,117 @@ kbd{font:600 11px/1 var(--body);padding:3px 6px;border-radius:6px;background:col
   .it-acts{padding:0 0 6px 32px}
   .tools .count{margin-left:0}
 }
+/* Prospectar */
+.pro{background:var(--surface);border-radius:22px;padding:22px;display:flex;flex-direction:column;gap:12px}
+.pro-q{display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;font-family:var(--display);font-size:clamp(20px,2.2vw,26px);font-weight:600;letter-spacing:-.03em}
+.pro-q .field{width:auto;font:inherit;letter-spacing:inherit;color:var(--accent);background:var(--bg);border:0;border-radius:999px;padding:6px 16px;line-height:1.25;cursor:pointer}
+.pro-q select.field{appearance:none;-webkit-appearance:none;padding-right:38px;background:var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23123C8C' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 14px center/16px}
+.pro-q #b-cid{flex:1 1 180px;min-width:0;cursor:text}
+.pro-q #b-area{min-width:0;max-width:100%}
+.pro-w{color:var(--muted);font-weight:500}
+.pro-r{display:flex;flex-wrap:wrap;gap:10px}
+.pro-r .field{flex:1 1 300px;min-width:0;border-radius:999px;padding:11px 18px;background:var(--bg);border-color:transparent}
+.pro-r .btn{padding:11px 20px}
+.cmd{margin:0;font-size:13px;color:var(--muted);flex:1 1 260px}
+.cmd code{font:600 13px ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--surface);color:var(--ink);padding:3px 9px;border-radius:8px;margin-left:2px}
+.ped{display:flex;align-items:center;gap:14px;padding:12px 12px 12px 18px;background:var(--surface);border-radius:16px}
+.ped b{display:block;font-weight:600}
+.ped span{font-size:13px;color:var(--muted)}
+.ped .btn{margin-left:auto;flex:none}
+.ped-st{flex:none;width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 0 color-mix(in srgb,var(--accent) 40%,transparent);animation:pulso 2s var(--ease) infinite}
+@keyframes pulso{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--accent) 45%,transparent)}70%,100%{box-shadow:0 0 0 9px transparent}}
+.ach-grps{display:flex;flex-direction:column;gap:26px}
+.ach-gh{margin:0 0 10px;font-size:14px;font-weight:600;color:var(--ink);display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
+.ach-gh span{font-weight:500;color:var(--muted);font-size:13px}
+.ach{background:var(--surface);border-radius:20px;padding:20px 22px;display:flex;flex-direction:column;gap:12px;transition:opacity .25s,transform .3s var(--ease)}
+.ach.out{opacity:0;transform:translateX(16px)}
+.ach-top{display:flex;align-items:flex-start;gap:16px}
+.ach-id{min-width:0;flex:1}
+.ach-top h3{margin:0;font-family:var(--display);font-size:21px;font-weight:600;letter-spacing:-.03em;line-height:1.15;overflow-wrap:anywhere}
+.ach-meta{margin:6px 0 0;display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;font-size:13px;color:var(--muted)}
+.ach-meta .dot{width:8px;height:8px}
+.ach-canal{margin-left:4px;font-weight:600;font-size:12px;padding:2px 9px;border-radius:999px;background:var(--bg);color:var(--muted)}
+.ach-nota{flex:none;display:flex;align-items:baseline;gap:1px;padding:8px 14px;border-radius:16px;background:var(--bg);color:var(--muted)}
+.ach-nota b{font-family:var(--display);font-size:30px;line-height:1;font-weight:600;letter-spacing:-.04em;font-variant-numeric:tabular-nums;color:var(--ink)}
+.ach-nota small{font-size:13px;font-weight:500}
+.ach-nota.alta{background:color-mix(in srgb,var(--ok) 13%,var(--surface))}
+.ach-nota.alta b{color:var(--ok)}
+.ach-porque{margin:0;font-size:15px;line-height:1.5;max-width:70ch}
+.ach-ct{display:flex;flex-wrap:wrap;gap:6px}
+.ach-ct a,.ach-ct span{font-size:12.5px;padding:4px 11px;border-radius:999px;background:var(--bg);color:var(--muted);text-decoration:none;overflow-wrap:anywhere;transition:color .15s,background .15s}
+.ach-ct a:hover{color:var(--accent);background:color-mix(in srgb,var(--accent) 9%,var(--bg))}
+.ach-ct .sem-video{background:color-mix(in srgb,var(--ok) 13%,var(--surface));color:var(--ok);font-weight:600}
+.ach-frase{display:flex;flex-direction:column;gap:6px;background:var(--bg);border-radius:14px;padding:12px 14px 8px}
+.ach-frase .label{font-size:12px}
+.ach-frase textarea{border:0;background:transparent;padding:0;min-height:48px;resize:vertical;font-size:15px;line-height:1.5;border-radius:0}
+.ach-frase textarea:focus{outline:0}
+.ach-frase:focus-within{outline:2px solid var(--accent);outline-offset:0}
+.ach-acts{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:8px}
+.ach-end{margin:-4px 0 0;font-size:13px;color:var(--muted)}
+.ach-end a{color:inherit;text-decoration:none}
+.ach-end a:hover{color:var(--accent);text-decoration:underline}
+.ach-ct .falta{opacity:.7;font-style:italic}
+.ach-ct .lendo,.ach-nota.lendo small{animation:piscar 1.6s ease-in-out infinite}
+.ach-nota.lendo{opacity:.65}
+.ach-frase textarea:disabled{opacity:.6;cursor:progress}
+.ped.erro{background:color-mix(in srgb,var(--hot) 9%,var(--surface))}
+.ped.erro b{color:var(--hot)}
+@keyframes piscar{50%{opacity:.45}}
+@media (prefers-reduced-motion:reduce){.ach-ct .lendo,.ach-nota.lendo small{animation:none}}
+.ach-dup{margin:0 auto 0 0;font-size:13px;color:var(--hot)}
+.ach-dup .lnk{color:var(--hot)}
+.feitas{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;background:var(--surface);border-radius:18px;padding:4px 18px}
+.feitas li{display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr) auto;gap:4px 14px;align-items:baseline;padding:12px 0;font-size:14px}
+.feitas li + li{border-top:1px solid color-mix(in srgb,var(--line) 70%,transparent)}
+.feitas span{color:var(--muted)}
+.feitas time{color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums}
+@media (max-width:720px){
+  .pro{padding:18px}
+  .pro-q{font-size:19px}
+  .pro-q #b-area{flex:1 1 100%;order:3}
+  .pro-q .pro-w:nth-of-type(2){order:4}
+  .pro-q #b-cid{order:5}
+  .ach{padding:16px}
+  .ach-top h3{font-size:18px}
+  .ach-nota b{font-size:24px}
+  .feitas li{grid-template-columns:minmax(0,1fr) auto}
+  .feitas span{grid-column:1/-1;grid-row:2}
+}
+
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .pro-q select.field{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23E6D7BA' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")} }
+:root[data-theme="dark"] .pro-q select.field{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23E6D7BA' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")}
+
+/* Refinamento visual (22/11): títulos, barra lateral, funil, menu do celular */
+h1{letter-spacing:-.04em;line-height:1}
+.head h1{font-size:clamp(30px,3.4vw,40px)}
+.rec-h h1{letter-spacing:-.04em}
+.sub{font-size:15px;line-height:1.5;margin-top:8px}
+.grp-h h2{font-size:18px;letter-spacing:-.025em}
+.side .foot{padding:0;gap:2px}
+.foot-b{display:flex;align-items:center;gap:11px;width:100%;border:0;background:transparent;padding:8px 10px;border-radius:12px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;text-align:left;transition:background .2s,color .2s}
+.foot-b:hover{color:var(--ink);background:color-mix(in srgb,var(--ink) 6%,transparent)}
+.foot-b .ico{width:17px;height:17px}
+.card{gap:5px}
+.card b{line-height:1.25;letter-spacing:-.01em}
+.card-area{display:flex!important;align-items:center;gap:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-area .dot{margin:0!important;flex:none}
+.card-area span:last-child{min-width:0;overflow:hidden;text-overflow:ellipsis}
+.ach-grps{margin-top:6px}
+.card-data{font-variant-numeric:tabular-nums}
+.col h3{letter-spacing:-.01em}
+@media (max-width:860px){
+  .nav button{flex:1 1 0;min-width:0}
+  .nav button span:not(.badge){max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .head h1{font-size:30px}
+}
+
+/* Gradiente animado (vendor/gradiente-animado.js): fundo do login e abertura da tela Hoje */
+.gate{position:relative;isolation:isolate;background:#123C8C}
+.gate-card{position:relative}
+.hero{position:relative;isolation:isolate;overflow:hidden;border-radius:24px;padding:clamp(24px,4vw,40px);min-height:clamp(150px,18vw,200px);align-items:flex-end;background:#123C8C}
+.hero h1{color:#F3EDE2}
+.hero .sub{color:color-mix(in srgb,#F3EDE2 86%,transparent)}
+.hero-bg{position:absolute;inset:0;z-index:-1;border-radius:inherit}
 </style>
 </head>
 <body>
@@ -474,8 +585,8 @@ kbd{font:600 11px/1 var(--body);padding:3px 6px;border-radius:6px;background:col
     <div class="brand"><div class="mark">D</div><div><b>Daime</b><span>Prospecção</span></div></div>
     <nav class="nav" id="nav" aria-label="Seções"></nav>
     <div class="foot">
-      <button class="theme" id="theme" type="button">Tema: automático</button>
-      <button class="theme" id="sair" type="button">Sair</button>
+      <button class="foot-b" id="theme" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7.5"/><path d="M12 4.5v15a7.5 7.5 0 0 0 0-15z" fill="currentColor" stroke="none"/></svg><span>Tema: automático</span></button>
+      <button class="foot-b" id="sair" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 5h4.5v14H14M10 8l-4 4 4 4M6 12h9"/></svg><span>Sair</span></button>
     </div>
   </aside>
   <main class="main" id="main"><div class="loading"><div class="spinner"></div></div></main>
@@ -496,6 +607,7 @@ kbd{font:600 11px/1 var(--body);padding:3px 6px;border-radius:6px;background:col
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="painel-logica.js"></script>
+<script src="vendor/gradiente-animado.js"></script>
 <script>
 // ===== NÚCLEO DE TEXTOS =====
 // Nenhum texto fala em prazo de gravação, pacote ou valor: o pedido é só visitar o site.
@@ -769,7 +881,7 @@ function outraVersao_(lead, etapa, canal, atual) {
 // ------------------------------------------------------------ conexão
 // Estes dois valores são públicos por natureza. Quem protege os dados é o login + as regras do banco.
 const SB = supabase.createClient('https://prrqshhnhvehvyafitax.supabase.co', 'sb_publishable_25ymkT18mK9bmAnEo-t5gw_mzYqdUiT');
-let LEADS = [], FILA = [], MSGS = [];
+let LEADS = [], FILA = [], MSGS = [], BUSCAS = [], ACHADOS = [];
 const drafts = {};   // textos editados na fila, ainda não salvos
 
 const AREAS = {
@@ -825,12 +937,16 @@ async function loadAll(){
   // Mensagens recebidas dos clientes (o robô copia do Gmail). Se a tabela ainda não existir, segue sem elas.
   const c = await SB.from('mensagens').select('*').order('data');
   MSGS = c.error ? [] : c.data;
+  // Prospectar: pedidos de busca e empresas encontradas pelo Claude.
+  const [d, e] = await Promise.all([ SB.from('buscas').select('*').order('criado', { ascending:false }).limit(40), SB.from('achados').select('*').eq('situacao', 'revisar').order('nota', { ascending:false }).order('empresa') ]);
+  BUSCAS = d.error ? [] : d.data; ACHADOS = e.error ? [] : e.data;
 }
 
 // ------------------------------------------------------------ navegação
 const VIEWS = [
   { id:'hoje', label:'Hoje', icon:'hoje' },
   { id:'leads', label:'Leads', icon:'leads' },
+  { id:'prospectar', label:'Prospectar', icon:'prospectar' },
   { id:'funil', label:'Funil', icon:'funil' },
   { id:'resultados', label:'Resultados', icon:'resultados' },
   { id:'ajustes', label:'Ajustes', icon:'ajustes' }
@@ -842,6 +958,7 @@ const ICONS = {
   resultados:'<path d="M4 20V11M10 20V5M16 20v-6M21 20H3"/>',
   ajustes:'<path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/>',
   busca:'<circle cx="11" cy="11" r="6.2"/><path d="m20 20-4.6-4.6"/>',
+  prospectar:'<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3"/>',
   voltar:'<path d="M15 5l-7 7 7 7"/>',
   sair:'<path d="M14 5h4.5v14H14M10 8l-4 4 4 4M6 12h9"/>',
   fora:'<path d="M9 5H5v14h14v-4M13 5h6v6M19 5l-8 8"/>',
@@ -862,7 +979,7 @@ function go(v, opts){
 function renderNav(){
   const n = itensAgora(LEADS, FILA, hojeStr()).total, ativo = view === 'lead' ? prevView : view;
   document.getElementById('nav').innerHTML = VIEWS.map(v =>
-    `<button type="button" data-go="${v.id}" ${v.id === ativo ? 'aria-current="page"' : ''}>${ico(v.icon)}<span>${v.label}</span>${v.id === 'hoje' && n ? `<span class="badge">${n}</span>` : ''}</button>`).join('')
+    `<button type="button" data-go="${v.id}" ${v.id === ativo ? 'aria-current="page"' : ''}>${ico(v.icon)}<span>${v.label}</span>${v.id === 'hoje' && n ? `<span class="badge">${n}</span>` : v.id === 'prospectar' && ACHADOS.length ? `<span class="badge">${ACHADOS.length}</span>` : ''}</button>`).join('')
     + `<button type="button" class="nav-busca" data-act="busca">${ico('busca')}<span>Buscar</span><kbd>${/Mac|iPhone|iPad/.test(navigator.platform) ? '⌘' : 'Ctrl'} K</kbd></button>`;
 }
 
@@ -941,7 +1058,7 @@ function vHoje(){
     if (!env.length) corpo = '<div class="vazio"><h2>Nada enviado hoje ainda.</h2></div>';
   }
   return `<div class="view">
-    <header class="head"><div><h1>${oi}, Cainan.</h1><p class="sub">${resumo}</p></div></header>
+    <header class="head hero"><div data-hero></div><div><h1>${oi}, Cainan.</h1><p class="sub">${resumo}</p></div></header>
     <div class="tabs" role="tablist">${tabs.map(([k, t, n]) => `<button type="button" role="tab" data-htab="${k}" aria-selected="${hojeTab === k}">${t}${n ? ` <span>${n}</span>` : ''}</button>`).join('')}</div>
     <div class="grps">${corpo}</div></div>`;
 }
@@ -1088,6 +1205,143 @@ function vLead(){
     </div></div>`;
 }
 
+// ------------------------------------------------------------ Prospectar
+const COMANDO_BUSCA = 'buscar leads';
+const NOTA_BOA = 7;
+function achHtml(a){
+  const dup = duplicadoDe(a, LEADS), site = dominio(a.site);
+  const lendo = analisandoAinda(a);
+  const ig = String(a.ig || '').replace(/^@/, '');
+  const sinais = [
+    a.video === 'não' ? '<span class="sem-video">Sem vídeo no site</span>' : a.video === 'sim' ? '<span>Já tem vídeo no site</span>' : '',
+    a.ig_video === 'não' ? '<span class="sem-video">Quase sem vídeo no Instagram</span>' : a.ig_video === 'sim' ? '<span>Posta vídeos no Instagram</span>' : (lendo && ig ? '<span class="lendo">Vendo o Instagram…</span>' : ''),
+    a.google_nota ? `<span title="Nota no Google">★ ${String(a.google_nota).replace('.', ',')} no Google${a.google_avaliacoes ? ` (${a.google_avaliacoes})` : ''}</span>` : ''
+  ].filter(Boolean).join('');
+  const ct = [
+    site ? `<a href="${esc(a.site)}" target="_blank" rel="noopener">${esc(site)}</a>` : '<span class="falta">Sem site próprio</span>',
+    ig ? `<a href="https://www.instagram.com/${esc(encodeURIComponent(ig))}/" target="_blank" rel="noopener">@${esc(ig)}</a>` : (lendo ? '<span class="lendo">Procurando Instagram…</span>' : '<span class="falta">Sem Instagram</span>'),
+    a.email ? `<a href="mailto:${esc(a.email)}">${esc(a.email)}</a>` : '',
+    a.wa ? `<span>WhatsApp ${esc(waPretty(a.wa))}</span>` : '',
+    a.telefone && waDigits(a.telefone) !== waDigits(a.wa) ? `<a href="tel:${esc(String(a.telefone).replace(/[^\d+]/g, ''))}">${esc(a.telefone)}</a>` : ''
+  ].filter(Boolean).join('');
+  const end = a.endereco ? `<p class="ach-end">${a.maps ? `<a href="${esc(a.maps)}" target="_blank" rel="noopener">${esc(a.endereco)}</a>` : esc(a.endereco)}</p>` : '';
+  return `<article class="ach" data-ach="${a.id}" style="--c:var(--a-${a.area})">
+    <div class="ach-top">
+      <div class="ach-id"><h3>${esc(a.empresa)}</h3>
+        <p class="ach-meta"><span class="dot"></span>${esc((AREAS[a.area] || { nome: a.area }).nome)}${a.cidade ? ' · ' + esc(a.cidade) : ''}<span class="ach-canal">${CANAIS[a.canal] || 'E-mail'}</span></p></div>
+      <div class="ach-nota ${a.nota >= NOTA_BOA ? 'alta' : ''} ${lendo ? 'lendo' : ''}" title="${lendo ? 'Nota provisória: o Claude ainda está analisando' : 'Nota de 0 a 10'}"><b>${a.nota}</b><small>/10</small></div>
+    </div>
+    ${end}
+    <div class="ach-ct">${ct}</div>
+    ${sinais ? `<div class="ach-ct">${sinais}</div>` : ''}
+    ${a.porque ? `<p class="ach-porque">${esc(a.porque)}</p>` : ''}
+    <div class="ach-frase"><label class="label" for="af-${a.id}">Frase personalizada</label>
+      <textarea class="field" id="af-${a.id}" data-afrase="${a.id}" rows="2" ${lendo ? 'disabled placeholder="O Claude está escrevendo a frase…"' : ''}>${esc(a.frase)}</textarea></div>
+    <div class="ach-acts">
+      ${dup ? `<p class="ach-dup">Parece já estar nos leads: <button class="lnk" type="button" data-open="${esc(dup.id)}">${esc(dup.empresa)}</button></p>` : ''}
+      <button class="btn ghost small" type="button" data-act="ach-descartar" data-id="${a.id}">Descartar</button>
+      <button class="btn primary small" type="button" data-act="ach-salvar" data-id="${a.id}">${ico('ok')}Salvar no funil</button>
+    </div></article>`;
+}
+// Uma análise que passou de 6 minutos travou: mostra o que já tem.
+const LIMITE_ANALISE = 6 * 60 * 1000;
+const recente = t => Date.now() - new Date(t).getTime() < LIMITE_ANALISE;
+function analisandoAinda(a){ return !!a.analisando && recente(a.criado); }
+function buscaRodando(b){ return (b.situacao === 'buscando' || b.situacao === 'analisando') && recente(b.criado); }
+let BUSCANDO = false;
+function vProspectar(){
+  const pend = BUSCAS.filter(b => b.situacao === 'pendente'), rodando = BUSCAS.filter(buscaRodando), erros = BUSCAS.filter(b => b.situacao === 'erro' && recente(b.criado)), feitas = BUSCAS.filter(b => b.situacao === 'feita').slice(0, 6);
+  const bons = ACHADOS.filter(a => a.nota >= NOTA_BOA && !duplicadoDe(a, LEADS));
+  const nomeArea = k => (AREAS[k] || { nome: k }).nome;
+  const porBusca = {};
+  ACHADOS.forEach(a => (porBusca[a.busca_id || ''] = porBusca[a.busca_id || ''] || []).push(a));
+  const grupos = Object.keys(porBusca).map(id => { const b = BUSCAS.find(x => x.id === id);
+    return `<div class="ach-grp"><h3 class="ach-gh">${b ? `${esc(nomeArea(b.area))}${b.cidade ? ' em ' + esc(b.cidade) : ''}` : 'Outras'}${b && b.resumo ? `<span>${esc(b.resumo)}</span>` : ''}</h3>
+      <div class="grp-b">${porBusca[id].map(achHtml).join('')}</div></div>`; }).join('');
+  return `<div class="view">
+    <header class="head"><div><h1>Prospectar</h1><p class="sub">Clique em Buscar: as empresas aparecem em segundos, com telefone, endereço, site e contatos. Em seguida o Claude confere o Instagram, dá a nota e escreve a frase. Você escolhe quem entra no funil.</p></div></header>
+    <form class="pro" id="fbusca" aria-label="Nova busca">
+      <div class="pro-q">
+        <span class="pro-w">Encontrar</span>
+        <select class="field" id="b-qtd" aria-label="Quantas empresas">${[10,15,20,30].map(n => `<option ${n === 15 ? 'selected' : ''}>${n}</option>`).join('')}</select>
+        <select class="field" id="b-area" aria-label="Área">${Object.keys(AREAS).map(k => `<option value="${k}">${esc(AREAS[k].nome)}</option>`).join('')}</select>
+        <span class="pro-w">em</span>
+        <input class="field" id="b-cid" value="Trancoso" placeholder="Cidade ou região" aria-label="Cidade ou região" required>
+      </div>
+      <div class="pro-r">
+        <input class="field" id="b-obs" placeholder="Detalhes (opcional): só alto padrão, com site próprio, sem redes grandes…" aria-label="O que procurar">
+        <button class="btn primary" type="submit" ${BUSCANDO ? 'disabled aria-busy="true"' : ''}>${ico('prospectar')}${BUSCANDO ? 'Buscando…' : 'Buscar'}</button>
+      </div>
+    </form>
+    ${BUSCANDO || rodando.length || erros.length ? `<div class="grp-b">
+      ${BUSCANDO ? '<div class="ped"><span class="ped-st" aria-hidden="true"></span><div><b>Procurando no Google e abrindo os sites…</b><span>Leva uns 15 segundos.</span></div></div>' : ''}
+      ${rodando.map(b => `<div class="ped"><span class="ped-st" aria-hidden="true"></span><div><b>${esc(nomeArea(b.area))}${b.cidade ? ' em ' + esc(b.cidade) : ''}: o Claude está analisando</b><span>${b.resumo ? esc(b.resumo) + ' · ' : ''}conferindo Instagram, nota e frase. A tela atualiza sozinha.</span></div></div>`).join('')}
+      ${erros.map(b => `<div class="ped erro"><div><b>A busca em ${esc(b.cidade)} não funcionou</b><span>${esc(b.resumo || 'Erro desconhecido')}</span></div></div>`).join('')}
+    </div>` : ''}
+    ${pend.length ? `<section class="grp"><header class="grp-h"><h2>Pedidos antigos na fila<span class="n">${pend.length}</span></h2>
+        <p class="cmd">Feitos antes da busca automática. Rode <code>${COMANDO_BUSCA}</code> no Claude Code ou cancele.</p></header>
+      <div class="grp-b">${pend.map(b => `<div class="ped"><span class="ped-st" aria-hidden="true"></span><div><b>${b.quantidade} · ${esc(nomeArea(b.area))}${b.cidade ? ' em ' + esc(b.cidade) : ''}</b><span>Pedida ${fmtDate(b.criado)}${b.obs ? ' · ' + esc(b.obs) : ''}</span></div><button class="btn ghost small" type="button" data-act="busca-cancelar" data-id="${b.id}">Cancelar</button></div>`).join('')}</div></section>` : ''}
+    ${ACHADOS.length ? `<section class="grp"><header class="grp-h"><h2>Para revisar<span class="n">${ACHADOS.length}</span></h2><p>Confira a nota e a frase. Só entra no funil o que você salvar.</p>${bons.length > 1 ? `<button class="btn small" type="button" data-act="ach-bons">${ico('ok')}Salvar as ${bons.length} com nota ${NOTA_BOA}+</button>` : ''}</header>
+      <div class="ach-grps">${grupos}</div></section>` : (pend.length || BUSCANDO ? '' : '<div class="vazio"><h2>Nada para revisar.</h2><p>Escolha a área e a cidade e clique em Buscar.</p></div>')}
+    ${feitas.length ? `<section class="grp"><header class="grp-h"><h2>Buscas feitas</h2></header><ul class="feitas">${feitas.map(b => `<li><b>${esc(nomeArea(b.area))}${b.cidade ? ' em ' + esc(b.cidade) : ''}</b><span>${b.resumo ? esc(b.resumo) : ''}</span><time>${fmtDate(b.feita || b.criado)}</time></li>`).join('')}</ul></section>` : ''}
+  </div>`;
+}
+async function pedirBusca(){
+  if (BUSCANDO) return;
+  const v = id => document.getElementById(id).value.trim();
+  const rec = { area: v('b-area'), cidade: v('b-cid'), quantidade: parseInt(v('b-qtd'), 10) || 15, obs: v('b-obs') };
+  if (!rec.cidade) return;
+  BUSCANDO = true; render();
+  try {
+    const { data, error } = await SB.functions.invoke('prospectar', { body: rec });
+    let msg = data && data.erro;
+    if (error) { try { msg = (await error.context.json()).erro; } catch (e) {} msg = msg || 'Não foi possível buscar. Confira a internet e tente de novo.'; }
+    if (msg) toast(msg);
+    else toast(data.encontradas ? data.encontradas + ' empresas encontradas' + (data.repetidas ? ` (${data.repetidas} já estavam no painel)` : '') : 'Nenhuma empresa nova encontrada');
+  } finally {
+    BUSCANDO = false;
+    await loadAll(); renderNav(); if (view === 'prospectar') render();
+    acompanharBusca();
+  }
+}
+// Enquanto o Claude analisa, recarrega a cada 6 s (sem apagar o que você estiver digitando).
+let _acomp = null;
+function acompanharBusca(){
+  clearTimeout(_acomp);
+  if (!BUSCAS.some(buscaRodando) && !ACHADOS.some(analisandoAinda)) return;
+  _acomp = setTimeout(async () => {
+    const [d, e] = await Promise.all([ SB.from('buscas').select('*').order('criado', { ascending:false }).limit(40), SB.from('achados').select('*').eq('situacao', 'revisar').order('nota', { ascending:false }).order('empresa') ]);
+    if (!d.error) BUSCAS = d.data;
+    if (!e.error) ACHADOS = e.data;
+    const digitando = document.activeElement && document.activeElement.matches('#main input, #main textarea, #main select');
+    if (view === 'prospectar' && !digitando) render();
+    renderNav();
+    acompanharBusca();
+  }, 6000);
+}
+async function salvarAchado(a){
+  const id = 'b' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+  await ok(SB.from('leads').insert(achadoParaLead(a, id, SEGS[a.area])), 'Não foi possível salvar ' + a.empresa + '.');
+  await ok(SB.from('achados').update({ situacao: 'salvo', lead_id: id }).eq('id', a.id));
+  ACHADOS = ACHADOS.filter(x => x.id !== a.id);
+}
+async function achAct(a, id){
+  if (a === 'busca-comando') return copy(COMANDO_BUSCA);
+  if (a === 'busca-cancelar') { await ok(SB.from('buscas').update({ situacao: 'cancelada' }).eq('id', id).eq('situacao', 'pendente')); await loadAll(); return render(); }
+  if (a === 'ach-bons') {
+    const list = ACHADOS.filter(x => x.nota >= NOTA_BOA && !duplicadoDe(x, LEADS));
+    for (const x of list) await salvarAchado(x);
+    await loadAll(); renderNav(); render(); return toast(list.length + ' empresas entraram no funil como Novo');
+  }
+  const x = ACHADOS.find(y => y.id === id); if (!x) return;
+  const el = document.querySelector(`[data-ach="${id}"]`);
+  if (a === 'ach-salvar') { await salvarAchado(x); toast(x.empresa + ' entrou no funil'); }
+  if (a === 'ach-descartar') { await ok(SB.from('achados').update({ situacao: 'descartado' }).eq('id', id)); ACHADOS = ACHADOS.filter(y => y.id !== id); toast('Descartada'); }
+  if (el) { el.classList.add('out'); await new Promise(r => setTimeout(r, 240)); }
+  if (a === 'ach-salvar') await loadAll();
+  renderNav(); render();
+}
+
 // ------------------------------------------------------------ Funil
 function vFunil(){
   const cols = [['Contatado',['Contatado']],['Lembretes',['Lembrete 1','Lembrete 2']],['Respondeu',['Respondeu']],['Reunião',['Reunião']],['Fechou',['Fechou']],['Sem interesse',['Sem interesse']]];
@@ -1097,7 +1351,7 @@ function vFunil(){
     <div class="board">${cols.map(([nome, sts]) => { const a = LEADS.filter(l => sts.includes(l.status)), pct = contatadas ? Math.round(a.length / contatadas * 100) : 0;
       const motivos = nome === 'Sem interesse' ? Object.entries(a.reduce((m, l) => (m[l.motivo_perda || 'Sem motivo'] = (m[l.motivo_perda || 'Sem motivo'] || 0) + 1, m), {})).map(([k, n]) => `${esc(k)}: ${n}`).join(' · ') : '';
       return `<div class="col" data-col="${esc(sts[0])}" data-sts="${esc(sts.join('|'))}"><h3><span>${nome}</span><span class="col-n">${a.length}<small>${pct}%</small></span></h3>${motivos ? `<p class="col-sub">${motivos}</p>` : ''}${a.map(l =>
-        `<button type="button" class="card" style="--c:var(--a-${l.area})" draggable="true" data-drag="${esc(l.id)}" data-open="${esc(l.id)}"><b>${esc(l.empresa)}</b><span><span class="dot"></span>${esc(areaNome(l))}${l.ultimo ? ' · ' + fmtDate(l.ultimo) : ''}</span>${l.status === 'Sem interesse' && l.motivo_perda ? `<span>${esc(l.motivo_perda)}</span>` : ''}${l.proximo ? `<span class="card-prox ${l.proximo_em && l.proximo_em < hojeStr() ? 'atr' : ''}">${esc(l.proximo)}${l.proximo_em ? ' · ' + esc(ddmm(l.proximo_em)) : ''}</span>` : ''}</button>`).join('') || '<p class="col-vazio">Nenhuma empresa</p>'}</div>`; }).join('')}</div></div>`;
+        `<button type="button" class="card" style="--c:var(--a-${l.area})" draggable="true" data-drag="${esc(l.id)}" data-open="${esc(l.id)}"><b>${esc(l.empresa)}</b><span class="card-area"><span class="dot"></span><span>${esc(areaNome(l))}</span></span>${l.ultimo ? `<span class="card-data">${fmtDate(l.ultimo)}</span>` : ''}${l.status === 'Sem interesse' && l.motivo_perda ? `<span>${esc(l.motivo_perda)}</span>` : ''}${l.proximo ? `<span class="card-prox ${l.proximo_em && l.proximo_em < hojeStr() ? 'atr' : ''}">${esc(l.proximo)}${l.proximo_em ? ' · ' + esc(ddmm(l.proximo_em)) : ''}</span>` : ''}</button>`).join('') || '<p class="col-vazio">Nenhuma empresa</p>'}</div>`; }).join('')}</div></div>`;
 }
 
 // ------------------------------------------------------------ Resultados
@@ -1150,8 +1404,24 @@ function vAjustes(){
 
 function render(){
   if (view === 'lead' && !cur) view = 'leads';
-  document.getElementById('main').innerHTML = ({ hoje:vHoje, leads:vLeads, lead:vLead, funil:vFunil, resultados:vResultados, ajustes:vAjustes })[view]();
+  document.getElementById('main').innerHTML = ({ hoje:vHoje, leads:vLeads, prospectar:vProspectar, lead:vLead, funil:vFunil, resultados:vResultados, ajustes:vAjustes })[view]();
+  const slot = document.querySelector('[data-hero]'); if (slot) slot.replaceWith(heroBg());
   countUp();
+}
+
+// ------------------------------------------------------------ gradiente animado
+// Um único canvas por lugar: o da tela Hoje é reaproveitado a cada render (só muda de lugar no DOM),
+// para não criar um contexto WebGL novo a cada clique.
+const GRAD_LOGIN = { color1:'#ECE3D3', color2:'#34549F', color3:'#0C2C6B', rotation:-20, proportion:40, scale:0.5, speed:14, distortion:6, swirl:70, swirlIterations:6, softness:100, offset:-230, shape:'Edge', shapeSize:45 };
+const GRAD_HOJE  = { color1:'#0C2C6B', color2:'#123C8C', color3:'#4A6DB8', rotation:30, proportion:45, scale:0.45, speed:12, distortion:5, swirl:60, swirlIterations:5, softness:100, offset:-120, shape:'Checks', shapeSize:30 };
+let HERO = null, GATE_G = null;
+function heroBg(){
+  if (!HERO) { const el = document.createElement('div'); el.className = 'hero-bg'; HERO = { el, g: window.GradienteAnimado ? GradienteAnimado(el, GRAD_HOJE) : null }; }
+  return HERO.el;
+}
+function gradienteLogin(ligar){
+  if (ligar && !GATE_G && window.GradienteAnimado) GATE_G = GradienteAnimado(document.getElementById('gate'), GRAD_LOGIN);
+  if (!ligar && GATE_G) { GATE_G.parar(); GATE_G = null; }
 }
 
 // ------------------------------------------------------------ busca rápida
@@ -1290,7 +1560,7 @@ function exportCsv(){
 let theme = ''; try { theme = localStorage.getItem('daime-tema') || ''; } catch(e) {}
 function applyTheme(){
   if (theme) document.documentElement.setAttribute('data-theme', theme); else document.documentElement.removeAttribute('data-theme');
-  document.getElementById('theme').textContent = 'Tema: ' + (theme === 'dark' ? 'escuro' : theme === 'light' ? 'claro' : 'automático');
+  document.querySelector('#theme span').textContent = 'Tema: ' + (theme === 'dark' ? 'escuro' : theme === 'light' ? 'claro' : 'automático');
 }
 let toastT;
 function toast(msg){ const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2600); }
@@ -1309,6 +1579,7 @@ document.addEventListener('click', async e => {
     if (t.dataset.etapa) { cur.etapa = +t.dataset.etapa; return renderDrawer(); }
     if (t.dataset.canal) { cur.canal = t.dataset.canal; return renderDrawer(); }
     const a = t.dataset.act, l = cur && getLead(cur.id);
+    if (a && (a.startsWith('ach-') || a.startsWith('busca-'))) return await achAct(a, t.dataset.id);
     if (a === 'close') return closeDrawer();
     if (a === 'voltar') return closeLead();
     if (a === 'busca') return abrirBusca();
@@ -1335,6 +1606,7 @@ document.addEventListener('input', e => {
   if (id === 'bq') return listarBusca(el.value);
   if (el.dataset.qtext) { (drafts[el.dataset.qtext] = drafts[el.dataset.qtext] || {}).texto = el.value; return; }
   if (el.dataset.qsubj) { (drafts[el.dataset.qsubj] = drafts[el.dataset.qsubj] || {}).assunto = el.value; return; }
+  if (el.dataset.afrase) { const a = ACHADOS.find(x => x.id === el.dataset.afrase); if (a) { a.frase = el.value; debounce('af' + a.id, () => SB.from('achados').update({ frase: a.frase }).eq('id', a.id).then(r => r.error && toast('Frase não salva'))); } return; }
   if (!cur) return;
   const l = getLead(cur.id), k = cur.canal + cur.etapa;
   if (id === 'dtext') dtxt[k] = el.value;
@@ -1359,6 +1631,7 @@ document.addEventListener('change', async e => {
 });
 document.addEventListener('submit', async e => {
   if (e.target.id === 'fnew') { e.preventDefault(); try { await addLead(); } catch(err) {} }
+  if (e.target.id === 'fbusca') { e.preventDefault(); try { await pedirBusca(); } catch(err) {} }
   if (e.target.id === 'login') {
     e.preventDefault();
     const btn = document.getElementById('l-btn'), err = document.getElementById('l-err'); err.textContent = ''; btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
@@ -1395,15 +1668,16 @@ document.getElementById('sair').addEventListener('click', async () => { await SB
 addEventListener('resize', () => { if (!document.getElementById('app').hidden) renderNav(); });
 
 // ------------------------------------------------------------ início
-function showGate(msg){ document.getElementById('app').hidden = true; document.getElementById('gate').hidden = false; document.getElementById('l-err').textContent = msg || ''; }
+function showGate(msg){ document.getElementById('app').hidden = true; document.getElementById('gate').hidden = false; document.getElementById('l-err').textContent = msg || ''; gradienteLogin(true); }
 async function boot(){
   const { data: { session } } = await SB.auth.getSession();
   if (!session) return showGate();
   const dono = await SB.rpc('eh_dono');
   if (dono.error || dono.data !== true) { await SB.auth.signOut(); return showGate('Esta conta não tem acesso ao painel.'); }
-  document.getElementById('gate').hidden = true; document.getElementById('app').hidden = false;
+  document.getElementById('gate').hidden = true; document.getElementById('app').hidden = false; gradienteLogin(false);
   await SB.rpc('montar_fila');
   await loadAll();
+  acompanharBusca();
   const h0 = location.hash.slice(1), antigo = { acompanhar:'funil', robo:'ajustes', areas:'ajustes' };
   if (h0.startsWith('lead/') && getLead(decodeURIComponent(h0.slice(5)))) { prevView = 'leads'; return openLead(decodeURIComponent(h0.slice(5))); }
   view = VIEWS.some(v => v.id === h0) ? h0 : antigo[h0] || 'hoje';
