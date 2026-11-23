@@ -185,6 +185,11 @@ dialog::backdrop{background:rgb(24 50 58 / .35);backdrop-filter:blur(3px)}
 .lista-casas button:hover{background:var(--hover)}
 .lista-casas button[aria-pressed=true]{background:var(--accent-soft);color:var(--accent);font-weight:600}
 .dois{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.subidos summary{cursor:pointer;font-weight:600;font-size:13px}
+.subidos ul{list-style:none;margin:8px 0 0;padding:0;max-height:220px;overflow:auto;display:grid;gap:4px}
+.subidos li{display:flex;justify-content:space-between;gap:12px;font-size:12.5px;min-width:0}
+.subidos li .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.subidos li .dica{margin:0;white-space:nowrap}
 .envios{position:fixed;right:16px;bottom:16px;z-index:50;width:min(360px,calc(100vw - 32px));display:grid;gap:8px}
 .envio{padding:12px 14px;border-radius:var(--r-control);font-size:12.5px}
 .envio .nm{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -803,6 +808,7 @@ document.addEventListener('click', async e => {
     case 'subir': return abrirSubir();
     case 'subir-comecar': return comecarSubida();
     case 'subir-repetir': return comecarSubida(true);
+    case 'subir-tarefa': document.getElementById('dlg-subir').close(); return abrirNovaTarefa({ id: SUBIDA.casaId, nome: SUBIDA.plano.casa });
     case 'baixar-pasta': return ARQ.dados ? baixarPasta(ARQ.dados.pasta.id, ARQ.dados.pasta.nome) : undefined;
     case 'baixar-repetir': return BAIXA ? rodarBaixa(BAIXA.falhas.splice(0)) : undefined;
     case 'comecar': return rpc('comecar_edicao', { p_tarefa: t.id }, 'Edição começou.');
@@ -903,10 +909,13 @@ function renderSubir() {
     ${atuais ? `<ul style="margin:0;padding-left:18px">${atuais}</ul>` : ''}
     ${s.erro ? `<p class="aviso-box erro" style="margin:0">${esc(s.erro)}</p>` : ''}
     ${s.falhas.length && s.fase !== 'subindo' ? `<p class="aviso-box erro" style="margin:0">${s.falhas.length} ${s.falhas.length === 1 ? 'arquivo não subiu' : 'arquivos não subiram'}: ${esc(s.falhas.slice(0, 3).map(f => f.nome).join(', '))}${s.falhas.length > 3 ? '…' : ''}</p>` : ''}
-    ${s.fase === 'feito' && !s.falhas.length ? `<p class="aviso-box ok" style="margin:0">Pronto: a casa já aparece em “Nova tarefa”.</p>` : ''}
+    ${s.fase === 'feito' && !s.falhas.length ? `<p class="aviso-box ok" style="margin:0">Pronto: a casa está no Drive.</p>` : ''}
+    ${s.fase !== 'subindo' && s.casaId ? `<details class="subidos" ${p.arquivos.length <= 12 ? 'open' : ''}><summary>Arquivos (${p.arquivos.length})</summary><ul>${linhasSubida(p.arquivos).map(l =>
+      `<li><span class="nm" title="${esc(l.rotulo)}">${esc(l.rotulo)}</span><span class="dica">${esc(tamanhoLegivel(l.tamanho))} · ${{ subiu: 'subiu', pulado: 'já estava', falhou: 'não subiu' }[l.estado]}</span></li>`).join('')}</ul></details>` : ''}
     <div class="acoes" style="justify-content:flex-end">${fechar}
       ${s.fase !== 'subindo' && (s.falhas.length || s.erro) ? `<button class="btn prim" type="button" data-act="subir-repetir">Tentar de novo</button>` : ''}
-      ${s.fase === 'feito' && s.casaId ? `<a class="btn" href="${esc(noDrive(`https://drive.google.com/drive/folders/${s.casaId}`))}" target="_blank" rel="noopener">${ico('abrir')} Ver no Drive</a>` : ''}</div>`;
+      ${s.fase === 'feito' && s.casaId ? `<a class="btn" href="${esc(noDrive(`https://drive.google.com/drive/folders/${s.casaId}`))}" target="_blank" rel="noopener">${ico('abrir')} Ver no Drive</a>
+        <button class="btn prim" type="button" data-act="subir-tarefa">${ico('mais')} Criar tarefa para esta casa</button>` : ''}</div>`;
 }
 const avisoSaida = ev => { ev.preventDefault(); ev.returnValue = ''; };
 async function comecarSubida(repetir = false) {
@@ -928,7 +937,8 @@ async function comecarSubida(repetir = false) {
     // 3. arquivos, SIMULTANEOS de cada vez
     const fila = [];
     for (const a of p.arquivos) {
-      if (jaNoDrive(a, existentes[a.pasta])) { s.pulados++; s.enviado += a.tamanho; } else fila.push(a);
+      a.estado = '';
+      if (jaNoDrive(a, existentes[a.pasta])) { a.estado = 'pulado'; s.pulados++; s.enviado += a.tamanho; } else fila.push(a);
     }
     renderSubir();
     await emParalelo(fila, async a => {
@@ -938,7 +948,7 @@ async function comecarSubida(repetir = false) {
         s.atuais.set(e.id, e); renderSubir();
         await continuarEnvio(e);
         s.atuais.delete(e.id);
-        if (e.estado === 'feito') { s.feitos++; s.enviado += e.total - antes; } else { s.falhas.push(a); s.enviado -= antes; }
+        if (e.estado === 'feito') { a.estado = 'subiu'; s.feitos++; s.enviado += e.total - antes; } else { a.estado = 'falhou'; s.falhas.push(a); s.enviado -= antes; }
         renderSubir();
     });
     s.fase = s.falhas.length ? 'erro' : 'feito';
@@ -952,7 +962,7 @@ async function comecarSubida(repetir = false) {
 }
 
 // ------------------------------------------------------------ nova tarefa
-async function abrirNovaTarefa() {
+async function abrirNovaTarefa(pre = null) {
   const dlg = document.getElementById('dlg-tarefa'), f = document.getElementById('f-tarefa');
   f.innerHTML = `<h2>Nova tarefa</h2>
     <label>Casa (pasta em ${esc(DRIVE.raiz.nome)})<input class="campo" id="busca-casa" placeholder="Buscar casa" autocomplete="off"></label>
@@ -976,6 +986,11 @@ async function abrirNovaTarefa() {
     };
     pintar('');
     document.getElementById('busca-casa').oninput = ev => pintar(ev.target.value);
+    if (pre) { // veio do "Subir casa": a casa já vem escolhida
+      document.getElementById('busca-casa').value = pre.nome; pintar(pre.nome);
+      document.querySelector(`[data-casa="${CSS.escape(pre.id)}"]`)?.setAttribute('aria-pressed', 'true');
+      document.getElementById('casa-escolhida').value = JSON.stringify(pre);
+    }
   } catch (err) { document.getElementById('lista-casas').innerHTML = `<p class="carregando">${esc(MSG[err.codigo] || 'Não foi possível listar as casas.')}</p>`; }
 }
 const semAcentoBusca = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();

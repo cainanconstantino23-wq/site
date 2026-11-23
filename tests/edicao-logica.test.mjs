@@ -5,7 +5,7 @@ import vm from 'node:vm';
 
 const ctx = {};
 vm.runInNewContext(readFileSync(new URL('../edicao-logica.js', import.meta.url), 'utf8'), ctx);
-const { ETAPAS, etapaDe, caminhoTarefa, timecode, ehPastaSaida, tamanhoLegivel, prazoInfo, nomeWindows, nomesUnicos, planoRetomada, inicioDoRange, tokenValido, esperaTentativa, ehNativoGoogle, deveRepetir, podeExcluirVersao } = ctx;
+const { ETAPAS, etapaDe, caminhoTarefa, timecode, ehPastaSaida, tamanhoLegivel, prazoInfo, nomeWindows, nomesUnicos, planoRetomada, inicioDoRange, tokenValido, esperaTentativa, ehNativoGoogle, deveRepetir, podeExcluirVersao, linhasSubida } = ctx;
 
 test('ETAPAS na ordem da linha do tempo', () => {
   assert.deepEqual(Array.from(ETAPAS, (e) => e.id), ['a_fazer', 'em_edicao', 'para_revisar', 'ajustes', 'reenviado', 'aprovado']);
@@ -160,4 +160,16 @@ test('podeExcluirVersao: editor só a última antes da revisão; dono qualquer u
   assert.equal(podeExcluirVersao('dono', 'aprovado', 1, 2), true);
   assert.equal(podeExcluirVersao('dono', 'para_revisar', 2, 2), true);
   assert.equal(podeExcluirVersao(null, 'para_revisar', 2, 2), false);
+});
+
+test('linhasSubida: caminho dentro da casa, ordenado, com o estado de cada arquivo', () => {
+  const linhas = linhasSubida([
+    { pasta: '02 Audio', nome: 'trilha.wav', tamanho: 10, estado: 'subiu' },
+    { pasta: '', nome: 'capa.jpg', tamanho: 5, estado: 'pulado' },
+    { pasta: '01 Brutas/Drone', nome: 'DJI_0002.MP4', tamanho: 30, estado: 'falhou' },
+    { pasta: '01 Brutas/Drone', nome: 'DJI_0001.MP4', tamanho: 20 },
+  ]);
+  assert.deepEqual(Array.from(linhas, l => l.rotulo), ['01 Brutas/Drone/DJI_0001.MP4', '01 Brutas/Drone/DJI_0002.MP4', '02 Audio/trilha.wav', 'capa.jpg']);
+  assert.deepEqual(Array.from(linhas, l => l.estado), ['subiu', 'falhou', 'subiu', 'pulado']);
+  assert.equal(linhas[0].tamanho, 20);
 });

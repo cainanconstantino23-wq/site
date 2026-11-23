@@ -149,3 +149,11 @@ function podeExcluirVersao(papel, status, numero, ultima) {
   if (papel === 'dono') return true;
   return papel === 'editor' && status === 'para_revisar' && numero === ultima;
 }
+
+/** Lista do que foi para o Drive em "Subir casa": caminho dentro da casa, em ordem, com o estado
+ *  ('subiu' | 'pulado' = já estava lá | 'falhou'). */
+function linhasSubida(arquivos) {
+  return (arquivos || []).map(function (a) {
+    return { rotulo: (a.pasta ? a.pasta + '/' : '') + a.nome, tamanho: a.tamanho, estado: a.estado || 'subiu' };
+  }).sort(function (x, y) { return x.rotulo.localeCompare(y.rotulo, 'pt', { numeric: true }); });
+}
