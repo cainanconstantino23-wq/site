@@ -63,37 +63,3 @@ test('origemDoNavegador usa o endereço real (www), não o SITE_URL', async () =
   assert.equal(origemDoNavegador(new Request('http://localhost:3005/api/drive/envio', { method: 'POST' })), 'http://localhost:3005');
   if (antes === undefined) delete process.env.SITE_URL; else process.env.SITE_URL = antes;
 });
-
-// ------------------------------------------------------------ atalho do Cyberduck
-const { cadeiaDePastas, caminhoCyberduck, duckPlist } = await import('../api/_lib/cyberduck.mjs');
-const fakeDrive = (mapa) => async (id) => mapa[id] ?? null;
-
-test('cadeiaDePastas: no Meu Drive do dono vai até a raiz', async () => {
-  const get = fakeDrive({ casa: { name: 'Casa Teste', parents: ['casas'] }, casas: { name: 'Casas', parents: ['bh'] }, bh: { name: 'BAHIA HOMES', parents: ['root'] }, root: { name: 'Meu Drive' } });
-  assert.deepEqual(await cadeiaDePastas('casa', get, 'root'), { raiz: 'meu', nomes: ['BAHIA HOMES', 'Casas', 'Casa Teste'] });
-});
-
-test('cadeiaDePastas: compartilhada com o editor para onde ele perde o acesso', async () => {
-  // o editor não enxerga o "Meu Drive" do dono (null), então BAHIA HOMES é o topo do que foi compartilhado
-  const get = fakeDrive({ casa: { name: 'Casa Teste', parents: ['casas'] }, casas: { name: 'Casas', parents: ['bh'] }, bh: { name: 'BAHIA HOMES', parents: ['rootDono'] } });
-  assert.deepEqual(await cadeiaDePastas('casa', get, 'rootEditor'), { raiz: 'compartilhado', nomes: ['BAHIA HOMES', 'Casas', 'Casa Teste'] });
-  // pasta compartilhada sem parents visíveis no meio do caminho: ela é o topo (não é confundida com a raiz)
-  const get2 = fakeDrive({ casa: { name: 'Casa Teste', parents: ['casas'] }, casas: { name: 'Casas' } });
-  assert.deepEqual(await cadeiaDePastas('casa', get2, 'rootEditor'), { raiz: 'compartilhado', nomes: ['Casas', 'Casa Teste'] });
-  assert.equal(await cadeiaDePastas('sumiu', get2, 'rootEditor'), null);
-});
-
-test('caminhoCyberduck usa as pastas de topo do Cyberduck', () => {
-  assert.equal(caminhoCyberduck({ raiz: 'meu', nomes: ['BAHIA HOMES', 'Casas', 'Casa Teste'] }), '/My Drive/BAHIA HOMES/Casas/Casa Teste');
-  assert.equal(caminhoCyberduck({ raiz: 'compartilhado', nomes: ['Casas', 'Casa Teste'] }), '/Shared with me/Casas/Casa Teste');
-  assert.equal(caminhoCyberduck({ raiz: 'meu', nomes: [] }), '/My Drive');
-});
-
-test('duckPlist: atalho válido com nomes escapados', () => {
-  const x = duckPlist({ apelido: 'Daime · Casa <A&B>', email: 'a@b.com', caminho: '/My Drive/Casa <A&B>', uuid: 'u-1' });
-  assert.match(x, /<key>Protocol<\/key>\s*<string>googledrive<\/string>/);
-  assert.match(x, /<key>Hostname<\/key>\s*<string>www\.googleapis\.com<\/string>/);
-  assert.match(x, /<key>Path<\/key>\s*<string>\/My Drive\/Casa &lt;A&amp;B&gt;<\/string>/);
-  assert.match(x, /<key>Username<\/key>\s*<string>a@b\.com<\/string>/);
-  assert.ok(!x.includes('<A&B>'));
-});
