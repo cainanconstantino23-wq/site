@@ -223,6 +223,7 @@ dialog::backdrop{background:rgb(24 50 58 / .35);backdrop-filter:blur(3px)}
 <dialog id="dlg-tarefa"><form class="dlg" id="f-tarefa" method="dialog"></form></dialog>
 <dialog id="dlg-raiz"><div class="dlg" id="raiz-corpo"></div></dialog>
 <dialog id="dlg-subir"><div class="dlg" id="subir-corpo"></div></dialog>
+<dialog id="dlg-baixar"><div class="dlg" id="baixar-corpo"></div></dialog>
 <div class="envios" id="envios" aria-live="polite"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
@@ -282,6 +283,7 @@ const MSG = {
   fora_da_casa: 'Esse arquivo não está dentro da pasta desta casa.',
   nao_e_video: 'Escolha um arquivo de vídeo.',
   sem_raiz: 'Falta escolher a pasta de trabalho no Drive.',
+  google_editor: 'Conecte sua conta Google (botão no topo) para baixar.',
 };
 function aviso(texto, tom = '') {
   const el = document.getElementById('avisos');
@@ -332,6 +334,9 @@ function renderTopo() {
     html += `<button class="btn prim" type="button" data-act="nova" ${DRIVE?.raiz ? '' : 'disabled title="Conecte o Drive e escolha a pasta de trabalho"'}>${ico('mais')} Nova tarefa</button>`;
   } else {
     if (!DRIVE?.conectado) html += `<span class="chip off">Drive desconectado: avise o Cainan</span>`;
+    html += DRIVE?.google_editor
+      ? `<span class="chip" title="Sua conta Google, usada para baixar">${ico('drive')} ${esc(DRIVE.google_editor.email || 'Google conectado')}</span>`
+      : `<button class="btn aviso" type="button" data-act="conectar">${ico('drive')} Conectar minha conta Google</button>`;
     html += `<span class="chip" style="background:var(--muted);color:var(--ink)">${esc(EU.nome)}</span><button class="btn" type="button" data-act="sair">${ico('sair')} Sair</button>`;
   }
   document.getElementById('acoes-topo').innerHTML = html;
@@ -466,6 +471,7 @@ function abaArquivos(t) {
     <div class="arq-barra">
       <span class="dica" style="margin:0">${d.itens.length} ${d.itens.length === 1 ? 'item' : 'itens'}</span>
       <span class="acoes">
+        ${PODE_PASTA ? `<button class="btn peq" type="button" data-act="baixar-pasta">${ico('baixar')} Baixar pasta</button>` : ''}
         <a class="btn peq" href="${esc(noDrive(d.pasta.link))}" target="_blank" rel="noopener">${ico('abrir')} Abrir no Drive</a>
         <label class="btn peq prim">${ico('enviar')} Enviar arquivos<input type="file" multiple id="arq-envio" hidden></label>
       </span>
@@ -476,11 +482,11 @@ function abaArquivos(t) {
           <span class="info">${a.tipo === 'pasta' ? 'Pasta' : esc(tamanhoLegivel(a.tamanho))}${a.modificado ? ' · ' + diaMes(a.modificado) : ''}</span></span>
         <span class="bts">
           ${a.tipo === 'video' && !fechada ? `<button class="btn peq" type="button" data-revisar="${esc(a.id)}">${ico('para_revisar')} Enviar para revisão</button>` : ''}
-          ${a.download ? `<a class="btn peq" href="${esc(noDrive(a.download))}" target="_blank" rel="noopener">${ico('baixar')} Baixar</a>` : ''}
+          ${a.download ? (PODE_ARQ && !ehNativoGoogle(a.mime) ? `<button class="btn peq" type="button" data-baixar="${esc(a.id)}">${ico('baixar')} Baixar</button>` : `<a class="btn peq" href="${esc(noDrive(a.download))}" target="_blank" rel="noopener">${ico('baixar')} Baixar</a>`) : ''}
           <a class="btn peq" href="${esc(noDrive(a.link))}" target="_blank" rel="noopener" aria-label="Abrir ${esc(a.nome)} no Drive">${ico('abrir')}</a>
         </span>
       </div>`).join('') : '<p class="arq-vazio">Pasta vazia.</p>'}</div>
-    <p class="dica">Baixar abre no Google Drive (use a sua conta com acesso às pastas). Enviar só cria arquivos novos; nada é apagado.</p>`;
+    <p class="dica">${PODE_PASTA ? 'Baixar salva direto no seu computador, com a sua conta Google.' : 'Baixar abre no Google Drive (use a sua conta com acesso às pastas).'} Enviar só cria arquivos novos; nada é apagado.</p>`;
 }
 
 function abaLinha(t) {
@@ -585,6 +591,158 @@ async function continuarEnvio(e) {
   return e;
 }
 
+// ------------------------------------------------------------ download direto do Google (como o Cyberduck)
+// O navegador pede o arquivo ao Google com a conta de quem baixa e grava na pasta escolhida no computador.
+// Nada passa pelo servidor do site. Se a internet cair, continua do byte em que parou.
+const PODE_PASTA = 'showDirectoryPicker' in window, PODE_ARQ = 'showSaveFilePicker' in window;
+let TOKEN_DL = null;
+async function tokenDownload(forcar = false) {
+  if (!forcar && tokenValido(TOKEN_DL, Date.now())) return TOKEN_DL.token;
+  try { TOKEN_DL = await api('/api/drive/meu-token'); return TOKEN_DL.token; }
+  catch (e) { if (e.codigo === 'google_editor' && DRIVE) { DRIVE.google_editor = null; renderTopo(); } throw e; }
+}
+const erroFinal = msg => Object.assign(new Error(msg), { final: true });
+/** Resposta do Google com o conteúdo do arquivo a partir do byte `inicio`. */
+async function pedirArquivo(id, inicio) {
+  const base = `https://www.googleapis.com/drive/v3/files/${encodeURIComponent(id)}?alt=media&supportsAllDrives=true`;
+  const tentar = async (forcar, abuso) => fetch(base + (abuso ? '&acknowledgeAbuse=true' : ''), {
+    headers: { Authorization: 'Bearer ' + await tokenDownload(forcar), ...(inicio ? { Range: `bytes=${inicio}-` } : {}) },
+  });
+  let r = await tentar(false, false);
+  if (r.status === 401) r = await tentar(true, false);
+  if (r.status === 403) {
+    const txt = await r.text();
+    if (!/cannotDownloadAbusiveFile/.test(txt)) throw erroFinal(/rateLimit|quota/i.test(txt) ? 'O Google pediu para esperar um pouco. Tente de novo.' : 'Sua conta Google não tem acesso a este arquivo.');
+    r = await tentar(false, true);
+  }
+  if (r.status === 404) throw erroFinal('Sua conta Google não tem acesso a este arquivo.');
+  if (!r.ok || !r.body) throw new Error(`O Google respondeu ${r.status}.`);
+  return r;
+}
+/** Grava um arquivo do Drive no handle. Devolve 'pulado' | 'baixado'. aoProgredir(bytesNoDisco). */
+async function gravar(item, fh, aoProgredir) {
+  const atual = await fh.getFile().catch(() => null);
+  const plano = item.tamanho == null ? { acao: 'do_zero', inicio: 0 } : planoRetomada(atual ? atual.size : null, item.tamanho);
+  if (plano.acao === 'pular') { aoProgredir(item.tamanho); return 'pulado'; }
+  const w = await fh.createWritable({ keepExistingData: plano.inicio > 0 });
+  let feito = plano.inicio, tentativas = 0;
+  try {
+    if (feito) await w.seek(feito);
+    aoProgredir(feito);
+    for (;;) {
+      try {
+        const r = await pedirArquivo(item.id, feito);
+        if (feito && r.status !== 206) { feito = 0; await w.truncate(0); await w.seek(0); aoProgredir(0); }
+        const leitor = r.body.getReader();
+        for (;;) {
+          const { done, value } = await leitor.read();
+          if (done) break;
+          await w.write(value); feito += value.byteLength; aoProgredir(feito);
+        }
+        if (item.tamanho != null && feito < item.tamanho) throw new Error('O download veio incompleto.');
+        break;
+      } catch (err) {
+        if (err.final || ++tentativas > 5) throw err;
+        await espera(esperaTentativa(tentativas)); // internet caiu: espera e continua do byte `feito`
+      }
+    }
+    await w.close();
+    return 'baixado';
+  } catch (err) { await w.abort().catch(() => {}); throw err; }
+}
+
+let BAIXA = null; // { fase:'montando'|'baixando'|'feito'|'erro', nome, arquivos:[{item, dir|fh, nome}], total, baixado, feitos, pulados, nativos, falhas:[], atuais:Map, erro }
+function novaBaixa(nome) {
+  return { fase: 'montando', nome, arquivos: [], total: 0, baixado: 0, feitos: 0, pulados: 0, nativos: 0, falhas: [], atuais: new Map(), erro: '' };
+}
+function emAndamento() {
+  if (BAIXA && ['montando', 'baixando'].includes(BAIXA.fase)) { document.getElementById('dlg-baixar').showModal(); renderBaixa(); return true; }
+  return false;
+}
+async function baixarPasta(pastaId, nome) {
+  if (emAndamento()) return;
+  let raiz;
+  try { raiz = await showDirectoryPicker({ mode: 'readwrite', id: 'daime-baixar' }); } catch { return; }
+  try { await tokenDownload(); } catch (e) { return aviso(MSG[e.codigo] || 'Não foi possível baixar.', 'erro'); }
+  BAIXA = novaBaixa(nome);
+  const b = BAIXA;
+  document.getElementById('dlg-baixar').showModal(); renderBaixa();
+  addEventListener('beforeunload', avisoSaida);
+  try {
+    const montar = async (id, dir) => {
+      const { itens } = await api(`/api/drive?pasta=${encodeURIComponent(id)}`);
+      const nomes = nomesUnicos(itens.map(i => i.nome));
+      for (let k = 0; k < itens.length; k++) {
+        const i = itens[k];
+        if (i.tipo === 'pasta') await montar(i.id, await dir.getDirectoryHandle(nomes[k], { create: true }));
+        else if (ehNativoGoogle(i.mime)) b.nativos++;
+        else { b.arquivos.push({ item: i, dir, nome: nomes[k] }); b.total += i.tamanho || 0; }
+      }
+      renderBaixa();
+    };
+    await montar(pastaId, await raiz.getDirectoryHandle(nomeWindows(nome), { create: true }));
+  } catch (e) {
+    removeEventListener('beforeunload', avisoSaida);
+    b.fase = 'erro'; b.erro = MSG[e.codigo] || 'Não foi possível ler as pastas no Drive. Tente de novo.'; return renderBaixa();
+  }
+  await rodarBaixa(b.arquivos);
+}
+async function baixarArquivo(item) {
+  if (emAndamento()) return;
+  let fh;
+  try { fh = await showSaveFilePicker({ suggestedName: nomeWindows(item.nome), id: 'daime-baixar' }); } catch { return; }
+  BAIXA = novaBaixa(item.nome);
+  BAIXA.arquivos.push({ item, fh, nome: item.nome }); BAIXA.total = item.tamanho || 0;
+  document.getElementById('dlg-baixar').showModal();
+  await rodarBaixa(BAIXA.arquivos);
+}
+/** Baixa a lista (todos ou só as falhas), SIMULTANEOS de cada vez. */
+async function rodarBaixa(lista) {
+  const b = BAIXA;
+  b.fase = 'baixando'; b.erro = ''; renderBaixa();
+  addEventListener('beforeunload', avisoSaida);
+  await emParalelo(lista, async a => {
+    const chave = a.item.id;
+    let antes = 0;
+    b.atuais.set(chave, { nome: a.nome, feito: 0, total: a.item.tamanho || 0 }); renderBaixa();
+    try {
+      const fh = a.fh || await a.dir.getFileHandle(a.nome, { create: true });
+      const r = await gravar(a.item, fh, feito => { b.baixado += feito - antes; antes = feito; b.atuais.get(chave).feito = feito; renderBaixa(); });
+      if (r === 'pulado') b.pulados++; else b.feitos++;
+    } catch (err) {
+      b.baixado -= antes;
+      b.falhas.push({ ...a, erro: MSG[err.codigo] || err.message || 'Falhou' });
+    }
+    b.atuais.delete(chave); renderBaixa();
+  });
+  removeEventListener('beforeunload', avisoSaida);
+  b.fase = b.falhas.length ? 'erro' : 'feito'; renderBaixa();
+  if (b.fase === 'feito') aviso(`${b.nome} baixado.`, 'ok');
+}
+let quadroBaixa = 0;
+function renderBaixa() { if (!quadroBaixa) quadroBaixa = requestAnimationFrame(() => { quadroBaixa = 0; desenharBaixa(); }); }
+function desenharBaixa() {
+  const c = document.getElementById('baixar-corpo'), b = BAIXA;
+  if (!b) return;
+  const rodando = ['montando', 'baixando'].includes(b.fase), n = b.arquivos.length;
+  const fechar = `<button class="btn" type="button" onclick="this.closest('dialog').close()">${rodando ? 'Esconder' : 'Fechar'}</button>`;
+  const pct = b.total ? Math.round(b.baixado / b.total * 100) : 0;
+  const atuais = [...b.atuais.values()].map(x => `<li class="dica" style="margin:2px 0">${esc(x.nome)} · ${x.total ? Math.round(x.feito / x.total * 100) : 0}%</li>`).join('');
+  c.innerHTML = `<h2>${{ montando: 'Preparando o download…', baixando: 'Baixando…', feito: 'Baixado', erro: 'Download parou' }[b.fase]}</h2>
+    <p style="margin:0"><b>${esc(b.nome)}</b></p>
+    ${b.fase === 'montando'
+      ? `<p class="dica" style="margin:0">Lendo as pastas no Drive… ${n} arquivos · ${tamanhoLegivel(b.total)}</p>`
+      : `<div class="prog" style="height:8px"><i style="width:${b.fase === 'feito' ? 100 : pct}%;${b.fase === 'feito' ? 'background:var(--e-aprovado)' : ''}"></i></div>
+         <p class="dica" style="margin:0">${b.feitos + b.pulados} de ${n} arquivos · ${tamanhoLegivel(b.baixado)} de ${tamanhoLegivel(b.total)} · ${pct}%${b.pulados ? ` · ${b.pulados} já estavam no computador` : ''}</p>`}
+    ${atuais ? `<ul style="margin:0;padding-left:18px">${atuais}</ul>` : ''}
+    ${b.fase === 'baixando' ? '<p class="dica" style="margin:0">Deixe esta aba aberta até terminar. Se a internet cair, ele continua de onde parou.</p>' : ''}
+    ${b.nativos ? `<p class="dica" style="margin:0">${b.nativos} ${b.nativos === 1 ? 'arquivo do Google Docs/Planilhas não foi baixado' : 'arquivos do Google Docs/Planilhas não foram baixados'}.</p>` : ''}
+    ${b.erro ? `<p class="aviso-box erro" style="margin:0">${esc(b.erro)}</p>` : ''}
+    ${b.falhas.length && !rodando ? `<p class="aviso-box erro" style="margin:0">${b.falhas.length} ${b.falhas.length === 1 ? 'arquivo não baixou' : 'arquivos não baixaram'}: ${esc(b.falhas.slice(0, 3).map(f => f.nome + ' (' + f.erro + ')').join(', '))}${b.falhas.length > 3 ? '…' : ''}</p>` : ''}
+    ${b.fase === 'feito' ? '<p class="aviso-box ok" style="margin:0">Pronto: está na pasta que você escolheu.</p>' : ''}
+    <div class="acoes" style="justify-content:flex-end">${fechar}${b.falhas.length && !rodando ? '<button class="btn prim" type="button" data-act="baixar-repetir">Tentar de novo</button>' : ''}</div>`;
+}
+
 // ------------------------------------------------------------ ações
 async function recarregar(manterAba = true) {
   await carregarTarefas();
@@ -610,7 +768,7 @@ async function registrarVersao(t, arquivoId, nota = '') {
 }
 
 document.addEventListener('click', async e => {
-  const el = e.target.closest('[data-act],[data-etapa],[data-grupo],[data-tarefa],[data-aba],[data-versao],[data-pular],[data-apagar],[data-pasta],[data-revisar],[data-retomar],[data-fechar-envio],[data-casa],[data-raiz-ir],[data-raiz-usar]');
+  const el = e.target.closest('[data-act],[data-etapa],[data-grupo],[data-tarefa],[data-aba],[data-versao],[data-pular],[data-apagar],[data-pasta],[data-revisar],[data-retomar],[data-fechar-envio],[data-casa],[data-raiz-ir],[data-raiz-usar],[data-baixar]');
   if (!el) return;
   const t = tarefaSel(), d = el.dataset;
   if (d.etapa) { abertas.clear(); abertas.add(d.etapa); renderEtapas(); renderFila(); return; }
@@ -627,6 +785,7 @@ document.addEventListener('click', async e => {
   if (d.casa) { document.querySelectorAll('[data-casa]').forEach(b => b.setAttribute('aria-pressed', String(b === el))); document.getElementById('casa-escolhida').value = JSON.stringify({ id: d.casa, nome: el.dataset.nome }); return; }
   if (d.raizIr) return navegarRaiz(d.raizIr);
   if (d.raizUsar) return usarRaiz(d.raizUsar);
+  if (d.baixar) { const it = ARQ.dados?.itens.find(i => i.id === d.baixar); return it ? baixarArquivo(it) : undefined; }
   switch (d.act) {
     case 'sair': await SB.auth.signOut(); location.replace('painel.html'); return;
     case 'conectar': location.href = `/api/google/login?token=${encodeURIComponent(await token())}`; return;
@@ -635,6 +794,8 @@ document.addEventListener('click', async e => {
     case 'subir': return abrirSubir();
     case 'subir-comecar': return comecarSubida();
     case 'subir-repetir': return comecarSubida(true);
+    case 'baixar-pasta': return ARQ.dados ? baixarPasta(ARQ.dados.pasta.id, ARQ.dados.pasta.nome) : undefined;
+    case 'baixar-repetir': return BAIXA ? rodarBaixa(BAIXA.falhas.splice(0)) : undefined;
     case 'comecar': return rpc('comecar_edicao', { p_tarefa: t.id }, 'Edição começou.');
     case 'aprovar': if (confirm(`Aprovar a V${t.versoes.at(-1)?.numero} de ${t.casa_nome}?`)) return rpc('aprovar_tarefa', { p_tarefa: t.id }, 'Vídeo aprovado.'); return;
     case 'ajustes': return rpc('pedir_ajustes', { p_tarefa: t.id, p_texto: document.getElementById('txt-ajustes')?.value || '' }, 'Ajustes enviados para o editor.');
@@ -852,6 +1013,11 @@ async function iniciar() {
     aviso({ ok: 'Google Drive conectado.', cancelado: 'Conexão com o Drive cancelada.', sem_permissao: 'Só o dono conecta o Drive.', nao_configurado: 'Faltam as credenciais do Google no servidor.' }[r] || 'Não foi possível conectar o Drive.', r === 'ok' ? 'ok' : 'erro');
     history.replaceState(null, '', 'edicao.html');
     if (r === 'ok' && !DRIVE.raiz) setTimeout(abrirRaiz, 300);
+  }
+  const g = new URLSearchParams(location.search).get('google');
+  if (g) {
+    aviso({ ok: 'Sua conta Google está conectada. Já dá para baixar.', cancelado: 'Conexão com o Google cancelada.', nao_configurado: 'Faltam as credenciais do Google no servidor.' }[g] || 'Não foi possível conectar sua conta Google.', g === 'ok' ? 'ok' : 'erro');
+    history.replaceState(null, '', 'edicao.html');
   }
   await recarregar();
 }
