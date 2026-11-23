@@ -1,0 +1,730 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Edição · Daime Filmes</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+:root{
+  --canvas:#eff5f7; --surface:#fbfdfe; --muted:#eaf3f6; --ink:#18323a; --ink-2:#5b7179; --ink-3:#8fa1a7;
+  --line:#d8e6ea; --hover:rgb(24 50 58 / .05); --accent:#087a8a; --accent-hover:#066672; --accent-soft:rgb(8 122 138 / .1);
+  --e-a_fazer:#5d6f86; --e-em_edicao:#2f7fb5; --e-para_revisar:#087a8a; --e-ajustes:#c27c0e; --e-reenviado:#7b5cd6; --e-aprovado:#2f9a5b;
+  --ok:#17633b; --ok-soft:#eaf6ee; --warn:#825310; --warn-soft:#fff5dc; --danger:#a52626; --danger-soft:#fff0ef;
+  --r-panel:1.25rem; --r-control:.875rem;
+  --shadow:0 1px 2px rgb(24 50 58 / .04), 0 10px 30px rgb(24 50 58 / .06);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{min-height:100dvh;background:radial-gradient(1100px 520px at 12% -10%, rgb(8 122 138 / .10), transparent), var(--canvas);color:var(--ink);
+  font:14px/1.45 -apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+[hidden]{display:none!important}
+a{color:inherit}
+.wrap{max-width:1280px;margin:0 auto;padding:max(18px,env(safe-area-inset-top)) 18px 60px}
+.cartao{background:rgb(251 253 254 / .9);border:1px solid var(--line);border-radius:var(--r-panel);box-shadow:var(--shadow)}
+.vidro{background:rgb(251 253 254 / .66);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid rgb(255 255 255 / .7);border-radius:var(--r-panel);box-shadow:var(--shadow)}
+@media (prefers-reduced-transparency: reduce){.vidro{background:var(--surface);backdrop-filter:none}}
+
+/* topo */
+.topo{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;justify-content:space-between;margin:8px 0 18px}
+.topo h1{margin:0;font-size:32px;line-height:1.1;letter-spacing:-.025em;font-weight:700}
+.topo p{margin:6px 0 0;color:var(--ink-2);font-size:15px}
+.acoes{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:40px;padding:0 16px;border-radius:999px;border:1px solid var(--line);background:rgb(255 255 255 / .8);font-size:13px;font-weight:600;transition:background-color .15s, transform .1s}
+.btn:hover{background:var(--muted)}
+.btn:active{transform:scale(.97)}
+.btn.prim{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.prim:hover{background:var(--accent-hover)}
+.btn.aviso{background:var(--warn-soft);border-color:#f0d99f;color:var(--warn)}
+.btn.peq{min-height:32px;padding:0 12px;font-size:12px}
+.btn:disabled{opacity:.5;cursor:default}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;border-radius:999px;padding:5px 11px;background:var(--ok-soft);color:var(--ok)}
+.chip.off{background:var(--warn-soft);color:var(--warn)}
+.aviso-box{margin:0 0 14px;padding:12px 14px;border-radius:var(--r-control);border:1px solid var(--line);background:var(--surface);font-size:13px}
+.aviso-box.erro{border-color:#f0c4c0;background:var(--danger-soft);color:var(--danger)}
+.aviso-box.ok{border-color:#b8ddc4;background:var(--ok-soft);color:var(--ok)}
+svg.i{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+
+/* linha do tempo das etapas */
+.fluxo{padding:14px 14px 10px;margin-bottom:16px}
+.fluxo .tit{margin:0 4px 10px;font-size:12px;font-weight:600;color:var(--ink-2)}
+.etapas{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
+@media (min-width:720px){.etapas{grid-template-columns:repeat(3,1fr)}}
+@media (min-width:1100px){.etapas{grid-template-columns:1fr 1fr 1fr 1fr 1fr 1px 1fr;align-items:stretch;gap:8px}}
+.etapa{position:relative;display:flex;align-items:center;gap:10px;min-height:56px;padding:8px 10px;border:0;border-radius:var(--r-control);background:none;text-align:left;transition:background-color .15s, transform .1s}
+.etapa:hover{background:var(--hover)}
+.etapa:active{transform:scale(.97)}
+.etapa[aria-pressed=true]{background:var(--accent-soft);box-shadow:inset 0 0 0 1px rgb(8 122 138 / .35)}
+.etapa .bola{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;color:#fff;flex:none}
+.etapa .bola svg{width:15px;height:15px;stroke-width:2.3}
+.etapa b{display:block;font-size:13px;line-height:1.2}
+.etapa small{display:block;font-size:11px;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.etapa .n{margin-left:auto;font-size:12px;font-weight:600;color:var(--ink-2);background:var(--muted);border-radius:999px;padding:1px 8px;font-variant-numeric:tabular-nums}
+.etapa .seta{position:absolute;right:-10px;top:50%;transform:translateY(-50%);color:var(--ink-3);display:none}
+@media (min-width:1100px){.etapa .seta{display:block}}
+.divisor{display:none}
+@media (min-width:1100px){.divisor{display:block;background:var(--line);align-self:center;height:70%}}
+.volta{margin:8px 4px 0;font-size:11.5px;color:var(--ink-2);display:flex;align-items:center;gap:6px}
+
+/* fila + detalhe */
+.grade{display:grid;gap:16px;grid-template-columns:1fr}
+@media (min-width:1100px){.grade{grid-template-columns:minmax(19rem,.8fr) minmax(0,1.7fr)}}
+.fila{overflow:hidden;align-self:start}
+.fila-h{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line);font-size:13px;font-weight:600;color:var(--ink-2)}
+.fila-h span:last-child{background:var(--muted);color:var(--ink);font-size:10px;border-radius:999px;padding:3px 9px}
+.fila-corpo{max-height:680px;overflow:auto}
+.grupo{border-bottom:1px solid var(--line)}
+.grupo:last-child{border-bottom:0}
+.grupo>h3{margin:0}
+.grupo-bt{position:sticky;top:0;z-index:1;display:flex;align-items:center;gap:8px;width:100%;min-height:44px;padding:0 16px;border:0;background:rgb(251 253 254 / .9);backdrop-filter:blur(16px);font-size:13px;font-weight:600;text-align:left}
+.grupo-bt:hover{background:var(--muted)}
+.grupo-bt .chev{color:var(--ink-3);transition:transform .2s cubic-bezier(.23,1,.32,1)}
+.grupo-bt[aria-expanded=true] .chev{transform:rotate(90deg)}
+.grupo-bt .pt{width:8px;height:8px;border-radius:50%}
+.grupo-bt .n{margin-left:auto;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.grupo-c{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s cubic-bezier(.23,1,.32,1)}
+.grupo-c.aberto{grid-template-rows:1fr}
+.grupo-c>div{overflow:hidden}
+.grupo-c.aberto>div{padding:0 6px 6px}
+.vazio-g{padding:2px 12px 10px;font-size:12px;color:var(--ink-2)}
+@media (prefers-reduced-motion: reduce){.grupo-c,.grupo-bt .chev{transition:none}}
+.linha{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;width:100%;padding:8px;border:0;border-radius:var(--r-control);background:none;text-align:left}
+.linha:hover{background:var(--hover)}
+.linha[aria-pressed=true]{background:var(--accent);color:#fff}
+.linha[aria-pressed=true] .sub,.linha[aria-pressed=true] .data{color:rgb(255 255 255 / .82)}
+.linha[aria-pressed=true] .v{background:rgb(255 255 255 / .22);color:#fff}
+.mini{width:44px;height:44px;border-radius:.65rem;display:grid;place-items:center;color:#fff}
+.mini svg{width:18px;height:18px}
+.nome{display:block;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sub{display:flex;gap:6px;align-items:center;margin-top:2px;font-size:11.5px;color:var(--ink-2);min-width:0}
+.sub span:last-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sub .atrasado{color:var(--danger);font-weight:600}
+.v{font-size:10px;font-weight:700;background:var(--muted);color:var(--ink);border-radius:4px;padding:0 4px;flex:none}
+.barras{display:flex;gap:2px;margin-top:5px}
+.barras i{display:block;width:14px;height:3px;border-radius:2px}
+.data{align-self:start;padding-top:2px;font-size:11px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+
+.detalhe{padding:18px;min-height:460px}
+@media (min-width:720px){.detalhe{padding:24px}}
+.det-vazio{display:grid;place-items:center;min-height:400px;text-align:center;color:var(--ink-2);font-size:13px}
+.det-topo{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:flex-start;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.selo{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;border-radius:999px;padding:3px 10px}
+.selo .pt{width:6px;height:6px;border-radius:50%}
+.det-topo h2{margin:8px 0 2px;font-size:22px;letter-spacing:-.02em}
+.det-topo .meta{font-size:12.5px;color:var(--ink-2)}
+.instr{margin:14px 0 0;padding:12px 14px;border-radius:var(--r-control);background:var(--muted);font-size:13px;white-space:pre-line}
+.abas{display:flex;gap:4px;margin:16px 0;padding:3px;border-radius:var(--r-control);background:var(--muted);width:fit-content}
+.abas button{border:0;background:none;padding:7px 14px;border-radius:.65rem;font-size:13px;font-weight:600;color:var(--ink-2)}
+.abas button[aria-selected=true]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgb(0 0 0 / .1)}
+.video-grade{display:grid;gap:18px}
+@media (min-width:900px){.video-grade{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}}
+.player{background:#0c1d22;border-radius:var(--r-panel);overflow:hidden;display:grid;place-items:center;min-height:240px;max-height:520px}
+.player video{width:100%;max-height:520px;display:block;background:#000}
+.player .sem{color:rgb(255 255 255 / .7);font-size:13px;padding:30px;text-align:center}
+.versoes{display:flex;gap:4px;margin-top:8px;padding:3px;border-radius:var(--r-control);background:var(--muted)}
+.versoes button{flex:1;border:0;background:none;min-height:30px;border-radius:.6rem;font-size:12px;font-weight:600;color:var(--ink-2)}
+.versoes button[aria-selected=true]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgb(0 0 0 / .1)}
+h4{margin:0 0 8px;font-size:13px;color:var(--ink-2)}
+.coments{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.coment{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:start;padding:9px 10px;border-radius:var(--r-control);background:var(--surface);border:1px solid var(--line);font-size:13px}
+.coment.rasc{border-style:dashed;background:var(--warn-soft)}
+.tc{border:0;border-radius:6px;padding:1px 7px;background:var(--accent-soft);color:var(--accent);font-weight:700;font-size:12px;font-variant-numeric:tabular-nums}
+.coment small{display:block;color:var(--ink-2);font-size:11px;margin-top:2px}
+.x{border:0;background:none;color:var(--ink-3);padding:2px}
+.x:hover{color:var(--danger)}
+.campo{width:100%;min-height:40px;padding:9px 12px;border:1px solid var(--line);border-radius:var(--r-control);background:var(--surface);font-size:13px}
+textarea.campo{resize:vertical;min-height:70px}
+.form-coment{display:grid;grid-template-columns:auto 1fr auto;gap:6px;margin-top:8px}
+.caixa{margin-top:14px;padding:14px;border-radius:var(--r-panel);border:1px solid var(--line);background:rgb(255 255 255 / .6)}
+.caixa .acoes{margin-top:10px}
+.dica{font-size:12px;color:var(--ink-2);margin:6px 0 0}
+
+/* arquivos */
+.migalhas{display:flex;flex-wrap:wrap;align-items:center;gap:2px;font-size:13px;margin-bottom:10px}
+.migalhas button{border:0;background:none;padding:4px 6px;border-radius:6px;color:var(--ink-2);font-weight:600}
+.migalhas button:hover{background:var(--hover);color:var(--ink)}
+.migalhas span{color:var(--ink-3)}
+.arq-barra{display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center;margin-bottom:10px}
+.arquivos{border:1px solid var(--line);border-radius:var(--r-panel);overflow:hidden;background:var(--surface)}
+.arq{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 12px;border-top:1px solid var(--line);font-size:13px}
+.arq:first-child{border-top:0}
+.arq:nth-child(even){background:rgb(234 243 246 / .45)}
+.arq .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.arq button.nm{border:0;background:none;text-align:left;font-weight:600;padding:0}
+.arq button.nm:hover{color:var(--accent)}
+.arq .info{color:var(--ink-2);font-size:11.5px;font-variant-numeric:tabular-nums}
+.arq .bts{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+.arq .ic{color:var(--ink-2)}
+.arq .ic.pasta{color:#3a8fd6}
+.arq .ic.video{color:var(--e-reenviado)}
+.arq-vazio{padding:22px;text-align:center;color:var(--ink-2);font-size:13px}
+
+/* linha do tempo da tarefa */
+.tl{list-style:none;margin:0;padding:4px 14px;border:1px solid var(--line);border-radius:var(--r-panel);background:var(--surface)}
+.tl li{position:relative;display:grid;grid-template-columns:20px 1fr;gap:10px;padding:10px 0}
+.tl li:not(:last-child)::after{content:"";position:absolute;left:9px;top:32px;bottom:-4px;width:1.5px;background:var(--line)}
+.tl .pt{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;color:#fff;margin-top:1px}
+.tl .pt svg{width:11px;height:11px;stroke-width:2.8}
+.tl b{font-size:13px}
+.tl .q{margin-top:6px;padding:8px 10px;border-radius:.7rem;background:var(--warn-soft);font-size:12.5px;white-space:pre-line}
+.tl .m{font-size:11.5px;color:var(--ink-2);margin-top:1px}
+
+/* diálogos e envios */
+dialog{border:0;padding:0;border-radius:var(--r-panel);box-shadow:0 30px 80px rgb(24 50 58 / .3);width:min(560px,calc(100vw - 24px));color:var(--ink);background:var(--surface)}
+dialog::backdrop{background:rgb(24 50 58 / .35);backdrop-filter:blur(3px)}
+.dlg{padding:20px;display:grid;gap:12px}
+.dlg h2{margin:0;font-size:18px}
+.dlg label{font-size:12px;font-weight:600;display:grid;gap:5px}
+.lista-casas{max-height:280px;overflow:auto;border:1px solid var(--line);border-radius:var(--r-control)}
+.lista-casas button{display:flex;align-items:center;gap:8px;width:100%;border:0;border-top:1px solid var(--line);background:none;padding:9px 12px;text-align:left;font-size:13px}
+.lista-casas button:first-child{border-top:0}
+.lista-casas button:hover{background:var(--hover)}
+.lista-casas button[aria-pressed=true]{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.dois{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.envios{position:fixed;right:16px;bottom:16px;z-index:50;width:min(360px,calc(100vw - 32px));display:grid;gap:8px}
+.envio{padding:12px 14px;border-radius:var(--r-control);font-size:12.5px}
+.envio .nm{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prog{height:5px;border-radius:3px;background:var(--muted);margin-top:8px;overflow:hidden}
+.prog i{display:block;height:100%;background:var(--accent);transition:width .2s}
+.envio .lin{display:flex;justify-content:space-between;gap:8px;margin-top:6px;color:var(--ink-2)}
+.envio.erro .prog i{background:var(--danger)}
+.envio.feito .prog i{background:var(--e-aprovado)}
+.carregando{color:var(--ink-2);font-size:13px;padding:20px;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap" id="app" hidden>
+  <header class="topo">
+    <div>
+      <h1>Edição</h1>
+      <p id="resumo">Tarefas do editor, arquivos das casas e revisão dos vídeos.</p>
+    </div>
+    <div class="acoes" id="acoes-topo"></div>
+  </header>
+  <div id="avisos"></div>
+  <section class="fluxo vidro" aria-label="Etapas das tarefas">
+    <p class="tit">Caminho de cada tarefa · toque numa etapa para abrir</p>
+    <div class="etapas" id="etapas"></div>
+    <p class="volta"><svg class="i" viewBox="0 0 24 24" style="color:var(--e-ajustes);width:13px;height:13px"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>Ajustes pedidos → o editor envia nova versão → volta para você revisar</p>
+  </section>
+  <div class="grade">
+    <section class="fila cartao" aria-label="Fila de tarefas">
+      <div class="fila-h"><span>Tarefas</span><span id="total">0</span></div>
+      <div class="fila-corpo" id="fila"></div>
+    </section>
+    <section class="detalhe cartao" id="detalhe" aria-live="polite"></section>
+  </div>
+</div>
+
+<dialog id="dlg-tarefa"><form class="dlg" id="f-tarefa" method="dialog"></form></dialog>
+<dialog id="dlg-raiz"><div class="dlg" id="raiz-corpo"></div></dialog>
+<div class="envios" id="envios" aria-live="polite"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="edicao-logica.js"></script>
+<script>
+// Estes dois valores são públicos por natureza. Quem protege os dados é o login + as regras do banco.
+const SB = supabase.createClient('https://prrqshhnhvehvyafitax.supabase.co', 'sb_publishable_25ymkT18mK9bmAnEo-t5gw_mzYqdUiT');
+
+const COR = id => `var(--e-${id})`;
+const ICO = {
+  a_fazer:'<path d="M9 4.5h6M9 4.5a1.5 1.5 0 0 0-1.5 1.5v.5h9V6A1.5 1.5 0 0 0 15 4.5M7.5 6.5H6a1.5 1.5 0 0 0-1.5 1.5v11A1.5 1.5 0 0 0 6 20.5h12a1.5 1.5 0 0 0 1.5-1.5V8A1.5 1.5 0 0 0 18 6.5h-1.5"/>',
+  em_edicao:'<path d="M4 20h4L19 9l-4-4L4 16z"/>',
+  para_revisar:'<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/>',
+  ajustes:'<path d="M12 8v5M12 16.5h.01"/><path d="M10.3 3.9 2.6 17.5A2 2 0 0 0 4.3 20.5h15.4a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>',
+  reenviado:'<path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/>',
+  aprovado:'<path d="m5 12.5 4.5 4.5L19 7.5"/>',
+  chev:'<path d="m9 6 6 6-6 6"/>', mais:'<path d="M12 5v14M5 12h14"/>', pasta:'<path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2.5h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/>',
+  video:'<rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="M10 9.5v5l4.3-2.5z"/>', imagem:'<rect x="3.5" y="4.5" width="17" height="15" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="m20.5 16-5-5-9 8.5"/>',
+  arquivo:'<path d="M13.5 3.5H7a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9z"/><path d="M13.5 3.5V9H19"/>', baixar:'<path d="M12 4v11M7 10.5l5 5 5-5M5 20h14"/>',
+  abrir:'<path d="M14 4.5h5.5V10M19.5 4.5 11 13"/><path d="M18 14v4.5a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 4 18.5v-11A1.5 1.5 0 0 1 5.5 6H10"/>', enviar:'<path d="M12 20V9M7 13.5l5-5 5 5M5 4h14"/>',
+  sair:'<path d="M15 4.5h3.5A1.5 1.5 0 0 1 20 6v12a1.5 1.5 0 0 1-1.5 1.5H15M10 16.5 14.5 12 10 7.5M14.5 12H4"/>', voltar:'<path d="m14.5 6-6 6 6 6"/>',
+  x:'<path d="M6 6l12 12M18 6 6 18"/>', drive:'<path d="m8.5 4 7 0 5 8.5-3.5 6h-10l-3.5-6z"/><path d="M8.5 4 12 10M15.5 4 8 16.5M3.5 12.5H17"/>'
+};
+const ico = (k, cls = '') => `<svg class="i ${cls}" viewBox="0 0 24 24" aria-hidden="true">${ICO[k] || ''}</svg>`;
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[c]);
+const hojeStr = () => new Date().toLocaleDateString('en-CA', { timeZone: 'America/Bahia' });
+const quando = iso => iso ? new Date(iso).toLocaleString('pt-BR', { timeZone: 'America/Bahia', day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' }).replace(',', ' às') : '';
+const diaMes = iso => iso ? new Date(iso).toLocaleDateString('pt-BR', { timeZone: 'America/Bahia', day:'2-digit', month:'2-digit' }) : '';
+const nomeEtapa = id => (ETAPAS.find(e => e.id === id) || {}).nome || id;
+
+let EU = null;          // { papel, nome }
+let DRIVE = null;       // estado do Drive
+let TAREFAS = [];
+let sel = null, aba = 'video', versaoVista = null;
+const abertas = new Set();
+const players = {};     // tarefa → { numero: url assinada }
+let ARQ = { tarefa: null, pasta: null, dados: null, carregando: false, erro: '' };
+let rascunhoTempo = null;
+
+async function token() { const { data: { session } } = await SB.auth.getSession(); return session?.access_token || ''; }
+async function api(caminho, opcoes = {}) {
+  const r = await fetch(caminho, { ...opcoes, headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${await token()}`, ...(opcoes.headers || {}) } });
+  const dados = await r.json().catch(() => ({}));
+  if (!r.ok) { const e = new Error(dados.erro || String(r.status)); e.codigo = dados.erro; e.status = r.status; throw e; }
+  return dados;
+}
+const MSG = {
+  drive_desconectado: 'O Google Drive está desconectado.',
+  fora_da_raiz: 'Esta pasta está fora da pasta de trabalho.',
+  fora_da_casa: 'Esse arquivo não está dentro da pasta desta casa.',
+  nao_e_video: 'Escolha um arquivo de vídeo.',
+  sem_raiz: 'Falta escolher a pasta de trabalho no Drive.',
+};
+function aviso(texto, tom = '') {
+  const el = document.getElementById('avisos');
+  el.innerHTML = texto ? `<p class="aviso-box ${tom}" role="${tom === 'erro' ? 'alert' : 'status'}">${esc(texto)}</p>` : '';
+  if (texto && tom !== 'erro') setTimeout(() => { if (el.textContent.includes(texto)) el.innerHTML = ''; }, 6000);
+}
+
+// ------------------------------------------------------------ dados
+async function carregarTarefas() {
+  const { data, error } = await SB.from('tarefas')
+    .select('*, versoes(numero,nome,tamanho,nota,enviada_por,enviada_em,drive_file_id), eventos(tipo,versao,autor,texto,criado_em), comentarios(id,versao,tempo_seg,texto,autor,enviado,criado_em)')
+    .order('atualizada_em', { ascending: false });
+  if (error) { aviso('Não foi possível carregar as tarefas. Confira se a migração do banco já foi rodada.', 'erro'); TAREFAS = []; return; }
+  TAREFAS = (data || []).map(t => ({
+    ...t,
+    versoes: (t.versoes || []).sort((a, b) => a.numero - b.numero),
+    eventos: (t.eventos || []).sort((a, b) => a.criado_em < b.criado_em ? -1 : 1),
+    comentarios: (t.comentarios || []).sort((a, b) => (a.tempo_seg ?? 1e9) - (b.tempo_seg ?? 1e9) || (a.criado_em < b.criado_em ? -1 : 1)),
+  }));
+}
+const tarefaSel = () => TAREFAS.find(t => t.id === sel) || null;
+const etapaT = t => etapaDe(t.status, t.versoes.length);
+
+async function assinaturas(t) {
+  if (!t.versoes.length) return;
+  try {
+    const { versoes } = await api(`/api/tarefas/versao?tarefa=${t.id}`);
+    players[t.id] = Object.fromEntries(versoes.map(v => [v.numero, v.video]));
+  } catch (e) { players[t.id] = {}; }
+}
+
+// ------------------------------------------------------------ topo, etapas e fila
+function renderTopo() {
+  const para = TAREFAS.filter(t => ['para_revisar'].includes(t.status)).length;
+  const ajustes = TAREFAS.filter(t => t.status === 'ajustes').length;
+  document.getElementById('resumo').textContent = TAREFAS.length
+    ? `${TAREFAS.length} ${TAREFAS.length === 1 ? 'tarefa' : 'tarefas'} · ${para} para revisar · ${ajustes} com ajustes pedidos`
+    : 'Tarefas do editor, arquivos das casas e revisão dos vídeos.';
+  const dono = EU.papel === 'dono';
+  let html = '';
+  if (dono) {
+    html += DRIVE?.conectado
+      ? `<span class="chip" title="Pasta de trabalho: ${esc(DRIVE.raiz?.nome || 'não escolhida')}">${ico('drive')} ${esc(DRIVE.email || 'Drive conectado')}</span>
+         <button class="btn peq" type="button" data-act="raiz">${DRIVE.raiz ? 'Pasta: ' + esc(DRIVE.raiz.nome) : 'Escolher pasta de trabalho'}</button>`
+      : `<button class="btn aviso" type="button" data-act="conectar">${ico('drive')} Conectar Google Drive</button>`;
+    html += `<a class="btn" href="painel.html">${ico('voltar')} Prospecção</a>`;
+    html += `<button class="btn prim" type="button" data-act="nova" ${DRIVE?.raiz ? '' : 'disabled title="Conecte o Drive e escolha a pasta de trabalho"'}>${ico('mais')} Nova tarefa</button>`;
+  } else {
+    if (!DRIVE?.conectado) html += `<span class="chip off">Drive desconectado: avise o Cainan</span>`;
+    html += `<span class="chip" style="background:var(--muted);color:var(--ink)">${esc(EU.nome)}</span><button class="btn" type="button" data-act="sair">${ico('sair')} Sair</button>`;
+  }
+  document.getElementById('acoes-topo').innerHTML = html;
+}
+
+function renderEtapas() {
+  document.getElementById('etapas').innerHTML = ETAPAS.map((e, i) => {
+    const n = TAREFAS.filter(t => etapaT(t) === e.id).length;
+    const on = abertas.size === 1 && abertas.has(e.id);
+    return (i === 5 ? '<span class="divisor" aria-hidden="true"></span>' : '') +
+      `<button class="etapa" type="button" data-etapa="${e.id}" aria-pressed="${on}">
+        <span class="bola" style="background:${COR(e.id)}">${ico(e.id)}</span>
+        <span style="min-width:0"><b>${e.nome}</b><small>${e.dica}</small></span>
+        <span class="n">${n}</span>${i < 4 ? `<span class="seta">${ico('chev')}</span>` : ''}
+      </button>`;
+  }).join('');
+}
+
+function linhaTarefa(t) {
+  const etapa = etapaT(t), pr = prazoInfo(t.prazo, hojeStr());
+  const ultimoAjuste = [...t.eventos].reverse().find(e => e.tipo === 'ajustes');
+  const sub = etapa === 'ajustes' && ultimoAjuste?.texto ? `“${esc(ultimoAjuste.texto)}”`
+    : pr && etapa !== 'aprovado' ? `<span class="${pr.atrasado ? 'atrasado' : ''}">${esc(pr.texto)}</span>` : esc(t.tipo);
+  const caminho = caminhoTarefa(t.eventos);
+  return `<button class="linha" type="button" data-tarefa="${t.id}" aria-pressed="${t.id === sel}">
+    <span class="mini" style="background:${COR(etapa)}">${ico('video')}</span>
+    <span style="min-width:0">
+      <span class="nome" title="${esc(t.casa_nome)}">${esc(t.casa_nome)}</span>
+      <span class="sub">${t.versoes.length ? `<span class="v">V${t.versoes.length}</span>` : ''}<span>${esc(t.tipo)} · ${sub}</span></span>
+      <span class="barras" role="img" aria-label="Caminho: ${esc(caminho.map(nomeEtapa).join(', '))}">${caminho.map(c => `<i style="background:${COR(c)}"></i>`).join('')}</span>
+    </span>
+    <span class="data">${diaMes(t.atualizada_em)}</span>
+  </button>`;
+}
+
+function renderFila() {
+  document.getElementById('total').textContent = TAREFAS.length;
+  document.getElementById('fila').innerHTML = TAREFAS.length === 0
+    ? `<p class="carregando">${EU.papel === 'dono' ? 'Nenhuma tarefa ainda. Use “Nova tarefa”.' : 'Nenhuma tarefa por enquanto.'}</p>`
+    : ETAPAS.map(e => {
+      const itens = TAREFAS.filter(t => etapaT(t) === e.id), aberto = abertas.has(e.id);
+      return `<section class="grupo" aria-label="${e.nome}">
+        <h3><button class="grupo-bt" type="button" data-grupo="${e.id}" aria-expanded="${aberto}">
+          <span class="chev">${ico('chev')}</span><span class="pt" style="background:${COR(e.id)}"></span>${e.nome}<span class="n">${itens.length}</span>
+        </button></h3>
+        <div class="grupo-c ${aberto ? 'aberto' : ''}"><div ${aberto ? '' : 'inert'}>
+          ${itens.length ? itens.map(linhaTarefa).join('') : '<p class="vazio-g">Nenhuma tarefa nesta etapa.</p>'}
+        </div></div>
+      </section>`;
+    }).join('');
+}
+
+// ------------------------------------------------------------ detalhe
+function renderDetalhe() {
+  const el = document.getElementById('detalhe'), t = tarefaSel();
+  if (!t) { el.innerHTML = `<div class="det-vazio"><div>${ico('video')}<p>Abra uma etapa à esquerda e escolha uma tarefa.</p></div></div>`; return; }
+  const etapa = etapaT(t), pr = prazoInfo(t.prazo, hojeStr());
+  el.innerHTML = `
+    <div class="det-topo">
+      <div style="min-width:0;flex:1 1 260px">
+        <span class="selo" style="background:color-mix(in srgb, ${COR(etapa)} 14%, transparent);color:${COR(etapa)}"><span class="pt" style="background:${COR(etapa)}"></span>${nomeEtapa(etapa)}${t.versoes.length ? ' · V' + t.versoes.length : ''}</span>
+        <h2>${esc(t.casa_nome)}</h2>
+        <p class="meta">${esc(t.tipo)}${pr ? ` · <span style="${pr.atrasado ? 'color:var(--danger);font-weight:600' : ''}">prazo ${esc(pr.texto)}</span>` : ''} · criada em ${diaMes(t.criada_em)}</p>
+      </div>
+      <div class="acoes">
+        ${t.status === 'a_fazer' ? `<button class="btn prim" type="button" data-act="comecar">${ico('em_edicao')} Começar edição</button>` : ''}
+        <a class="btn peq" href="https://drive.google.com/drive/folders/${esc(t.casa_pasta_id)}" target="_blank" rel="noopener">${ico('abrir')} Pasta no Drive</a>
+      </div>
+    </div>
+    ${t.instrucoes ? `<p class="instr">${esc(t.instrucoes)}</p>` : ''}
+    <div class="abas" role="tablist">
+      ${[['video', 'Vídeo'], ['arquivos', 'Arquivos'], ['linha', 'Linha do tempo']].map(([k, n]) => `<button type="button" role="tab" data-aba="${k}" aria-selected="${aba === k}">${n}</button>`).join('')}
+    </div>
+    <div id="aba-corpo">${aba === 'video' ? abaVideo(t) : aba === 'arquivos' ? abaArquivos(t) : abaLinha(t)}</div>`;
+  if (aba === 'arquivos' && (ARQ.tarefa !== t.id || (!ARQ.dados && !ARQ.carregando && !ARQ.erro))) abrirPasta(t, t.casa_pasta_id);
+}
+
+function abaVideo(t) {
+  const dono = EU.papel === 'dono';
+  const atual = t.versoes.at(-1)?.numero;
+  const vista = versaoVista ?? atual;
+  const url = players[t.id]?.[vista];
+  const coments = t.comentarios.filter(c => c.versao === vista && (c.enviado || dono));
+  const rasc = t.comentarios.filter(c => !c.enviado && c.versao === atual);
+  const versao = t.versoes.find(v => v.numero === vista);
+  const fechada = t.status === 'aprovado';
+  return `<div class="video-grade">
+    <div>
+      <div class="player">${url ? `<video id="player" controls preload="metadata" playsinline src="${esc(url)}"></video>`
+        : `<p class="sem">${t.versoes.length ? 'Carregando o vídeo…' : 'Ainda não há vídeo enviado.'}</p>`}</div>
+      ${t.versoes.length > 1 ? `<div class="versoes" role="tablist" aria-label="Versões">${t.versoes.map(v => `<button type="button" role="tab" data-versao="${v.numero}" aria-selected="${v.numero === vista}">V${v.numero}${v.numero === atual ? ' · atual' : ''}</button>`).join('')}</div>` : ''}
+      ${versao ? `<p class="dica">${esc(versao.nome)} · ${esc(tamanhoLegivel(versao.tamanho))} · enviada por ${esc(versao.enviada_por)} em ${quando(versao.enviada_em)}${versao.nota ? ` · “${esc(versao.nota)}”` : ''}</p>` : ''}
+      ${!dono && !fechada ? `<div class="caixa">
+          <h4>${t.versoes.length ? 'Enviar nova versão' : 'Enviar o vídeo para revisão'}</h4>
+          <input class="campo" id="nota-versao" placeholder="O que mudou? (opcional)" maxlength="300">
+          <div class="acoes"><label class="btn prim">${ico('enviar')} Escolher vídeo do computador<input type="file" accept="video/*" id="arq-versao" hidden></label></div>
+          <p class="dica">Vai para a pasta “06 Saída” da casa. Se você já subiu pelo Cyberduck, use “Enviar para revisão” na aba Arquivos.</p>
+        </div>` : ''}
+    </div>
+    <div>
+      <h4>Comentários ${vista ? `da V${vista}` : ''}</h4>
+      ${coments.length ? `<ul class="coments">${coments.map(c => `<li class="coment ${c.enviado ? '' : 'rasc'}">
+          ${c.tempo_seg !== null ? `<button class="tc" type="button" data-pular="${c.tempo_seg}">${timecode(c.tempo_seg)}</button>` : '<span></span>'}
+          <span>${esc(c.texto)}<small>${esc(c.autor)} · ${quando(c.criado_em)}${c.enviado ? '' : ' · rascunho (ainda não enviado)'}</small></span>
+          ${!c.enviado && dono ? `<button class="x" type="button" data-apagar="${c.id}" aria-label="Apagar rascunho">${ico('x')}</button>` : '<span></span>'}
+        </li>`).join('')}</ul>` : `<p class="dica">${t.versoes.length ? 'Nenhum comentário nesta versão.' : 'Os comentários aparecem aqui quando houver vídeo.'}</p>`}
+      ${t.versoes.length && vista === atual && !fechada ? `<form class="form-coment" id="f-coment">
+          <button class="tc" type="button" id="tc-atual" title="Comentário no minuto atual do vídeo">${rascunhoTempo !== null ? timecode(rascunhoTempo) : '00:00'}</button>
+          <input class="campo" id="txt-coment" placeholder="${dono ? 'Comentar neste minuto (ex.: trocar a música)' : 'Responder'}" maxlength="4000" required>
+          <button class="btn peq prim" type="submit">Comentar</button>
+        </form>` : ''}
+      ${dono && t.versoes.length && !fechada && ['para_revisar', 'ajustes'].includes(t.status) ? `<div class="caixa">
+          <h4>Sua decisão</h4>
+          <textarea class="campo" id="txt-ajustes" placeholder="Pedido geral de ajustes (opcional se você já comentou nos minutos)"></textarea>
+          <div class="acoes">
+            <button class="btn aviso" type="button" data-act="ajustes" ${t.status === 'ajustes' && !rasc.length ? 'disabled title="Ajustes já pedidos; aguarde a nova versão"' : ''}>${ico('ajustes')} Pedir ajustes${rasc.length ? ` (${rasc.length} ${rasc.length === 1 ? 'comentário' : 'comentários'})` : ''}</button>
+            <button class="btn prim" type="button" data-act="aprovar">${ico('aprovado')} Aprovar V${atual}</button>
+          </div>
+        </div>` : ''}
+      ${fechada ? `<p class="aviso-box ok">Aprovado. Este vídeo está pronto.</p>` : ''}
+    </div>
+  </div>`;
+}
+
+function abaArquivos(t) {
+  if (!DRIVE?.conectado) return `<p class="aviso-box erro">${EU.papel === 'dono' ? 'Conecte o Google Drive no topo da página.' : 'O Drive está desconectado. Avise o Cainan.'}</p>`;
+  if (ARQ.tarefa !== t.id || ARQ.carregando || !ARQ.dados) return ARQ.erro && ARQ.tarefa === t.id ? `<p class="aviso-box erro">${esc(ARQ.erro)}</p>` : '<p class="carregando">Abrindo a pasta…</p>';
+  const d = ARQ.dados, fechada = t.status === 'aprovado';
+  const casaIdx = d.caminho.findIndex(p => p.id === t.casa_pasta_id);
+  const migalhas = (casaIdx >= 0 ? d.caminho.slice(casaIdx) : d.caminho);
+  return `<div class="migalhas">${migalhas.map((p, i) => `${i ? '<span>›</span>' : ''}<button type="button" data-pasta="${esc(p.id)}">${esc(p.nome)}</button>`).join('')}</div>
+    <div class="arq-barra">
+      <span class="dica" style="margin:0">${d.itens.length} ${d.itens.length === 1 ? 'item' : 'itens'}</span>
+      <span class="acoes">
+        <a class="btn peq" href="${esc(d.pasta.link)}" target="_blank" rel="noopener">${ico('abrir')} Abrir no Drive</a>
+        <label class="btn peq prim">${ico('enviar')} Enviar arquivos<input type="file" multiple id="arq-envio" hidden></label>
+      </span>
+    </div>
+    <div class="arquivos">${d.itens.length ? d.itens.map(a => `<div class="arq">
+        <span class="ic ${a.tipo}">${ico(a.tipo)}</span>
+        <span style="min-width:0">${a.tipo === 'pasta' ? `<button class="nm" type="button" data-pasta="${esc(a.id)}">${esc(a.nome)}</button>` : `<span class="nm" title="${esc(a.nome)}" style="display:block">${esc(a.nome)}</span>`}
+          <span class="info">${a.tipo === 'pasta' ? 'Pasta' : esc(tamanhoLegivel(a.tamanho))}${a.modificado ? ' · ' + diaMes(a.modificado) : ''}</span></span>
+        <span class="bts">
+          ${a.tipo === 'video' && !fechada ? `<button class="btn peq" type="button" data-revisar="${esc(a.id)}">${ico('para_revisar')} Enviar para revisão</button>` : ''}
+          ${a.download ? `<a class="btn peq" href="${esc(a.download)}" target="_blank" rel="noopener">${ico('baixar')} Baixar</a>` : ''}
+          <a class="btn peq" href="${esc(a.link)}" target="_blank" rel="noopener" aria-label="Abrir ${esc(a.nome)} no Drive">${ico('abrir')}</a>
+        </span>
+      </div>`).join('') : '<p class="arq-vazio">Pasta vazia.</p>'}</div>
+    <p class="dica">Baixar abre no Google Drive (use a sua conta com acesso às pastas). Enviar só cria arquivos novos; nada é apagado.</p>`;
+}
+
+function abaLinha(t) {
+  const enviados = t.comentarios.filter(c => c.enviado);
+  const titulo = e => ({ criada: 'Tarefa criada', comecou: 'Edição começou', versao: e.versao > 1 ? `V${e.versao} reenviada com os ajustes` : 'V1 enviada para revisão', ajustes: 'Ajustes pedidos', aprovada: `V${e.versao} aprovada` })[e.tipo];
+  const etapaEv = e => ({ criada: 'a_fazer', comecou: 'em_edicao', versao: e.versao > 1 ? 'reenviado' : 'para_revisar', ajustes: 'ajustes', aprovada: 'aprovado' })[e.tipo];
+  const itens = t.eventos.map(e => {
+    const notas = e.tipo === 'ajustes' ? enviados.filter(c => c.versao === e.versao && c.autor !== EU_NOME_EDITOR(t, c)) : [];
+    const txt = [e.texto, ...notas.map(c => (c.tempo_seg !== null ? timecode(c.tempo_seg) + ' · ' : '') + c.texto)].filter(Boolean).join('\n');
+    return `<li><span class="pt" style="background:${COR(etapaEv(e))}">${ico(etapaEv(e))}</span>
+      <div><b>${titulo(e)}</b><p class="m">${quando(e.criado_em)} · ${esc(e.autor)}</p>${txt && e.tipo !== 'criada' ? `<div class="q">${esc(txt)}</div>` : ''}</div></li>`;
+  });
+  const esperando = { para_revisar: 'Aguardando a sua revisão', ajustes: 'Aguardando a nova versão do editor', em_edicao: 'Em edição', a_fazer: 'Aguardando o editor começar' }[t.status];
+  if (esperando) itens.push(`<li><span class="pt" style="background:none;border:1.5px dashed var(--ink-3)"></span><div><b style="color:var(--ink-2)">${esperando}</b></div></li>`);
+  return `<ol class="tl">${itens.join('')}</ol>`;
+}
+// comentários do pedido de ajustes = os do dono (o editor responde com o próprio nome)
+function EU_NOME_EDITOR(t, c) { return t.versoes.find(v => v.numero === c.versao)?.enviada_por; }
+
+// ------------------------------------------------------------ arquivos
+async function abrirPasta(t, pastaId) {
+  ARQ = { tarefa: t.id, pasta: pastaId, dados: null, carregando: true, erro: '' };
+  if (aba === 'arquivos') document.getElementById('aba-corpo').innerHTML = abaArquivos(t);
+  try { ARQ.dados = await api(`/api/drive?pasta=${encodeURIComponent(pastaId)}`); }
+  catch (e) { ARQ.erro = MSG[e.codigo] || 'Não foi possível abrir a pasta.'; }
+  ARQ.carregando = false;
+  if (sel === t.id && aba === 'arquivos') document.getElementById('aba-corpo').innerHTML = abaArquivos(t);
+}
+
+// ------------------------------------------------------------ envio em partes direto para o Google
+const PARTE = 16 * 1024 * 1024; // múltiplo de 256 KB
+let envioSeq = 0;
+const ENVIOS = new Map();
+function renderEnvios() {
+  document.getElementById('envios').innerHTML = [...ENVIOS.values()].map(e => {
+    const pct = e.total ? Math.round(e.enviado / e.total * 100) : 0;
+    return `<div class="envio cartao ${e.estado}">
+      <div class="nm" title="${esc(e.arquivo.name)}">${esc(e.arquivo.name)}</div>
+      <div class="prog"><i style="width:${e.estado === 'feito' ? 100 : pct}%"></i></div>
+      <div class="lin"><span>${e.estado === 'feito' ? 'Enviado' : e.estado === 'erro' ? esc(e.erro || 'Falhou') : `${tamanhoLegivel(e.enviado)} de ${tamanhoLegivel(e.total)} · ${pct}%`}</span>
+        ${e.estado === 'erro' ? `<button class="btn peq" type="button" data-retomar="${e.id}">Tentar de novo</button>` : e.estado === 'feito' ? `<button class="x" type="button" data-fechar-envio="${e.id}" aria-label="Fechar">${ico('x')}</button>` : ''}</div>
+    </div>`;
+  }).join('');
+}
+async function enviarArquivo(arquivo, destino) {
+  const e = { id: ++envioSeq, arquivo, destino, total: arquivo.size, enviado: 0, estado: 'enviando', url: null, resultado: null };
+  ENVIOS.set(e.id, e); renderEnvios();
+  await continuarEnvio(e);
+  return e;
+}
+async function continuarEnvio(e) {
+  e.estado = 'enviando'; e.erro = ''; renderEnvios();
+  try {
+    if (!e.url) {
+      const { url } = await api('/api/drive/envio', { method: 'POST', body: JSON.stringify({ ...e.destino, nome: e.arquivo.name, tipo: e.arquivo.type || 'application/octet-stream', tamanho: e.arquivo.size }) });
+      e.url = url;
+    }
+    while (e.enviado < e.total) {
+      const fim = Math.min(e.enviado + PARTE, e.total);
+      const r = await fetch(e.url, { method: 'PUT', headers: { 'Content-Range': `bytes ${e.enviado}-${fim - 1}/${e.total}` }, body: e.arquivo.slice(e.enviado, fim) });
+      if (r.status === 308) { const rg = r.headers.get('Range'); e.enviado = rg ? Number(rg.split('-')[1]) + 1 : fim; }
+      else if (r.ok) { e.resultado = await r.json().catch(() => ({})); e.enviado = e.total; }
+      else if (r.status === 404 || r.status === 410) { e.url = null; e.enviado = 0; throw new Error('O envio expirou; comece de novo.'); }
+      else throw new Error(`O Google respondeu ${r.status}.`);
+      renderEnvios();
+    }
+    e.estado = 'feito'; renderEnvios();
+    setTimeout(() => { if (ENVIOS.get(e.id)?.estado === 'feito') { ENVIOS.delete(e.id); renderEnvios(); } }, 8000);
+  } catch (err) {
+    e.estado = 'erro'; e.erro = MSG[err.codigo] || err.message || 'Falhou'; renderEnvios();
+  }
+  return e;
+}
+
+// ------------------------------------------------------------ ações
+async function recarregar(manterAba = true) {
+  await carregarTarefas();
+  const t = tarefaSel();
+  if (t) await assinaturas(t);
+  if (!manterAba) aba = 'video';
+  renderTopo(); renderEtapas(); renderFila(); renderDetalhe();
+}
+async function rpc(nome, args, ok) {
+  const { error } = await SB.rpc(nome, args);
+  if (error) { aviso(/escreva/.test(error.message) ? 'Escreva o que precisa mudar ou comente num minuto do vídeo.' : 'Não foi possível salvar. Tente de novo.', 'erro'); return false; }
+  if (ok) aviso(ok, 'ok');
+  await recarregar();
+  return true;
+}
+async function registrarVersao(t, arquivoId, nota = '') {
+  try {
+    const { numero } = await api('/api/tarefas/versao', { method: 'POST', body: JSON.stringify({ tarefa: t.id, arquivo: arquivoId, nota }) });
+    aviso(`V${numero} enviada para revisão.`, 'ok');
+    versaoVista = null; aba = 'video';
+    await recarregar();
+  } catch (e) { aviso(MSG[e.codigo] || 'Não foi possível registrar a versão.', 'erro'); }
+}
+
+document.addEventListener('click', async e => {
+  const el = e.target.closest('[data-act],[data-etapa],[data-grupo],[data-tarefa],[data-aba],[data-versao],[data-pular],[data-apagar],[data-pasta],[data-revisar],[data-retomar],[data-fechar-envio],[data-casa],[data-raiz-ir],[data-raiz-usar]');
+  if (!el) return;
+  const t = tarefaSel(), d = el.dataset;
+  if (d.etapa) { abertas.clear(); abertas.add(d.etapa); renderEtapas(); renderFila(); return; }
+  if (d.grupo) { abertas.has(d.grupo) ? abertas.delete(d.grupo) : abertas.add(d.grupo); renderEtapas(); renderFila(); return; }
+  if (d.tarefa) { sel = Number(d.tarefa); versaoVista = null; rascunhoTempo = null; renderFila(); renderDetalhe(); const nt = tarefaSel(); await assinaturas(nt); if (sel === nt.id) renderDetalhe(); return; }
+  if (d.aba) { aba = d.aba; renderDetalhe(); return; }
+  if (d.versao) { versaoVista = Number(d.versao); renderDetalhe(); return; }
+  if (d.pular) { const p = document.getElementById('player'); if (p) { p.currentTime = Number(d.pular); p.play().catch(() => {}); } return; }
+  if (d.apagar) return rpc('apagar_rascunho', { p_comentario: Number(d.apagar) });
+  if (d.pasta && t) return abrirPasta(t, d.pasta);
+  if (d.revisar && t) return registrarVersao(t, d.revisar);
+  if (d.retomar) { const en = ENVIOS.get(Number(d.retomar)); if (en) { await continuarEnvio(en); en.depois?.(en); } return; }
+  if (d.fecharEnvio) { ENVIOS.delete(Number(d.fecharEnvio)); renderEnvios(); return; }
+  if (d.casa) { document.querySelectorAll('[data-casa]').forEach(b => b.setAttribute('aria-pressed', String(b === el))); document.getElementById('casa-escolhida').value = JSON.stringify({ id: d.casa, nome: el.dataset.nome }); return; }
+  if (d.raizIr) return navegarRaiz(d.raizIr);
+  if (d.raizUsar) return usarRaiz(d.raizUsar);
+  switch (d.act) {
+    case 'sair': await SB.auth.signOut(); location.replace('painel.html'); return;
+    case 'conectar': location.href = `/api/google/login?token=${encodeURIComponent(await token())}`; return;
+    case 'raiz': return abrirRaiz();
+    case 'nova': return abrirNovaTarefa();
+    case 'comecar': return rpc('comecar_edicao', { p_tarefa: t.id }, 'Edição começou.');
+    case 'aprovar': if (confirm(`Aprovar a V${t.versoes.at(-1)?.numero} de ${t.casa_nome}?`)) return rpc('aprovar_tarefa', { p_tarefa: t.id }, 'Vídeo aprovado.'); return;
+    case 'ajustes': return rpc('pedir_ajustes', { p_tarefa: t.id, p_texto: document.getElementById('txt-ajustes')?.value || '' }, 'Ajustes enviados para o editor.');
+  }
+});
+
+// minuto do comentário: pega o tempo do vídeo ao começar a escrever (e ao tocar no selo)
+document.addEventListener('focusin', e => {
+  if (e.target.id !== 'txt-coment') return;
+  const p = document.getElementById('player'); if (!p) return;
+  p.pause(); rascunhoTempo = p.currentTime; const tc = document.getElementById('tc-atual'); if (tc) tc.textContent = timecode(rascunhoTempo);
+});
+document.addEventListener('click', e => {
+  if (e.target.id !== 'tc-atual') return;
+  const p = document.getElementById('player'); if (!p) return;
+  rascunhoTempo = p.currentTime; e.target.textContent = timecode(rascunhoTempo);
+});
+
+document.addEventListener('submit', async e => {
+  if (e.target.id === 'f-coment') {
+    e.preventDefault();
+    const t = tarefaSel(), txt = document.getElementById('txt-coment').value.trim(); if (!t || !txt) return;
+    const p = document.getElementById('player');
+    const tempo = rascunhoTempo ?? (p ? p.currentTime : null);
+    rascunhoTempo = null;
+    await rpc('comentar', { p_tarefa: t.id, p_versao: t.versoes.at(-1).numero, p_tempo: tempo !== null ? Math.round(tempo * 10) / 10 : null, p_texto: txt });
+  }
+  if (e.target.id === 'f-tarefa') { e.preventDefault(); return salvarTarefa(); }
+});
+
+document.addEventListener('change', async e => {
+  const t = tarefaSel(); if (!t) return;
+  if (e.target.id === 'arq-versao' && e.target.files[0]) {
+    const arquivo = e.target.files[0], nota = document.getElementById('nota-versao')?.value || '';
+    e.target.value = '';
+    const envio = await enviarArquivo(arquivo, { casa: t.casa_pasta_id });
+    envio.depois = async en => { if (en.estado === 'feito' && en.resultado?.id) await registrarVersao(t, en.resultado.id, nota); };
+    await envio.depois(envio);
+  }
+  if (e.target.id === 'arq-envio' && e.target.files.length) {
+    const arquivos = [...e.target.files], pasta = ARQ.pasta; e.target.value = '';
+    for (const a of arquivos) await enviarArquivo(a, { pasta });
+    if (sel === t.id) abrirPasta(t, pasta);
+  }
+});
+
+// ------------------------------------------------------------ nova tarefa
+async function abrirNovaTarefa() {
+  const dlg = document.getElementById('dlg-tarefa'), f = document.getElementById('f-tarefa');
+  f.innerHTML = `<h2>Nova tarefa</h2>
+    <label>Casa (pasta em ${esc(DRIVE.raiz.nome)})<input class="campo" id="busca-casa" placeholder="Buscar casa" autocomplete="off"></label>
+    <div class="lista-casas" id="lista-casas"><p class="carregando">Carregando as casas…</p></div>
+    <input type="hidden" id="casa-escolhida">
+    <div class="dois">
+      <label>Tipo<select class="campo" id="t-tipo">${['Reels', 'Pílula', 'Tour', 'Carrossel', 'Outro'].map(x => `<option>${x}</option>`).join('')}</select></label>
+      <label>Prazo<input class="campo" type="date" id="t-prazo"></label>
+    </div>
+    <label>Instruções para o editor<textarea class="campo" id="t-instr" placeholder="Ex.: Reels de 30 s, abrir com o drone da piscina, música calma"></textarea></label>
+    <p class="dica" id="t-erro" role="alert" style="color:var(--danger)"></p>
+    <div class="acoes" style="justify-content:flex-end"><button class="btn" type="button" onclick="this.closest('dialog').close()">Cancelar</button><button class="btn prim" type="submit">Criar tarefa</button></div>`;
+  dlg.showModal();
+  try {
+    const { itens } = await api(`/api/drive?pasta=${encodeURIComponent(DRIVE.raiz.id)}`);
+    const casas = itens.filter(i => i.tipo === 'pasta');
+    const pintar = filtro => {
+      const n = semAcentoBusca(filtro);
+      const lista = casas.filter(c => semAcentoBusca(c.nome).includes(n));
+      document.getElementById('lista-casas').innerHTML = lista.length ? lista.map(c => `<button type="button" data-casa="${esc(c.id)}" data-nome="${esc(c.nome)}" aria-pressed="false">${ico('pasta')} ${esc(c.nome)}</button>`).join('') : '<p class="carregando">Nenhuma pasta encontrada.</p>';
+    };
+    pintar('');
+    document.getElementById('busca-casa').oninput = ev => pintar(ev.target.value);
+  } catch (err) { document.getElementById('lista-casas').innerHTML = `<p class="carregando">${esc(MSG[err.codigo] || 'Não foi possível listar as casas.')}</p>`; }
+}
+const semAcentoBusca = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+async function salvarTarefa() {
+  const casa = document.getElementById('casa-escolhida').value, erro = document.getElementById('t-erro');
+  if (!casa) { erro.textContent = 'Escolha a pasta da casa.'; return; }
+  const { id, nome } = JSON.parse(casa);
+  const { data, error } = await SB.from('tarefas').insert({
+    casa_pasta_id: id, casa_nome: nome, tipo: document.getElementById('t-tipo').value,
+    prazo: document.getElementById('t-prazo').value || null, instrucoes: document.getElementById('t-instr').value.trim(),
+  }).select('id').single();
+  if (error) { erro.textContent = 'Não foi possível criar a tarefa.'; return; }
+  document.getElementById('dlg-tarefa').close();
+  sel = data.id; abertas.add('a_fazer'); aba = 'video';
+  aviso('Tarefa criada.', 'ok');
+  await recarregar();
+}
+
+// ------------------------------------------------------------ pasta de trabalho (dono)
+async function abrirRaiz() { document.getElementById('dlg-raiz').showModal(); await navegarRaiz(DRIVE?.raiz?.id ? 'root' : 'root'); }
+async function navegarRaiz(pasta) {
+  const corpo = document.getElementById('raiz-corpo');
+  corpo.innerHTML = '<h2>Pasta de trabalho</h2><p class="carregando">Carregando…</p>';
+  try {
+    const d = await api(`/api/drive?livre=1&pasta=${encodeURIComponent(pasta)}`);
+    const real = !['root', 'compartilhados'].includes(d.pasta.id);
+    corpo.innerHTML = `<h2>Pasta de trabalho</h2>
+      <p class="dica" style="margin:0">Escolha a pasta onde ficam as casas (ex.: BAHIA HOMES › Casas). O editor só vê o que estiver dentro dela.</p>
+      <div class="acoes"><button class="btn peq" type="button" data-raiz-ir="root">Meu Drive</button><button class="btn peq" type="button" data-raiz-ir="compartilhados">Compartilhados comigo</button></div>
+      <p style="margin:0;font-weight:600">${esc(d.pasta.nome)}</p>
+      <div class="lista-casas">${d.itens.filter(i => i.tipo === 'pasta').map(i => `<button type="button" data-raiz-ir="${esc(i.id)}">${ico('pasta')} ${esc(i.nome)}</button>`).join('') || '<p class="carregando">Sem subpastas.</p>'}</div>
+      <div class="acoes" style="justify-content:flex-end"><button class="btn" type="button" onclick="this.closest('dialog').close()">Fechar</button>
+        ${real ? `<button class="btn prim" type="button" data-raiz-usar="${esc(d.pasta.id)}">Usar “${esc(d.pasta.nome)}”</button>` : ''}</div>`;
+  } catch (e) { corpo.innerHTML = `<h2>Pasta de trabalho</h2><p class="aviso-box erro">${esc(MSG[e.codigo] || 'Não foi possível abrir o Drive.')}</p><div class="acoes"><button class="btn" type="button" onclick="this.closest('dialog').close()">Fechar</button></div>`; }
+}
+async function usarRaiz(id) {
+  try {
+    const { raiz } = await api('/api/drive', { method: 'POST', body: JSON.stringify({ raiz: id }) });
+    DRIVE.raiz = raiz; document.getElementById('dlg-raiz').close(); aviso(`Pasta de trabalho: ${raiz.nome}.`, 'ok'); renderTopo();
+  } catch (e) { aviso('Não foi possível usar essa pasta.', 'erro'); }
+}
+
+// ------------------------------------------------------------ início
+async function iniciar() {
+  const { data: { session } } = await SB.auth.getSession();
+  if (!session) return location.replace('painel.html');
+  const papel = await SB.rpc('papel');
+  if (papel.error || !['dono', 'editor'].includes(papel.data)) { await SB.auth.signOut(); return location.replace('painel.html'); }
+  try { DRIVE = await api('/api/drive/estado'); EU = { papel: DRIVE.papel, nome: DRIVE.nome }; }
+  catch { EU = { papel: papel.data, nome: papel.data === 'dono' ? 'Cainan' : 'Editor' }; DRIVE = { conectado: false }; aviso('O servidor da Edição não respondeu. Arquivos e vídeos podem não abrir.', 'erro'); }
+  document.getElementById('app').hidden = false;
+  const r = new URLSearchParams(location.search).get('drive');
+  if (r) {
+    aviso({ ok: 'Google Drive conectado.', cancelado: 'Conexão com o Drive cancelada.', sem_permissao: 'Só o dono conecta o Drive.', nao_configurado: 'Faltam as credenciais do Google no servidor.' }[r] || 'Não foi possível conectar o Drive.', r === 'ok' ? 'ok' : 'erro');
+    history.replaceState(null, '', 'edicao.html');
+    if (r === 'ok' && !DRIVE.raiz) setTimeout(abrirRaiz, 300);
+  }
+  await recarregar();
+}
+addEventListener('focus', () => { if (EU) recarregar(); });
+iniciar();
+</script>
+</body>
+</html>
