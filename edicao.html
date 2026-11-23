@@ -510,8 +510,28 @@ async function abrirPasta(t, pastaId) {
   if (sel === t.id && aba === 'arquivos') document.getElementById('aba-corpo').innerHTML = abaArquivos(t);
 }
 
-// ------------------------------------------------------------ envio em partes direto para o Google
-const PARTE = 16 * 1024 * 1024; // múltiplo de 256 KB
+// ------------------------------------------------------------ envio direto para o Google (como o Cyberduck)
+// Cada arquivo vai num único PUT contínuo; se a conexão cair, pergunta ao Google onde parou e continua dali.
+const SIMULTANEOS = 3;
+const espera = ms => new Promise(r => setTimeout(r, ms));
+/** Roda fn(item) com no máximo n ao mesmo tempo; termina quando todos terminam. */
+async function emParalelo(itens, fn, n = SIMULTANEOS) {
+  const fila = [...itens];
+  const trabalhar = async () => { while (fila.length) await fn(fila.shift()); };
+  await Promise.all(Array.from({ length: Math.min(n, fila.length) }, trabalhar));
+}
+/** Um PUT na sessão de envio. Corpo vazio + "bytes * /total" pergunta onde parou. Resolve { status, range, json }; status 0 = rede caiu. */
+function putEnvio(e, inicio, perguntar = false) {
+  return new Promise(resolve => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('PUT', e.url);
+    xhr.setRequestHeader('Content-Range', perguntar ? `bytes */${e.total}` : `bytes ${inicio}-${e.total - 1}/${e.total}`);
+    if (!perguntar) xhr.upload.onprogress = ev => { e.enviado = inicio + ev.loaded; renderEnvios(); e.aoProgredir?.(); };
+    xhr.onload = () => { let json = null; try { json = JSON.parse(xhr.responseText); } catch {} resolve({ status: xhr.status, range: xhr.getResponseHeader('Range'), json }); };
+    xhr.onerror = xhr.onabort = xhr.ontimeout = () => resolve({ status: 0, range: null, json: null });
+    xhr.send(perguntar ? null : e.arquivo.slice(inicio));
+  });
+}
 let envioSeq = 0;
 const ENVIOS = new Map();
 function renderEnvios() {
@@ -538,14 +558,24 @@ async function continuarEnvio(e) {
       const { url } = await api('/api/drive/envio', { method: 'POST', body: JSON.stringify({ ...e.destino, nome: e.arquivo.name, tipo: e.arquivo.type || 'application/octet-stream', tamanho: e.arquivo.size }) });
       e.url = url;
     }
-    while (e.enviado < e.total) {
-      const fim = Math.min(e.enviado + PARTE, e.total);
-      const r = await fetch(e.url, { method: 'PUT', headers: { 'Content-Range': `bytes ${e.enviado}-${fim - 1}/${e.total}` }, body: e.arquivo.slice(e.enviado, fim) });
-      if (r.status === 308) { const rg = r.headers.get('Range'); e.enviado = rg ? Number(rg.split('-')[1]) + 1 : fim; }
-      else if (r.ok) { e.resultado = await r.json().catch(() => ({})); e.enviado = e.total; }
-      else if (r.status === 404 || r.status === 410) { e.url = null; e.enviado = 0; throw new Error('O envio expirou; comece de novo.'); }
-      else throw new Error(`O Google respondeu ${r.status}.`);
-      renderEnvios(); e.aoProgredir?.();
+    let inicio = e.enviado, tentativas = 0;
+    for (;;) {
+      let r = await putEnvio(e, inicio);
+      if (r.status === 200 || r.status === 201) { e.resultado = r.json || {}; e.enviado = e.total; break; }
+      if (r.status === 404 || r.status === 410) { e.url = null; e.enviado = 0; throw new Error('O envio expirou; comece de novo.'); }
+      if (r.status !== 0 && r.status !== 308 && r.status < 500) throw new Error(`O Google respondeu ${r.status}.`);
+      // caiu (rede ou 5xx): espera, pergunta onde parou e continua dali
+      let retomou = false;
+      while (!retomou) {
+        if (++tentativas > 5) { e.enviado = inicio; throw new Error('A conexão caiu várias vezes. Tente de novo.'); }
+        await espera(esperaTentativa(tentativas));
+        r = await putEnvio(e, 0, true);
+        if (r.status === 200 || r.status === 201) { e.resultado = r.json || {}; e.enviado = e.total; break; }
+        if (r.status === 404 || r.status === 410) { e.url = null; e.enviado = 0; throw new Error('O envio expirou; comece de novo.'); }
+        if (r.status === 308) { inicio = inicioDoRange(r.range); retomou = true; }
+      }
+      if (e.enviado === e.total && e.resultado) break;
+      e.enviado = inicio; renderEnvios(); e.aoProgredir?.();
     }
     e.estado = 'feito'; renderEnvios();
     setTimeout(() => { if (ENVIOS.get(e.id)?.estado === 'feito') { ENVIOS.delete(e.id); renderEnvios(); } }, 8000);
@@ -647,7 +677,7 @@ document.addEventListener('change', async e => {
   }
   if (e.target.id === 'arq-envio' && e.target.files.length) {
     const arquivos = [...e.target.files], pasta = ARQ.pasta; e.target.value = '';
-    for (const a of arquivos) await enviarArquivo(a, { pasta });
+    await emParalelo(arquivos, a => enviarArquivo(a, { pasta }));
     if (sel === t.id) abrirPasta(t, pasta);
   }
 });
@@ -715,15 +745,13 @@ async function comecarSubida(repetir = false) {
     // 2. o que já está em cada pasta (para pular)
     const existentes = {};
     for (const caminho of ['', ...p.pastas]) existentes[caminho] = (await api(`/api/drive?pasta=${encodeURIComponent(ids[caminho])}`)).itens;
-    // 3. arquivos, 2 de cada vez
+    // 3. arquivos, SIMULTANEOS de cada vez
     const fila = [];
     for (const a of p.arquivos) {
       if (jaNoDrive(a, existentes[a.pasta])) { s.pulados++; s.enviado += a.tamanho; } else fila.push(a);
     }
     renderSubir();
-    const trabalhar = async () => {
-      while (fila.length) {
-        const a = fila.shift();
+    await emParalelo(fila, async a => {
         const e = { id: ++envioSeq, arquivo: a.arquivo, destino: { pasta: ids[a.pasta] }, total: a.tamanho, enviado: 0, estado: 'enviando', url: null };
         let antes = 0;
         e.aoProgredir = () => { s.enviado += e.enviado - antes; antes = e.enviado; renderSubir(); };
@@ -732,9 +760,7 @@ async function comecarSubida(repetir = false) {
         s.atuais.delete(e.id);
         if (e.estado === 'feito') { s.feitos++; s.enviado += e.total - antes; } else { s.falhas.push(a); s.enviado -= antes; }
         renderSubir();
-      }
-    };
-    await Promise.all([trabalhar(), trabalhar()]);
+    });
     s.fase = s.falhas.length ? 'erro' : 'feito';
   } catch (err) {
     s.fase = 'erro';
