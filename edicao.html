@@ -456,7 +456,7 @@ function abaVideo(t) {
       ${t.versoes.length > 1 ? `<div class="versoes" role="tablist" aria-label="Versões">${t.versoes.map(v => `<button type="button" role="tab" data-versao="${v.numero}" aria-selected="${v.numero === vista}">V${v.numero}${v.numero === atual ? ' · atual' : ''}</button>`).join('')}</div>` : ''}
       ${versao ? `<p class="dica">${esc(versao.nome)} · ${esc(tamanhoLegivel(versao.tamanho))} · enviada por ${esc(versao.enviada_por)} em ${quando(versao.enviada_em)}${versao.nota ? ` · “${esc(versao.nota)}”` : ''}</p>` : ''}
       ${versao && podeExcluirVersao(EU.papel, t.status, versao.numero, atual) ? `<div class="acoes"><button class="btn peq" type="button" data-act="excluir-versao" data-numero="${versao.numero}">${ico('lixo')} Excluir V${versao.numero}</button></div>` : ''}
-      ${!dono && !fechada ? `<div class="caixa">
+      ${!fechada ? `<div class="caixa">
           <h4>${t.versoes.length ? 'Enviar nova versão' : 'Enviar o vídeo para revisão'}</h4>
           <input class="campo" id="nota-versao" placeholder="O que mudou? (opcional)" maxlength="300">
           <div class="acoes"><label class="btn prim">${ico('enviar')} Escolher vídeo do computador<input type="file" accept="video/*" id="arq-versao" hidden></label></div>
