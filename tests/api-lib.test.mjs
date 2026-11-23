@@ -63,3 +63,13 @@ test('origemDoNavegador usa o endereço real (www), não o SITE_URL', async () =
   assert.equal(origemDoNavegador(new Request('http://localhost:3005/api/drive/envio', { method: 'POST' })), 'http://localhost:3005');
   if (antes === undefined) delete process.env.SITE_URL; else process.env.SITE_URL = antes;
 });
+
+// ------------------------------------------------------------ R2 (assinatura SigV4)
+const r2 = await import('../api/_lib/r2.mjs');
+
+test('presign reproduz o exemplo oficial da AWS', () => {
+  const url = r2.presign({ metodo: 'GET', host: 'examplebucket.s3.amazonaws.com', caminho: '/test.txt', regiao: 'us-east-1', servico: 's3',
+    acesso: 'AKIAIOSFODNN7EXAMPLE', segredo: 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY', agora: new Date('2013-05-24T00:00:00Z'), segundos: 86400 });
+  assert.match(url, /X-Amz-Signature=aeeed9bbccd4d02ee5c0109b86d86835f995330da4c265957d157751f604d404$/);
+  assert.match(url, /^https:\/\/examplebucket\.s3\.amazonaws\.com\/test\.txt\?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20130524%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20130524T000000Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=/);
+});
