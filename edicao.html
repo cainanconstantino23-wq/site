@@ -253,7 +253,7 @@ const quando = iso => iso ? new Date(iso).toLocaleString('pt-BR', { timeZone: 'A
 const diaMes = iso => iso ? new Date(iso).toLocaleDateString('pt-BR', { timeZone: 'America/Bahia', day:'2-digit', month:'2-digit' }) : '';
 const nomeEtapa = id => (ETAPAS.find(e => e.id === id) || {}).nome || id;
 
-let EU = null;          // { papel, nome }
+let EU = null;          // { papel, nome, email }
 let DRIVE = null;       // estado do Drive
 let TAREFAS = [];
 let sel = null, aba = 'video', versaoVista = null;
@@ -262,6 +262,13 @@ const players = {};     // tarefa → { numero: url assinada }
 let ARQ = { tarefa: null, pasta: null, dados: null, carregando: false, erro: '' };
 let rascunhoTempo = null;
 
+// Links do Drive com a conta certa: com várias contas Google no navegador, o Drive usa a primeira
+// e o download dá 403. authuser força a conta que tem acesso às pastas.
+function noDrive(url) {
+  const conta = (EU?.papel === 'dono' && DRIVE?.email) || EU?.email;
+  if (!url || !conta) return url;
+  return url + (url.includes('?') ? '&' : '?') + 'authuser=' + encodeURIComponent(conta);
+}
 async function token() { const { data: { session } } = await SB.auth.getSession(); return session?.access_token || ''; }
 async function api(caminho, opcoes = {}) {
   const r = await fetch(caminho, { ...opcoes, headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${await token()}`, ...(opcoes.headers || {}) } });
@@ -391,7 +398,7 @@ function renderDetalhe() {
       </div>
       <div class="acoes">
         ${t.status === 'a_fazer' ? `<button class="btn prim" type="button" data-act="comecar">${ico('em_edicao')} Começar edição</button>` : ''}
-        <a class="btn peq" href="https://drive.google.com/drive/folders/${esc(t.casa_pasta_id)}" target="_blank" rel="noopener">${ico('abrir')} Pasta no Drive</a>
+        <a class="btn peq" href="${esc(noDrive(`https://drive.google.com/drive/folders/${t.casa_pasta_id}`))}" target="_blank" rel="noopener">${ico('abrir')} Pasta no Drive</a>
       </div>
     </div>
     ${t.instrucoes ? `<p class="instr">${esc(t.instrucoes)}</p>` : ''}
@@ -459,7 +466,7 @@ function abaArquivos(t) {
     <div class="arq-barra">
       <span class="dica" style="margin:0">${d.itens.length} ${d.itens.length === 1 ? 'item' : 'itens'}</span>
       <span class="acoes">
-        <a class="btn peq" href="${esc(d.pasta.link)}" target="_blank" rel="noopener">${ico('abrir')} Abrir no Drive</a>
+        <a class="btn peq" href="${esc(noDrive(d.pasta.link))}" target="_blank" rel="noopener">${ico('abrir')} Abrir no Drive</a>
         <label class="btn peq prim">${ico('enviar')} Enviar arquivos<input type="file" multiple id="arq-envio" hidden></label>
       </span>
     </div>
@@ -469,8 +476,8 @@ function abaArquivos(t) {
           <span class="info">${a.tipo === 'pasta' ? 'Pasta' : esc(tamanhoLegivel(a.tamanho))}${a.modificado ? ' · ' + diaMes(a.modificado) : ''}</span></span>
         <span class="bts">
           ${a.tipo === 'video' && !fechada ? `<button class="btn peq" type="button" data-revisar="${esc(a.id)}">${ico('para_revisar')} Enviar para revisão</button>` : ''}
-          ${a.download ? `<a class="btn peq" href="${esc(a.download)}" target="_blank" rel="noopener">${ico('baixar')} Baixar</a>` : ''}
-          <a class="btn peq" href="${esc(a.link)}" target="_blank" rel="noopener" aria-label="Abrir ${esc(a.nome)} no Drive">${ico('abrir')}</a>
+          ${a.download ? `<a class="btn peq" href="${esc(noDrive(a.download))}" target="_blank" rel="noopener">${ico('baixar')} Baixar</a>` : ''}
+          <a class="btn peq" href="${esc(noDrive(a.link))}" target="_blank" rel="noopener" aria-label="Abrir ${esc(a.nome)} no Drive">${ico('abrir')}</a>
         </span>
       </div>`).join('') : '<p class="arq-vazio">Pasta vazia.</p>'}</div>
     <p class="dica">Baixar abre no Google Drive (use a sua conta com acesso às pastas). Enviar só cria arquivos novos; nada é apagado.</p>`;
@@ -689,7 +696,7 @@ function renderSubir() {
     ${s.fase === 'feito' && !s.falhas.length ? `<p class="aviso-box ok" style="margin:0">Pronto: a casa já aparece em “Nova tarefa”.</p>` : ''}
     <div class="acoes" style="justify-content:flex-end">${fechar}
       ${s.fase !== 'subindo' && (s.falhas.length || s.erro) ? `<button class="btn prim" type="button" data-act="subir-repetir">Tentar de novo</button>` : ''}
-      ${s.fase === 'feito' && s.casaId ? `<a class="btn" href="https://drive.google.com/drive/folders/${esc(s.casaId)}" target="_blank" rel="noopener">${ico('abrir')} Ver no Drive</a>` : ''}</div>`;
+      ${s.fase === 'feito' && s.casaId ? `<a class="btn" href="${esc(noDrive(`https://drive.google.com/drive/folders/${s.casaId}`))}" target="_blank" rel="noopener">${ico('abrir')} Ver no Drive</a>` : ''}</div>`;
 }
 const avisoSaida = ev => { ev.preventDefault(); ev.returnValue = ''; };
 async function comecarSubida(repetir = false) {
@@ -811,8 +818,8 @@ async function iniciar() {
   if (!session) return location.replace('painel.html');
   const papel = await SB.rpc('papel');
   if (papel.error || !['dono', 'editor'].includes(papel.data)) { await SB.auth.signOut(); return location.replace('painel.html'); }
-  try { DRIVE = await api('/api/drive/estado'); EU = { papel: DRIVE.papel, nome: DRIVE.nome }; }
-  catch { EU = { papel: papel.data, nome: papel.data === 'dono' ? 'Cainan' : 'Editor' }; DRIVE = { conectado: false }; aviso('O servidor da Edição não respondeu. Arquivos e vídeos podem não abrir.', 'erro'); }
+  try { DRIVE = await api('/api/drive/estado'); EU = { papel: DRIVE.papel, nome: DRIVE.nome, email: session.user?.email }; }
+  catch { EU = { papel: papel.data, nome: papel.data === 'dono' ? 'Cainan' : 'Editor', email: session.user?.email }; DRIVE = { conectado: false }; aviso('O servidor da Edição não respondeu. Arquivos e vídeos podem não abrir.', 'erro'); }
   document.getElementById('app').hidden = false;
   const r = new URLSearchParams(location.search).get('drive');
   if (r) {
