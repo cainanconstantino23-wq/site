@@ -139,6 +139,36 @@ h4{margin:0 0 8px;font-size:13px;color:var(--ink-2)}
 .campo{width:100%;min-height:40px;padding:9px 12px;border:1px solid var(--line);border-radius:var(--r-control);background:var(--surface);font-size:13px}
 textarea.campo{resize:vertical;min-height:70px}
 .form-coment{display:grid;grid-template-columns:auto 1fr auto;gap:6px;margin-top:8px}
+.coment.resolv{opacity:.62}
+.coment.resolv > .c-corpo > span:first-child{text-decoration:line-through;text-decoration-color:var(--ink-3)}
+.c-corpo{min-width:0;display:grid;gap:6px}
+.c-acoes{display:flex;gap:12px}
+.c-acoes button{border:0;background:none;padding:0;font-size:11px;font-weight:600;color:var(--accent)}
+.resp{display:flex;gap:6px;align-items:start;justify-content:space-between;padding:6px 8px;border-left:2px solid var(--line);background:var(--muted);border-radius:0 6px 6px 0}
+.resp.rasc{border-left-style:dashed}
+.form-resp{display:grid;grid-template-columns:1fr auto auto;gap:6px}
+.vtag{font-size:10px;font-weight:700;color:var(--ink-2);background:var(--muted);border-radius:4px;padding:0 5px}
+.c-topo{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.c-topo h4{margin:0}
+.c-filtros{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.c-filtros .campo{min-height:32px;padding:4px 10px;font-size:12px;width:auto}
+.c-filtros input[type=search]{width:130px}
+.chk{display:flex;gap:5px;align-items:center;font-size:12px;color:var(--ink-2)}
+.marcas{position:relative;height:18px;margin-top:8px;border-radius:999px;background:var(--muted);cursor:pointer}
+.marcas .cabeca{position:absolute;top:-3px;bottom:-3px;width:2px;margin-left:-1px;background:var(--ink);border-radius:2px;pointer-events:none;left:0}
+.marca{position:absolute;top:50%;transform:translate(-50%,-50%);min-width:14px;height:14px;padding:0 3px;border-radius:999px;border:2px solid var(--surface);background:var(--e-ajustes);color:#fff;font-size:9px;font-weight:700;line-height:10px}
+.marca.ok{background:var(--e-aprovado)}
+.marca:hover{transform:translate(-50%,-50%) scale(1.25)}
+.ferr{display:flex;flex-wrap:wrap;gap:4px;align-items:center;margin-top:8px}
+.ferr button{border:1px solid var(--line);background:var(--surface);border-radius:8px;min-height:30px;padding:0 9px;font-size:12px;font-weight:600;color:var(--ink-2)}
+.ferr button[aria-pressed=true]{background:var(--accent-soft);color:var(--accent);border-color:transparent}
+.ferr .sep{width:1px;height:18px;background:var(--line);margin:0 3px}
+.ferr .dir{margin-left:auto}
+.etapa-sel{min-height:32px;padding:4px 10px;font-size:12px;width:auto;border-radius:999px}
+.links{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:8px}
+.links li{display:grid;gap:4px;padding:10px;border:1px solid var(--line);border-radius:var(--r-control)}
+.links li.exp{opacity:.55}
+.links small{color:var(--ink-2);font-size:11px}
 .caixa{margin-top:14px;padding:14px;border-radius:var(--r-panel);border:1px solid var(--line);background:rgb(255 255 255 / .6)}
 .caixa .acoes{margin-top:10px}
 .dica{font-size:12px;color:var(--ink-2);margin:6px 0 0}
@@ -243,6 +273,7 @@ dialog::backdrop{background:rgb(24 50 58 / .35);backdrop-filter:blur(3px)}
 <dialog id="dlg-tarefa"><form class="dlg" id="f-tarefa" method="dialog"></form></dialog>
 <dialog id="dlg-raiz"><div class="dlg" id="raiz-corpo"></div></dialog>
 <dialog id="dlg-subir"><div class="dlg" id="subir-corpo"></div></dialog>
+<dialog id="dlg-link"><div class="dlg" id="link-corpo"></div></dialog>
 <dialog id="dlg-baixar"><div class="dlg" id="baixar-corpo"></div></dialog>
 <div class="envios" id="envios" aria-live="polite"></div>
 
@@ -282,6 +313,8 @@ const abertas = new Set();
 const players = {};     // tarefa → { numero: url assinada }
 let ARQ = { tarefa: null, pasta: null, dados: null, carregando: false, erro: '' };
 let rascunhoTempo = null;
+let velocidadeP = 1, loopP = false, verAtalhos = false;      // player
+let buscaC = '', filtroC = 'todos', todasVersoes = false, respondendo = null; // comentários
 
 // Links do Drive com a conta certa: com várias contas Google no navegador, o Drive usa a primeira
 // e o download dá 403. authuser força a conta que tem acesso às pastas.
@@ -318,7 +351,7 @@ function aviso(texto, tom = '') {
 // ------------------------------------------------------------ dados
 async function carregarTarefas() {
   const { data, error } = await SB.from('tarefas')
-    .select('*, versoes(numero,nome,tamanho,nota,enviada_por,enviada_em,drive_file_id), eventos(tipo,versao,autor,texto,criado_em), comentarios(id,versao,tempo_seg,texto,autor,enviado,criado_em)')
+    .select('*, versoes(numero,nome,tamanho,nota,enviada_por,enviada_em,drive_file_id), eventos(tipo,versao,autor,texto,criado_em), comentarios(id,versao,tempo_seg,texto,autor,enviado,criado_em,resposta_a,resolvido,resolvido_por,convidado)')
     .order('atualizada_em', { ascending: false });
   if (error) { aviso('Não foi possível carregar as tarefas. Confira se a migração do banco já foi rodada.', 'erro'); TAREFAS = []; return; }
   TAREFAS = (data || []).map(t => ({
@@ -428,6 +461,8 @@ function renderDetalhe() {
       <div class="acoes">
         ${t.status === 'a_fazer' ? `<button class="btn prim" type="button" data-act="comecar">${ico('em_edicao')} Começar edição</button>` : ''}
         <a class="btn peq" href="${esc(noDrive(`https://drive.google.com/drive/folders/${t.casa_pasta_id}`))}" target="_blank" rel="noopener">${ico('abrir')} Pasta no Drive</a>
+        ${EU.papel === 'dono' ? `<select class="campo etapa-sel" id="mudar-etapa" aria-label="Mudar etapa"><option value="">Mudar etapa…</option>${['a_fazer', 'em_edicao', 'para_revisar', 'ajustes', 'aprovado'].filter(s => s !== t.status).map(s => `<option value="${s}">${s === 'aprovado' ? 'Aprovar' : nomeEtapa(s)}</option>`).join('')}</select>
+          <button class="btn peq" type="button" data-act="links">${ico('abrir')} Link para o cliente</button>` : ''}
         ${EU.papel === 'dono' ? `<button class="btn peq" type="button" data-act="excluir-tarefa">${ico('lixo')} Excluir tarefa</button>` : ''}
       </div>
     </div>
@@ -436,6 +471,7 @@ function renderDetalhe() {
       ${[['video', 'Vídeo'], ['arquivos', 'Arquivos'], ['linha', 'Linha do tempo']].map(([k, n]) => `<button type="button" role="tab" data-aba="${k}" aria-selected="${aba === k}">${n}</button>`).join('')}
     </div>
     <div id="aba-corpo">${aba === 'video' ? abaVideo(t) : aba === 'arquivos' ? abaArquivos(t) : abaLinha(t)}</div>`;
+  if (aba === 'video') depoisDoDetalhe();
   if (aba === 'arquivos' && (ARQ.tarefa !== t.id || (!ARQ.dados && !ARQ.carregando && !ARQ.erro))) abrirPasta(t, t.casa_pasta_id);
 }
 
@@ -444,15 +480,43 @@ function abaVideo(t) {
   const atual = t.versoes.at(-1)?.numero;
   const vista = versaoVista ?? atual;
   const p = players[t.id]?.[vista], url = typeof p === 'string' ? p : null, removido = p?.removido;
-  const coments = t.comentarios.filter(c => c.versao === vista && (c.enviado || dono));
+  const base = t.comentarios.filter(c => (todasVersoes || c.versao === vista) && (c.enviado || dono));
+  const arvore = arvoreComentarios(base);
   const rasc = t.comentarios.filter(c => !c.enviado && c.versao === atual);
   const versao = t.versoes.find(v => v.numero === vista);
   const fechada = t.status === 'aprovado';
+  const podeComentar = t.versoes.length && !fechada;
+  const linhaC = c => `<li class="coment ${c.enviado ? '' : 'rasc'} ${c.resolvido ? 'resolv' : ''}" data-cid="${c.id}">
+      ${c.tempo_seg !== null ? `<button class="tc" type="button" data-pular="${c.tempo_seg}" data-v="${c.versao}">${timecode(c.tempo_seg)}</button>` : '<span></span>'}
+      <div class="c-corpo">
+        <span>${todasVersoes ? `<span class="vtag">V${c.versao}</span> ` : ''}${esc(c.texto)}<small>${esc(c.autor)} · ${quando(c.criado_em)}${c.enviado ? '' : c.convidado ? ' · do cliente (vai para o editor no “Pedir ajustes”)' : ' · rascunho (ainda não enviado)'}${c.resolvido ? ` · resolvido${c.resolvido_por ? ' por ' + esc(c.resolvido_por) : ''}` : ''}</small></span>
+        ${c.respostas.map(r => `<div class="resp ${r.enviado ? '' : 'rasc'}"><span><b>${esc(r.autor)}</b> ${esc(r.texto)}<small>${quando(r.criado_em)}${r.enviado ? '' : ' · rascunho'}</small></span>${!r.enviado && dono ? `<button class="x" type="button" data-apagar="${r.id}" aria-label="Apagar resposta">${ico('x')}</button>` : ''}</div>`).join('')}
+        ${respondendo === c.id ? `<form class="form-resp" data-resp="${c.id}"><input class="campo" id="txt-resp" placeholder="Responder a ${esc(c.autor)}" maxlength="4000" required><button class="btn peq prim" type="submit">Responder</button><button class="btn peq" type="button" data-responder="0">Cancelar</button></form>` : ''}
+        <div class="c-acoes">
+          ${!fechada ? `<button type="button" data-responder="${c.id}">Responder</button>` : ''}
+          <button type="button" data-resolver="${c.id}" data-valor="${c.resolvido ? 0 : 1}">${c.resolvido ? 'Reabrir' : '✓ Resolver'}</button>
+        </div>
+      </div>
+      ${!c.enviado && dono ? `<button class="x" type="button" data-apagar="${c.id}" aria-label="Apagar">${ico('x')}</button>` : '<span></span>'}
+    </li>`;
   return `<div class="video-grade">
     <div>
-      <div class="player">${url ? `<video id="player" controls preload="metadata" playsinline src="${esc(url)}"></video>`
+      <div class="player" id="caixa-player">${url ? `<video id="player" controls preload="metadata" playsinline crossorigin="anonymous" src="${esc(url)}"></video>`
         : removido ? `<p class="sem">Vídeo removido em ${diaMes(removido)} (1 mês depois da aprovação).</p>`
         : `<p class="sem">${t.versoes.length ? 'Carregando o vídeo…' : 'Ainda não há vídeo enviado.'}</p>`}</div>
+      ${url ? `<div class="marcas" id="marcas" title="Comentários no vídeo · clique para ir ao ponto"><span class="cabeca" id="cabeca"></span></div>
+      <div class="ferr" role="toolbar" aria-label="Controles do vídeo">
+        <button type="button" data-player="quadro-" title="Quadro anterior ( , )">◀︎❙</button>
+        <button type="button" data-player="quadro+" title="Próximo quadro ( . )">❙▶︎</button>
+        <span class="sep"></span>
+        ${[0.5, 1, 1.5, 2].map(v => `<button type="button" data-vel="${v}" aria-pressed="${velocidadeP === v}">${String(v).replace('.', ',')}×</button>`).join('')}
+        <span class="sep"></span>
+        <button type="button" data-player="loop" aria-pressed="${loopP}" title="Repetir">⟲ Repetir</button>
+        <button type="button" data-player="foto" title="Salvar este quadro como imagem">📷 Quadro</button>
+        <button type="button" data-player="tela" title="Tela cheia ( F )">⛶</button>
+        <button type="button" data-player="atalhos" class="dir" title="Atalhos do teclado">⌨︎</button>
+      </div>
+      ${verAtalhos ? `<p class="dica atalhos">Espaço ou K: tocar/pausar · ← →: 1 s · Shift + ← →: 5 s · J / L: 10 s · , e .: 1 quadro · F: tela cheia · C: comentar neste ponto</p>` : ''}` : ''}
       ${t.versoes.length > 1 ? `<div class="versoes" role="tablist" aria-label="Versões">${t.versoes.map(v => `<button type="button" role="tab" data-versao="${v.numero}" aria-selected="${v.numero === vista}">V${v.numero}${v.numero === atual ? ' · atual' : ''}</button>`).join('')}</div>` : ''}
       ${versao ? `<p class="dica">${esc(versao.nome)} · ${esc(tamanhoLegivel(versao.tamanho))} · enviada por ${esc(versao.enviada_por)} em ${quando(versao.enviada_em)}${versao.nota ? ` · “${esc(versao.nota)}”` : ''}</p>` : ''}
       ${versao && podeExcluirVersao(EU.papel, t.status, versao.numero, atual) ? `<div class="acoes"><button class="btn peq" type="button" data-act="excluir-versao" data-numero="${versao.numero}">${ico('lixo')} Excluir V${versao.numero}</button></div>` : ''}
@@ -464,15 +528,21 @@ function abaVideo(t) {
         </div>` : ''}
     </div>
     <div>
-      <h4>Comentários ${vista ? `da V${vista}` : ''}</h4>
-      ${coments.length ? `<ul class="coments">${coments.map(c => `<li class="coment ${c.enviado ? '' : 'rasc'}">
-          ${c.tempo_seg !== null ? `<button class="tc" type="button" data-pular="${c.tempo_seg}">${timecode(c.tempo_seg)}</button>` : '<span></span>'}
-          <span>${esc(c.texto)}<small>${esc(c.autor)} · ${quando(c.criado_em)}${c.enviado ? '' : ' · rascunho (ainda não enviado)'}</small></span>
-          ${!c.enviado && dono ? `<button class="x" type="button" data-apagar="${c.id}" aria-label="Apagar rascunho">${ico('x')}</button>` : '<span></span>'}
-        </li>`).join('')}</ul>` : `<p class="dica">${t.versoes.length ? 'Nenhum comentário nesta versão.' : 'Os comentários aparecem aqui quando houver vídeo.'}</p>`}
-      ${t.versoes.length && vista === atual && !fechada ? `<form class="form-coment" id="f-coment">
+      <div class="c-topo">
+        <h4>Comentários ${todasVersoes ? '(todas as versões)' : vista ? `da V${vista}` : ''}</h4>
+        <div class="c-filtros">
+          <input class="campo" type="search" id="busca-c" placeholder="Buscar" value="${esc(buscaC)}" aria-label="Buscar nos comentários">
+          <select class="campo" id="filtro-c" aria-label="Mostrar">
+            ${[['todos', 'Todos'], ['abertos', 'Abertos'], ['resolvidos', 'Resolvidos']].map(([k, n]) => `<option value="${k}" ${filtroC === k ? 'selected' : ''}>${n}</option>`).join('')}
+          </select>
+          ${t.versoes.length > 1 ? `<label class="chk"><input type="checkbox" id="todas-c" ${todasVersoes ? 'checked' : ''}> Todas as versões</label>` : ''}
+        </div>
+      </div>
+      ${arvore.length ? `<ul class="coments" id="lista-c">${arvore.map(linhaC).join('')}</ul><p class="dica" id="c-nada" hidden>Nenhum comentário com esse filtro.</p>`
+        : `<p class="dica">${t.versoes.length ? 'Nenhum comentário nesta versão.' : 'Os comentários aparecem aqui quando houver vídeo.'}</p>`}
+      ${podeComentar && vista === atual ? `<form class="form-coment" id="f-coment">
           <button class="tc" type="button" id="tc-atual" title="Comentário no minuto atual do vídeo">${rascunhoTempo !== null ? timecode(rascunhoTempo) : '00:00'}</button>
-          <input class="campo" id="txt-coment" placeholder="${dono ? 'Comentar neste minuto (ex.: trocar a música)' : 'Responder'}" maxlength="4000" required>
+          <input class="campo" id="txt-coment" placeholder="${dono ? 'Comentar neste minuto (ex.: trocar a música)' : 'Comentar neste minuto'}" maxlength="4000" required>
           <button class="btn peq prim" type="submit">Comentar</button>
         </form>` : ''}
       ${dono && t.versoes.length && !fechada && ['para_revisar', 'ajustes'].includes(t.status) ? `<div class="caixa">
@@ -518,13 +588,13 @@ function abaArquivos(t) {
 
 function abaLinha(t) {
   const enviados = t.comentarios.filter(c => c.enviado);
-  const titulo = e => ({ criada: 'Tarefa criada', comecou: 'Edição começou', versao: e.versao > 1 ? `V${e.versao} reenviada com os ajustes` : 'V1 enviada para revisão', ajustes: 'Ajustes pedidos', aprovada: `V${e.versao} aprovada` })[e.tipo];
-  const etapaEv = e => ({ criada: 'a_fazer', comecou: 'em_edicao', versao: e.versao > 1 ? 'reenviado' : 'para_revisar', ajustes: 'ajustes', aprovada: 'aprovado' })[e.tipo];
+  const titulo = e => ({ criada: 'Tarefa criada', comecou: 'Edição começou', versao: e.versao > 1 ? `V${e.versao} reenviada com os ajustes` : 'V1 enviada para revisão', ajustes: 'Ajustes pedidos', aprovada: `V${e.versao} aprovada`, status: `Etapa mudada para ${nomeEtapa(e.texto)}` })[e.tipo];
+  const etapaEv = e => ({ criada: 'a_fazer', comecou: 'em_edicao', versao: e.versao > 1 ? 'reenviado' : 'para_revisar', ajustes: 'ajustes', aprovada: 'aprovado', status: e.texto })[e.tipo];
   const itens = t.eventos.map(e => {
     const notas = e.tipo === 'ajustes' ? enviados.filter(c => c.versao === e.versao && c.autor !== EU_NOME_EDITOR(t, c)) : [];
     const txt = [e.texto, ...notas.map(c => (c.tempo_seg !== null ? timecode(c.tempo_seg) + ' · ' : '') + c.texto)].filter(Boolean).join('\n');
     return `<li><span class="pt" style="background:${COR(etapaEv(e))}">${ico(etapaEv(e))}</span>
-      <div><b>${titulo(e)}</b><p class="m">${quando(e.criado_em)} · ${esc(e.autor)}</p>${txt && e.tipo !== 'criada' ? `<div class="q">${esc(txt)}</div>` : ''}</div></li>`;
+      <div><b>${titulo(e)}</b><p class="m">${quando(e.criado_em)} · ${esc(e.autor)}</p>${txt && !['criada', 'status'].includes(e.tipo) ? `<div class="q">${esc(txt)}</div>` : ''}</div></li>`;
   });
   const esperando = { para_revisar: 'Aguardando a sua revisão', ajustes: 'Aguardando a nova versão do editor', em_edicao: 'Em edição', a_fazer: 'Aguardando o editor começar' }[t.status];
   if (esperando) itens.push(`<li><span class="pt" style="background:none;border:1.5px dashed var(--ink-3)"></span><div><b style="color:var(--ink-2)">${esperando}</b></div></li>`);
@@ -905,9 +975,10 @@ document.addEventListener('click', async e => {
   const t = tarefaSel(), d = el.dataset;
   if (d.etapa) { abertas.clear(); abertas.add(d.etapa); renderEtapas(); renderFila(); return; }
   if (d.grupo) { abertas.has(d.grupo) ? abertas.delete(d.grupo) : abertas.add(d.grupo); renderEtapas(); renderFila(); return; }
-  if (d.tarefa) { sel = Number(d.tarefa); versaoVista = null; rascunhoTempo = null; renderFila(); renderDetalhe(); const nt = tarefaSel(); await assinaturas(nt); if (sel === nt.id) renderDetalhe(); return; }
+  if (d.tarefa) { sel = Number(d.tarefa); versaoVista = null; rascunhoTempo = null; respondendo = null; buscaC = ''; filtroC = 'todos'; todasVersoes = false; renderFila(); renderDetalhe(); const nt = tarefaSel(); await assinaturas(nt); if (sel === nt.id) renderDetalhe(); return; }
   if (d.aba) { aba = d.aba; renderDetalhe(); return; }
   if (d.versao) { versaoVista = Number(d.versao); renderDetalhe(); return; }
+  if (d.pular && d.v && Number(d.v) !== (versaoVista ?? t?.versoes.at(-1)?.numero)) { versaoVista = Number(d.v); todasVersoes = false; renderDetalhe(); const q = document.getElementById('player'); if (q) q.addEventListener('loadedmetadata', () => { q.currentTime = Number(d.pular); }, { once: true }); return; }
   if (d.pular) { const p = document.getElementById('player'); if (p) { p.currentTime = Number(d.pular); p.play().catch(() => {}); } return; }
   if (d.apagar) return rpc('apagar_rascunho', { p_comentario: Number(d.apagar) });
   if (d.pasta && t) return abrirPasta(t, d.pasta);
@@ -938,6 +1009,9 @@ document.addEventListener('click', async e => {
     case 'subir-tarefa': document.getElementById('dlg-subir').close(); return abrirNovaTarefa({ id: SUBIDA.casaId, nome: SUBIDA.plano.casa });
     case 'baixar-pasta': return ARQ.dados ? baixarPasta(ARQ.dados.pasta.id, ARQ.dados.pasta.nome) : undefined;
     case 'baixar-repetir': return BAIXA ? rodarBaixa(BAIXA.falhas.splice(0)) : undefined;
+    case 'links': return abrirLinks();
+    case 'link-criar': return criarLink();
+    case 'link-fechar': document.getElementById('dlg-link').close(); return;
     case 'comecar': return rpc('comecar_edicao', { p_tarefa: t.id }, 'Edição começou.');
     case 'excluir-versao': {
       const n = Number(d.numero);
@@ -990,6 +1064,156 @@ document.addEventListener('change', async e => {
     const arquivos = [...e.target.files], pasta = ARQ.pasta; e.target.value = '';
     await emParalelo(arquivos, a => enviarArquivo(a, { pasta }));
     if (sel === t.id) abrirPasta(t, pasta);
+  }
+});
+
+// ------------------------------------------------------------ revisão: player, marcas, conversa, etapa e link do cliente
+const QUADRO = 1 / 30;
+function comentsVistos() {
+  const t = tarefaSel(); if (!t) return [];
+  const vista = versaoVista ?? t.versoes.at(-1)?.numero;
+  return t.comentarios.filter(c => c.versao === vista && (c.enviado || EU.papel === 'dono'));
+}
+function desenharMarcas() {
+  const p = document.getElementById('player'), el = document.getElementById('marcas'); if (!p || !el) return;
+  const cab = '<span class="cabeca" id="cabeca"></span>';
+  el.innerHTML = cab + marcasLinha(comentsVistos(), p.duration).map(m => `<button type="button" class="marca ${m.abertos ? '' : 'ok'}" style="left:${m.pct}%" data-pular="${m.tempo}" title="${timecode(m.tempo)} · ${m.n} ${m.n === 1 ? 'comentário' : 'comentários'}">${m.n > 1 ? m.n : ''}</button>`).join('');
+  moverCabeca();
+}
+function moverCabeca() {
+  const p = document.getElementById('player'), c = document.getElementById('cabeca');
+  if (p && c && p.duration > 0) c.style.left = `${Math.min(100, p.currentTime / p.duration * 100)}%`;
+}
+function aplicarFiltroC() {
+  const lista = document.getElementById('lista-c'); if (!lista) return;
+  const t = tarefaSel(), vista = versaoVista ?? t.versoes.at(-1)?.numero;
+  const base = t.comentarios.filter(c => (todasVersoes || c.versao === vista) && (c.enviado || EU.papel === 'dono'));
+  const ok = new Set(filtrarComentarios(arvoreComentarios(base), { busca: buscaC, filtro: filtroC }).map(c => c.id));
+  lista.querySelectorAll('[data-cid]').forEach(li => { li.hidden = !ok.has(Number(li.dataset.cid)); });
+  document.getElementById('c-nada').hidden = ok.size > 0;
+}
+const depoisDoDetalhe = () => { aplicarFiltroC(); desenharMarcas(); };
+
+// eventos do vídeo não sobem pela página: escuta na captura
+document.addEventListener('loadedmetadata', e => {
+  if (e.target.id !== 'player') return;
+  e.target.playbackRate = velocidadeP; e.target.loop = loopP; desenharMarcas();
+}, true);
+document.addEventListener('timeupdate', e => { if (e.target.id === 'player') moverCabeca(); }, true);
+document.addEventListener('error', e => {
+  // sem a liberação de CORS do armazenamento, toca sem crossorigin (só a captura de quadro deixa de funcionar)
+  const p = e.target; if (p.id !== 'player' || !p.hasAttribute('crossorigin')) return;
+  p.removeAttribute('crossorigin'); p.src = p.getAttribute('src'); p.load();
+}, true);
+document.addEventListener('click', e => {
+  const trilha = e.target.closest('#marcas'); if (!trilha || e.target.closest('[data-pular]')) return;
+  const p = document.getElementById('player'), r = trilha.getBoundingClientRect();
+  if (p && p.duration > 0) p.currentTime = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)) * p.duration;
+});
+
+function controlePlayer(acao) {
+  const p = document.getElementById('player'); if (!p) return;
+  if (acao === 'quadro-' || acao === 'quadro+') { p.pause(); p.currentTime = Math.max(0, p.currentTime + (acao === 'quadro+' ? QUADRO : -QUADRO)); }
+  if (acao === 'loop') { loopP = !loopP; p.loop = loopP; document.querySelector('[data-player=loop]')?.setAttribute('aria-pressed', loopP); }
+  if (acao === 'tela') (document.fullscreenElement ? document.exitFullscreen() : p.requestFullscreen?.() || p.webkitEnterFullscreen?.());
+  if (acao === 'atalhos') { verAtalhos = !verAtalhos; renderDetalhe(); }
+  if (acao === 'foto') salvarQuadro(p);
+}
+function salvarQuadro(p) {
+  if (!p.videoWidth) return aviso('O vídeo ainda está carregando.', 'erro');
+  const c = document.createElement('canvas'); c.width = p.videoWidth; c.height = p.videoHeight;
+  c.getContext('2d').drawImage(p, 0, 0);
+  try {
+    c.toBlob(b => {
+      if (!b) return aviso('Não foi possível capturar o quadro.', 'erro');
+      const t = tarefaSel(), a = document.createElement('a');
+      a.href = URL.createObjectURL(b);
+      a.download = `${t.casa_nome} V${versaoVista ?? t.versoes.at(-1)?.numero} ${timecode(p.currentTime).replace(/:/g, '-')}.png`;
+      a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+    }, 'image/png');
+  } catch { aviso('Este vídeo não permite capturar o quadro (falta liberar o CORS do armazenamento).', 'erro'); }
+}
+document.addEventListener('keydown', e => {
+  if (aba !== 'video' || e.metaKey || e.ctrlKey || e.altKey) return;
+  if (e.target.closest('input, textarea, select, [contenteditable]') || document.querySelector('dialog[open]')) return;
+  const p = document.getElementById('player'); if (!p) return;
+  const k = e.key.toLowerCase(), pular = s => { p.currentTime = Math.max(0, Math.min(p.duration || 1e9, p.currentTime + s)); };
+  if (k === ' ' || k === 'k') { if (k === ' ' && e.target.closest('button, video')) return; e.preventDefault(); p.paused ? p.play().catch(() => {}) : p.pause(); }
+  else if (k === 'arrowleft') { e.preventDefault(); pular(e.shiftKey ? -5 : -1); }
+  else if (k === 'arrowright') { e.preventDefault(); pular(e.shiftKey ? 5 : 1); }
+  else if (k === 'j') pular(-10);
+  else if (k === 'l') pular(10);
+  else if (k === ',') controlePlayer('quadro-');
+  else if (k === '.') controlePlayer('quadro+');
+  else if (k === 'f') controlePlayer('tela');
+  else if (k === 'c') { const i = document.getElementById('txt-coment'); if (i) { e.preventDefault(); i.focus(); } }
+});
+
+document.addEventListener('input', e => {
+  if (e.target.id === 'busca-c') { buscaC = e.target.value; aplicarFiltroC(); }
+});
+
+// ---- link de revisão do cliente
+async function abrirLinks() {
+  const t = tarefaSel(), dlg = document.getElementById('dlg-link'), el = document.getElementById('link-corpo');
+  el.innerHTML = '<p class="dica">Carregando…</p>'; if (!dlg.open) dlg.showModal();
+  const { data, error } = await SB.from('links_revisao').select('token,expira_em,criado_em').eq('tarefa_id', t.id).order('criado_em', { ascending: false });
+  const links = error ? [] : data;
+  el.innerHTML = `<h3>Link para o cliente</h3>
+    <p class="dica">Quem tiver o link vê os vídeos de ${esc(t.casa_nome)} e comenta nos minutos, sem login. Os comentários chegam para você como rascunho; você decide se manda para o editor.</p>
+    ${error ? '<p class="aviso-box erro">Não foi possível ler os links. Confira se a migração 20261124_revisao.sql já foi rodada.</p>' : ''}
+    ${links.length ? `<ul class="links">${links.map(l => { const v = validadeLink(l.expira_em); const u = `${location.origin}/revisao.html?t=${l.token}`;
+      return `<li class="${v.ativo ? '' : 'exp'}"><input class="campo" readonly value="${esc(u)}" aria-label="Link"><small>${v.texto} · criado em ${diaMes(l.criado_em)}</small>
+        <span class="acoes">${v.ativo ? `<button class="btn peq" type="button" data-copiar="${esc(u)}">Copiar</button>` : ''}<button class="btn peq" type="button" data-link-apagar="${l.token}">${ico('lixo')} Desativar</button></span></li>`; }).join('')}</ul>` : '<p class="dica">Nenhum link criado ainda.</p>'}
+    <div class="acoes" style="margin-top:12px">
+      <select class="campo" id="link-dias" aria-label="Validade" style="max-width:160px">${[3, 7, 15, 30].map(d => `<option value="${d}" ${d === 7 ? 'selected' : ''}>Vale ${d} dias</option>`).join('')}</select>
+      <button class="btn prim" type="button" data-act="link-criar">Criar link</button>
+      <button class="btn" type="button" data-act="link-fechar">Fechar</button>
+    </div>`;
+}
+async function criarLink() {
+  const t = tarefaSel(), dias = Number(document.getElementById('link-dias').value) || 7;
+  const { data, error } = await SB.from('links_revisao').insert({ tarefa_id: t.id, expira_em: new Date(Date.now() + dias * 86400000).toISOString(), criado_por: EU.nome || 'Cainan' }).select('token').single();
+  if (error) return aviso('Não foi possível criar o link.', 'erro');
+  const u = `${location.origin}/revisao.html?t=${data.token}`;
+  await navigator.clipboard?.writeText(u).catch(() => {});
+  await abrirLinks(); aviso('Link criado e copiado.', 'ok');
+}
+document.addEventListener('click', async e => {
+  const b = e.target.closest('[data-copiar],[data-link-apagar],[data-responder],[data-resolver],[data-player],[data-vel]'); if (!b) return;
+  const d = b.dataset;
+  if (d.copiar) { await navigator.clipboard?.writeText(d.copiar).catch(() => {}); b.textContent = 'Copiado'; return; }
+  if (d.linkApagar) {
+    if (!confirm('Desativar este link? Quem tiver o endereço não consegue mais abrir. Os comentários já feitos ficam.')) return;
+    const { error } = await SB.from('links_revisao').delete().eq('token', d.linkApagar);
+    if (error) aviso('Não foi possível desativar o link.', 'erro');
+    return abrirLinks();
+  }
+  if (d.responder !== undefined) { respondendo = Number(d.responder) || null; renderDetalhe(); document.getElementById('txt-resp')?.focus(); return; }
+  if (d.resolver) return rpc('resolver_comentario', { p_comentario: Number(d.resolver), p_resolvido: d.valor === '1' });
+  if (d.player) return controlePlayer(d.player);
+  if (d.vel) {
+    velocidadeP = Number(d.vel); const p = document.getElementById('player'); if (p) p.playbackRate = velocidadeP;
+    document.querySelectorAll('[data-vel]').forEach(x => x.setAttribute('aria-pressed', String(Number(x.dataset.vel) === velocidadeP)));
+  }
+});
+document.addEventListener('submit', async e => {
+  if (!e.target.matches('.form-resp')) return;
+  e.preventDefault();
+  const txt = document.getElementById('txt-resp').value.trim(); if (!txt) return;
+  const id = Number(e.target.dataset.resp); respondendo = null;
+  await rpc('responder', { p_comentario: id, p_texto: txt });
+});
+document.addEventListener('change', async e => {
+  if (e.target.id === 'filtro-c') { filtroC = e.target.value; return aplicarFiltroC(); }
+  if (e.target.id === 'todas-c') { todasVersoes = e.target.checked; return renderDetalhe(); }
+  if (e.target.id === 'mudar-etapa') {
+    const t = tarefaSel(), v = e.target.value; e.target.value = '';
+    if (!t || !v) return;
+    if (v === 'aprovado') { if (confirm(`Aprovar a V${t.versoes.at(-1)?.numero} de ${t.casa_nome}?`)) return rpc('aprovar_tarefa', { p_tarefa: t.id }, 'Vídeo aprovado.'); return; }
+    if (t.status === 'aprovado' && !confirm(`Reabrir ${t.casa_nome}? Ela sai de aprovada e o vídeo não é mais apagado em 1 mês.`)) return;
+    const ok = await rpc('mudar_status', { p_tarefa: t.id, p_status: v }, `Etapa mudada para ${nomeEtapa(v)}.`);
+    if (!ok) aviso('Não foi possível mudar a etapa (para revisar e ajustes precisam de uma versão).', 'erro');
   }
 });
 

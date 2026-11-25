@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Revisão · Daime Filmes</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+:root{
+  --canvas:#eff5f7; --surface:#fbfdfe; --muted:#eaf3f6; --ink:#18323a; --ink-2:#5b7179; --ink-3:#8fa1a7;
+  --line:#d8e6ea; --accent:#087a8a; --accent-hover:#066672; --accent-soft:rgb(8 122 138 / .1);
+  --ajustes:#c27c0e; --ok:#17633b; --ok-soft:#eaf6ee; --danger:#a52626; --danger-soft:#fff0ef;
+  --r-panel:1.25rem; --r-control:.875rem; --shadow:0 1px 2px rgb(24 50 58 / .04), 0 10px 30px rgb(24 50 58 / .06);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{min-height:100dvh;background:radial-gradient(1100px 520px at 12% -10%, rgb(8 122 138 / .10), transparent), var(--canvas);color:var(--ink);
+  font:14px/1.45 -apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+[hidden]{display:none!important}
+.wrap{max-width:1180px;margin:0 auto;padding:max(18px,env(safe-area-inset-top)) 16px 60px}
+header{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;justify-content:space-between;margin:8px 0 18px}
+header small{color:var(--ink-2);font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+h1{margin:2px 0 0;font-size:28px;line-height:1.15;letter-spacing:-.02em}
+.grade{display:grid;gap:18px}
+@media (min-width:960px){.grade{grid-template-columns:minmax(0,1.6fr) minmax(300px,1fr);align-items:start}}
+.player{background:#0c1d22;border-radius:var(--r-panel);overflow:hidden;display:grid;place-items:center;min-height:220px}
+.player video{width:100%;max-height:70dvh;display:block;background:#000}
+.player p{color:rgb(255 255 255 / .75);padding:30px;text-align:center}
+.marcas{position:relative;height:18px;margin-top:8px;border-radius:999px;background:var(--muted);cursor:pointer}
+.cabeca{position:absolute;top:-3px;bottom:-3px;width:2px;margin-left:-1px;background:var(--ink);pointer-events:none;left:0}
+.marca{position:absolute;top:50%;transform:translate(-50%,-50%);min-width:14px;height:14px;padding:0 3px;border-radius:999px;border:2px solid var(--surface);background:var(--ajustes);color:#fff;font-size:9px;font-weight:700;line-height:10px}
+.versoes{display:flex;gap:4px;margin-top:8px;padding:3px;border-radius:var(--r-control);background:var(--muted)}
+.versoes button{flex:1;border:0;background:none;min-height:32px;border-radius:.6rem;font-size:12px;font-weight:600;color:var(--ink-2)}
+.versoes button[aria-selected=true]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgb(0 0 0 / .1)}
+.painel{background:rgb(251 253 254 / .9);border:1px solid var(--line);border-radius:var(--r-panel);box-shadow:var(--shadow);padding:16px}
+h2{margin:0 0 10px;font-size:15px}
+.coments{list-style:none;margin:0 0 12px;padding:0;display:grid;gap:6px}
+.coments li{display:grid;grid-template-columns:auto 1fr;gap:8px;padding:9px 10px;border:1px solid var(--line);border-radius:var(--r-control);background:var(--surface);font-size:13px}
+.coments small{display:block;color:var(--ink-2);font-size:11px;margin-top:2px}
+.tc{border:0;border-radius:6px;padding:1px 7px;background:var(--accent-soft);color:var(--accent);font-weight:700;font-size:12px;font-variant-numeric:tabular-nums;align-self:start}
+.campo{width:100%;min-height:40px;padding:8px 12px;border:1px solid var(--line);border-radius:var(--r-control);background:#fff}
+form{display:grid;gap:8px}
+.linha{display:grid;grid-template-columns:auto 1fr;gap:6px;align-items:center}
+.btn{min-height:40px;padding:0 16px;border-radius:999px;border:1px solid var(--accent);background:var(--accent);color:#fff;font-size:13px;font-weight:600}
+.btn:hover{background:var(--accent-hover)}
+.dica{color:var(--ink-2);font-size:12px;margin:6px 0 0}
+.aviso{padding:10px 12px;border-radius:var(--r-control);font-size:13px;margin:0 0 10px}
+.aviso.ok{background:var(--ok-soft);color:var(--ok)}
+.aviso.erro{background:var(--danger-soft);color:var(--danger)}
+.vazio{max-width:440px;margin:18vh auto;text-align:center;color:var(--ink-2)}
+</style>
+</head>
+<body>
+<main class="wrap" id="app"><p class="vazio">Carregando…</p></main>
+<script src="edicao-logica.js"></script>
+<script>
+const T = new URLSearchParams(location.search).get('t') || '';
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[c]);
+const quando = iso => new Date(iso).toLocaleString('pt-BR', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' }).replace(',', ' às');
+let D = null, vista = null, tempo = null, msg = null;
+const nomeSalvo = () => { try { return localStorage.getItem('revisao-nome') || ''; } catch { return ''; } };
+
+async function carregar() {
+  const r = await fetch(`/api/revisao?t=${encodeURIComponent(T)}`).catch(() => null);
+  if (!r || !r.ok) {
+    document.getElementById('app').innerHTML = `<p class="vazio">${r?.status === 404 ? 'Este link de revisão expirou ou foi desativado. Peça um novo para a Daime Filmes.' : 'Não foi possível abrir a revisão. Tente de novo em instantes.'}</p>`;
+    return;
+  }
+  D = await r.json();
+  const ultima = [...D.versoes].reverse().find(v => v.video);
+  vista = vista ?? ultima?.numero ?? D.versoes.at(-1)?.numero ?? null;
+  render();
+}
+
+function render() {
+  const v = D.versoes.find(x => x.numero === vista);
+  const coments = D.comentarios.filter(c => c.versao === vista).sort((a, b) => (a.tempo_seg ?? 1e9) - (b.tempo_seg ?? 1e9));
+  document.getElementById('app').innerHTML = `
+    <header><div><small>Daime Filmes · revisão</small><h1>${esc(D.titulo)}</h1></div>
+      <p class="dica">Link ${validadeLink(D.expira_em).texto}</p></header>
+    <div class="grade">
+      <section>
+        <div class="player">${v?.video ? `<video id="player" controls playsinline preload="metadata" src="${esc(v.video)}"></video>`
+          : v?.removido ? '<p>Este vídeo já foi removido.</p>' : '<p>Ainda não há vídeo para revisar.</p>'}</div>
+        ${v?.video ? '<div class="marcas" id="marcas"><span class="cabeca" id="cabeca"></span></div>' : ''}
+        ${D.versoes.length > 1 ? `<div class="versoes" role="tablist">${D.versoes.map(x => `<button type="button" role="tab" data-versao="${x.numero}" aria-selected="${x.numero === vista}">V${x.numero}</button>`).join('')}</div>` : ''}
+      </section>
+      <section class="painel">
+        <h2>Comentários${vista ? ` · V${vista}` : ''}</h2>
+        ${msg ? `<p class="aviso ${msg.tom}">${esc(msg.texto)}</p>` : ''}
+        ${coments.length ? `<ul class="coments">${coments.map(c => `<li>${c.tempo_seg !== null ? `<button class="tc" type="button" data-pular="${c.tempo_seg}">${timecode(c.tempo_seg)}</button>` : '<span></span>'}
+          <span>${esc(c.texto)}<small>${esc(c.autor.replace(/ \(cliente\)$/, ''))} · ${quando(c.criado_em)}</small></span></li>`).join('')}</ul>`
+          : '<p class="dica" style="margin:0 0 12px">Pause o vídeo no ponto que quer mudar e escreva aqui.</p>'}
+        ${v?.video && !D.aprovado ? `<form id="f">
+          <input class="campo" id="nome" placeholder="Seu nome" maxlength="60" required value="${esc(nomeSalvo())}" autocomplete="name">
+          <div class="linha"><button class="tc" type="button" id="tc" title="Minuto do comentário">${tempo !== null ? timecode(tempo) : '00:00'}</button>
+            <input class="campo" id="texto" placeholder="Comentário neste minuto" maxlength="2000" required></div>
+          <button class="btn" type="submit">Enviar comentário</button>
+          <p class="dica">O comentário vai para a Daime Filmes no minuto marcado. Espaço toca e pausa; ← → andam 1 segundo.</p>
+        </form>` : D.aprovado ? '<p class="aviso ok">Este vídeo já foi aprovado.</p>' : ''}
+      </section>
+    </div>`;
+  marcas();
+}
+
+function marcas() {
+  const p = document.getElementById('player'), el = document.getElementById('marcas'); if (!p || !el) return;
+  el.innerHTML = '<span class="cabeca" id="cabeca"></span>' + marcasLinha(D.comentarios.filter(c => c.versao === vista), p.duration)
+    .map(m => `<button type="button" class="marca" style="left:${m.pct}%" data-pular="${m.tempo}" title="${timecode(m.tempo)}">${m.n > 1 ? m.n : ''}</button>`).join('');
+}
+document.addEventListener('loadedmetadata', e => { if (e.target.id === 'player') marcas(); }, true);
+document.addEventListener('timeupdate', e => {
+  const p = e.target, c = document.getElementById('cabeca');
+  if (p.id === 'player' && c && p.duration > 0) c.style.left = `${p.currentTime / p.duration * 100}%`;
+}, true);
+document.addEventListener('focusin', e => {
+  if (e.target.id !== 'texto') return;
+  const p = document.getElementById('player'); if (!p) return;
+  p.pause(); tempo = p.currentTime; document.getElementById('tc').textContent = timecode(tempo);
+});
+document.addEventListener('click', e => {
+  const p = document.getElementById('player');
+  const b = e.target.closest('[data-pular],[data-versao],#tc,#marcas');
+  if (!b) return;
+  if (b.dataset.versao) { vista = Number(b.dataset.versao); tempo = null; msg = null; return render(); }
+  if (b.id === 'tc' && p) { tempo = p.currentTime; b.textContent = timecode(tempo); return; }
+  if (b.dataset.pular && p) { p.currentTime = Number(b.dataset.pular); p.play().catch(() => {}); return; }
+  if (b.id === 'marcas' && p?.duration > 0) { const r = b.getBoundingClientRect(); p.currentTime = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)) * p.duration; }
+});
+document.addEventListener('keydown', e => {
+  if (e.target.closest('input, textarea, button, video') || e.metaKey || e.ctrlKey) return;
+  const p = document.getElementById('player'); if (!p) return;
+  if (e.key === ' ') { e.preventDefault(); p.paused ? p.play().catch(() => {}) : p.pause(); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); p.currentTime = Math.max(0, p.currentTime - 1); }
+  if (e.key === 'ArrowRight') { e.preventDefault(); p.currentTime += 1; }
+});
+document.addEventListener('submit', async e => {
+  if (e.target.id !== 'f') return;
+  e.preventDefault();
+  const nome = document.getElementById('nome').value.trim(), texto = document.getElementById('texto').value.trim();
+  if (!nome || !texto) return;
+  try { localStorage.setItem('revisao-nome', nome); } catch {}
+  const p = document.getElementById('player');
+  const t = tempo ?? (p ? p.currentTime : null);
+  const botao = e.target.querySelector('button[type=submit]'); botao.disabled = true;
+  const r = await fetch('/api/revisao', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ t: T, nome, versao: vista, tempo: t, texto }) }).catch(() => null);
+  if (r?.ok) {
+    const { comentario } = await r.json();
+    D.comentarios.push(comentario); tempo = null; msg = { tom: 'ok', texto: 'Comentário enviado. Obrigado!' };
+  } else msg = { tom: 'erro', texto: r?.status === 404 ? 'Este link expirou.' : 'Não foi possível enviar. Tente de novo.' };
+  const pos = p?.currentTime; render();
+  const q = document.getElementById('player'); if (q && pos) q.addEventListener('loadedmetadata', () => { q.currentTime = pos; }, { once: true });
+});
+carregar();
+</script>
+</body>
+</html>

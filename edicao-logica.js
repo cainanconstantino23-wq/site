@@ -188,3 +188,47 @@ function textoProgresso(feito, total, bps) {
   var extra = bps > 0 && total > feito ? ', ' + tamanhoLegivel(bps) + '/s, ' + tempoLegivel((total - feito) / bps) + ' restantes' : '';
   return tamanhoLegivel(feito) + ' de ' + tamanhoLegivel(total) + ' (' + pct + '%' + extra + ')';
 }
+
+// ------------------------------------------------------------ revisão (comentários, marcas, link do cliente)
+/** Comentários originais (resposta_a nulo), cada um com .respostas em ordem de criação. Mantém a ordem da lista. */
+function arvoreComentarios(lista) {
+  var raiz = [], porId = {};
+  (lista || []).forEach(function (c) { if (c.resposta_a == null) { var n = Object.assign({}, c, { respostas: [] }); porId[c.id] = n; raiz.push(n); } });
+  (lista || []).forEach(function (c) { if (c.resposta_a != null && porId[c.resposta_a]) porId[c.resposta_a].respostas.push(c); });
+  raiz.forEach(function (c) { c.respostas.sort(function (a, b) { return a.criado_em < b.criado_em ? -1 : 1; }); });
+  return raiz;
+}
+
+
+/** filtro: 'todos' | 'abertos' | 'resolvidos'; busca no texto e no autor do original e das respostas. */
+function filtrarComentarios(arvore, opcoes) {
+  var o = opcoes || {}, b = semAcento(o.busca || "").trim();
+  return arvore.filter(function (c) {
+    if (o.filtro === 'abertos' && c.resolvido) return false;
+    if (o.filtro === 'resolvidos' && !c.resolvido) return false;
+    if (!b) return true;
+    return [c].concat(c.respostas || []).some(function (x) { return semAcento(x.texto || "").indexOf(b) >= 0 || semAcento(x.autor || "").indexOf(b) >= 0; });
+  });
+}
+
+/** Pontos na linha do tempo do vídeo: [{ tempo, pct, n, abertos }]. Comentários a menos de 1% um do outro viram um ponto só. */
+function marcasLinha(comentarios, duracao) {
+  if (!(duracao > 0)) return [];
+  var marcas = [];
+  (comentarios || []).filter(function (c) { return c.resposta_a == null && c.tempo_seg != null; })
+    .sort(function (a, b) { return a.tempo_seg - b.tempo_seg; })
+    .forEach(function (c) {
+      var pct = Math.min(100, Math.round(c.tempo_seg / duracao * 1000) / 10), ultima = marcas[marcas.length - 1];
+      if (ultima && pct - ultima.pct < 1) { ultima.n++; if (!c.resolvido) ultima.abertos++; return; }
+      marcas.push({ tempo: Number(c.tempo_seg), pct: pct, n: 1, abertos: c.resolvido ? 0 : 1 });
+    });
+  return marcas;
+}
+
+/** Link de revisão do cliente: { ativo, texto }. */
+function validadeLink(expiraEm, agora) {
+  var ms = new Date(expiraEm) - (agora || new Date());
+  if (ms <= 0) return { ativo: false, texto: 'expirado' };
+  var dias = Math.floor(ms / 86400000);
+  return { ativo: true, texto: dias < 1 ? 'vale por menos de 1 dia' : 'vale por mais ' + dias + (dias === 1 ? ' dia' : ' dias') };
+}
