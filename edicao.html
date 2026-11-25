@@ -1176,13 +1176,14 @@ async function criarLink() {
   const { data, error } = await SB.from('links_revisao').insert({ tarefa_id: t.id, expira_em: new Date(Date.now() + dias * 86400000).toISOString(), criado_por: EU.nome || 'Cainan' }).select('token').single();
   if (error) return aviso('Não foi possível criar o link.', 'erro');
   const u = `${location.origin}/revisao.html?t=${data.token}`;
-  await navigator.clipboard?.writeText(u).catch(() => {});
-  await abrirLinks(); aviso('Link criado e copiado.', 'ok');
+  await abrirLinks();
+  // a cópia pode ficar esperando permissão do navegador: não segura a tela
+  Promise.resolve(navigator.clipboard?.writeText(u)).then(() => aviso('Link criado e copiado.', 'ok'), () => aviso('Link criado. Use “Copiar”.', 'ok'));
 }
 document.addEventListener('click', async e => {
   const b = e.target.closest('[data-copiar],[data-link-apagar],[data-responder],[data-resolver],[data-player],[data-vel]'); if (!b) return;
   const d = b.dataset;
-  if (d.copiar) { await navigator.clipboard?.writeText(d.copiar).catch(() => {}); b.textContent = 'Copiado'; return; }
+  if (d.copiar) { b.closest('li')?.querySelector('input')?.select(); Promise.resolve(navigator.clipboard?.writeText(d.copiar)).then(() => { b.textContent = 'Copiado'; }, () => { b.textContent = 'Selecionado: Cmd+C'; }); return; }
   if (d.linkApagar) {
     if (!confirm('Desativar este link? Quem tiver o endereço não consegue mais abrir. Os comentários já feitos ficam.')) return;
     const { error } = await SB.from('links_revisao').delete().eq('token', d.linkApagar);
