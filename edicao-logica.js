@@ -49,12 +49,17 @@ function tamanhoLegivel(bytes) {
   return texto + ' ' + unidades[i];
 }
 
-/** Prazo "AAAA-MM-DD" comparado com hoje ("AAAA-MM-DD"). */
+/**
+ * Prazo "AAAA-MM-DD" comparado com hoje ("AAAA-MM-DD").
+ * dias = quantos dias faltam (negativo = atrasado); urgente = vence hoje, amanhã ou em 2 dias.
+ */
 function prazoInfo(prazo, hoje) {
   if (!prazo) return null;
   var dm = prazo.slice(8, 10) + '/' + prazo.slice(5, 7);
-  if (prazo === hoje) return { texto: 'hoje', atrasado: false };
-  return prazo < hoje ? { texto: 'venceu ' + dm, atrasado: true } : { texto: 'até ' + dm, atrasado: false };
+  var dia = function (s) { return Date.UTC(+s.slice(0, 4), +s.slice(5, 7) - 1, +s.slice(8, 10)); };
+  var dias = Math.round((dia(prazo) - dia(hoje)) / 86400000);
+  var texto = dias < 0 ? 'venceu ' + dm : dias === 0 ? 'vence hoje' : dias === 1 ? 'vence amanhã' : dias === 2 ? 'vence em 2 dias' : 'até ' + dm;
+  return { texto: texto, data: dm, dias: dias, atrasado: dias < 0, urgente: dias >= 0 && dias <= 2 };
 }
 
 /**

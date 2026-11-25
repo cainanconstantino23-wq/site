@@ -47,9 +47,12 @@ test('tamanhoLegivel', () => {
 });
 
 test('prazoInfo', () => {
-  assert.deepEqual({ ...prazoInfo('2026-11-25', '2026-11-23') }, { texto: 'até 25/11', atrasado: false });
-  assert.deepEqual({ ...prazoInfo('2026-11-20', '2026-11-23') }, { texto: 'venceu 20/11', atrasado: true });
-  assert.deepEqual({ ...prazoInfo('2026-11-23', '2026-11-23') }, { texto: 'hoje', atrasado: false });
+  assert.deepEqual({ ...prazoInfo('2026-11-30', '2026-11-23') }, { texto: 'até 30/11', data: '30/11', dias: 7, atrasado: false, urgente: false });
+  assert.deepEqual({ ...prazoInfo('2026-11-25', '2026-11-23') }, { texto: 'vence em 2 dias', data: '25/11', dias: 2, atrasado: false, urgente: true });
+  assert.deepEqual({ ...prazoInfo('2026-11-24', '2026-11-23') }, { texto: 'vence amanhã', data: '24/11', dias: 1, atrasado: false, urgente: true });
+  assert.deepEqual({ ...prazoInfo('2026-11-23', '2026-11-23') }, { texto: 'vence hoje', data: '23/11', dias: 0, atrasado: false, urgente: true });
+  assert.deepEqual({ ...prazoInfo('2026-11-20', '2026-11-23') }, { texto: 'venceu 20/11', data: '20/11', dias: -3, atrasado: true, urgente: false });
+  assert.equal(prazoInfo('2026-12-01', '2026-11-29').dias, 2); // virada de mês
   assert.equal(prazoInfo(null, '2026-11-23'), null);
 });
 
