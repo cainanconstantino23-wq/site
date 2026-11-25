@@ -169,6 +169,58 @@ textarea.campo{resize:vertical;min-height:70px}
 .links li{display:grid;gap:4px;padding:10px;border:1px solid var(--line);border-radius:var(--r-control)}
 .links li.exp{opacity:.55}
 .links small{color:var(--ink-2);font-size:11px}
+.sem-rolar{overflow:hidden}
+.rev{position:fixed;inset:0;z-index:40;display:flex;flex-direction:column;background:#131619;color:var(--ink);
+  --surface:#1f2428; --muted:#272d32; --line:#323a40; --ink:#eef3f5; --ink-2:#a3b3b9; --ink-3:#6f7f85; --hover:rgb(255 255 255 / .06);
+  --accent:#36b9c8; --accent-hover:#2aa4b2; --accent-soft:rgb(54 185 200 / .16); --warn:#f0b24a; --warn-soft:rgb(194 124 14 / .16); --ok:#6fd39a; --ok-soft:rgb(47 154 91 / .18)}
+.rev .campo{background:#171b1e;color:var(--ink)}
+.rev .btn{background:var(--muted);color:var(--ink);border-color:var(--line)}
+.rev .btn.prim{background:var(--accent);border-color:var(--accent);color:#06272c}
+.rev-topo{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 14px;border-bottom:1px solid var(--line)}
+.rev-ic{width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center}
+.rev-tit{display:flex;flex-direction:column;font-size:14px;line-height:1.2;max-width:34ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rev-tit small{color:var(--ink-2);font-weight:500;font-size:11px}
+.rev-sel{min-height:34px;border-radius:10px;border:1px solid var(--line);background:var(--surface);padding:0 10px;font-weight:600}
+.rev-chip{display:inline-flex;align-items:center;gap:6px;min-height:30px;padding:0 10px;border-radius:999px;background:var(--surface);border:1px solid var(--line);font-size:12px;font-weight:600}
+.rev-chip.ok{color:var(--ok)}
+.rev-chip .pt{width:8px;height:8px;border-radius:50%}
+.rev-esp{flex:1}
+.rev-bt{display:inline-flex;align-items:center;gap:6px;min-height:34px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:12px;font-weight:600}
+.rev-bt.prim{background:var(--accent);border-color:var(--accent);color:#06272c}
+.rev-bt.aviso{background:var(--warn-soft);border-color:transparent;color:var(--warn)}
+.rev-bt:disabled{opacity:.5;cursor:default}
+.rev-corpo{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 400px;grid-template-rows:minmax(0,1fr) auto}
+.rev-palco{position:relative;min-height:0;display:grid;place-items:center;padding:14px;background:#0b0d0f}
+.rev-palco video{width:100%;height:100%;object-fit:contain;display:block;cursor:crosshair;background:#000}
+.rev-palco .sem{color:var(--ink-2)}
+.pinos{position:absolute;pointer-events:none}
+.pino{position:absolute;transform:translate(-50%,-50%);pointer-events:auto;width:26px;height:26px;border-radius:50%;border:2px solid #fff;background:var(--e-ajustes);color:#fff;font-size:11px;font-weight:700;box-shadow:0 2px 8px rgb(0 0 0 / .5);display:grid;place-items:center}
+.pino.ok{background:var(--e-aprovado)}
+.pino.novo{background:var(--accent);color:#06272c;animation:pulsar 1.2s ease-in-out infinite}
+@keyframes pulsar{50%{box-shadow:0 0 0 8px rgb(54 185 200 / .25)}}
+@media (prefers-reduced-motion: reduce){.pino.novo{animation:none}}
+.rev-base{padding:8px 14px 10px;border-top:1px solid var(--line);background:#16191c}
+.marcas.grande{height:22px;margin-top:4px;background:#2a3136}
+.marcas .prog{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:999px;background:rgb(54 185 200 / .35);pointer-events:none}
+.marcas.grande .marca{min-width:16px;height:16px}
+.rev-ctrl{display:flex;align-items:center;gap:4px;margin-top:8px}
+.rev-ctrl button{min-width:36px;height:34px;border-radius:8px;border:0;background:none;color:var(--ink);font-size:14px}
+.rev-ctrl button:hover{background:var(--hover)}
+.rev-ctrl button[aria-pressed=true]{color:var(--accent);background:var(--accent-soft)}
+.rev-tempo{font-variant-numeric:tabular-nums;font-size:13px;color:var(--ink-2);margin-left:8px}
+.rev-atalhos{margin:6px 0 0;font-size:11px;color:var(--ink-2)}
+.rev-lado{grid-row:1 / 3;grid-column:2;min-height:0;overflow:auto;padding:14px;border-left:1px solid var(--line);background:#181c1f;display:flex;flex-direction:column}
+.rev-lado .coments{flex:0 0 auto}
+.rev-lado .form-coment{position:sticky;bottom:-14px;margin:auto -14px -14px;padding:12px 14px;background:#181c1f;border-top:1px solid var(--line)}
+.rev-dica{grid-column:1 / -1;margin:0;font-size:11px}
+.coment.foco{outline:2px solid var(--accent)}
+.pino-ic{color:var(--e-ajustes);font-size:10px}
+@media (max-width:899px){
+  .rev{overflow:auto}
+  .rev-corpo{grid-template-columns:1fr;grid-template-rows:auto auto auto}
+  .rev-palco{height:52dvh}
+  .rev-lado{grid-row:auto;grid-column:auto;border-left:0;border-top:1px solid var(--line);overflow:visible}
+}
 .caixa{margin-top:14px;padding:14px;border-radius:var(--r-panel);border:1px solid var(--line);background:rgb(255 255 255 / .6)}
 .caixa .acoes{margin-top:10px}
 .dica{font-size:12px;color:var(--ink-2);margin:6px 0 0}
@@ -273,6 +325,7 @@ dialog::backdrop{background:rgb(24 50 58 / .35);backdrop-filter:blur(3px)}
 <dialog id="dlg-tarefa"><form class="dlg" id="f-tarefa" method="dialog"></form></dialog>
 <dialog id="dlg-raiz"><div class="dlg" id="raiz-corpo"></div></dialog>
 <dialog id="dlg-subir"><div class="dlg" id="subir-corpo"></div></dialog>
+<div class="rev" id="rev" hidden role="dialog" aria-label="Revisão do vídeo"></div>
 <dialog id="dlg-link"><div class="dlg" id="link-corpo"></div></dialog>
 <dialog id="dlg-baixar"><div class="dlg" id="baixar-corpo"></div></dialog>
 <div class="envios" id="envios" aria-live="polite"></div>
@@ -351,7 +404,7 @@ function aviso(texto, tom = '') {
 // ------------------------------------------------------------ dados
 async function carregarTarefas() {
   const { data, error } = await SB.from('tarefas')
-    .select('*, versoes(numero,nome,tamanho,nota,enviada_por,enviada_em,drive_file_id), eventos(tipo,versao,autor,texto,criado_em), comentarios(id,versao,tempo_seg,texto,autor,enviado,criado_em,resposta_a,resolvido,resolvido_por,convidado)')
+    .select('*, versoes(numero,nome,tamanho,nota,enviada_por,enviada_em,drive_file_id), eventos(tipo,versao,autor,texto,criado_em), comentarios(id,versao,tempo_seg,texto,autor,enviado,criado_em,resposta_a,resolvido,resolvido_por,convidado,pos_x,pos_y)')
     .order('atualizada_em', { ascending: false });
   if (error) { aviso('Não foi possível carregar as tarefas. Confira se a migração do banco já foi rodada.', 'erro'); TAREFAS = []; return; }
   TAREFAS = (data || []).map(t => ({
@@ -475,21 +528,11 @@ function renderDetalhe() {
   if (aba === 'arquivos' && (ARQ.tarefa !== t.id || (!ARQ.dados && !ARQ.carregando && !ARQ.erro))) abrirPasta(t, t.casa_pasta_id);
 }
 
-function abaVideo(t) {
-  const dono = EU.papel === 'dono';
-  const atual = t.versoes.at(-1)?.numero;
-  const vista = versaoVista ?? atual;
-  const p = players[t.id]?.[vista], url = typeof p === 'string' ? p : null, removido = p?.removido;
-  const base = t.comentarios.filter(c => (todasVersoes || c.versao === vista) && (c.enviado || dono));
-  const arvore = arvoreComentarios(base);
-  const rasc = t.comentarios.filter(c => !c.enviado && c.versao === atual);
-  const versao = t.versoes.find(v => v.numero === vista);
-  const fechada = t.status === 'aprovado';
-  const podeComentar = t.versoes.length && !fechada;
-  const linhaC = c => `<li class="coment ${c.enviado ? '' : 'rasc'} ${c.resolvido ? 'resolv' : ''}" data-cid="${c.id}">
+function linhaComentario(c, dono, fechada) {
+  return `<li class="coment ${c.enviado ? '' : 'rasc'} ${c.resolvido ? 'resolv' : ''}" data-cid="${c.id}">
       ${c.tempo_seg !== null ? `<button class="tc" type="button" data-pular="${c.tempo_seg}" data-v="${c.versao}">${timecode(c.tempo_seg)}</button>` : '<span></span>'}
       <div class="c-corpo">
-        <span>${todasVersoes ? `<span class="vtag">V${c.versao}</span> ` : ''}${esc(c.texto)}<small>${esc(c.autor)} · ${quando(c.criado_em)}${c.enviado ? '' : c.convidado ? ' · do cliente (vai para o editor no “Pedir ajustes”)' : ' · rascunho (ainda não enviado)'}${c.resolvido ? ` · resolvido${c.resolvido_por ? ' por ' + esc(c.resolvido_por) : ''}` : ''}</small></span>
+        <span>${todasVersoes ? `<span class="vtag">V${c.versao}</span> ` : ''}${c.pos_x != null ? '<span class="pino-ic" title="Marcado num ponto da imagem">●</span> ' : ''}${esc(c.texto)}<small>${esc(c.autor)} · ${quando(c.criado_em)}${c.enviado ? '' : c.convidado ? ' · do cliente (vai para o editor no “Pedir ajustes”)' : ' · rascunho (ainda não enviado)'}${c.resolvido ? ` · resolvido${c.resolvido_por ? ' por ' + esc(c.resolvido_por) : ''}` : ''}</small></span>
         ${c.respostas.map(r => `<div class="resp ${r.enviado ? '' : 'rasc'}"><span><b>${esc(r.autor)}</b> ${esc(r.texto)}<small>${quando(r.criado_em)}${r.enviado ? '' : ' · rascunho'}</small></span>${!r.enviado && dono ? `<button class="x" type="button" data-apagar="${r.id}" aria-label="Apagar resposta">${ico('x')}</button>` : ''}</div>`).join('')}
         ${respondendo === c.id ? `<form class="form-resp" data-resp="${c.id}"><input class="campo" id="txt-resp" placeholder="Responder a ${esc(c.autor)}" maxlength="4000" required><button class="btn peq prim" type="submit">Responder</button><button class="btn peq" type="button" data-responder="0">Cancelar</button></form>` : ''}
         <div class="c-acoes">
@@ -499,12 +542,49 @@ function abaVideo(t) {
       </div>
       ${!c.enviado && dono ? `<button class="x" type="button" data-apagar="${c.id}" aria-label="Apagar">${ico('x')}</button>` : '<span></span>'}
     </li>`;
+}
+
+function comentariosHtml(t, vista) {
+  const dono = EU.papel === 'dono', atual = t.versoes.at(-1)?.numero, fechada = t.status === 'aprovado';
+  const base = t.comentarios.filter(c => (todasVersoes || c.versao === vista) && (c.enviado || dono));
+  const arvore = arvoreComentarios(base);
+  const podeComentar = t.versoes.length && !fechada;
+  return `<div class="c-topo">
+        <h4>Comentários ${todasVersoes ? '(todas as versões)' : vista ? `da V${vista}` : ''}</h4>
+        <div class="c-filtros">
+          <input class="campo" type="search" id="busca-c" placeholder="Buscar" value="${esc(buscaC)}" aria-label="Buscar nos comentários">
+          <select class="campo" id="filtro-c" aria-label="Mostrar">
+            ${[['todos', 'Todos'], ['abertos', 'Abertos'], ['resolvidos', 'Resolvidos']].map(([k, n]) => `<option value="${k}" ${filtroC === k ? 'selected' : ''}>${n}</option>`).join('')}
+          </select>
+          ${t.versoes.length > 1 ? `<label class="chk"><input type="checkbox" id="todas-c" ${todasVersoes ? 'checked' : ''}> Todas as versões</label>` : ''}
+        </div>
+      </div>
+      ${arvore.length ? `<ul class="coments" id="lista-c">${arvore.map(c => linhaComentario(c, dono, fechada)).join('')}</ul><p class="dica" id="c-nada" hidden>Nenhum comentário com esse filtro.</p>`
+        : `<p class="dica">${t.versoes.length ? 'Nenhum comentário nesta versão.' : 'Os comentários aparecem aqui quando houver vídeo.'}</p>`}
+      ${podeComentar && vista === atual ? `<form class="form-coment" id="f-coment">
+          <button class="tc" type="button" id="tc-atual" title="Comentário no minuto atual do vídeo">${rascunhoTempo !== null ? timecode(rascunhoTempo) : '00:00'}</button>
+          <input class="campo" id="txt-coment" placeholder="${dono ? 'Comentar neste minuto (ex.: trocar a música)' : 'Comentar neste minuto'}" maxlength="4000" required>
+          <button class="btn peq prim" type="submit">Comentar</button>
+          ${modoRev ? `<p class="dica rev-dica">${rascunhoPos ? '● Ponto marcado na imagem. ' : ''}Clique no vídeo para marcar o ponto e comentar.</p>` : ''}
+        </form>` : ''}`;
+}
+
+function abaVideo(t) {
+  const dono = EU.papel === 'dono';
+  const atual = t.versoes.at(-1)?.numero;
+  const vista = versaoVista ?? atual;
+  const p = players[t.id]?.[vista], url = typeof p === 'string' ? p : null, removido = p?.removido;
+  const rasc = t.comentarios.filter(c => !c.enviado && c.versao === atual);
+  const versao = t.versoes.find(v => v.numero === vista);
+  const fechada = t.status === 'aprovado';
+  if (modoRev) return `<div class="caixa"><p>A revisão está aberta em tela cheia.</p><div class="acoes"><button class="btn prim" type="button" data-act="rev-abrir">Voltar para a revisão</button></div></div>`;
   return `<div class="video-grade">
     <div>
       <div class="player" id="caixa-player">${url ? `<video id="player" controls preload="metadata" playsinline crossorigin="anonymous" src="${esc(url)}"></video>`
         : removido ? `<p class="sem">Vídeo removido em ${diaMes(removido)} (1 mês depois da aprovação).</p>`
         : `<p class="sem">${t.versoes.length ? 'Carregando o vídeo…' : 'Ainda não há vídeo enviado.'}</p>`}</div>
-      ${url ? `<div class="marcas" id="marcas" title="Comentários no vídeo · clique para ir ao ponto"><span class="cabeca" id="cabeca"></span></div>
+      ${url ? `<div class="acoes" style="margin-top:8px"><button class="btn prim" type="button" data-act="rev-abrir">⛶ Revisar em tela cheia</button></div>
+      <div class="marcas" id="marcas" title="Comentários no vídeo · clique para ir ao ponto"><span class="cabeca" id="cabeca"></span></div>
       <div class="ferr" role="toolbar" aria-label="Controles do vídeo">
         <button type="button" data-player="quadro-" title="Quadro anterior ( , )">◀︎❙</button>
         <button type="button" data-player="quadro+" title="Próximo quadro ( . )">❙▶︎</button>
@@ -528,23 +608,7 @@ function abaVideo(t) {
         </div>` : ''}
     </div>
     <div>
-      <div class="c-topo">
-        <h4>Comentários ${todasVersoes ? '(todas as versões)' : vista ? `da V${vista}` : ''}</h4>
-        <div class="c-filtros">
-          <input class="campo" type="search" id="busca-c" placeholder="Buscar" value="${esc(buscaC)}" aria-label="Buscar nos comentários">
-          <select class="campo" id="filtro-c" aria-label="Mostrar">
-            ${[['todos', 'Todos'], ['abertos', 'Abertos'], ['resolvidos', 'Resolvidos']].map(([k, n]) => `<option value="${k}" ${filtroC === k ? 'selected' : ''}>${n}</option>`).join('')}
-          </select>
-          ${t.versoes.length > 1 ? `<label class="chk"><input type="checkbox" id="todas-c" ${todasVersoes ? 'checked' : ''}> Todas as versões</label>` : ''}
-        </div>
-      </div>
-      ${arvore.length ? `<ul class="coments" id="lista-c">${arvore.map(linhaC).join('')}</ul><p class="dica" id="c-nada" hidden>Nenhum comentário com esse filtro.</p>`
-        : `<p class="dica">${t.versoes.length ? 'Nenhum comentário nesta versão.' : 'Os comentários aparecem aqui quando houver vídeo.'}</p>`}
-      ${podeComentar && vista === atual ? `<form class="form-coment" id="f-coment">
-          <button class="tc" type="button" id="tc-atual" title="Comentário no minuto atual do vídeo">${rascunhoTempo !== null ? timecode(rascunhoTempo) : '00:00'}</button>
-          <input class="campo" id="txt-coment" placeholder="${dono ? 'Comentar neste minuto (ex.: trocar a música)' : 'Comentar neste minuto'}" maxlength="4000" required>
-          <button class="btn peq prim" type="submit">Comentar</button>
-        </form>` : ''}
+      ${comentariosHtml(t, vista)}
       ${dono && t.versoes.length && !fechada && ['para_revisar', 'ajustes'].includes(t.status) ? `<div class="caixa">
           <h4>Sua decisão</h4>
           <textarea class="campo" id="txt-ajustes" placeholder="Pedido geral de ajustes (opcional se você já comentou nos minutos)"></textarea>
@@ -951,7 +1015,7 @@ async function recarregar(manterAba = true) {
   const t = tarefaSel();
   if (t) await assinaturas(t);
   if (!manterAba) aba = 'video';
-  renderTopo(); renderEtapas(); renderFila(); renderDetalhe();
+  renderTopo(); renderEtapas(); renderFila(); renderDetalhe(); atualizarRev();
 }
 async function rpc(nome, args, ok) {
   const { error } = await SB.rpc(nome, args);
@@ -978,8 +1042,8 @@ document.addEventListener('click', async e => {
   if (d.tarefa) { sel = Number(d.tarefa); versaoVista = null; rascunhoTempo = null; respondendo = null; buscaC = ''; filtroC = 'todos'; todasVersoes = false; renderFila(); renderDetalhe(); const nt = tarefaSel(); await assinaturas(nt); if (sel === nt.id) renderDetalhe(); return; }
   if (d.aba) { aba = d.aba; renderDetalhe(); return; }
   if (d.versao) { versaoVista = Number(d.versao); renderDetalhe(); return; }
-  if (d.pular && d.v && Number(d.v) !== (versaoVista ?? t?.versoes.at(-1)?.numero)) { versaoVista = Number(d.v); todasVersoes = false; renderDetalhe(); const q = document.getElementById('player'); if (q) q.addEventListener('loadedmetadata', () => { q.currentTime = Number(d.pular); }, { once: true }); return; }
-  if (d.pular) { const p = document.getElementById('player'); if (p) { p.currentTime = Number(d.pular); p.play().catch(() => {}); } return; }
+  if (d.pular && d.v && Number(d.v) !== (versaoVista ?? t?.versoes.at(-1)?.numero)) { versaoVista = Number(d.v); todasVersoes = false; renderDetalhe(); if (modoRev) renderRevisao(); const q = document.getElementById('player'); if (q) q.addEventListener('loadedmetadata', () => { q.currentTime = Number(d.pular); }, { once: true }); return; }
+  if (d.pular) { const p = document.getElementById('player'); if (p) { p.currentTime = Number(d.pular); if (modoRev) p.pause(); else p.play().catch(() => {}); } return; }
   if (d.apagar) return rpc('apagar_rascunho', { p_comentario: Number(d.apagar) });
   if (d.pasta && t) return abrirPasta(t, d.pasta);
   if (d.revisar && t) return registrarVersao(t, d.revisar);
@@ -1010,6 +1074,8 @@ document.addEventListener('click', async e => {
     case 'baixar-pasta': return ARQ.dados ? baixarPasta(ARQ.dados.pasta.id, ARQ.dados.pasta.nome) : undefined;
     case 'baixar-repetir': return BAIXA ? rodarBaixa(BAIXA.falhas.splice(0)) : undefined;
     case 'links': return abrirLinks();
+    case 'rev-abrir': return abrirRevisao();
+    case 'rev-fechar': return fecharRevisao();
     case 'link-criar': return criarLink();
     case 'link-fechar': document.getElementById('dlg-link').close(); return;
     case 'comecar': return rpc('comecar_edicao', { p_tarefa: t.id }, 'Edição começou.');
@@ -1047,7 +1113,8 @@ document.addEventListener('submit', async e => {
     const p = document.getElementById('player');
     const tempo = rascunhoTempo ?? (p ? p.currentTime : null);
     rascunhoTempo = null;
-    await rpc('comentar', { p_tarefa: t.id, p_versao: t.versoes.at(-1).numero, p_tempo: tempo !== null ? Math.round(tempo * 10) / 10 : null, p_texto: txt });
+    const pos = rascunhoPos; rascunhoPos = null;
+    await rpc('comentar', { p_tarefa: t.id, p_versao: t.versoes.at(-1).numero, p_tempo: tempo !== null ? Math.round(tempo * 10) / 10 : null, p_texto: txt, ...(pos ? { p_x: pos.x, p_y: pos.y } : {}) });
   }
   if (e.target.id === 'f-tarefa') { e.preventDefault(); return salvarTarefa(); }
 });
@@ -1076,13 +1143,16 @@ function comentsVistos() {
 }
 function desenharMarcas() {
   const p = document.getElementById('player'), el = document.getElementById('marcas'); if (!p || !el) return;
-  const cab = '<span class="cabeca" id="cabeca"></span>';
+  const cab = (el.classList.contains('grande') ? '<span class="prog" id="prog"></span>' : '') + '<span class="cabeca" id="cabeca"></span>';
   el.innerHTML = cab + marcasLinha(comentsVistos(), p.duration).map(m => `<button type="button" class="marca ${m.abertos ? '' : 'ok'}" style="left:${m.pct}%" data-pular="${m.tempo}" title="${timecode(m.tempo)} · ${m.n} ${m.n === 1 ? 'comentário' : 'comentários'}">${m.n > 1 ? m.n : ''}</button>`).join('');
   moverCabeca();
 }
 function moverCabeca() {
   const p = document.getElementById('player'), c = document.getElementById('cabeca');
-  if (p && c && p.duration > 0) c.style.left = `${Math.min(100, p.currentTime / p.duration * 100)}%`;
+  if (!p || !(p.duration > 0)) return;
+  const pct = `${Math.min(100, p.currentTime / p.duration * 100)}%`;
+  if (c) c.style.left = pct;
+  const g = document.getElementById('prog'); if (g) g.style.width = pct;
 }
 function aplicarFiltroC() {
   const lista = document.getElementById('lista-c'); if (!lista) return;
@@ -1105,6 +1175,13 @@ document.addEventListener('error', e => {
   const p = e.target; if (p.id !== 'player' || !p.hasAttribute('crossorigin')) return;
   p.removeAttribute('crossorigin'); p.src = p.getAttribute('src'); p.load();
 }, true);
+document.addEventListener('pointerdown', e => {
+  const trilha = e.target.closest('#marcas'); if (!trilha || e.target.closest('[data-pular]')) return;
+  const p = document.getElementById('player'); if (!p || !(p.duration > 0)) return;
+  const ir = ev => { const r = trilha.getBoundingClientRect(); p.currentTime = Math.max(0, Math.min(1, (ev.clientX - r.left) / r.width)) * p.duration; moverCabeca(); };
+  const fim = () => { document.removeEventListener('pointermove', ir); document.removeEventListener('pointerup', fim); };
+  document.addEventListener('pointermove', ir); document.addEventListener('pointerup', fim);
+});
 document.addEventListener('click', e => {
   const trilha = e.target.closest('#marcas'); if (!trilha || e.target.closest('[data-pular]')) return;
   const p = document.getElementById('player'), r = trilha.getBoundingClientRect();
@@ -1115,8 +1192,11 @@ function controlePlayer(acao) {
   const p = document.getElementById('player'); if (!p) return;
   if (acao === 'quadro-' || acao === 'quadro+') { p.pause(); p.currentTime = Math.max(0, p.currentTime + (acao === 'quadro+' ? QUADRO : -QUADRO)); }
   if (acao === 'loop') { loopP = !loopP; p.loop = loopP; document.querySelector('[data-player=loop]')?.setAttribute('aria-pressed', loopP); }
-  if (acao === 'tela') (document.fullscreenElement ? document.exitFullscreen() : p.requestFullscreen?.() || p.webkitEnterFullscreen?.());
-  if (acao === 'atalhos') { verAtalhos = !verAtalhos; renderDetalhe(); }
+  if (acao === 'tela') { const alvo = modoRev ? document.getElementById('rev') : p; document.fullscreenElement ? document.exitFullscreen() : (alvo.requestFullscreen?.() || p.webkitEnterFullscreen?.()); }
+  if (acao === 'tocar') p.paused ? p.play().catch(() => {}) : p.pause();
+  if (acao === 'vel') { velocidadeP = VELS[(VELS.indexOf(velocidadeP) + 1) % VELS.length]; p.playbackRate = velocidadeP; const b = document.getElementById('bt-vel'); if (b) b.textContent = String(velocidadeP).replace('.', ',') + '×'; }
+  if (acao === 'som') { p.muted = !p.muted; const b = document.getElementById('bt-som'); if (b) b.textContent = p.muted ? '🔇' : '🔊'; }
+  if (acao === 'atalhos') { verAtalhos = !verAtalhos; if (modoRev) { const t = p.currentTime; renderRevisao(); const q = document.getElementById('player'); q?.addEventListener('loadedmetadata', () => { q.currentTime = t; }, { once: true }); } else renderDetalhe(); }
   if (acao === 'foto') salvarQuadro(p);
 }
 function salvarQuadro(p) {
@@ -1134,6 +1214,7 @@ function salvarQuadro(p) {
   } catch { aviso('Este vídeo não permite capturar o quadro (falta liberar o CORS do armazenamento).', 'erro'); }
 }
 document.addEventListener('keydown', e => {
+  if (modoRev && e.key === 'Escape' && !document.querySelector('dialog[open]') && !e.target.closest('input, textarea, select')) { e.preventDefault(); return fecharRevisao(); }
   if (aba !== 'video' || e.metaKey || e.ctrlKey || e.altKey) return;
   if (e.target.closest('input, textarea, select, [contenteditable]') || document.querySelector('dialog[open]')) return;
   const p = document.getElementById('player'); if (!p) return;
@@ -1151,6 +1232,132 @@ document.addEventListener('keydown', e => {
 
 document.addEventListener('input', e => {
   if (e.target.id === 'busca-c') { buscaC = e.target.value; aplicarFiltroC(); }
+});
+
+// ------------------------------------------------------------ modo revisão em tela cheia (vídeo no centro, comentários à direita)
+let modoRev = false, rascunhoPos = null; // rascunhoPos: { x, y } de 0 a 1 na imagem
+const VELS = [0.5, 1, 1.5, 2];
+function abrirRevisao() {
+  modoRev = true; document.body.classList.add('sem-rolar');
+  renderDetalhe(); renderRevisao();
+}
+function fecharRevisao() {
+  modoRev = false; rascunhoPos = null; document.body.classList.remove('sem-rolar');
+  if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+  const el = document.getElementById('rev'); el.hidden = true; el.innerHTML = '';
+  renderDetalhe();
+}
+function topoRev(t) {
+  const dono = EU.papel === 'dono', atual = t.versoes.at(-1)?.numero, vista = versaoVista ?? atual, etapa = etapaT(t), fechada = t.status === 'aprovado';
+  const rasc = t.comentarios.filter(c => !c.enviado && c.versao === atual);
+  return `<button class="rev-ic" type="button" data-act="rev-fechar" title="Fechar a revisão (Esc)" aria-label="Fechar">${ico('voltar')}</button>
+    <b class="rev-tit">${esc(t.casa_nome)}<small>${esc(t.tipo)}</small></b>
+    ${t.versoes.length > 1 ? `<select class="rev-sel" id="rev-versao" aria-label="Versão">${t.versoes.map(v => `<option value="${v.numero}" ${v.numero === vista ? 'selected' : ''}>V${v.numero}${v.numero === atual ? ' · atual' : ''}</option>`).join('')}</select>` : vista ? `<span class="rev-chip">V${vista}</span>` : ''}
+    <span class="rev-chip"><span class="pt" style="background:${COR(etapa)}"></span>${nomeEtapa(etapa)}</span>
+    <span class="rev-esp"></span>
+    ${dono ? `<button class="rev-bt" type="button" data-act="links">${ico('abrir')} Link para o cliente</button>` : ''}
+    ${dono && t.versoes.length && !fechada && ['para_revisar', 'ajustes'].includes(t.status) ? `
+      <button class="rev-bt aviso" type="button" data-act="ajustes" ${t.status === 'ajustes' && !rasc.length ? 'disabled title="Ajustes já pedidos; aguarde a nova versão"' : ''}>${ico('ajustes')} Pedir ajustes${rasc.length ? ` (${rasc.length})` : ''}</button>
+      <button class="rev-bt prim" type="button" data-act="aprovar">${ico('aprovado')} Aprovar V${atual}</button>` : ''}
+    ${fechada ? `<span class="rev-chip ok">${ico('aprovado')} Aprovado</span>` : ''}`;
+}
+function renderRevisao() {
+  const el = document.getElementById('rev'), t = tarefaSel();
+  if (!modoRev || !t) { el.hidden = true; return; }
+  const vista = versaoVista ?? t.versoes.at(-1)?.numero;
+  const p = players[t.id]?.[vista], url = typeof p === 'string' ? p : null;
+  el.hidden = false;
+  el.innerHTML = `<header class="rev-topo" id="rev-topo">${topoRev(t)}</header>
+    <div class="rev-corpo">
+      <div class="rev-palco" id="rev-palco">
+        ${url ? `<video id="player" playsinline preload="metadata" crossorigin="anonymous" src="${esc(url)}"></video><div class="pinos" id="pinos"></div>`
+          : `<p class="sem">${p?.removido ? `Vídeo removido em ${diaMes(p.removido)}.` : t.versoes.length ? 'Carregando o vídeo…' : 'Ainda não há vídeo enviado.'}</p>`}
+      </div>
+      <div class="rev-base">
+        <div class="marcas grande" id="marcas"><span class="prog" id="prog"></span><span class="cabeca" id="cabeca"></span></div>
+        <div class="rev-ctrl" role="toolbar" aria-label="Controles do vídeo">
+          <button type="button" data-player="tocar" id="bt-tocar" title="Tocar / pausar (Espaço)">▶</button>
+          <button type="button" data-player="quadro-" title="Quadro anterior ( , )">◀︎❙</button>
+          <button type="button" data-player="quadro+" title="Próximo quadro ( . )">❙▶︎</button>
+          <button type="button" data-player="loop" aria-pressed="${loopP}" title="Repetir">⟲</button>
+          <button type="button" data-player="vel" id="bt-vel" title="Velocidade">${String(velocidadeP).replace('.', ',')}×</button>
+          <button type="button" data-player="som" id="bt-som" title="Som">🔊</button>
+          <span class="rev-tempo" id="rev-tempo">00:00 / 00:00</span>
+          <span class="rev-esp"></span>
+          <button type="button" data-player="foto" title="Salvar este quadro como imagem">📷</button>
+          <button type="button" data-player="atalhos" title="Atalhos do teclado">⌨︎</button>
+          <button type="button" data-player="tela" title="Tela cheia ( F )">⛶</button>
+        </div>
+        ${verAtalhos ? '<p class="rev-atalhos">Clique no vídeo: comentar naquele ponto · Espaço/K: tocar · ← →: 1 s · Shift: 5 s · J/L: 10 s · , .: 1 quadro · C: comentar · F: tela cheia · Esc: fechar</p>' : ''}
+      </div>
+      <aside class="rev-lado" id="rev-lado">${comentariosHtml(t, vista)}</aside>
+    </div>`;
+  depoisDoDetalhe();
+}
+/** Depois de salvar algo: atualiza topo e comentários sem recarregar o vídeo (não perde o ponto). */
+function atualizarRev() {
+  const t = tarefaSel(); if (!modoRev) return;
+  if (!t) return fecharRevisao();
+  const topo = document.getElementById('rev-topo'), lado = document.getElementById('rev-lado'); if (!topo || !lado) return renderRevisao();
+  const rolagem = lado.scrollTop;
+  topo.innerHTML = topoRev(t); lado.innerHTML = comentariosHtml(t, versaoVista ?? t.versoes.at(-1)?.numero); lado.scrollTop = rolagem;
+  depoisDoDetalhe(); desenharPinos();
+}
+
+/** Retângulo da imagem dentro do <video> (object-fit: contain deixa faixas pretas). */
+function areaImagem(p) {
+  const W = p.clientWidth, H = p.clientHeight, vw = p.videoWidth, vh = p.videoHeight;
+  if (!vw || !vh) return null;
+  const s = Math.min(W / vw, H / vh), w = vw * s, h = vh * s;
+  return { x: p.offsetLeft + (W - w) / 2, y: p.offsetTop + (H - h) / 2, w, h };
+}
+function desenharPinos() {
+  const p = document.getElementById('player'), lay = document.getElementById('pinos'); if (!p || !lay) return;
+  const a = areaImagem(p); if (!a) { lay.innerHTML = ''; return; }
+  Object.assign(lay.style, { left: a.x + 'px', top: a.y + 'px', width: a.w + 'px', height: a.h + 'px' });
+  if (!p.paused) { lay.innerHTML = ''; return; }
+  const t = tarefaSel(), vista = versaoVista ?? t.versoes.at(-1)?.numero;
+  const lista = arvoreComentarios(t.comentarios.filter(c => c.versao === vista && (c.enviado || EU.papel === 'dono')));
+  const pinos = lista.map((c, i) => ({ c, n: i + 1 })).filter(({ c }) => c.pos_x != null && Math.abs(c.tempo_seg - p.currentTime) < 0.5);
+  lay.innerHTML = pinos.map(({ c, n }) => `<button type="button" class="pino ${c.resolvido ? 'ok' : ''}" style="left:${c.pos_x * 100}%;top:${c.pos_y * 100}%" data-ver-c="${c.id}" title="${esc(c.texto)}">${n}</button>`).join('')
+    + (rascunhoPos ? `<span class="pino novo" style="left:${rascunhoPos.x * 100}%;top:${rascunhoPos.y * 100}%">+</span>` : '');
+}
+function atualizarTempoRev() {
+  const p = document.getElementById('player'), el = document.getElementById('rev-tempo'); if (!p || !el) return;
+  el.textContent = `${timecode(p.currentTime)} / ${timecode(p.duration || 0)}`;
+  const b = document.getElementById('bt-tocar'); if (b) b.textContent = p.paused ? '▶' : '❚❚';
+}
+['play', 'pause', 'seeked', 'loadedmetadata', 'timeupdate'].forEach(ev => document.addEventListener(ev, e => {
+  if (e.target.id !== 'player' || !modoRev) return;
+  atualizarTempoRev();
+  if (ev !== 'timeupdate') desenharPinos();
+}, true));
+window.addEventListener('resize', () => { if (modoRev) desenharPinos(); });
+
+// clicar no vídeo: pausa, marca o ponto e abre o comentário naquele segundo
+document.addEventListener('click', e => {
+  if (!modoRev || e.target.id !== 'player') return;
+  const p = e.target, a = areaImagem(p), r = p.getBoundingClientRect();
+  p.pause();
+  if (a) {
+    const x = (e.clientX - r.left - (a.x - p.offsetLeft)) / a.w, y = (e.clientY - r.top - (a.y - p.offsetTop)) / a.h;
+    rascunhoPos = x >= 0 && x <= 1 && y >= 0 && y <= 1 ? { x: Math.round(x * 1000) / 1000, y: Math.round(y * 1000) / 1000 } : null;
+  }
+  rascunhoTempo = p.currentTime;
+  const tc = document.getElementById('tc-atual'); if (tc) tc.textContent = timecode(rascunhoTempo);
+  const dica = document.querySelector('.rev-dica'); if (dica) dica.textContent = (rascunhoPos ? '● Ponto marcado na imagem. ' : '') + 'Clique no vídeo para marcar o ponto e comentar.';
+  desenharPinos();
+  const i = document.getElementById('txt-coment');
+  if (i) i.focus({ preventScroll: false }); else aviso(tarefaSel()?.status === 'aprovado' ? 'Este vídeo já foi aprovado.' : 'Só dá para comentar na versão atual.', 'erro');
+});
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-ver-c]'); if (!b) return;
+  const li = document.querySelector(`[data-cid="${b.dataset.verC}"]`);
+  if (li) { li.scrollIntoView({ block: 'center', behavior: 'smooth' }); li.classList.add('foco'); setTimeout(() => li.classList.remove('foco'), 1400); }
+});
+document.addEventListener('change', e => {
+  if (e.target.id !== 'rev-versao') return;
+  versaoVista = Number(e.target.value); rascunhoPos = null; rascunhoTempo = null; renderRevisao();
 });
 
 // ---- link de revisão do cliente
