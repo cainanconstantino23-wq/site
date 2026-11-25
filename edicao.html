@@ -54,7 +54,7 @@ svg.i{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;stroke-widt
 .fluxo .tit{margin:0 4px 10px;font-size:12px;font-weight:600;color:var(--ink-2)}
 .etapas{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
 @media (min-width:720px){.etapas{grid-template-columns:repeat(3,1fr)}}
-@media (min-width:1100px){.etapas{grid-template-columns:1fr 1fr 1fr 1fr 1fr 1px 1fr;align-items:stretch;gap:8px}}
+@media (min-width:1100px){.etapas{grid-template-columns:1fr 1fr 1fr 1px 1fr;align-items:stretch;gap:8px}}
 .etapa{position:relative;display:flex;align-items:center;gap:10px;min-height:56px;padding:8px 10px;border:0;border-radius:var(--r-control);background:none;text-align:left;transition:background-color .15s, transform .1s}
 .etapa:hover{background:var(--hover)}
 .etapa:active{transform:scale(.97)}
@@ -303,7 +303,7 @@ dialog::backdrop{background:rgb(24 50 58 / .35);backdrop-filter:blur(3px)}
   <header class="topo">
     <div>
       <h1>Edição</h1>
-      <p id="resumo">Tarefas do editor, arquivos das casas e revisão dos vídeos.</p>
+      <p id="resumo">Tarefas do editor e revisão dos vídeos.</p>
     </div>
     <div class="acoes" id="acoes-topo"></div>
   </header>
@@ -311,7 +311,7 @@ dialog::backdrop{background:rgb(24 50 58 / .35);backdrop-filter:blur(3px)}
   <section class="fluxo vidro" aria-label="Etapas das tarefas">
     <p class="tit">Caminho de cada tarefa · toque numa etapa para abrir</p>
     <div class="etapas" id="etapas"></div>
-    <p class="volta"><svg class="i" viewBox="0 0 24 24" style="color:var(--e-ajustes);width:13px;height:13px"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>Ajustes pedidos → o editor envia nova versão → volta para você revisar</p>
+    <p class="volta"><svg class="i" viewBox="0 0 24 24" style="color:var(--e-ajustes);width:13px;height:13px"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>Pedir ajustes → volta para Em edição → o editor envia nova versão → volta para Para revisar</p>
   </section>
   <div class="grade">
     <section class="fila cartao" aria-label="Fila de tarefas">
@@ -323,11 +323,8 @@ dialog::backdrop{background:rgb(24 50 58 / .35);backdrop-filter:blur(3px)}
 </div>
 
 <dialog id="dlg-tarefa"><form class="dlg" id="f-tarefa" method="dialog"></form></dialog>
-<dialog id="dlg-raiz"><div class="dlg" id="raiz-corpo"></div></dialog>
-<dialog id="dlg-subir"><div class="dlg" id="subir-corpo"></div></dialog>
 <div class="rev" id="rev" hidden role="dialog" aria-label="Revisão do vídeo"></div>
 <dialog id="dlg-link"><div class="dlg" id="link-corpo"></div></dialog>
-<dialog id="dlg-baixar"><div class="dlg" id="baixar-corpo"></div></dialog>
 <div class="envios" id="envios" aria-live="polite"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
@@ -359,23 +356,16 @@ const diaMes = iso => iso ? new Date(iso).toLocaleDateString('pt-BR', { timeZone
 const nomeEtapa = id => (ETAPAS.find(e => e.id === id) || {}).nome || id;
 
 let EU = null;          // { papel, nome, email }
-let DRIVE = null;       // estado do Drive
 let TAREFAS = [];
 let sel = null, aba = 'video', versaoVista = null;
 const abertas = new Set();
 const players = {};     // tarefa → { numero: url assinada }
-let ARQ = { tarefa: null, pasta: null, dados: null, carregando: false, erro: '' };
 let rascunhoTempo = null;
 let velocidadeP = 1, loopP = false, verAtalhos = false;      // player
 let buscaC = '', filtroC = 'todos', todasVersoes = false, respondendo = null; // comentários
 
 // Links do Drive com a conta certa: com várias contas Google no navegador, o Drive usa a primeira
 // e o download dá 403. authuser força a conta que tem acesso às pastas.
-function noDrive(url) {
-  const conta = (EU?.papel === 'dono' && DRIVE?.email) || EU?.email;
-  if (!url || !conta) return url;
-  return url + (url.includes('?') ? '&' : '?') + 'authuser=' + encodeURIComponent(conta);
-}
 async function token() { const { data: { session } } = await SB.auth.getSession(); return session?.access_token || ''; }
 async function api(caminho, opcoes = {}) {
   const r = await fetch(caminho, { ...opcoes, headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${await token()}`, ...(opcoes.headers || {}) } });
@@ -427,40 +417,24 @@ async function assinaturas(t) {
 
 // ------------------------------------------------------------ topo, etapas e fila
 function renderTopo() {
-  const para = TAREFAS.filter(t => ['para_revisar'].includes(t.status)).length;
-  const ajustes = TAREFAS.filter(t => t.status === 'ajustes').length;
+  const para = TAREFAS.filter(t => t.status === 'para_revisar').length;
   document.getElementById('resumo').textContent = TAREFAS.length
-    ? `${TAREFAS.length} ${TAREFAS.length === 1 ? 'tarefa' : 'tarefas'} · ${para} para revisar · ${ajustes} com ajustes pedidos`
-    : 'Tarefas do editor, arquivos das casas e revisão dos vídeos.';
-  const dono = EU.papel === 'dono';
-  let html = '';
-  if (dono) {
-    html += DRIVE?.conectado
-      ? `<span class="chip" title="Pasta de trabalho: ${esc(DRIVE.raiz?.nome || 'não escolhida')}">${ico('drive')} ${esc(DRIVE.email || 'Drive conectado')}</span>
-         <button class="btn peq" type="button" data-act="raiz">${DRIVE.raiz ? 'Pasta: ' + esc(DRIVE.raiz.nome) : 'Escolher pasta de trabalho'}</button>`
-      : `<button class="btn aviso" type="button" data-act="conectar">${ico('drive')} Conectar Google Drive</button>`;
-    html += `<a class="btn" href="painel.html">${ico('voltar')} Prospecção</a>`;
-    html += `<button class="btn" type="button" data-act="subir" ${DRIVE?.raiz ? '' : 'disabled title="Conecte o Drive e escolha a pasta de trabalho"'}>${ico('enviar')} Subir casa</button>`;
-    html += `<button class="btn prim" type="button" data-act="nova" ${DRIVE?.raiz ? '' : 'disabled title="Conecte o Drive e escolha a pasta de trabalho"'}>${ico('mais')} Nova tarefa</button>`;
-  } else {
-    if (!DRIVE?.conectado) html += `<span class="chip off">Drive desconectado: avise o Cainan</span>`;
-    html += DRIVE?.google_editor
-      ? `<span class="chip" title="Sua conta Google, usada para baixar">${ico('drive')} ${esc(DRIVE.google_editor.email || 'Google conectado')}</span>`
-      : `<button class="btn aviso" type="button" data-act="conectar">${ico('drive')} Conectar minha conta Google</button>`;
-    html += `<span class="chip" style="background:var(--muted);color:var(--ink)">${esc(EU.nome)}</span><button class="btn" type="button" data-act="sair">${ico('sair')} Sair</button>`;
-  }
-  document.getElementById('acoes-topo').innerHTML = html;
+    ? `${TAREFAS.length} ${TAREFAS.length === 1 ? 'tarefa' : 'tarefas'} · ${para} para revisar`
+    : 'Tarefas do editor e revisão dos vídeos.';
+  document.getElementById('acoes-topo').innerHTML = EU.papel === 'dono'
+    ? `<a class="btn" href="painel.html">${ico('voltar')} Prospecção</a><button class="btn prim" type="button" data-act="nova">${ico('mais')} Nova tarefa</button>`
+    : `<span class="chip" style="background:var(--muted);color:var(--ink)">${esc(EU.nome)}</span><button class="btn" type="button" data-act="sair">${ico('sair')} Sair</button>`;
 }
 
 function renderEtapas() {
   document.getElementById('etapas').innerHTML = ETAPAS.map((e, i) => {
     const n = TAREFAS.filter(t => etapaT(t) === e.id).length;
     const on = abertas.size === 1 && abertas.has(e.id);
-    return (i === 5 ? '<span class="divisor" aria-hidden="true"></span>' : '') +
+    return (i === ETAPAS.length - 1 ? '<span class="divisor" aria-hidden="true"></span>' : '') +
       `<button class="etapa" type="button" data-etapa="${e.id}" aria-pressed="${on}">
         <span class="bola" style="background:${COR(e.id)}">${ico(e.id)}</span>
         <span style="min-width:0"><b>${e.nome}</b><small>${e.dica}</small></span>
-        <span class="n">${n}</span>${i < 4 ? `<span class="seta">${ico('chev')}</span>` : ''}
+        <span class="n">${n}</span>${i < ETAPAS.length - 2 ? `<span class="seta">${ico('chev')}</span>` : ''}
       </button>`;
   }).join('');
 }
@@ -468,7 +442,7 @@ function renderEtapas() {
 function linhaTarefa(t) {
   const etapa = etapaT(t), pr = prazoInfo(t.prazo, hojeStr());
   const ultimoAjuste = [...t.eventos].reverse().find(e => e.tipo === 'ajustes');
-  const sub = etapa === 'ajustes' && ultimoAjuste?.texto ? `“${esc(ultimoAjuste.texto)}”`
+  const sub = t.status === 'ajustes' && ultimoAjuste?.texto ? `“${esc(ultimoAjuste.texto)}”`
     : pr && etapa !== 'aprovado' ? `<span class="${pr.atrasado ? 'atrasado' : ''}">${esc(pr.texto)}</span>` : esc(t.tipo);
   const caminho = caminhoTarefa(t.eventos);
   return `<button class="linha" type="button" data-tarefa="${t.id}" aria-pressed="${t.id === sel}">
@@ -513,19 +487,17 @@ function renderDetalhe() {
       </div>
       <div class="acoes">
         ${t.status === 'a_fazer' ? `<button class="btn prim" type="button" data-act="comecar">${ico('em_edicao')} Começar edição</button>` : ''}
-        <a class="btn peq" href="${esc(noDrive(`https://drive.google.com/drive/folders/${t.casa_pasta_id}`))}" target="_blank" rel="noopener">${ico('abrir')} Pasta no Drive</a>
-        ${EU.papel === 'dono' ? `<select class="campo etapa-sel" id="mudar-etapa" aria-label="Mudar etapa"><option value="">Mudar etapa…</option>${['a_fazer', 'em_edicao', 'para_revisar', 'ajustes', 'aprovado'].filter(s => s !== t.status).map(s => `<option value="${s}">${s === 'aprovado' ? 'Aprovar' : nomeEtapa(s)}</option>`).join('')}</select>
+        ${EU.papel === 'dono' ? `<select class="campo etapa-sel" id="mudar-etapa" aria-label="Mudar etapa"><option value="">Mudar etapa…</option>${['a_fazer', 'em_edicao', 'para_revisar', 'aprovado'].filter(s => s !== etapa).map(s => `<option value="${s}">${s === 'aprovado' ? 'Aprovar' : nomeEtapa(s)}</option>`).join('')}</select>
           <button class="btn peq" type="button" data-act="links">${ico('abrir')} Link para o cliente</button>` : ''}
         ${EU.papel === 'dono' ? `<button class="btn peq" type="button" data-act="excluir-tarefa">${ico('lixo')} Excluir tarefa</button>` : ''}
       </div>
     </div>
     ${t.instrucoes ? `<p class="instr">${esc(t.instrucoes)}</p>` : ''}
     <div class="abas" role="tablist">
-      ${[['video', 'Vídeo'], ['arquivos', 'Arquivos'], ['linha', 'Linha do tempo']].map(([k, n]) => `<button type="button" role="tab" data-aba="${k}" aria-selected="${aba === k}">${n}</button>`).join('')}
+      ${[['video', 'Vídeo'], ['linha', 'Linha do tempo']].map(([k, n]) => `<button type="button" role="tab" data-aba="${k}" aria-selected="${aba === k}">${n}</button>`).join('')}
     </div>
-    <div id="aba-corpo">${aba === 'video' ? abaVideo(t) : aba === 'arquivos' ? abaArquivos(t) : abaLinha(t)}</div>`;
+    <div id="aba-corpo">${aba === 'video' ? abaVideo(t) : abaLinha(t)}</div>`;
   if (aba === 'video') depoisDoDetalhe();
-  if (aba === 'arquivos' && (ARQ.tarefa !== t.id || (!ARQ.dados && !ARQ.carregando && !ARQ.erro))) abrirPasta(t, t.casa_pasta_id);
 }
 
 function linhaComentario(c, dono, fechada) {
@@ -604,7 +576,7 @@ function abaVideo(t) {
           <h4>${t.versoes.length ? 'Enviar nova versão' : 'Enviar o vídeo para revisão'}</h4>
           <input class="campo" id="nota-versao" placeholder="O que mudou? (opcional)" maxlength="300">
           <div class="acoes"><label class="btn prim">${ico('enviar')} Escolher vídeo do computador<input type="file" accept="video/*" id="arq-versao" hidden></label></div>
-          <p class="dica">O vídeo fica na plataforma para a revisão (não vai para o Drive). Some 1 mês depois da aprovação.</p>
+          <p class="dica">O vídeo fica na plataforma para a revisão. Some 1 mês depois da aprovação.</p>
         </div>` : ''}
     </div>
     <div>
@@ -620,34 +592,6 @@ function abaVideo(t) {
       ${fechada ? `<p class="aviso-box ok">Aprovado. Este vídeo está pronto.</p>` : ''}
     </div>
   </div>`;
-}
-
-function abaArquivos(t) {
-  if (!DRIVE?.conectado) return `<p class="aviso-box erro">${EU.papel === 'dono' ? 'Conecte o Google Drive no topo da página.' : 'O Drive está desconectado. Avise o Cainan.'}</p>`;
-  if (ARQ.tarefa !== t.id || ARQ.carregando || !ARQ.dados) return ARQ.erro && ARQ.tarefa === t.id ? `<p class="aviso-box erro">${esc(ARQ.erro)}</p>` : '<p class="carregando">Abrindo a pasta…</p>';
-  const d = ARQ.dados, fechada = t.status === 'aprovado';
-  const casaIdx = d.caminho.findIndex(p => p.id === t.casa_pasta_id);
-  const migalhas = (casaIdx >= 0 ? d.caminho.slice(casaIdx) : d.caminho);
-  return `<div class="migalhas">${migalhas.map((p, i) => `${i ? '<span>›</span>' : ''}<button type="button" data-pasta="${esc(p.id)}">${esc(p.nome)}</button>`).join('')}</div>
-    <div class="arq-barra">
-      <span class="dica" style="margin:0">${d.itens.length} ${d.itens.length === 1 ? 'item' : 'itens'}</span>
-      <span class="acoes">
-        ${PODE_PASTA ? `<button class="btn peq" type="button" data-act="baixar-pasta">${ico('baixar')} Baixar pasta</button>` : ''}
-        <a class="btn peq" href="${esc(noDrive(d.pasta.link))}" target="_blank" rel="noopener">${ico('abrir')} Abrir no Drive</a>
-        <label class="btn peq prim">${ico('enviar')} Enviar arquivos<input type="file" multiple id="arq-envio" hidden></label>
-      </span>
-    </div>
-    <div class="arquivos">${d.itens.length ? d.itens.map(a => `<div class="arq">
-        <span class="ic ${a.tipo}">${ico(a.tipo)}</span>
-        <span style="min-width:0">${a.tipo === 'pasta' ? `<button class="nm" type="button" data-pasta="${esc(a.id)}">${esc(a.nome)}</button>` : `<span class="nm" title="${esc(a.nome)}" style="display:block">${esc(a.nome)}</span>`}
-          <span class="info">${a.tipo === 'pasta' ? 'Pasta' : esc(tamanhoLegivel(a.tamanho))}${a.modificado ? ' · ' + diaMes(a.modificado) : ''}</span></span>
-        <span class="bts">
-          ${a.tipo === 'video' && !fechada ? `<button class="btn peq" type="button" data-revisar="${esc(a.id)}">${ico('para_revisar')} Enviar para revisão</button>` : ''}
-          ${a.download ? (PODE_ARQ && !ehNativoGoogle(a.mime) ? `<button class="btn peq" type="button" data-baixar="${esc(a.id)}">${ico('baixar')} Baixar</button>` : `<a class="btn peq" href="${esc(noDrive(a.download))}" target="_blank" rel="noopener">${ico('baixar')} Baixar</a>`) : ''}
-          <a class="btn peq" href="${esc(noDrive(a.link))}" target="_blank" rel="noopener" aria-label="Abrir ${esc(a.nome)} no Drive">${ico('abrir')}</a>
-        </span>
-      </div>`).join('') : '<p class="arq-vazio">Pasta vazia.</p>'}</div>
-    <p class="dica">${PODE_PASTA ? 'Baixar salva direto no seu computador, com a sua conta Google.' : 'Baixar abre no Google Drive (use a sua conta com acesso às pastas).'} Enviar só cria arquivos novos; nada é apagado.</p>`;
 }
 
 function abaLinha(t) {
@@ -667,60 +611,12 @@ function abaLinha(t) {
 // comentários do pedido de ajustes = os do dono (o editor responde com o próprio nome)
 function EU_NOME_EDITOR(t, c) { return t.versoes.find(v => v.numero === c.versao)?.enviada_por; }
 
-// ------------------------------------------------------------ arquivos
-async function abrirPasta(t, pastaId) {
-  ARQ = { tarefa: t.id, pasta: pastaId, dados: null, carregando: true, erro: '' };
-  if (aba === 'arquivos') document.getElementById('aba-corpo').innerHTML = abaArquivos(t);
-  try { ARQ.dados = await api(`/api/drive?pasta=${encodeURIComponent(pastaId)}`); }
-  catch (e) { ARQ.erro = MSG[e.codigo] || 'Não foi possível abrir a pasta.'; }
-  ARQ.carregando = false;
-  if (sel === t.id && aba === 'arquivos') document.getElementById('aba-corpo').innerHTML = abaArquivos(t);
-}
-
-// ------------------------------------------------------------ envio direto para o Google (como o Cyberduck)
-// Cada arquivo vai num único PUT contínuo; se a conexão cair, pergunta ao Google onde parou e continua dali.
-const SIMULTANEOS = 3;
-const espera = ms => new Promise(r => setTimeout(r, ms));
-/** Roda fn(item) com no máximo n ao mesmo tempo; termina quando todos terminam. */
-async function emParalelo(itens, fn, n = SIMULTANEOS) {
-  const fila = [...itens];
-  const trabalhar = async () => { while (fila.length) await fn(fila.shift()); };
-  await Promise.all(Array.from({ length: Math.min(n, fila.length) }, trabalhar));
-}
-/** Um PUT na sessão de envio. Corpo vazio + "bytes * /total" pergunta onde parou. Resolve { status, range, json }; status 0 = rede caiu. */
-function putEnvio(e, inicio, perguntar = false) {
-  return new Promise(resolve => {
-    const xhr = new XMLHttpRequest();
-    e.xhr = xhr;
-    xhr.open('PUT', e.url);
-    xhr.setRequestHeader('Content-Range', perguntar ? `bytes */${e.total}` : `bytes ${inicio}-${e.total - 1}/${e.total}`);
-    if (!perguntar) xhr.upload.onprogress = ev => { e.enviado = inicio + ev.loaded; renderEnvios(); e.aoProgredir?.(); };
-    xhr.onload = () => { let json = null; try { json = JSON.parse(xhr.responseText); } catch {} resolve({ status: xhr.status, range: xhr.getResponseHeader('Range'), json }); };
-    xhr.onerror = xhr.onabort = xhr.ontimeout = () => resolve({ status: 0, range: null, json: null });
-    xhr.send(perguntar ? null : e.arquivo.slice(inicio));
-  });
-}
 let envioSeq = 0;
 const ENVIOS = new Map();
 // ---- painel de transferências (como o do Cyberduck): tudo que sobe e desce, com velocidade e tempo restante
 const FEITAS = [];          // concluídas nesta sessão (até fechar a página)
 const AMOSTRAS = new Map(); // chave → amostras de progresso (velocidade)
 let painelMin = false, quadroTransf = 0;
-function linhaSubida() {
-  const s = SUBIDA;
-  if (!s?.plano || !['subindo', 'feito', 'erro', 'parado'].includes(s.fase)) return null;
-  const atual = [...s.atuais.values()][0];
-  return { chave: 'subida', tipo: 'up', nome: s.plano.casa, feito: s.enviado, total: s.plano.total, estado: s.fase === 'subindo' ? 'rodando' : s.fase === 'parado' ? 'erro' : s.fase, fim: s.fim,
-    atual: s.fase === 'parado' ? 'Parada por você' : atual ? 'Enviando ' + atual.arquivo.name : '', detalhes: 'transf-subir',
-    repetir: ['erro', 'parado'].includes(s.fase) ? 'subir-repetir' : '', rotuloRepetir: s.fase === 'parado' ? 'Continuar' : '', parar: s.fase === 'subindo' && !s.parar ? 'subir-parar' : '' };
-}
-function linhaBaixa() {
-  const b = BAIXA;
-  if (!b) return null;
-  const atual = [...b.atuais.values()][0];
-  return { chave: 'baixa', tipo: 'down', nome: b.nome, feito: b.baixado, total: b.total, estado: ['montando', 'baixando'].includes(b.fase) ? 'rodando' : b.fase, fim: b.fim,
-    atual: b.fase === 'montando' ? 'Lendo as pastas no Drive…' : atual ? 'Baixando ' + atual.nome : '', detalhes: 'transf-baixar', repetir: b.fase === 'erro' && b.falhas.length ? 'baixar-repetir' : '' };
-}
 const linhaEnvio = e => ({ chave: 'envio' + e.id, tipo: 'up', nome: e.arquivo.name, feito: e.enviado, total: e.total, estado: e.estado === 'enviando' ? 'rodando' : e.estado, fim: e.fim,
   atual: e.estado === 'erro' ? e.erro || 'Falhou' : '', retomar: e.estado === 'erro' ? e.id : 0 });
 function arquivar(l) { if (l && l.estado !== 'rodando') FEITAS.unshift({ ...l, chave: 'feita' + FEITAS.length + Date.now(), detalhes: '', repetir: '', retomar: 0, fim: l.fim || new Date() }); }
@@ -728,7 +624,7 @@ function renderEnvios() { if (!quadroTransf) quadroTransf = requestAnimationFram
 setInterval(() => { if (document.querySelector('#envios .tr.rodando')) renderEnvios(); }, 1000); // velocidade e tempo andam mesmo sem evento
 function desenharTransf() {
   const el = document.getElementById('envios');
-  const ativas = [linhaSubida(), linhaBaixa(), ...[...ENVIOS.values()].map(linhaEnvio)].filter(Boolean);
+  const ativas = [...ENVIOS.values()].map(linhaEnvio);
   const todas = [...ativas, ...FEITAS];
   if (!todas.length) { el.innerHTML = ''; return; }
   const agora = Date.now();
@@ -765,212 +661,6 @@ function desenharTransf() {
       </div>`;
     }).join('')}</div></div>`;
 }
-async function enviarArquivo(arquivo, destino) {
-  const e = { id: ++envioSeq, arquivo, destino, total: arquivo.size, enviado: 0, estado: 'enviando', url: null, resultado: null };
-  ENVIOS.set(e.id, e); renderEnvios();
-  await continuarEnvio(e);
-  return e;
-}
-async function continuarEnvio(e) {
-  e.estado = 'enviando'; e.erro = ''; renderEnvios();
-  try {
-    if (!e.url) {
-      const { url } = await api('/api/drive/envio', { method: 'POST', body: JSON.stringify({ ...e.destino, nome: e.arquivo.name, tipo: e.arquivo.type || 'application/octet-stream', tamanho: e.arquivo.size }) });
-      e.url = url;
-    }
-    let inicio = e.enviado, tentativas = 0, perguntar = e.enviado > 0;
-    const seParou = () => { if (e.cancelado) throw Object.assign(new Error('Parado.'), { parado: true }); };
-    for (;;) {
-      seParou();
-      if (perguntar) { // retomada manual: o Google pode já ter mais bytes do que achamos
-        perguntar = false;
-        const q = await putEnvio(e, 0, true);
-        if (q.status === 200 || q.status === 201) { e.resultado = q.json || {}; e.enviado = e.total; break; }
-        if (q.status === 404 || q.status === 410) { e.url = null; e.enviado = 0; throw new Error('O envio expirou; comece de novo.'); }
-        if (q.status === 308) inicio = inicioDoRange(q.range);
-      }
-      let r = await putEnvio(e, inicio);
-      seParou();
-      if (r.status === 200 || r.status === 201) { e.resultado = r.json || {}; e.enviado = e.total; break; }
-      if (r.status === 404 || r.status === 410) { e.url = null; e.enviado = 0; throw new Error('O envio expirou; comece de novo.'); }
-      if (r.status !== 0 && r.status !== 308 && r.status < 500) throw new Error(`O Google respondeu ${r.status}.`);
-      // caiu (rede ou 5xx): espera, pergunta onde parou e continua dali
-      let retomou = false;
-      while (!retomou) {
-        if (++tentativas > 5) { e.enviado = inicio; throw new Error('A conexão caiu várias vezes. Tente de novo.'); }
-        await espera(esperaTentativa(tentativas));
-        seParou();
-        r = await putEnvio(e, 0, true);
-        if (r.status === 200 || r.status === 201) { e.resultado = r.json || {}; e.enviado = e.total; break; }
-        if (r.status === 404 || r.status === 410) { e.url = null; e.enviado = 0; throw new Error('O envio expirou; comece de novo.'); }
-        if (r.status === 308) { inicio = inicioDoRange(r.range); retomou = true; }
-      }
-      if (e.enviado === e.total && e.resultado) break;
-      e.enviado = inicio; renderEnvios(); e.aoProgredir?.();
-    }
-    e.estado = 'feito'; e.fim = new Date();
-    if (ENVIOS.has(e.id)) { arquivar(linhaEnvio(e)); ENVIOS.delete(e.id); }
-    renderEnvios();
-  } catch (err) {
-    e.estado = err.parado ? 'parado' : 'erro'; e.erro = err.parado ? 'Parado.' : MSG[err.codigo] || err.message || 'Falhou'; renderEnvios();
-  }
-  return e;
-}
-
-// ------------------------------------------------------------ download direto do Google (como o Cyberduck)
-// O navegador pede o arquivo ao Google com a conta de quem baixa e grava na pasta escolhida no computador.
-// Nada passa pelo servidor do site. Se a internet cair, continua do byte em que parou.
-const PODE_PASTA = 'showDirectoryPicker' in window, PODE_ARQ = 'showSaveFilePicker' in window;
-let TOKEN_DL = null;
-async function tokenDownload(forcar = false) {
-  if (!forcar && tokenValido(TOKEN_DL, Date.now())) return TOKEN_DL.token;
-  try { TOKEN_DL = await api('/api/drive/meu-token' + (forcar ? '?forcar=1' : '')); return TOKEN_DL.token; }
-  catch (e) { if (e.codigo === 'google_editor' && DRIVE) { DRIVE.google_editor = null; renderTopo(); } throw e; }
-}
-const erroFinal = msg => Object.assign(new Error(msg), { final: true });
-/** Resposta do Google com o conteúdo do arquivo a partir do byte `inicio`. */
-async function pedirArquivo(id, inicio) {
-  const base = `https://www.googleapis.com/drive/v3/files/${encodeURIComponent(id)}?alt=media&supportsAllDrives=true`;
-  const tentar = async (forcar, abuso) => fetch(base + (abuso ? '&acknowledgeAbuse=true' : ''), {
-    headers: { Authorization: 'Bearer ' + await tokenDownload(forcar), ...(inicio ? { Range: `bytes=${inicio}-` } : {}) },
-  });
-  let r = await tentar(false, false);
-  if (r.status === 401) r = await tentar(true, false);
-  if (r.status === 403) {
-    const txt = await r.text();
-    if (!/cannotDownloadAbusiveFile/.test(txt)) throw erroFinal(/rateLimit|quota/i.test(txt) ? 'O Google pediu para esperar um pouco. Tente de novo.' : 'Sua conta Google não tem acesso a este arquivo.');
-    r = await tentar(false, true);
-  }
-  if (r.status === 404) throw erroFinal('Sua conta Google não tem acesso a este arquivo.');
-  if (!r.ok || !r.body) throw new Error(`O Google respondeu ${r.status}.`);
-  return r;
-}
-/** Grava um arquivo do Drive no handle. Devolve 'pulado' | 'baixado'. aoProgredir(bytesNoDisco). */
-async function gravar(item, fh, aoProgredir, sempre = false) {
-  const atual = sempre ? null : await fh.getFile().catch(() => null);
-  if (!sempre && planoRetomada(atual ? atual.size : null, item.tamanho).acao === 'pular') { aoProgredir(item.tamanho); return 'pulado'; }
-  const w = await fh.createWritable({ keepExistingData: false });
-  let feito = 0, tentativas = 0;
-  try {
-    aoProgredir(0);
-    for (;;) {
-      try {
-        const r = await pedirArquivo(item.id, feito);
-        if (feito && r.status !== 206) { feito = 0; await w.truncate(0); await w.seek(0); aoProgredir(0); }
-        const leitor = r.body.getReader();
-        for (;;) {
-          const { done, value } = await leitor.read();
-          if (done) break;
-          await w.write(value); feito += value.byteLength; aoProgredir(feito);
-        }
-        if (item.tamanho != null && feito < item.tamanho) throw new Error('O download veio incompleto.');
-        break;
-      } catch (err) {
-        if (!deveRepetir(err, ++tentativas)) throw err;
-        await espera(esperaTentativa(tentativas)); // internet caiu: espera e continua do byte `feito`
-      }
-    }
-    await w.close();
-    return 'baixado';
-  } catch (err) { await w.abort().catch(() => {}); throw err; }
-}
-
-let BAIXA = null; // { fase:'montando'|'baixando'|'feito'|'erro', nome, arquivos:[{item, dir|fh, nome}], total, baixado, feitos, pulados, nativos, falhas:[], atuais:Map, erro }
-function novaBaixa(nome) {
-  return { fase: 'montando', nome, arquivos: [], total: 0, baixado: 0, feitos: 0, pulados: 0, nativos: 0, falhas: [], atuais: new Map(), erro: '' };
-}
-function emAndamento() {
-  if (BAIXA && ['montando', 'baixando'].includes(BAIXA.fase)) { document.getElementById('dlg-baixar').showModal(); renderBaixa(); return true; }
-  return false;
-}
-async function baixarPasta(pastaId, nome) {
-  if (emAndamento()) return;
-  let raiz;
-  try { raiz = await showDirectoryPicker({ mode: 'readwrite', id: 'daime-baixar' }); } catch { return; }
-  try { await tokenDownload(); } catch (e) { return aviso(MSG[e.codigo] || 'Não foi possível baixar.', 'erro'); }
-  arquivar(linhaBaixa());
-  BAIXA = novaBaixa(nome);
-  const b = BAIXA;
-  document.getElementById('dlg-baixar').showModal(); renderBaixa();
-  addEventListener('beforeunload', avisoSaida);
-  try {
-    const montar = async (id, dir) => {
-      const { itens } = await api(`/api/drive?pasta=${encodeURIComponent(id)}`);
-      const nomes = nomesUnicos(itens.map(i => i.nome));
-      for (let k = 0; k < itens.length; k++) {
-        const i = itens[k];
-        if (i.tipo === 'pasta') await montar(i.id, await dir.getDirectoryHandle(nomes[k], { create: true }));
-        else if (ehNativoGoogle(i.mime)) b.nativos++;
-        else { b.arquivos.push({ item: i, dir, nome: nomes[k] }); b.total += i.tamanho || 0; }
-      }
-      renderBaixa();
-    };
-    await montar(pastaId, await raiz.getDirectoryHandle(nomeWindows(nome), { create: true }));
-  } catch (e) {
-    removeEventListener('beforeunload', avisoSaida);
-    b.fase = 'erro'; b.erro = MSG[e.codigo] || 'Não foi possível ler as pastas no Drive. Tente de novo.'; return renderBaixa();
-  }
-  await rodarBaixa(b.arquivos);
-}
-async function baixarArquivo(item) {
-  if (emAndamento()) return;
-  let fh;
-  try { fh = await showSaveFilePicker({ suggestedName: nomeWindows(item.nome), id: 'daime-baixar' }); } catch { return; }
-  arquivar(linhaBaixa());
-  BAIXA = novaBaixa(item.nome);
-  BAIXA.arquivos.push({ item, fh, nome: item.nome }); BAIXA.total = item.tamanho || 0;
-  document.getElementById('dlg-baixar').showModal();
-  await rodarBaixa(BAIXA.arquivos);
-}
-/** Baixa a lista (todos ou só as falhas), SIMULTANEOS de cada vez. */
-async function rodarBaixa(lista) {
-  const b = BAIXA;
-  b.fase = 'baixando'; b.erro = ''; b.parar = false; renderBaixa();
-  addEventListener('beforeunload', avisoSaida);
-  await emParalelo(lista, async a => {
-    const chave = a.item.id;
-    let antes = 0;
-    if (b.parar) { b.falhas.push({ ...a, erro: MSG.google_editor }); return; }
-    b.atuais.set(chave, { nome: a.nome, feito: 0, total: a.item.tamanho || 0 }); renderBaixa();
-    try {
-      const fh = a.fh || await a.dir.getFileHandle(a.nome, { create: true });
-      const r = await gravar(a.item, fh, feito => { b.baixado += feito - antes; antes = feito; b.atuais.get(chave).feito = feito; renderBaixa(); }, Boolean(a.fh));
-      if (r === 'pulado') b.pulados++; else b.feitos++;
-    } catch (err) {
-      b.baixado -= antes;
-      if (err.codigo === 'google_editor') { b.parar = true; b.erro = MSG.google_editor; }
-      b.falhas.push({ ...a, erro: MSG[err.codigo] || err.message || 'Falhou' });
-    }
-    b.atuais.delete(chave); renderBaixa();
-  });
-  removeEventListener('beforeunload', avisoSaida);
-  b.fase = b.falhas.length ? 'erro' : 'feito'; b.fim = new Date(); renderBaixa();
-  if (b.fase === 'feito') aviso(`${b.nome} baixado.`, 'ok');
-}
-let quadroBaixa = 0;
-function renderBaixa() { renderEnvios(); if (!quadroBaixa) quadroBaixa = requestAnimationFrame(() => { quadroBaixa = 0; desenharBaixa(); }); }
-function desenharBaixa() {
-  const c = document.getElementById('baixar-corpo'), b = BAIXA;
-  if (!b) return;
-  const rodando = ['montando', 'baixando'].includes(b.fase), n = b.arquivos.length;
-  const fechar = `<button class="btn" type="button" onclick="this.closest('dialog').close()">${rodando ? 'Esconder' : 'Fechar'}</button>`;
-  const pct = b.total ? Math.round(b.baixado / b.total * 100) : 0;
-  const atuais = [...b.atuais.values()].map(x => `<li class="dica" style="margin:2px 0">${esc(x.nome)} · ${x.total ? Math.round(x.feito / x.total * 100) : 0}%</li>`).join('');
-  c.innerHTML = `<h2>${{ montando: 'Preparando o download…', baixando: 'Baixando…', feito: 'Baixado', erro: 'Download parou' }[b.fase]}</h2>
-    <p style="margin:0"><b>${esc(b.nome)}</b></p>
-    ${b.fase === 'montando'
-      ? `<p class="dica" style="margin:0">Lendo as pastas no Drive… ${n} arquivos · ${tamanhoLegivel(b.total)}</p>`
-      : `<div class="prog" style="height:8px"><i style="width:${b.fase === 'feito' ? 100 : pct}%;${b.fase === 'feito' ? 'background:var(--e-aprovado)' : ''}"></i></div>
-         <p class="dica" style="margin:0">${b.feitos + b.pulados} de ${n} arquivos · ${textoProgresso(b.baixado, b.total, b.fase === 'baixando' ? velocidade(AMOSTRAS.get('baixa')) : 0)}${b.pulados ? ` · ${b.pulados} já estavam no computador` : ''}</p>`}
-    ${atuais ? `<ul style="margin:0;padding-left:18px">${atuais}</ul>` : ''}
-    ${b.fase === 'baixando' ? '<p class="dica" style="margin:0">Deixe esta aba aberta até terminar. Se a internet cair, ele continua de onde parou.</p>' : ''}
-    ${b.nativos ? `<p class="dica" style="margin:0">${b.nativos} ${b.nativos === 1 ? 'arquivo do Google Docs/Planilhas não foi baixado' : 'arquivos do Google Docs/Planilhas não foram baixados'}.</p>` : ''}
-    ${b.erro ? `<p class="aviso-box erro" style="margin:0">${esc(b.erro)}</p>` : ''}
-    ${b.falhas.length && !rodando ? `<p class="aviso-box erro" style="margin:0">${b.falhas.length} ${b.falhas.length === 1 ? 'arquivo não baixou' : 'arquivos não baixaram'}: ${esc(b.falhas.slice(0, 3).map(f => f.nome + ' (' + f.erro + ')').join(', '))}${b.falhas.length > 3 ? '…' : ''}</p>` : ''}
-    ${b.fase === 'feito' ? '<p class="aviso-box ok" style="margin:0">Pronto: está na pasta que você escolheu.</p>' : ''}
-    <div class="acoes" style="justify-content:flex-end">${fechar}${b.falhas.length && !rodando ? '<button class="btn prim" type="button" data-act="baixar-repetir">Tentar de novo</button>' : ''}</div>`;
-}
-
 // ------------------------------------------------------------ versão de aprovação no R2 (não vai para o Drive)
 async function enviarVersaoR2(t, arquivo, nota) {
   const e = { id: ++envioSeq, arquivo, total: arquivo.size, enviado: 0, estado: 'enviando', r2: { tarefa: t.id, chave: null, enviado: false, nota } };
@@ -1024,17 +714,9 @@ async function rpc(nome, args, ok) {
   await recarregar();
   return true;
 }
-async function registrarVersao(t, arquivoId, nota = '') {
-  try {
-    const { numero } = await api('/api/tarefas/versao', { method: 'POST', body: JSON.stringify({ tarefa: t.id, arquivo: arquivoId, nota }) });
-    aviso(`V${numero} enviada para revisão.`, 'ok');
-    versaoVista = null; aba = 'video';
-    await recarregar();
-  } catch (e) { aviso(MSG[e.codigo] || 'Não foi possível registrar a versão.', 'erro'); }
-}
 
 document.addEventListener('click', async e => {
-  const el = e.target.closest('[data-act],[data-etapa],[data-grupo],[data-tarefa],[data-aba],[data-versao],[data-pular],[data-apagar],[data-pasta],[data-revisar],[data-retomar],[data-fechar-envio],[data-casa],[data-raiz-ir],[data-raiz-usar],[data-baixar]');
+  const el = e.target.closest('[data-act],[data-etapa],[data-grupo],[data-tarefa],[data-aba],[data-versao],[data-pular],[data-apagar],[data-retomar],[data-fechar-envio]');
   if (!el) return;
   const t = tarefaSel(), d = el.dataset;
   if (d.etapa) { abertas.clear(); abertas.add(d.etapa); renderEtapas(); renderFila(); return; }
@@ -1045,34 +727,15 @@ document.addEventListener('click', async e => {
   if (d.pular && d.v && Number(d.v) !== (versaoVista ?? t?.versoes.at(-1)?.numero)) { versaoVista = Number(d.v); todasVersoes = false; renderDetalhe(); if (modoRev) renderRevisao(); const q = document.getElementById('player'); if (q) q.addEventListener('loadedmetadata', () => { q.currentTime = Number(d.pular); }, { once: true }); return; }
   if (d.pular) { const p = document.getElementById('player'); if (p) { p.currentTime = Number(d.pular); if (modoRev) p.pause(); else p.play().catch(() => {}); } return; }
   if (d.apagar) return rpc('apagar_rascunho', { p_comentario: Number(d.apagar) });
-  if (d.pasta && t) return abrirPasta(t, d.pasta);
-  if (d.revisar && t) return registrarVersao(t, d.revisar);
-  if (d.retomar) { const en = ENVIOS.get(Number(d.retomar)); if (en?.r2) await continuarR2(en); else if (en) { await continuarEnvio(en); en.depois?.(en); } return; }
+  if (d.retomar) { const en = ENVIOS.get(Number(d.retomar)); if (en) await continuarR2(en); return; }
   if (d.fecharEnvio) { ENVIOS.delete(Number(d.fecharEnvio)); renderEnvios(); return; }
-  if (d.casa) { document.querySelectorAll('[data-casa]').forEach(b => b.setAttribute('aria-pressed', String(b === el))); document.getElementById('casa-escolhida').value = JSON.stringify({ id: d.casa, nome: el.dataset.nome }); return; }
-  if (d.raizIr) return navegarRaiz(d.raizIr);
-  if (d.raizUsar) return usarRaiz(d.raizUsar);
-  if (d.baixar) { const it = ARQ.dados?.itens.find(i => i.id === d.baixar); return it ? baixarArquivo(it) : undefined; }
   switch (d.act) {
     case 'sair': await SB.auth.signOut(); location.replace('painel.html'); return;
-    case 'conectar': location.href = `/api/google/login?token=${encodeURIComponent(await token())}`; return;
-    case 'raiz': return abrirRaiz();
     case 'nova': return abrirNovaTarefa();
-    case 'subir': return abrirSubir();
-    case 'subir-comecar': return comecarSubida();
-    case 'subir-repetir': return comecarSubida(true);
-    case 'subir-parar': return pararSubida();
-    case 'transf-subir': document.getElementById('dlg-subir').showModal(); return renderSubir();
-    case 'transf-baixar': document.getElementById('dlg-baixar').showModal(); return renderBaixa();
     case 'transf-min': painelMin = !painelMin; return renderEnvios();
     case 'transf-limpar':
       FEITAS.length = 0;
-      if (SUBIDA && SUBIDA.fase !== 'subindo') SUBIDA = null;
-      if (BAIXA && !['montando', 'baixando'].includes(BAIXA.fase)) BAIXA = null;
       return renderEnvios();
-    case 'subir-tarefa': document.getElementById('dlg-subir').close(); return abrirNovaTarefa({ id: SUBIDA.casaId, nome: SUBIDA.plano.casa });
-    case 'baixar-pasta': return ARQ.dados ? baixarPasta(ARQ.dados.pasta.id, ARQ.dados.pasta.nome) : undefined;
-    case 'baixar-repetir': return BAIXA ? rodarBaixa(BAIXA.falhas.splice(0)) : undefined;
     case 'links': return abrirLinks();
     case 'rev-abrir': return abrirRevisao();
     case 'rev-fechar': return fecharRevisao();
@@ -1120,17 +783,11 @@ document.addEventListener('submit', async e => {
 });
 
 document.addEventListener('change', async e => {
-  if (e.target.id === 'subir-pasta') return escolheuPasta(e.target.files);
   const t = tarefaSel(); if (!t) return;
   if (e.target.id === 'arq-versao' && e.target.files[0]) {
     const arquivo = e.target.files[0], nota = document.getElementById('nota-versao')?.value || '';
     e.target.value = '';
     await enviarVersaoR2(t, arquivo, nota);
-  }
-  if (e.target.id === 'arq-envio' && e.target.files.length) {
-    const arquivos = [...e.target.files], pasta = ARQ.pasta; e.target.value = '';
-    await emParalelo(arquivos, a => enviarArquivo(a, { pasta }));
-    if (sel === t.id) abrirPasta(t, pasta);
   }
 });
 
@@ -1425,120 +1082,14 @@ document.addEventListener('change', async e => {
   }
 });
 
-// ------------------------------------------------------------ subir casa (pasta inteira do computador → Drive)
-let SUBIDA = null; // { plano, fase, feitos, pulados, falhas:[], enviado, atuais:Set, casaId, erro }
-/** Para a subida: corta os envios em andamento e não começa os próximos. "Continuar" pula o que já subiu. */
-function pararSubida() {
-  const s = SUBIDA; if (!s || s.fase !== 'subindo') return;
-  s.parar = true;
-  for (const e of s.atuais.values()) { e.cancelado = true; e.xhr?.abort(); }
-  renderSubir();
-}
-function abrirSubir() {
-  if (SUBIDA && SUBIDA.fase === 'subindo') { document.getElementById('dlg-subir').showModal(); return renderSubir(); }
-  arquivar(linhaSubida());
-  SUBIDA = null; renderEnvios();
-  document.getElementById('dlg-subir').showModal();
-  renderSubir();
-}
-function escolheuPasta(lista) {
-  const plano = planoDaCasa([...lista].map(f => ({ caminho: f.webkitRelativePath || f.name, tamanho: f.size, arquivo: f })));
-  SUBIDA = { plano, fase: 'pronto', feitos: 0, pulados: 0, falhas: [], enviado: 0, atuais: new Map(), casaId: null, erro: '' };
-  renderSubir();
-}
-function renderSubir() {
-  renderEnvios();
-  const c = document.getElementById('subir-corpo'), s = SUBIDA;
-  const fechar = `<button class="btn" type="button" onclick="this.closest('dialog').close()">${s?.fase === 'subindo' ? 'Esconder' : 'Fechar'}</button>`;
-  if (!s) {
-    c.innerHTML = `<h2>Subir casa</h2>
-      <p class="dica" style="margin:0">Escolha a pasta da casa no seu computador, já organizada (01 Brutas, 02 Audio…). Ela vai para <b>${esc(DRIVE.raiz.nome)}</b> com o mesmo nome e as mesmas subpastas. Se a casa já existir lá, o que já subiu (mesmo nome e tamanho) é pulado.</p>
-      <label class="btn prim" style="width:fit-content">${ico('pasta')} Escolher pasta da casa<input type="file" id="subir-pasta" webkitdirectory directory multiple hidden></label>
-      <div class="acoes" style="justify-content:flex-end">${fechar}</div>`;
-    return;
-  }
-  const p = s.plano;
-  if (!p.casa || !p.arquivos.length) { SUBIDA = null; c.innerHTML = `<h2>Subir casa</h2><p class="aviso-box erro">Essa pasta está vazia.</p><div class="acoes">${fechar}</div>`; return; }
-  const pct = p.total ? Math.round(s.enviado / p.total * 100) : 0;
-  const resumo = `<p style="margin:0"><b>${esc(p.casa)}</b></p>
-    <p class="dica" style="margin:0">${p.arquivos.length} arquivos · ${tamanhoLegivel(p.total)} · ${p.pastas.length} subpastas (${esc(p.pastas.filter(x => !x.includes('/')).join(', ') || '—')})</p>`;
-  if (s.fase === 'pronto') {
-    c.innerHTML = `<h2>Subir casa</h2>${resumo}
-      <p class="dica" style="margin:0">Deixe esta aba aberta até terminar. Se a internet cair, é só subir de novo: o que já chegou é pulado.</p>
-      <div class="acoes" style="justify-content:flex-end">${fechar}<button class="btn prim" type="button" data-act="subir-comecar">${ico('enviar')} Subir para o Drive</button></div>`;
-    return;
-  }
-  const atuais = [...s.atuais.values()].map(e => `<li class="dica" style="margin:2px 0">${esc(e.arquivo.name)} · ${e.total ? Math.round(e.enviado / e.total * 100) : 0}%</li>`).join('');
-  c.innerHTML = `<h2>${s.fase === 'feito' ? 'Casa no Drive' : s.fase === 'erro' ? 'Subida parou' : s.fase === 'parado' ? 'Subida parada' : s.parar ? 'Parando…' : 'Subindo a casa…'}</h2>${resumo}
-    <div class="prog" style="height:8px"><i style="width:${s.fase === 'feito' ? 100 : pct}%;${s.fase === 'feito' && !s.falhas.length ? 'background:var(--e-aprovado)' : ''}"></i></div>
-    <p class="dica" style="margin:0">${s.feitos + s.pulados} de ${p.arquivos.length} arquivos · ${textoProgresso(s.enviado, p.total, s.fase === 'subindo' ? velocidade(AMOSTRAS.get('subida')) : 0)}${s.pulados ? ` · ${s.pulados} já estavam no Drive` : ''}</p>
-    ${atuais ? `<ul style="margin:0;padding-left:18px">${atuais}</ul>` : ''}
-    ${s.erro ? `<p class="aviso-box erro" style="margin:0">${esc(s.erro)}</p>` : ''}
-    ${s.falhas.length && s.fase !== 'subindo' ? `<p class="aviso-box erro" style="margin:0">${s.falhas.length} ${s.falhas.length === 1 ? 'arquivo não subiu' : 'arquivos não subiram'}: ${esc(s.falhas.slice(0, 3).map(f => f.nome).join(', '))}${s.falhas.length > 3 ? '…' : ''}</p>` : ''}
-    ${s.fase === 'feito' && !s.falhas.length ? `<p class="aviso-box ok" style="margin:0">Pronto: a casa está no Drive.</p>` : ''}
-    ${s.fase !== 'subindo' && s.casaId ? `<details class="subidos" ${p.arquivos.length <= 12 ? 'open' : ''}><summary>Arquivos (${p.arquivos.length})</summary><ul>${linhasSubida(p.arquivos).map(l =>
-      `<li><span class="nm" title="${esc(l.rotulo)}">${esc(l.rotulo)}</span><span class="dica">${esc(tamanhoLegivel(l.tamanho))} · ${{ subiu: 'subiu', pulado: 'já estava', falhou: 'não subiu', pendente: 'não enviado' }[l.estado]}</span></li>`).join('')}</ul></details>` : ''}
-    <div class="acoes" style="justify-content:flex-end">${fechar}
-      ${s.fase === 'subindo' && !s.parar ? `<button class="btn" type="button" data-act="subir-parar">${ico('x')} Parar</button>` : ''}
-      ${s.fase === 'parado' ? `<button class="btn prim" type="button" data-act="subir-repetir">Continuar</button>`
-        : s.fase !== 'subindo' && (s.falhas.length || s.erro) ? `<button class="btn prim" type="button" data-act="subir-repetir">Tentar de novo</button>` : ''}
-      ${s.fase === 'feito' && s.casaId ? `<a class="btn" href="${esc(noDrive(`https://drive.google.com/drive/folders/${s.casaId}`))}" target="_blank" rel="noopener">${ico('abrir')} Ver no Drive</a>
-        <button class="btn prim" type="button" data-act="subir-tarefa">${ico('mais')} Criar tarefa para esta casa</button>` : ''}</div>`;
-}
-const avisoSaida = ev => { ev.preventDefault(); ev.returnValue = ''; };
-async function comecarSubida(repetir = false) {
-  const s = SUBIDA; if (!s) return;
-  const p = s.plano;
-  Object.assign(s, { fase: 'subindo', feitos: 0, pulados: 0, falhas: [], enviado: 0, erro: '', parar: false });
-  s.atuais.clear(); renderSubir();
-  addEventListener('beforeunload', avisoSaida);
-  try {
-    // 1. pastas: a da casa dentro da pasta de trabalho, depois as subpastas (pais antes dos filhos)
-    const ids = { '': (s.casaId = (await api('/api/drive/pasta', { method: 'POST', body: JSON.stringify({ pai: DRIVE.raiz.id, nome: p.casa }) })).id) };
-    for (const caminho of p.pastas) {
-      const pai = caminho.includes('/') ? caminho.slice(0, caminho.lastIndexOf('/')) : '';
-      ids[caminho] = (await api('/api/drive/pasta', { method: 'POST', body: JSON.stringify({ pai: ids[pai], nome: caminho.split('/').pop() }) })).id;
-    }
-    // 2. o que já está em cada pasta (para pular)
-    const existentes = {};
-    for (const caminho of ['', ...p.pastas]) existentes[caminho] = (await api(`/api/drive?pasta=${encodeURIComponent(ids[caminho])}`)).itens;
-    // 3. arquivos, SIMULTANEOS de cada vez
-    const fila = [];
-    for (const a of p.arquivos) {
-      a.estado = '';
-      if (jaNoDrive(a, existentes[a.pasta])) { a.estado = 'pulado'; s.pulados++; s.enviado += a.tamanho; } else fila.push(a);
-    }
-    renderSubir();
-    await emParalelo(fila, async a => {
-        if (s.parar) return; // parado por você: o resto fica para "Continuar"
-        const e = { id: ++envioSeq, arquivo: a.arquivo, destino: { pasta: ids[a.pasta] }, total: a.tamanho, enviado: 0, estado: 'enviando', url: null };
-        let antes = 0;
-        e.aoProgredir = () => { s.enviado += e.enviado - antes; antes = e.enviado; renderSubir(); };
-        s.atuais.set(e.id, e); renderSubir();
-        await continuarEnvio(e);
-        s.atuais.delete(e.id);
-        if (e.cancelado) { s.enviado -= antes; renderSubir(); return; }
-        if (e.estado === 'feito') { a.estado = 'subiu'; s.feitos++; s.enviado += e.total - antes; } else { a.estado = 'falhou'; s.falhas.push(a); s.enviado -= antes; }
-        renderSubir();
-    });
-    s.fase = s.parar ? 'parado' : s.falhas.length ? 'erro' : 'feito';
-  } catch (err) {
-    s.fase = 'erro';
-    s.erro = MSG[err.codigo] || 'Não foi possível criar as pastas no Drive. Tente de novo.';
-  }
-  removeEventListener('beforeunload', avisoSaida);
-  s.fim = new Date();
-  renderSubir();
-  if (s.fase === 'feito') aviso(`${p.casa} está no Drive.`, 'ok');
-}
-
 // ------------------------------------------------------------ nova tarefa
-async function abrirNovaTarefa(pre = null) {
+async function abrirNovaTarefa() {
   const dlg = document.getElementById('dlg-tarefa'), f = document.getElementById('f-tarefa');
+  const casas = [...new Set(TAREFAS.map(t => t.casa_nome))].sort((a, b) => a.localeCompare(b, 'pt-BR'));
   f.innerHTML = `<h2>Nova tarefa</h2>
-    <label>Casa (pasta em ${esc(DRIVE.raiz.nome)})<input class="campo" id="busca-casa" placeholder="Buscar casa" autocomplete="off"></label>
-    <div class="lista-casas" id="lista-casas"><p class="carregando">Carregando as casas…</p></div>
-    <input type="hidden" id="casa-escolhida">
+    <label>Casa<input class="campo" id="t-casa" placeholder="Ex.: 09 Casa 11 Lia - QD" list="casas-usadas" maxlength="200" required autocomplete="off"></label>
+    <datalist id="casas-usadas">${casas.map(c => `<option value="${esc(c)}">`).join('')}</datalist>
+    <p class="dica" style="margin:0">Use o mesmo nome da pasta que você mandou pelo Cyberduck.</p>
     <div class="dois">
       <label>Tipo<select class="campo" id="t-tipo">${['Reels', 'Pílula', 'Tour', 'Carrossel', 'Outro'].map(x => `<option>${x}</option>`).join('')}</select></label>
       <label>Prazo<input class="campo" type="date" id="t-prazo"></label>
@@ -1547,61 +1098,20 @@ async function abrirNovaTarefa(pre = null) {
     <p class="dica" id="t-erro" role="alert" style="color:var(--danger)"></p>
     <div class="acoes" style="justify-content:flex-end"><button class="btn" type="button" onclick="this.closest('dialog').close()">Cancelar</button><button class="btn prim" type="submit">Criar tarefa</button></div>`;
   dlg.showModal();
-  try {
-    const { itens } = await api(`/api/drive?pasta=${encodeURIComponent(DRIVE.raiz.id)}`);
-    const casas = itens.filter(i => i.tipo === 'pasta');
-    const pintar = filtro => {
-      const n = semAcentoBusca(filtro);
-      const lista = casas.filter(c => semAcentoBusca(c.nome).includes(n));
-      document.getElementById('lista-casas').innerHTML = lista.length ? lista.map(c => `<button type="button" data-casa="${esc(c.id)}" data-nome="${esc(c.nome)}" aria-pressed="false">${ico('pasta')} ${esc(c.nome)}</button>`).join('') : '<p class="carregando">Nenhuma pasta encontrada.</p>';
-    };
-    pintar('');
-    document.getElementById('busca-casa').oninput = ev => pintar(ev.target.value);
-    if (pre) { // veio do "Subir casa": a casa já vem escolhida
-      document.getElementById('busca-casa').value = pre.nome; pintar(pre.nome);
-      document.querySelector(`[data-casa="${CSS.escape(pre.id)}"]`)?.setAttribute('aria-pressed', 'true');
-      document.getElementById('casa-escolhida').value = JSON.stringify(pre);
-    }
-  } catch (err) { document.getElementById('lista-casas').innerHTML = `<p class="carregando">${esc(MSG[err.codigo] || 'Não foi possível listar as casas.')}</p>`; }
+  document.getElementById('t-casa').focus();
 }
-const semAcentoBusca = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 async function salvarTarefa() {
-  const casa = document.getElementById('casa-escolhida').value, erro = document.getElementById('t-erro');
-  if (!casa) { erro.textContent = 'Escolha a pasta da casa.'; return; }
-  const { id, nome } = JSON.parse(casa);
+  const nome = document.getElementById('t-casa').value.trim(), erro = document.getElementById('t-erro');
+  if (!nome) { erro.textContent = 'Escreva o nome da casa.'; return; }
   const { data, error } = await SB.from('tarefas').insert({
-    casa_pasta_id: id, casa_nome: nome, tipo: document.getElementById('t-tipo').value,
+    casa_nome: nome, tipo: document.getElementById('t-tipo').value,
     prazo: document.getElementById('t-prazo').value || null, instrucoes: document.getElementById('t-instr').value.trim(),
   }).select('id').single();
-  if (error) { erro.textContent = 'Não foi possível criar a tarefa.'; return; }
+  if (error) { erro.textContent = 'Não foi possível criar a tarefa. Confira se o SQL 20261125_ponto.sql já foi rodado.'; return; }
   document.getElementById('dlg-tarefa').close();
   sel = data.id; abertas.add('a_fazer'); aba = 'video';
   aviso('Tarefa criada.', 'ok');
   await recarregar();
-}
-
-// ------------------------------------------------------------ pasta de trabalho (dono)
-async function abrirRaiz() { document.getElementById('dlg-raiz').showModal(); await navegarRaiz(DRIVE?.raiz?.id ? 'root' : 'root'); }
-async function navegarRaiz(pasta) {
-  const corpo = document.getElementById('raiz-corpo');
-  corpo.innerHTML = '<h2>Pasta de trabalho</h2><p class="carregando">Carregando…</p>';
-  try {
-    const d = await api(`/api/drive?livre=1&pasta=${encodeURIComponent(pasta)}`);
-    const real = !['root', 'compartilhados'].includes(d.pasta.id);
-    corpo.innerHTML = `<h2>Pasta de trabalho</h2>
-      <p class="dica" style="margin:0">Escolha a pasta onde ficam as casas (ex.: BAHIA HOMES › Casas). O editor só vê o que estiver dentro dela.</p>
-      <div class="acoes"><button class="btn peq" type="button" data-raiz-ir="root">Meu Drive</button><button class="btn peq" type="button" data-raiz-ir="compartilhados">Compartilhados comigo</button></div>
-      <p style="margin:0;font-weight:600">${esc(d.pasta.nome)}</p>
-      <div class="lista-casas">${d.itens.filter(i => i.tipo === 'pasta').map(i => `<button type="button" data-raiz-ir="${esc(i.id)}">${ico('pasta')} ${esc(i.nome)}</button>`).join('') || '<p class="carregando">Sem subpastas.</p>'}</div>
-      <div class="acoes" style="justify-content:flex-end"><button class="btn" type="button" onclick="this.closest('dialog').close()">Fechar</button>
-        ${real ? `<button class="btn prim" type="button" data-raiz-usar="${esc(d.pasta.id)}">Usar “${esc(d.pasta.nome)}”</button>` : ''}</div>`;
-  } catch (e) { corpo.innerHTML = `<h2>Pasta de trabalho</h2><p class="aviso-box erro">${esc(MSG[e.codigo] || 'Não foi possível abrir o Drive.')}</p><div class="acoes"><button class="btn" type="button" onclick="this.closest('dialog').close()">Fechar</button></div>`; }
-}
-async function usarRaiz(id) {
-  try {
-    const { raiz } = await api('/api/drive', { method: 'POST', body: JSON.stringify({ raiz: id }) });
-    DRIVE.raiz = raiz; document.getElementById('dlg-raiz').close(); aviso(`Pasta de trabalho: ${raiz.nome}.`, 'ok'); renderTopo();
-  } catch (e) { aviso('Não foi possível usar essa pasta.', 'erro'); }
 }
 
 // ------------------------------------------------------------ início
@@ -1610,20 +1120,13 @@ async function iniciar() {
   if (!session) return location.replace('painel.html');
   const papel = await SB.rpc('papel');
   if (papel.error || !['dono', 'editor'].includes(papel.data)) { await SB.auth.signOut(); return location.replace('painel.html'); }
-  try { DRIVE = await api('/api/drive/estado'); EU = { papel: DRIVE.papel, nome: DRIVE.nome, email: session.user?.email }; }
-  catch { EU = { papel: papel.data, nome: papel.data === 'dono' ? 'Cainan' : 'Editor', email: session.user?.email }; DRIVE = { conectado: false }; aviso('O servidor da Edição não respondeu. Arquivos e vídeos podem não abrir.', 'erro'); }
+  let nome = 'Cainan';
+  if (papel.data === 'editor') {
+    const { data } = await SB.from('editores').select('nome').eq('user_id', session.user.id).maybeSingle();
+    nome = data?.nome || 'Editor';
+  }
+  EU = { papel: papel.data, nome, email: session.user?.email };
   document.getElementById('app').hidden = false;
-  const r = new URLSearchParams(location.search).get('drive');
-  if (r) {
-    aviso({ ok: 'Google Drive conectado.', cancelado: 'Conexão com o Drive cancelada.', sem_permissao: 'Só o dono conecta o Drive.', nao_configurado: 'Faltam as credenciais do Google no servidor.' }[r] || 'Não foi possível conectar o Drive.', r === 'ok' ? 'ok' : 'erro');
-    history.replaceState(null, '', 'edicao.html');
-    if (r === 'ok' && !DRIVE.raiz) setTimeout(abrirRaiz, 300);
-  }
-  const g = new URLSearchParams(location.search).get('google');
-  if (g) {
-    aviso({ ok: 'Sua conta Google está conectada. Já dá para baixar.', cancelado: 'Conexão com o Google cancelada.', nao_configurado: 'Faltam as credenciais do Google no servidor.' }[g] || 'Não foi possível conectar sua conta Google.', g === 'ok' ? 'ok' : 'erro');
-    history.replaceState(null, '', 'edicao.html');
-  }
   await recarregar();
 }
 addEventListener('focus', () => { if (EU) recarregar(); });

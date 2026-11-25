@@ -1,27 +1,24 @@
 /* Lógica pura do espaço de Edição (sem dados, sem rede). Carregado pelo edicao.html e testado em tests/. */
 var ETAPAS = [
   { id: 'a_fazer', nome: 'A fazer', dica: 'Tarefa criada' },
-  { id: 'em_edicao', nome: 'Em edição', dica: 'O editor está trabalhando' },
-  { id: 'para_revisar', nome: 'Para revisar', dica: '1ª versão enviada' },
-  { id: 'ajustes', nome: 'Ajustes pedidos', dica: 'Voltou para o editor' },
-  { id: 'reenviado', nome: 'Reenviado', dica: 'V2, V3… com os ajustes' },
+  { id: 'em_edicao', nome: 'Em edição', dica: 'Editando ou fazendo ajustes' },
+  { id: 'para_revisar', nome: 'Para revisar', dica: 'Versão enviada' },
   { id: 'aprovado', nome: 'Aprovado', dica: 'Vídeo pronto' }
 ];
 
-/** Etapa na tela: "para revisar" com mais de uma versão = reenviado. */
-function etapaDe(status, nVersoes) {
-  if (status === 'para_revisar' && nVersoes > 1) return 'reenviado';
-  return status;
+/** Etapa na tela. "Ajustes pedidos" volta para Em edição (o editor está trabalhando de novo). */
+function etapaDe(status) {
+  return status === 'ajustes' ? 'em_edicao' : status;
 }
 
 /** Caminho percorrido pela tarefa, a partir dos eventos em ordem. */
 function caminhoTarefa(eventos) {
   var caminho = ['a_fazer'];
   (eventos || []).forEach(function (e) {
-    if (e.tipo === 'comecou') caminho.push('em_edicao');
-    else if (e.tipo === 'versao') caminho.push(e.versao > 1 ? 'reenviado' : 'para_revisar');
-    else if (e.tipo === 'ajustes') caminho.push('ajustes');
+    if (e.tipo === 'comecou' || e.tipo === 'ajustes') caminho.push('em_edicao');
+    else if (e.tipo === 'versao') caminho.push('para_revisar');
     else if (e.tipo === 'aprovada') caminho.push('aprovado');
+    else if (e.tipo === 'status' && e.texto) caminho.push(etapaDe(e.texto));
   });
   return caminho;
 }

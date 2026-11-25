@@ -8,21 +8,21 @@ vm.runInNewContext(readFileSync(new URL('../edicao-logica.js', import.meta.url),
 const { ETAPAS, etapaDe, caminhoTarefa, timecode, ehPastaSaida, tamanhoLegivel, prazoInfo, nomeWindows, nomesUnicos, planoRetomada, inicioDoRange, tokenValido, esperaTentativa, ehNativoGoogle, deveRepetir, podeExcluirVersao, linhasSubida, velocidade, tempoLegivel, textoProgresso, amostrar } = ctx;
 
 test('ETAPAS na ordem da linha do tempo', () => {
-  assert.deepEqual(Array.from(ETAPAS, (e) => e.id), ['a_fazer', 'em_edicao', 'para_revisar', 'ajustes', 'reenviado', 'aprovado']);
+  assert.deepEqual(Array.from(ETAPAS, (e) => e.id), ['a_fazer', 'em_edicao', 'para_revisar', 'aprovado']);
 });
 
-test('etapaDe separa para revisar de reenviado', () => {
-  assert.equal(etapaDe('a_fazer', 0), 'a_fazer');
-  assert.equal(etapaDe('em_edicao', 0), 'em_edicao');
-  assert.equal(etapaDe('para_revisar', 1), 'para_revisar');
-  assert.equal(etapaDe('para_revisar', 2), 'reenviado');
-  assert.equal(etapaDe('ajustes', 1), 'ajustes');
-  assert.equal(etapaDe('aprovado', 3), 'aprovado');
+test('etapaDe: ajustes pedidos aparece como Em edição', () => {
+  assert.equal(etapaDe('a_fazer'), 'a_fazer');
+  assert.equal(etapaDe('em_edicao'), 'em_edicao');
+  assert.equal(etapaDe('para_revisar'), 'para_revisar');
+  assert.equal(etapaDe('ajustes'), 'em_edicao');
+  assert.equal(etapaDe('aprovado'), 'aprovado');
 });
 
 test('caminhoTarefa a partir dos eventos', () => {
   const ev = [{ tipo: 'criada' }, { tipo: 'comecou' }, { tipo: 'versao', versao: 1 }, { tipo: 'ajustes', versao: 1 }, { tipo: 'versao', versao: 2 }, { tipo: 'aprovada', versao: 2 }];
-  assert.deepEqual(Array.from(caminhoTarefa(ev)), ['a_fazer', 'em_edicao', 'para_revisar', 'ajustes', 'reenviado', 'aprovado']);
+  assert.deepEqual(Array.from(caminhoTarefa(ev)), ['a_fazer', 'em_edicao', 'para_revisar', 'em_edicao', 'para_revisar', 'aprovado']);
+  assert.deepEqual(Array.from(caminhoTarefa([{ tipo: 'status', texto: 'ajustes' }])), ['a_fazer', 'em_edicao']);
   assert.deepEqual(Array.from(caminhoTarefa([])), ['a_fazer']);
 });
 

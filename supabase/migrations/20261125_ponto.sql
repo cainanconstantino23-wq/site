@@ -17,3 +17,6 @@ begin
 end; $$;
 revoke all on function public.comentar(bigint, int, numeric, text, numeric, numeric) from public, anon;
 grant execute on function public.comentar(bigint, int, numeric, text, numeric, numeric) to authenticated;
+
+-- Edição sem Google Drive: a tarefa guarda só o nome da casa (as casas vão e voltam pelo Cyberduck).
+alter table public.tarefas alter column casa_pasta_id drop not null;
