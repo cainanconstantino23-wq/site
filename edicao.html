@@ -1220,7 +1220,10 @@ async function baixarDuck(t) {
   let estado = null;
   try { estado = await api('/api/drive/estado'); } catch { /* sem servidor: usa o nome padrão da pasta */ }
   const raiz = estado?.raiz?.nome || 'Casas';
-  const conta = EU.papel === 'editor' ? estado?.google_editor?.email : estado?.email;
+  // Sem a conta no atalho, o Cyberduck pede login no navegador toda vez e pode abrir na raiz.
+  // Editor: a conta Google ligada antes (drive_editor) ou, se não houver, o e-mail com que entra no site.
+  const emailSite = (await SB.auth.getSession()).data.session?.user?.email || null;
+  const conta = EU.papel === 'editor' ? (estado?.google_editor?.email || emailSite) : (estado?.email || emailSite);
   const caminho = `${CYBERDUCK_BASE[EU.papel] || CYBERDUCK_BASE.editor}/${raiz}/${t.casa_nome}`;
   const campos = { Protocol: 'googledrive', Provider: 'iterate GmbH', UUID: crypto.randomUUID(), Hostname: 'www.googleapis.com', Port: '443',
     ...(conta ? { Username: conta } : {}), Path: caminho, Nickname: `${t.casa_nome} · ${t.tipo}` };
