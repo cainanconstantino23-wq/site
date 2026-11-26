@@ -234,6 +234,9 @@ textarea.campo{resize:vertical;min-height:70px}
   .rev-palco{height:52dvh}
   .rev-lado{grid-row:auto;grid-column:auto;border-left:0;border-top:1px solid var(--line);overflow:visible}
 }
+.st-aprov{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.st-aprov button{flex:1 1 auto;min-height:34px;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font:inherit;font-size:12.5px;cursor:pointer;color:var(--ink-2)}
+.st-aprov button[aria-pressed=true]{color:#fff;border-color:transparent;cursor:default}
 .caixa{margin-top:14px;padding:14px;border-radius:var(--r-panel);border:1px solid var(--line);background:rgb(255 255 255 / .6)}
 .caixa .acoes{margin-top:10px}
 .dica{font-size:12px;color:var(--ink-2);margin:6px 0 0}
@@ -638,6 +641,10 @@ function abaVideo(t) {
           </div>
         </div>` : ''}
       ${fechada ? `<p class="aviso-box ok">Aprovado. Este vídeo está pronto.</p>` : ''}
+      ${dono && t.versoes.length ? `<div class="caixa">
+          <h4>Status da aprovação</h4>
+          <div class="st-aprov" role="group" aria-label="Status da aprovação">${[['para_revisar', 'Aguardando aprovação'], ['ajustes', 'Ajustes pedidos'], ['aprovado', 'Aprovado']].map(([k, n]) => `<button type="button" data-status="${k}" aria-pressed="${t.status === k}" ${t.status === k ? `style="background:${COR(k)}"` : ''}>${n}</button>`).join('')}</div>
+        </div>` : ''}
     </div>
   </div>`;
 }
@@ -1124,14 +1131,21 @@ document.addEventListener('change', async e => {
   if (e.target.id === 'filtro-c') { filtroC = e.target.value; return aplicarFiltroC(); }
   if (e.target.id === 'todas-c') { todasVersoes = e.target.checked; return renderDetalhe(); }
   if (e.target.id === 'mudar-etapa') {
-    const t = tarefaSel(), v = e.target.value; e.target.value = '';
-    if (!t || !v) return;
+    const v = e.target.value; e.target.value = '';
+    return mudarEtapa(tarefaSel(), v);
+  }
+});
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-status]');
+  if (b && b.getAttribute('aria-pressed') !== 'true') mudarEtapa(tarefaSel(), b.dataset.status);
+});
+async function mudarEtapa(t, v) {
+    if (!t || !v || t.status === v) return;
     if (v === 'aprovado') { if (confirm(`Aprovar a V${t.versoes.at(-1)?.numero} de ${t.casa_nome}?`)) return rpc('aprovar_tarefa', { p_tarefa: t.id }, 'Vídeo aprovado.'); return; }
     if (t.status === 'aprovado' && !confirm(`Reabrir ${t.casa_nome}? Ela sai de aprovada e o vídeo não é mais apagado em 1 mês.`)) return;
     const ok = await rpc('mudar_status', { p_tarefa: t.id, p_status: v }, `Etapa mudada para ${nomeEtapa(v)}.`);
     if (!ok) aviso('Não foi possível mudar a etapa (para revisar e ajustes precisam de uma versão).', 'erro');
-  }
-});
+}
 
 // ------------------------------------------------------------ nova tarefa
 async function abrirNovaTarefa() {
