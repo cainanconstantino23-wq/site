@@ -1213,8 +1213,9 @@ async function salvarTarefa() {
 
 // ---- atalho do Cyberduck (.duck): abre a pasta da casa no Google Drive, no Cyberduck do editor
 // No Cyberduck, o que foi compartilhado com a pessoa fica em "/Shared with me"; o que é dela, em "/My Drive".
-// A pasta de trabalho (Casas) é do Cainan e está compartilhada com o editor.
-const CYBERDUCK_BASE = { editor: '/Shared with me', dono: '/My Drive/BAHIA HOMES' };
+// A pasta compartilhada com o editor é BAHIA HOMES (Casas fica dentro dela). Em "Shared with me"
+// só aparece a pasta de cima do compartilhamento, então o caminho passa por BAHIA HOMES.
+const CYBERDUCK_BASE = { editor: '/Shared with me/BAHIA HOMES', dono: '/My Drive/BAHIA HOMES' };
 const xml = v => String(v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 async function baixarDuck(t) {
   let estado = null;
