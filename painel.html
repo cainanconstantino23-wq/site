@@ -954,6 +954,7 @@ const VIEWS = [
 const ICONS = {
   hoje:'<path d="M3.5 13.5h4.2l1.8 2.6h5l1.8-2.6h4.2"/><path d="M5.6 5.5h12.8l2.1 8v5h-17v-5z"/>',
   edicao:'<rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="M10 9.5v5l4.3-2.5z"/>',
+  financeiro:'<circle cx="12" cy="12" r="8.5"/><path d="M14.8 9.2c-.5-.9-1.6-1.4-2.8-1.4-1.6 0-2.8.8-2.8 2s1.2 1.7 2.8 2.1 2.8.9 2.8 2.1-1.2 2-2.8 2c-1.3 0-2.4-.6-2.9-1.5M12 6.3v1.5M12 16.7v1.5"/>',
   leads:'<path d="M9 7h11M9 12h11M9 17h11"/><path d="M4.5 7h.01M4.5 12h.01M4.5 17h.01" stroke-width="2.6"/>',
   funil:'<rect x="3.5" y="4.5" width="4.6" height="15" rx="1.6"/><rect x="9.7" y="4.5" width="4.6" height="10.5" rx="1.6"/><rect x="15.9" y="4.5" width="4.6" height="6.5" rx="1.6"/>',
   resultados:'<path d="M4 20V11M10 20V5M16 20v-6M21 20H3"/>',
@@ -982,6 +983,7 @@ function renderNav(){
   document.getElementById('nav').innerHTML = VIEWS.map(v =>
     `<button type="button" data-go="${v.id}" ${v.id === ativo ? 'aria-current="page"' : ''}>${ico(v.icon)}<span>${v.label}</span>${v.id === 'hoje' && n ? `<span class="badge">${n}</span>` : v.id === 'prospectar' && ACHADOS.length ? `<span class="badge">${ACHADOS.length}</span>` : ''}</button>`).join('')
     + `<button type="button" data-act="edicao">${ico('edicao')}<span>Edição</span></button>`
+    + `<button type="button" data-act="financeiro">${ico('financeiro')}<span>Financeiro</span></button>`
     + `<button type="button" class="nav-busca" data-act="busca">${ico('busca')}<span>Buscar</span><kbd>${/Mac|iPhone|iPad/.test(navigator.platform) ? '⌘' : 'Ctrl'} K</kbd></button>`;
 }
 
@@ -1572,6 +1574,7 @@ document.addEventListener('click', async e => {
   const t = e.target.closest('[data-qact],[data-go],[data-bopen],[data-open],[data-area],[data-act],[data-etapa],[data-canal],[data-htab],[data-visao]'); if (!t) return;
   try {
     if (t.dataset.act === 'edicao') { location.href = 'edicao.html'; return; }
+    if (t.dataset.act === 'financeiro') { location.href = 'financeiro.html'; return; }
     if (t.dataset.qact) { if (t.dataset.qact !== 'abrir') e.preventDefault(); e.stopPropagation(); return await qAct(t.dataset.qact, t.dataset.id, t); }
     if (t.dataset.go) return go(t.dataset.go);
     if (t.dataset.bopen) { document.getElementById('busca').close(); return openLead(t.dataset.bopen); }

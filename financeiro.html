@@ -1,0 +1,1096 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Financeiro · Daime Filmes</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+:root{
+  --canvas:#f3f2ef; --surface:#ffffff; --muted:#ebe9e4; --ink:#1d1c1a; --ink-2:#6b6862; --ink-3:#9a968e;
+  --line:#e1ded7; --hover:rgb(29 28 26 / .05); --accent:#1d1c1a; --accent-hover:#3a3835;
+  --ok:#17633b; --ok-soft:#eaf6ee; --ok-line:#b8ddc4;
+  --warn:#825310; --warn-soft:#fff5dc; --warn-line:#f0d99f;
+  --danger:#a52626; --danger-soft:#fff0ef; --danger-line:#f0c4c0;
+  --info:#2456b8; --info-soft:#eef3fd; --info-line:#c3d4f3;
+  --receita:#5e4590; --despesa:#b5652a;
+  --r-panel:1.25rem; --r-control:.875rem;
+  --shadow:0 1px 2px rgb(29 28 26 / .04), 0 10px 30px rgb(29 28 26 / .06);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{min-height:100dvh;background:var(--canvas);color:var(--ink);
+  font:14px/1.45 -apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+[hidden]{display:none!important}
+a{color:inherit}
+h1,h2,h3,p{margin:0}
+.wrap{max-width:1320px;margin:0 auto;padding:max(18px,env(safe-area-inset-top)) 18px 60px}
+.cartao{background:rgb(255 255 255 / .92);border:1px solid var(--line);border-radius:var(--r-panel);box-shadow:var(--shadow)}
+.pad{padding:20px}
+@media (min-width:720px){.pad{padding:24px}}
+svg.i{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.num,.valor{font-variant-numeric:tabular-nums;white-space:nowrap}
+html[data-ocultar] .valor{filter:blur(7px);user-select:none}
+.verde{color:var(--ok)} .vermelho{color:var(--danger)} .azul{color:var(--info)} .ambar{color:var(--warn)} .fraco{color:var(--ink-2)}
+.forte{font-weight:700} .semi{font-weight:600}
+
+/* topo */
+.topo{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;justify-content:space-between;margin:8px 0 16px}
+.topo h1{font-size:32px;line-height:1.1;letter-spacing:-.025em;font-weight:700}
+.topo p{margin-top:6px;color:var(--ink-2);font-size:15px}
+.acoes{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:40px;padding:0 16px;border-radius:999px;border:1px solid var(--line);background:rgb(255 255 255 / .8);font-size:13px;font-weight:600;text-decoration:none;white-space:nowrap;transition:background-color .15s, transform .1s}
+.btn:hover{background:var(--muted)}
+.btn:active{transform:scale(.97)}
+.btn.prim{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.prim:hover{background:var(--accent-hover)}
+.btn.peq{min-height:32px;padding:0 11px;font-size:12px}
+.btn.ic{width:40px;padding:0}
+.btn.peq.ic{width:32px}
+.btn.fant{border-color:transparent;background:none;color:var(--ink-2)}
+.btn.fant:hover{background:var(--hover);color:var(--ink)}
+.btn.ok{color:var(--ok)}
+.btn.perigo:hover{background:var(--danger-soft);color:var(--danger)}
+.btn:disabled{opacity:.45;cursor:default;pointer-events:none}
+
+/* abas */
+.abas{display:flex;gap:4px;overflow-x:auto;padding:5px;margin-bottom:18px;scrollbar-width:none}
+.abas::-webkit-scrollbar{display:none}
+.abas button{display:inline-flex;align-items:center;gap:7px;min-height:38px;padding:0 14px;border:0;border-radius:999px;background:none;color:var(--ink-2);font-size:13px;font-weight:600;white-space:nowrap;transition:background-color .15s,color .15s}
+.abas button:hover{background:var(--hover);color:var(--ink)}
+.abas button[aria-current=page]{background:var(--accent);color:#fff}
+.abas .sep{width:1px;background:var(--line);margin:6px 4px;flex:none}
+
+/* barra de ferramentas */
+.barra{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px}
+.barra .dir{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.mes{display:inline-flex;align-items:stretch;border:1px solid var(--line);border-radius:999px;background:var(--surface);overflow:hidden}
+.mes button{border:0;background:none;width:40px;min-height:40px;display:grid;place-items:center;color:var(--ink-2)}
+.mes button:hover{background:var(--muted);color:var(--ink)}
+.mes label{position:relative;display:flex;align-items:center;gap:8px;padding:0 14px;min-width:12rem;justify-content:center;font-weight:600;cursor:pointer;border-left:1px solid var(--line);border-right:1px solid var(--line)}
+.mes label input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.pilula{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:13px}
+.pilula.verde{background:var(--ok-soft);border-color:var(--ok-line)}
+.pilula.vermelho{background:var(--danger-soft);border-color:var(--danger-line)}
+.pilula.ambar{background:var(--warn-soft);border-color:var(--warn-line)}
+.pilula span:first-child{color:var(--ink-2)}
+
+/* grades e cartões */
+.g{display:grid;gap:16px;margin-bottom:16px}
+@media (min-width:720px){.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:1180px){.g4{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.tit{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.tit h2{font-size:19px;letter-spacing:-.015em;font-weight:700}
+.tit .sub{color:var(--ink-2);font-size:13px;margin-top:2px}
+.bola{width:40px;height:40px;border-radius:var(--r-control);display:grid;place-items:center;flex:none}
+.bola svg{width:20px;height:20px}
+.bola.verde{background:var(--ok-soft)} .bola.vermelho{background:var(--danger-soft)} .bola.azul{background:var(--info-soft)} .bola.escura{background:var(--accent);color:#fff} .bola.ambar{background:var(--warn-soft)}
+.linha-v{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:6px 0}
+.linha-v>span:first-child{color:var(--ink-2);font-size:13px}
+.linha-v.f>span:first-child{color:var(--ink);font-weight:600;font-size:14px}
+.div{border-top:1px solid var(--line);margin:8px 0}
+.nota{color:var(--ink-2);font-size:12px;margin-top:10px}
+.indic p{color:var(--ink-2);font-size:13px;margin-bottom:6px}
+.indic .grande{font-size:28px;font-weight:700;letter-spacing:-.02em}
+h2.secao{font-size:20px;font-weight:700;letter-spacing:-.015em;margin:26px 0 12px}
+.secao-sub{color:var(--ink-2);font-size:13px;margin:-6px 0 14px;max-width:46rem}
+.intro{color:var(--ink-2);font-size:13px;max-width:44rem}
+
+/* barras de grupo */
+.trilho{height:8px;border-radius:999px;background:var(--muted);overflow:hidden}
+.trilho i{display:block;height:100%;border-radius:999px}
+.grp-l{margin-bottom:14px}
+.grp-l .cab{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:6px;font-size:13px}
+
+/* vencidos */
+.alerta{border-radius:var(--r-panel);border:1px solid var(--warn-line);background:var(--warn-soft);padding:20px}
+.alerta.verm{border-color:var(--danger-line);background:var(--danger-soft)}
+.alerta ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.alerta li{display:flex;justify-content:space-between;gap:12px;font-size:13px}
+.alerta li small{display:block;color:var(--ink-2);font-size:11.5px}
+.selo{display:inline-flex;align-items:center;white-space:nowrap;border-radius:999px;border:1px solid var(--line);padding:2px 9px;font-size:11px;font-weight:700;background:var(--muted)}
+.selo.verde{background:var(--ok-soft);border-color:var(--ok-line)}
+.selo.vermelho{background:var(--danger-soft);border-color:var(--danger-line)}
+.selo.azul{background:var(--info-soft);border-color:var(--info-line)}
+.selo.ambar{background:var(--warn-soft);border-color:var(--warn-line)}
+.link{border:0;background:none;padding:0;margin-top:14px;color:var(--ink-2);font-size:13px;text-decoration:underline;text-underline-offset:3px}
+.link:hover{color:var(--ink)}
+
+/* listas e tabelas */
+.filtros{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+.filtros .busca{flex:1 1 16rem;position:relative}
+.filtros .busca svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--ink-3)}
+.filtros .busca input{padding-left:36px}
+.campo{width:100%;min-height:42px;border:1px solid var(--line);border-radius:var(--r-control);background:var(--surface);padding:0 12px;outline:none;transition:border-color .15s, box-shadow .15s}
+.campo:focus{border-color:var(--ink);box-shadow:0 0 0 3px rgb(29 28 26 / .08)}
+select.campo{appearance:none;padding-right:34px;background:var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%236b6862' stroke-width='2'%3E%3Cpath d='m4 6 4 4 4-4'/%3E%3C/svg%3E") no-repeat right 12px center}
+textarea.campo{padding:10px 12px;min-height:64px;resize:vertical}
+.filtros select.campo{width:auto;min-width:11rem}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-2);padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--hover)}
+.dir{text-align:right}
+td small,.sm{display:block;color:var(--ink-2);font-size:11.5px}
+.rolagem{overflow-x:auto}
+.so-pc{display:none}
+@media (min-width:860px){.so-pc{display:block}.so-cel{display:none}}
+.cartoes{list-style:none;margin:0;padding:0}
+.cartoes>li{padding:14px 0;border-bottom:1px solid var(--line)}
+.cartoes>li:last-child{border-bottom:0}
+.cl-topo{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.cl-base{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;margin-top:8px}
+.bts{display:flex;flex-wrap:wrap;gap:4px;justify-content:flex-end;align-items:center}
+.vazio{padding:44px 16px;text-align:center;color:var(--ink-2)}
+.vazio b{display:block;color:var(--ink);font-size:14px;margin-bottom:4px}
+.selecao{display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:10px 14px;margin-bottom:12px;border-radius:var(--r-control);border:1px solid var(--danger-line);background:var(--danger-soft);font-size:13px}
+input[type=checkbox]{width:16px;height:16px;accent-color:var(--accent)}
+.lista-rec>div{display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid var(--line)}
+.lista-rec>div:last-child{border-bottom:0}
+.lista-rec .apagada{opacity:.55}
+.lista-rec .txt{flex:1 1 14rem;min-width:0}
+.atalho{display:flex;flex-wrap:wrap;align-items:center;gap:14px;padding:18px 20px;margin-top:16px;text-decoration:none;cursor:pointer;width:100%;text-align:left;font:inherit}
+.atalho:hover{background:var(--surface)}
+.cli-pend{list-style:none;margin:10px 0 0;padding:10px 0 0;border-top:1px solid var(--line);display:grid;gap:4px;font-size:13px;color:var(--ink-2)}
+.cli-pend li{display:flex;justify-content:space-between;gap:12px}
+.cli{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:flex-start}
+.cli .txt{flex:1 1 14rem;min-width:0}
+.cli .v{min-width:7rem}
+.cli .v small{display:block;color:var(--ink-2);font-size:11.5px}
+@media (min-width:720px){.cli .v{text-align:right}}
+
+/* gráficos */
+figure{margin:0;min-width:0}
+.fig-cab{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;margin-bottom:12px}
+.fig-cab h3{font-size:15px;font-weight:700}
+.legenda{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:var(--ink-2);margin-bottom:10px}
+.legenda i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.graf{position:relative;width:100%;min-height:120px}
+.graf svg{display:block}
+.graf text{font-size:11px;fill:var(--ink-2);font-variant-numeric:tabular-nums}
+.graf .faixa{fill:transparent;cursor:default}
+.graf .faixa:hover{fill:rgb(29 28 26 / .04)}
+.dica{position:absolute;top:6px;z-index:5;pointer-events:none;width:210px;padding:9px 12px;border-radius:var(--r-control);border:1px solid var(--line);background:var(--surface);box-shadow:var(--shadow);font-size:12px}
+.dica b{display:block;margin-bottom:4px}
+.dica div{display:flex;justify-content:space-between;gap:10px;padding:1px 0}
+.dica div span:first-child{color:var(--ink-2)}
+.ranq{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.ranq li{display:grid;gap:4px;font-size:13px}
+@media (min-width:640px){.ranq li{grid-template-columns:11rem 1fr auto;align-items:center;gap:12px}}
+.ranq .barra-h{height:12px;border-radius:0 4px 4px 0;background:var(--muted)}
+.ranq .barra-h i{display:block;height:100%;border-radius:0 4px 4px 0}
+.ranq .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* janela */
+dialog{border:0;padding:0;background:none;max-width:calc(100vw - 24px);width:34rem;color:var(--ink)}
+dialog.larga{width:50rem}
+dialog::backdrop{background:rgb(29 28 26 / .38);backdrop-filter:blur(3px)}
+.dlg{background:var(--surface);border-radius:var(--r-panel);box-shadow:0 30px 80px rgb(0 0 0 / .25);overflow:hidden}
+.dlg-cab{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line)}
+.dlg-cab h2{font-size:17px;font-weight:700}
+.dlg-corpo{padding:20px;max-height:calc(100dvh - 140px);overflow:auto}
+.form{display:grid;gap:14px}
+.form .duas{display:grid;gap:14px}
+@media (min-width:560px){.form .duas{grid-template-columns:1fr 1fr}}
+.form label{display:grid;gap:6px}
+.form label>span{font-size:12px;font-weight:600;color:var(--ink-2)}
+.form label>small{font-size:11.5px;color:var(--ink-2)}
+.form .rodape{display:flex;justify-content:flex-end;gap:8px}
+.erro{padding:10px 12px;border-radius:var(--r-control);border:1px solid var(--danger-line);background:var(--danger-soft);color:var(--danger);font-size:13px}
+.repetir{display:flex!important;grid-template-columns:none!important;gap:12px!important;align-items:flex-start;padding:12px;border-radius:var(--r-control);border:1px solid var(--line);background:var(--canvas);cursor:pointer}
+.repetir:has(:checked){border-color:var(--ink)}
+.repetir b{display:block;font-size:13px}
+.repetir small{color:var(--ink-2);font-size:12px}
+.aviso-rec{padding:10px 12px;border-radius:var(--r-control);border:1px solid var(--info-line);background:var(--info-soft);color:var(--info);font-size:13px}
+.resumo3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.resumo3>div{border:1px solid var(--line);border-radius:var(--r-control);padding:10px 12px}
+.resumo3 p{font-size:11.5px;color:var(--ink-2)}
+.resumo3 .valor{font-size:17px;font-weight:700}
+.partes{border:1px solid var(--line);border-radius:var(--r-control);margin-bottom:18px}
+.partes>div{display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--line)}
+.partes>div:last-child{border-bottom:0}
+.partes .txt{flex:1;min-width:0}
+.partes .txt b{display:block;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+h3.sub-tit{font-size:14px;font-weight:700;margin:0 0 12px}
+.cats{display:grid;gap:18px;margin-bottom:22px}
+@media (min-width:560px){.cats{grid-template-columns:1fr 1fr}}
+.cats p{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-2);margin-bottom:8px}
+.cats ul{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.cats li{display:flex;justify-content:space-between;align-items:center;padding:4px 4px 4px 12px;border-radius:10px;background:var(--canvas);font-size:13px}
+
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;background:var(--accent);color:#fff;padding:10px 18px;border-radius:999px;font-size:13px;font-weight:600;transition:opacity .2s, transform .2s;pointer-events:none;z-index:50;max-width:calc(100vw - 32px)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.carregando{color:var(--ink-2);font-size:13px;padding:40px;text-align:center}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap" id="app" hidden>
+  <header class="topo">
+    <div>
+      <h1 id="titulo">Financeiro</h1>
+      <p>Receitas, despesas e distribuição do dinheiro da produtora.</p>
+    </div>
+    <div class="acoes">
+      <a class="btn" href="painel.html" id="voltar"></a>
+      <button class="btn ic" type="button" data-act="ocultar" id="bt-ocultar"></button>
+      <button class="btn" type="button" data-act="novo-pagar" id="bt-despesa"></button>
+      <button class="btn prim" type="button" data-act="venda-rapida" id="bt-venda"></button>
+    </div>
+  </header>
+  <nav class="abas cartao" id="abas" aria-label="Seções do financeiro"></nav>
+  <main id="conteudo"><p class="carregando">Carregando…</p></main>
+</div>
+
+<dialog id="dlg"><div class="dlg"><div class="dlg-cab"><h2 id="dlg-tit"></h2><button class="btn fant ic peq" type="button" data-act="fechar-dlg" aria-label="Fechar" id="dlg-x"></button></div><div class="dlg-corpo" id="dlg-corpo"></div></div></dialog>
+<dialog id="dlg-conf"><div class="dlg"><div class="dlg-corpo"><p id="conf-txt" style="font-size:15px;margin-bottom:18px"></p><div class="form"><div class="rodape"><button class="btn" type="button" id="conf-nao">Cancelar</button><button class="btn prim" type="button" id="conf-sim">Confirmar</button></div></div></div></div></dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="financeiro-logica.js"></script>
+<script>
+// Estes dois valores são públicos por natureza. Quem protege os dados é o login + as regras do banco (só o dono).
+const SB = supabase.createClient('https://prrqshhnhvehvyafitax.supabase.co', 'sb_publishable_25ymkT18mK9bmAnEo-t5gw_mzYqdUiT');
+
+const COR = { receita:'#5e4590', despesa:'#b5652a', positivo:'#17633b', negativo:'#a52626', grade:'#ece8e0', eixo:'#d9d2c8', superficie:'#ffffff', previsto:'#f3f0e9' };
+const COR_GRUPO = { pessoal:'#1d1c1a', fixa:'#2456b8', variavel:'#b5652a', imposto:'#b9800b' };
+const ICO = {
+  geral:'<rect x="3.5" y="3.5" width="7" height="8" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="5" rx="1.5"/><rect x="13.5" y="11.5" width="7" height="9" rx="1.5"/><rect x="3.5" y="14.5" width="7" height="6" rx="1.5"/>',
+  sobe:'<path d="M3.5 17 9 11.5l4 4 7.5-8"/><path d="M15 7.5h5.5V13"/>', desce:'<path d="M3.5 7 9 12.5l4-4 7.5 8"/><path d="M15 16.5h5.5V11"/>',
+  repetir:'<path d="M4 11V9.5A3.5 3.5 0 0 1 7.5 6H20M17 3l3 3-3 3"/><path d="M20 13v1.5a3.5 3.5 0 0 1-3.5 3.5H4M7 21l-3-3 3-3"/>',
+  graf:'<path d="M4 20V11M10 20V5M16 20v-6M21 20H3"/>', pessoas:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/>',
+  caminhao:'<path d="M2.5 6.5h11v10h-11zM13.5 10h4l3 3v3.5h-7"/><circle cx="6.5" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/>',
+  tags:'<path d="M3.5 12.2V4.5a1 1 0 0 1 1-1h7.7l8.3 8.3a1.5 1.5 0 0 1 0 2.1l-6.2 6.2a1.5 1.5 0 0 1-2.1 0z"/><circle cx="8" cy="8" r="1.4"/>',
+  voltar:'<path d="m14.5 6-6 6 6 6"/>', esq:'<path d="m14.5 6-6 6 6 6"/>', dir:'<path d="m9.5 6 6 6-6 6"/>',
+  olho:'<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/>',
+  olhoX:'<path d="M3 3l18 18M10.6 5.6A9.6 9.6 0 0 1 12 5.5c6 0 9.5 6.5 9.5 6.5a17 17 0 0 1-3 3.8M6.3 6.6C3.9 8.3 2.5 12 2.5 12S6 18.5 12 18.5c1.6 0 3-.4 4.3-1.1M9.9 10a2.8 2.8 0 0 0 4 4"/>',
+  cal:'<rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
+  ok:'<path d="m5 12.5 4.2 4.2L19 7"/>', okok:'<path d="m2.5 12.5 4.2 4.2L16.5 7M12 16.7 21.5 7"/>', desfazer:'<path d="M9 14 4.5 9.5 9 5"/><path d="M4.5 9.5H15a5 5 0 0 1 0 10h-3"/>',
+  lapis:'<path d="M4 20h4L19 9l-4-4L4 16z"/>', lixo:'<path d="M4.5 7h15M10 11v6M14 11v6M6 7l1 12a1.5 1.5 0 0 0 1.5 1.4h7A1.5 1.5 0 0 0 17 19l1-12M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>',
+  dividir:'<path d="M12 21v-7l-6-6M12 14l6-6M3.5 3.5H9M15 3.5h5.5v5.5M3.5 3.5V9"/>', mais:'<path d="M12 5v14M5 12h14"/>',
+  pausa:'<path d="M9 5v14M15 5v14"/>', play:'<path d="M7 4.5v15l12-7.5z"/>', busca:'<circle cx="11" cy="11" r="6.2"/><path d="m20 20-4.6-4.6"/>',
+  x:'<path d="M6 6l12 12M18 6 6 18"/>', dinheiro:'<circle cx="12" cy="12" r="8.5"/><path d="M14.8 9.2c-.5-.9-1.6-1.4-2.8-1.4-1.6 0-2.8.8-2.8 2s1.2 1.7 2.8 2.1 2.8.9 2.8 2.1-1.2 2-2.8 2c-1.3 0-2.4-.6-2.9-1.5M12 6.3v1.5M12 16.7v1.5"/>',
+  pizza:'<path d="M12 3.5v8.5h8.5A8.5 8.5 0 1 1 12 3.5z"/><path d="M15 3.8A8.5 8.5 0 0 1 20.2 9H15z"/>', info:'<circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8v.01"/>',
+  tabela:'<rect x="3.5" y="4.5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M3.5 14.5h17M9.5 9.5v10"/>', recibo:'<path d="M6 3.5h12v17l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>'
+};
+const ico = (k, cls = '') => `<svg class="i ${cls}" viewBox="0 0 24 24" aria-hidden="true">${ICO[k] || ''}</svg>`;
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[c]);
+const din = (v, tom = '', cls = '', sinal = false) => `<span class="valor ${tom} ${cls}">${sinal && v > 0 ? '−' : ''}${esc(brl(v))}</span>`;
+const selo = (txt, tom = '') => `<span class="selo ${tom}">${esc(txt)}</span>`;
+const plural = (n, um, varios) => `${n} ${n === 1 ? um : varios}`;
+
+// ------------------------------------------------------------ estado
+const VIEWS = [
+  { id:'geral', label:'Visão geral', icon:'geral' },
+  { id:'receber', label:'Receber', icon:'sobe' },
+  { id:'pagar', label:'Pagar', icon:'desce' },
+  { id:'receitas-rec', label:'Receitas recorrentes', icon:'repetir' },
+  { id:'despesas-rec', label:'Despesas recorrentes', icon:'repetir' },
+  { id:'relatorios', label:'Relatórios', icon:'graf' },
+  { sep:true },
+  { id:'clientes', label:'Clientes', icon:'pessoas' },
+  { id:'equipe', label:'Equipe e fornecedores', icon:'caminhao' }
+];
+const TITULOS = { geral:'Visão geral', receber:'Contas a receber', pagar:'Contas a pagar', 'receitas-rec':'Receitas recorrentes', 'despesas-rec':'Despesas recorrentes', relatorios:'Relatórios', clientes:'Clientes', equipe:'Equipe e fornecedores' };
+
+let D = null, E = null;           // dados crus / com nomes ligados
+let HOJE = hojeBahia(), ATUAL = HOJE.slice(0, 7);
+const S = { view:'geral', mes:ATUAL, ano:Number(ATUAL.slice(0, 4)), tipo:'', f:{ q:'', status:'', categoria:'' }, cq:'', cstatus:'', eq:'', etipo:'' };
+const SEL = new Set();            // contas a pagar selecionadas
+const TABELA = {};                // gráficos mostrados como tabela
+let ocultar = false; try { ocultar = localStorage.getItem('fin-ocultar') === '1'; } catch (e) {}
+
+function lerHash() {
+  const [v, qs] = location.hash.slice(1).split('?');
+  if (TITULOS[v]) S.view = v;
+  const p = new URLSearchParams(qs || '');
+  S.mes = mesValido(p.get('mes'), ATUAL);
+  if (/^\d{4}$/.test(p.get('ano') || '')) S.ano = Number(p.get('ano'));
+  if (p.get('status')) S.f.status = p.get('status');
+}
+function gravarHash() {
+  const p = new URLSearchParams();
+  if (S.mes !== ATUAL) p.set('mes', S.mes);
+  if (S.view === 'relatorios' && S.ano !== Number(ATUAL.slice(0, 4))) p.set('ano', S.ano);
+  try { history.replaceState(null, '', '#' + S.view + (p.toString() ? '?' + p : '')); } catch (e) {}
+}
+
+// ------------------------------------------------------------ dados
+async function tudo(tabela, ordem) {
+  let out = [], de = 0;
+  for (;;) {
+    const { data, error } = await SB.from(tabela).select('*').order(ordem).range(de, de + 999);
+    if (error) throw error;
+    out = out.concat(data);
+    if (data.length < 1000) return out;
+    de += 1000;
+  }
+}
+async function carregar() {
+  const [categorias, clientes, pessoas, receber, pagar, recorrentes, receitasRec, puladas] = await Promise.all([
+    tudo('fin_categorias', 'id'), tudo('fin_clientes', 'id'), tudo('fin_pessoas', 'id'), tudo('fin_receber', 'id'),
+    tudo('fin_pagar', 'id'), tudo('fin_recorrentes', 'id'), tudo('fin_receitas_recorrentes', 'id'), tudo('fin_receita_pulada', 'recorrente_id')
+  ]);
+  const nome = (a, b) => a.nome.localeCompare(b.nome, 'pt-BR', { sensitivity:'base' });
+  D = { categorias: categorias.sort((a, b) => a.tipo.localeCompare(b.tipo) || nome(a, b)), clientes: clientes.sort(nome), pessoas: pessoas.sort(nome), receber, pagar, recorrentes, receitasRec, puladas };
+  E = enriquecer(D);
+}
+/** Cria os lançamentos das recorrências até o mês visto, recarrega e redesenha. */
+async function recarregar() {
+  HOJE = hojeBahia(); ATUAL = HOJE.slice(0, 7);
+  const g = await SB.rpc('fin_gerar', { p_mes: S.view === 'relatorios' ? ATUAL : S.mes });
+  if (g.error) console.warn(g.error);
+  await carregar();
+  render();
+}
+function msgErro(e) {
+  const m = e?.message || String(e || '');
+  if (/Failed to fetch|NetworkError/i.test(m)) return 'Sem conexão. Tente de novo.';
+  if (/sem acesso|row-level|permission/i.test(m)) return 'Sem acesso ao financeiro.';
+  return m.length < 160 ? m : 'Não foi possível salvar.';
+}
+/** Chama o banco; em erro mostra o aviso e lança. */
+async function db(promessa) {
+  const r = await promessa;
+  if (r.error) { toast(msgErro(r.error)); throw r.error; }
+  return r.data;
+}
+let toastT;
+function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2800); }
+
+function confirmar(texto, rotulo = 'Confirmar') {
+  const d = document.getElementById('dlg-conf');
+  document.getElementById('conf-txt').textContent = texto;
+  document.getElementById('conf-sim').textContent = rotulo;
+  d.showModal();
+  return new Promise(res => {
+    const fim = v => { d.close(); sim.onclick = nao.onclick = d.oncancel = null; res(v); };
+    const sim = document.getElementById('conf-sim'), nao = document.getElementById('conf-nao');
+    sim.onclick = () => fim(true); nao.onclick = () => fim(false); d.oncancel = () => fim(false);
+    sim.focus();
+  });
+}
+
+// ------------------------------------------------------------ peças
+function seletorMes() {
+  return `<div class="mes"><button type="button" data-act="mes" data-d="-1" aria-label="Mês anterior">${ico('esq')}</button>
+    <label>${ico('cal')}<span>${esc(nomeMes(S.mes))}</span><input type="month" id="in-mes" value="${S.mes}" aria-label="Escolher mês"></label>
+    <button type="button" data-act="mes" data-d="1" aria-label="Próximo mês">${ico('dir')}</button></div>`;
+}
+const pilula = (rotulo, conteudo, tom) => `<div class="pilula ${tom}"><span>${rotulo}:</span>${conteudo}</div>`;
+const vazio = (titulo, texto = '', extra = '') => `<div class="vazio" role="status"><b>${esc(titulo)}</b>${texto ? esc(texto) : ''}${extra ? `<div style="margin-top:14px">${extra}</div>` : ''}</div>`;
+function situacao(status, venc, pagar) {
+  if (status === 'recebido') return selo('Recebido', 'verde');
+  if (status === 'pago') return selo('Pago', 'verde');
+  if (venc < HOJE) return selo('Vencido', 'vermelho');
+  return selo(pagar ? 'A pagar' : 'A receber', 'azul');
+}
+function opcoesCategoria(tipo, valor, vazioTxt = 'Sem categoria') {
+  const l = D.categorias.filter(c => c.tipo === tipo);
+  const op = c => `<option value="${c.id}" ${String(valor) === String(c.id) ? 'selected' : ''}>${esc(c.nome)}</option>`;
+  if (tipo === 'receita') return `<option value="">${vazioTxt}</option>` + l.map(op).join('');
+  return `<option value="">${vazioTxt}</option>` + Object.entries(GRUPOS_DESPESA).map(([g, n]) => {
+    const dg = l.filter(c => (c.grupo || 'variavel') === g);
+    return dg.length ? `<optgroup label="${esc(n)}">${dg.map(op).join('')}</optgroup>` : '';
+  }).join('');
+}
+function opcoesPessoa(valor) {
+  return '<option value="">Nenhum</option>' + Object.entries(TIPOS_PESSOA).map(([t, n]) => {
+    const dt = D.pessoas.filter(p => p.tipo === t);
+    return dt.length ? `<optgroup label="${n}">${dt.map(p => `<option value="${p.id}" ${String(valor) === String(p.id) ? 'selected' : ''}>${esc(p.nome)}</option>`).join('')}</optgroup>` : '';
+  }).join('');
+}
+const opcoesCliente = valor => '<option value="">Sem cliente</option>' + D.clientes.map(c => `<option value="${c.id}" ${String(valor) === String(c.id) ? 'selected' : ''}>${esc(c.nome)}</option>`).join('');
+const opcoes = (lista, valor) => lista.map(([v, n]) => `<option value="${v}" ${String(valor) === String(v) ? 'selected' : ''}>${esc(n)}</option>`).join('');
+
+function filtros(placeholder, status, categorias) {
+  return `<div class="filtros">
+    <label class="busca">${ico('busca')}<input class="campo" id="f-q" value="${esc(S.f.q)}" placeholder="${esc(placeholder)}" aria-label="Buscar" autocomplete="off"></label>
+    <select class="campo" id="f-status" aria-label="Situação">${opcoes(status, S.f.status)}</select>
+    ${categorias ? `<select class="campo" id="f-cat" aria-label="Categoria"><option value="">Todas as categorias</option>${categorias.map(c => `<option value="${c.id}" ${String(S.f.categoria) === String(c.id) ? 'selected' : ''}>${esc(c.nome)}</option>`).join('')}</select>` : ''}
+  </div>`;
+}
+
+// ------------------------------------------------------------ telas
+function telaGeral() {
+  const r = resumoMes(E, S.mes, HOJE), nome = nomeMes(S.mes);
+  const grupos = despesasPorGrupo(E, S.mes), vR = vencidos(E.receber, HOJE), vP = vencidos(E.pagar, HOJE), lista = transacoes(E, S.mes, S.tipo);
+  const base = Math.max(r.receita, r.despesas, 1);
+  const lv = (rotulo, conteudo, f) => `<div class="linha-v ${f ? 'f' : ''}"><span>${esc(rotulo)}</span>${conteudo}</div>`;
+  const tit = (icone, tom, txt) => `<div class="tit"><span class="bola ${tom}">${ico(icone)}</span><h2>${esc(txt)}</h2></div>`;
+  const venc = (titulo, itens, tom, view) => `<div class="alerta ${tom}">
+      <div class="tit" style="margin-bottom:12px"><h2 style="flex:1;font-size:16px">${titulo}</h2>${selo(itens.length, 'vermelho')}</div>
+      ${itens.length ? `<ul>${itens.slice(0, 5).map(i => `<li><div><span>${esc(i.titulo || i.descricao)}</span><small>venceu ${dataBR(i.vencimento)}${i.cliente_nome || i.pessoa_nome ? ' · ' + esc(i.cliente_nome || i.pessoa_nome) : ''}</small></div>${din(i.valor, 'vermelho', 'semi')}</li>`).join('')}</ul>
+        <button class="link" type="button" data-act="ver-vencidos" data-view="${view}">${itens.length > 5 ? `Ver todos (${itens.length})` : 'Ver detalhes'}</button>`
+      : `<p class="fraco" style="text-align:center">${view === 'receber' ? 'Nenhum recebimento vencido.' : 'Nenhum pagamento vencido.'}</p>`}
+    </div>`;
+  return `<div class="barra">${seletorMes()}</div>
+  <div class="g g3">
+    <section class="cartao pad">${tit('sobe', 'verde verde', 'Contas a receber')}
+      ${lv('Receita do mês', din(r.receita, '', 'forte'), 1)}${lv('Pendente', din(r.receberPendente, 'azul'))}${lv('Vencido', din(r.receberVencido, 'vermelho'))}
+      <div class="div"></div>${lv(`Recebido em ${nome}`, din(r.recebido, 'verde', 'forte'))}</section>
+    <section class="cartao pad">${tit('desce', 'vermelho vermelho', 'Contas a pagar')}
+      ${lv(`Pago em ${nome}`, din(r.pago, 'verde', 'forte'))}${lv('Pendente', din(r.pagarPendente, 'azul'))}${lv('Vencido', din(r.pagarVencido, 'vermelho'))}
+      <div class="div"></div>${lv('Total de despesas', din(r.despesas, '', 'forte'), 1)}</section>
+    <section class="cartao pad">${tit('dinheiro', 'escura', 'Lucro do período')}
+      ${lv('Recebido no mês', din(r.recebido, 'verde'))}${lv('Pago no mês', din(r.pago, 'vermelho', '', true))}
+      <div class="div"></div>${lv(`Lucro líquido em ${nome}`, `<span style="font-size:24px">${din(r.lucro, r.lucro >= 0 ? 'verde' : 'vermelho', 'forte')}</span>`, 1)}
+      <p class="nota">Considera só o que já entrou e já saiu da conta.</p></section>
+  </div>
+  <section class="cartao pad" style="margin-bottom:16px">${tit('pizza', 'azul azul', `Para onde vai o dinheiro em ${nome}`)}
+    ${grupos.length ? grupos.map(g => `<div class="grp-l"><div class="cab"><span>${esc(g.grupo ? GRUPOS_DESPESA[g.grupo] : 'Sem categoria')}</span>
+        <span class="fraco">${din(g.total, '', 'semi')}${r.receita > 0 ? ` <small style="margin-left:6px">${Math.round(g.total / r.receita * 100)}% da receita</small>` : ''}</span></div>
+        <div class="trilho"><i style="width:${Math.round(g.total / base * 100)}%;background:${COR_GRUPO[g.grupo] || '#9a968e'}"></i></div></div>`).join('')
+      + (r.receita > 0 ? `<div class="div"></div><div class="linha-v f"><span>Sobra prevista (receita − despesas do mês)</span><span style="font-size:18px">${din(r.receita - r.despesas, r.receita - r.despesas >= 0 ? 'verde' : 'vermelho', 'forte')}</span></div>` : '')
+      : '<p class="fraco" style="text-align:center;padding:12px">Nenhuma despesa neste mês.</p>'}
+  </section>
+  <div class="g g2">${venc('Recebimentos vencidos', vR, '', 'receber')}${venc('Pagamentos vencidos', vP, 'verm', 'pagar')}</div>
+  <section class="cartao pad">
+    <div class="tit" style="justify-content:space-between;flex-wrap:wrap"><h2>Transações de ${esc(nome)}</h2>
+      <select class="campo" id="f-tipo" style="width:auto;min-width:12rem" aria-label="Tipo">${opcoes([['', 'Entradas e saídas'], ['entrada', 'Só entradas'], ['saida', 'Só saídas']], S.tipo)}</select></div>
+    <p class="fraco" style="display:flex;gap:8px;align-items:center;font-size:13px;margin:-6px 0 12px">${ico('info')} Aqui aparece o que já foi recebido ou pago. Para editar, use as abas Receber ou Pagar.</p>
+    ${lista.length ? `<ul class="cartoes">${lista.map(t => `<li style="display:flex;align-items:center;gap:12px;padding:10px 0">
+        <span class="bola ${t.tipo === 'entrada' ? 'verde verde' : 'vermelho vermelho'}" style="width:36px;height:36px">${ico(t.tipo === 'entrada' ? 'sobe' : 'desce')}</span>
+        <div style="flex:1;min-width:0"><b class="semi">${esc(t.descricao)}</b><small class="sm">${[dataBR(t.data), t.contraparte, t.categoria_nome].filter(Boolean).map(esc).join(' · ')}</small></div>
+        ${din(t.valor, t.tipo === 'entrada' ? 'verde' : 'vermelho', 'semi', t.tipo === 'saida')}</li>`).join('')}</ul>` : vazio('Nenhuma transação encontrada')}
+  </section>`;
+}
+
+function acoesReceber(r) {
+  return `<div class="bts">
+    ${r.status === 'pendente'
+      ? `<button class="btn peq fant ok" type="button" data-act="recebido" data-id="${r.id}" title="Marcar como recebido">${ico('ok')} Recebido</button>`
+      : `<button class="btn peq fant ic" type="button" data-act="nao-recebido" data-id="${r.id}" title="Voltar para a receber" aria-label="Voltar para a receber">${ico('desfazer')}</button>`}
+    <button class="btn peq fant" type="button" data-act="distribuir" data-id="${r.id}" title="Distribuir o valor">${ico('dividir')} Distribuir</button>
+    <button class="btn peq fant ic" type="button" data-act="editar-receber" data-id="${r.id}" title="Editar" aria-label="Editar">${ico('lapis')}</button>
+    <button class="btn peq fant ic perigo" type="button" data-act="excluir-receber" data-id="${r.id}" title="Excluir" aria-label="Excluir">${ico('lixo')}</button></div>`;
+}
+function telaReceber() {
+  const todosV = S.f.status === 'vencido', linhas = filtrarReceber(E, S.mes, S.f, HOJE);
+  const total = linhas.reduce((s, r) => s + r.valor, 0), pend = linhas.filter(r => r.status === 'pendente').reduce((s, r) => s + r.valor, 0);
+  const filtrando = !!(S.f.q || S.f.status || S.f.categoria);
+  const dist = r => r.distribuido > 0 ? `${din(r.distribuido, 'vermelho')}<small>sobra ${din(r.valor - r.distribuido)}</small>` : '<span class="fraco">—</span>';
+  return `<div class="barra">${seletorMes()}${pilula('Total', din(total, 'verde', 'forte'), 'verde')}${pilula('Pendente', din(pend, 'ambar', 'forte'), 'ambar')}
+    <div class="dir"><button class="btn prim" type="button" data-act="novo-receber">${ico('sobe')} Novo recebimento</button></div></div>
+  <section class="cartao pad">
+    <div class="tit"><span class="bola verde verde">${ico('recibo')}</span><div><h2>Contas a receber</h2><p class="sub">${todosV ? 'Todos os vencidos, de qualquer mês' : esc(nomeMes(S.mes))}</p></div></div>
+    ${filtros('Buscar por cliente ou título…', [['', 'Todos'], ['pendente', 'A receber'], ['vencido', 'Vencidos (todos)'], ['recebido', 'Recebidos']], D.categorias.filter(c => c.tipo === 'receita'))}
+    ${!linhas.length ? vazio(filtrando ? 'Nenhuma conta encontrada com esses filtros' : 'Nenhuma conta a receber neste mês', filtrando ? '' : 'Cadastre um trabalho fechado para acompanhar o pagamento e distribuir o valor.') : `
+    <ul class="cartoes so-cel">${linhas.map(r => `<li><div class="cl-topo"><div><b class="semi">${esc(r.titulo)}</b><small class="sm">${[dataBR(r.vencimento), r.cliente_nome, r.categoria_nome].filter(Boolean).map(esc).join(' · ')}</small></div>${din(r.valor, 'verde', 'semi')}</div>
+      <div class="cl-base"><div style="display:flex;gap:8px;align-items:center;font-size:12px">${situacao(r.status, r.vencimento)}${r.distribuido > 0 ? `<span class="fraco">distribuído ${din(r.distribuido, '', 'semi')}</span>` : ''}</div>${acoesReceber(r)}</div></li>`).join('')}</ul>
+    <div class="rolagem so-pc"><table><thead><tr><th>Vencimento</th><th>Título / cliente</th><th>Situação</th><th class="dir">Valor</th><th class="dir">Distribuído</th><th class="dir">Ações</th></tr></thead><tbody>
+      ${linhas.map(r => `<tr><td class="num">${dataBR(r.vencimento)}</td><td><b class="semi">${esc(r.titulo)}</b><small>${[r.cliente_nome, r.categoria_nome].filter(Boolean).map(esc).join(' · ') || 'Sem cliente'}</small></td>
+        <td>${situacao(r.status, r.vencimento)}</td><td class="dir">${din(r.valor, 'verde', 'semi')}</td><td class="dir">${dist(r)}</td><td>${acoesReceber(r)}</td></tr>`).join('')}
+    </tbody></table></div>`}
+  </section>`;
+}
+
+function acoesPagar(p) {
+  return `<div class="bts">
+    ${p.status === 'pendente'
+      ? `<button class="btn peq fant ok" type="button" data-act="pago" data-id="${p.id}" title="Marcar como pago">${ico('ok')} Pago</button>`
+      : `<button class="btn peq fant ic" type="button" data-act="nao-pago" data-id="${p.id}" title="Voltar para a pagar" aria-label="Voltar para a pagar">${ico('desfazer')}</button>`}
+    <button class="btn peq fant ic" type="button" data-act="editar-pagar" data-id="${p.id}" title="Editar" aria-label="Editar">${ico('lapis')}</button>
+    <button class="btn peq fant ic perigo" type="button" data-act="excluir-pagar" data-id="${p.id}" title="Excluir" aria-label="Excluir">${ico('lixo')}</button></div>`;
+}
+const detalhePagar = p => [p.pessoa_nome, p.receber_titulo && `distribuição de “${p.receber_titulo}”`, p.recorrente_id && 'recorrente'].filter(Boolean).map(esc).join(' · ');
+function telaPagar() {
+  const todosV = S.f.status === 'vencido', linhas = filtrarPagar(E, S.mes, S.f, HOJE);
+  const pendentes = linhas.filter(p => p.status === 'pendente');
+  [...SEL].forEach(id => { if (!pendentes.some(p => p.id === id)) SEL.delete(id); });
+  const total = linhas.reduce((s, p) => s + p.valor, 0), pend = pendentes.reduce((s, p) => s + p.valor, 0);
+  const totalSel = linhas.filter(p => SEL.has(p.id)).reduce((s, p) => s + p.valor, 0);
+  const rec = recorrentesResumo(E).filter(r => r.ativo), fixo = rec.reduce((s, r) => s + r.valor, 0);
+  const filtrando = !!(S.f.q || S.f.status || S.f.categoria);
+  const caixa = p => p.status === 'pendente' ? `<input type="checkbox" data-sel="${p.id}" ${SEL.has(p.id) ? 'checked' : ''} aria-label="Selecionar ${esc(p.descricao)}">` : '';
+  return `<div class="barra">${seletorMes()}${pilula('Total', din(total, 'vermelho', 'forte'), 'vermelho')}${pilula('Pendente', din(pend, 'ambar', 'forte'), 'ambar')}
+    <div class="dir"><button class="btn prim" type="button" data-act="novo-pagar">${ico('desce')} Lançar despesa</button></div></div>
+  <section class="cartao pad">
+    <div class="tit"><span class="bola vermelho vermelho">${ico('recibo')}</span><div><h2>Contas a pagar</h2><p class="sub">${todosV ? 'Todos os vencidos, de qualquer mês' : esc(nomeMes(S.mes))}</p></div></div>
+    ${filtros('Buscar por descrição ou nome…', [['', 'Todos'], ['pendente', 'A pagar'], ['vencido', 'Vencidos (todos)'], ['pago', 'Pagos']], D.categorias.filter(c => c.tipo === 'despesa'))}
+    ${SEL.size ? `<div class="selecao" role="status"><span>Selecionado: <b class="vermelho">${plural(SEL.size, 'conta', 'contas')}</b> · ${din(totalSel, 'vermelho')}</span>
+      <button class="btn peq prim" type="button" data-act="pagar-varios">${ico('okok')} Marcar como pagas</button><button class="btn peq fant" type="button" data-act="limpar-sel">Limpar</button></div>` : ''}
+    ${!linhas.length ? vazio(filtrando ? 'Nenhuma conta encontrada com esses filtros' : 'Nenhuma conta a pagar neste mês') : `
+    <ul class="cartoes so-cel">${linhas.map(p => `<li><div class="cl-topo"><div style="display:flex;gap:12px;min-width:0"><span style="width:16px;padding-top:2px">${caixa(p)}</span><div><b class="semi">${esc(p.descricao)}</b><small class="sm">${[dataBR(p.vencimento), esc(p.categoria_nome || ''), detalhePagar(p)].filter(Boolean).join(' · ')}</small></div></div>${din(p.valor, 'vermelho', 'semi')}</div>
+      <div class="cl-base" style="padding-left:28px">${situacao(p.status, p.vencimento, true)}${acoesPagar(p)}</div></li>`).join('')}</ul>
+    <div class="rolagem so-pc"><table><thead><tr><th style="width:36px"><input type="checkbox" data-act="sel-todas" aria-label="Selecionar todas as pendentes" ${pendentes.length && SEL.size === pendentes.length ? 'checked' : ''}></th><th>Vencimento</th><th>Descrição / para quem</th><th>Categoria</th><th>Situação</th><th class="dir">Valor</th><th class="dir">Ações</th></tr></thead><tbody>
+      ${linhas.map(p => `<tr><td>${caixa(p)}</td><td class="num">${dataBR(p.vencimento)}</td><td><b class="semi">${esc(p.descricao)}</b><small>${detalhePagar(p) || '—'}</small></td>
+        <td class="fraco">${esc(p.categoria_nome || '—')}</td><td>${situacao(p.status, p.vencimento, true)}</td><td class="dir">${din(p.valor, 'vermelho', 'semi')}</td><td>${acoesPagar(p)}</td></tr>`).join('')}
+    </tbody></table></div>`}
+  </section>
+  <button class="cartao atalho" type="button" data-go="despesas-rec"><span class="bola" style="background:var(--muted)">${ico('repetir')}</span>
+    <div style="flex:1;min-width:0"><b>Despesas recorrentes</b><p class="fraco" style="font-size:13px">${plural(rec.length, 'ativa', 'ativas')} · custo fixo de ${din(fixo, '', 'semi')} por mês</p></div>
+    <span class="semi" style="display:flex;align-items:center;gap:4px">Gerenciar ${ico('dir')}</span></button>`;
+}
+
+const indicador = (rotulo, conteudo) => `<section class="cartao pad indic"><p>${esc(rotulo)}</p>${conteudo}</section>`;
+function telaReceitasRec() {
+  const itens = receitasRecorrentesResumo(E), vig = itens.filter(r => r.ativo && (!r.fim || r.fim >= ATUAL));
+  const mensal = vig.reduce((s, r) => s + r.valor, 0), recebido = itens.reduce((s, r) => s + r.recebido_total, 0);
+  return `<div class="barra"><p class="intro">Contratos que pagam todo mês. O recebimento de cada mês é criado sozinho em Receber; lá você marca como recebido e distribui o valor.</p>
+    <div class="dir"><button class="btn prim" type="button" data-act="nova-receita-rec">${ico('mais')} Nova receita recorrente</button></div></div>
+  <div class="g g3">${indicador('Contratos ativos', `<span class="grande num">${vig.length}</span>`)}${indicador('Receita recorrente por mês', din(mensal, 'verde', 'grande'))}${indicador('Já recebido desses contratos', din(recebido, '', 'grande'))}</div>
+  <section class="cartao">${!itens.length ? vazio('Nenhuma receita recorrente', 'Cadastre aqui, ou marque “Repetir todo mês” ao criar um recebimento.') : `<div class="lista-rec">${itens.map(rr => {
+    const enc = !!rr.fim && rr.fim < ATUAL;
+    return `<div class="${!rr.ativo || enc ? 'apagada' : ''}"><div class="txt"><b class="semi">${esc(rr.descricao)}</b><small class="sm">${[rr.cliente_nome, `todo dia ${rr.dia}`, `desde ${nomeMes(rr.inicio).toLowerCase()}`, rr.fim ? `até ${nomeMes(rr.fim).toLowerCase()}` : 'até cancelar'].filter(Boolean).map(esc).join(' · ')}</small></div>
+      ${!rr.ativo ? selo('Pausada') : ''}${enc ? selo('Encerrada') : ''}
+      <div class="dir">${din(rr.valor, 'verde', 'semi')}<small class="sm">por mês</small></div>
+      <div class="dir" style="min-width:8rem">${din(rr.recebido_total)}<small class="sm">${plural(rr.meses_recebidos, 'mês recebido', 'meses recebidos')}</small></div>
+      <div class="bts"><button class="btn peq fant ic" type="button" data-act="alternar-receita-rec" data-id="${rr.id}" title="${rr.ativo ? 'Pausar' : 'Reativar'}" aria-label="${rr.ativo ? 'Pausar' : 'Reativar'}">${ico(rr.ativo ? 'pausa' : 'play')}</button>
+        <button class="btn peq fant ic" type="button" data-act="editar-receita-rec" data-id="${rr.id}" title="Editar" aria-label="Editar">${ico('lapis')}</button>
+        <button class="btn peq fant ic perigo" type="button" data-act="excluir-receita-rec" data-id="${rr.id}" title="Excluir" aria-label="Excluir">${ico('lixo')}</button></div></div>`;
+  }).join('')}</div>`}</section>`;
+}
+function telaDespesasRec() {
+  const rec = recorrentesResumo(E), ativos = rec.filter(r => r.ativo), fixo = ativos.reduce((s, r) => s + r.valor, 0);
+  return `<div class="barra"><p class="intro">Despesas que se repetem todo mês. A conta de cada mês é criada sozinha em Pagar. Ao editar o valor, só os meses ainda não pagos mudam; o histórico fica como está.</p>
+    <div class="dir"><button class="btn" type="button" data-act="nova-recorrente">${ico('mais')} Nova despesa recorrente</button></div></div>
+  <div class="g g3">${indicador('Ativas', `<span class="grande num">${ativos.length}</span>`)}${indicador('Custo fixo por mês', din(fixo, 'vermelho', 'grande'))}${indicador('Pausadas', `<span class="grande num">${rec.length - ativos.length}</span>`)}</div>
+  <section class="cartao">${!rec.length ? vazio('Nenhuma despesa recorrente', 'Cadastre aqui, ou marque “Repetir todo mês” ao lançar uma despesa.') : `<div class="lista-rec">${rec.map(rc => `
+    <div class="${rc.ativo ? '' : 'apagada'}"><div class="txt"><b class="semi">${esc(rc.descricao)}</b><small class="sm">${[`todo dia ${rc.dia}`, rc.pessoa_nome, rc.categoria_nome].filter(Boolean).map(esc).join(' · ')}</small></div>
+      ${rc.ativo ? '' : selo('Pausada')}${din(rc.valor, 'vermelho', 'semi')}
+      <div class="bts"><button class="btn peq fant ic" type="button" data-act="alternar-recorrente" data-id="${rc.id}" title="${rc.ativo ? 'Pausar' : 'Reativar'}" aria-label="${rc.ativo ? 'Pausar' : 'Reativar'}">${ico(rc.ativo ? 'pausa' : 'play')}</button>
+        <button class="btn peq fant ic" type="button" data-act="editar-recorrente" data-id="${rc.id}" title="Editar" aria-label="Editar">${ico('lapis')}</button>
+        <button class="btn peq fant ic perigo" type="button" data-act="excluir-recorrente" data-id="${rc.id}" title="Excluir" aria-label="Excluir">${ico('lixo')}</button></div></div>`).join('')}</div>`}</section>`;
+}
+
+function telaClientes() {
+  let cl = clientesResumo(E, S.mes, HOJE, S.cq);
+  if (S.cstatus === 'aberto') cl = cl.filter(c => c.em_aberto > 0);
+  const mesNome = nomeMes(S.mes).split(' ')[0].toLowerCase();
+  return `<div class="barra">${seletorMes()}<div class="dir"><button class="btn prim" type="button" data-act="novo-cliente">${ico('mais')} Novo cliente</button></div></div>
+  <section class="cartao pad">
+    <div class="tit"><span class="bola vermelho vermelho">${ico('pessoas')}</span><div><h2>Fechamento por cliente</h2><p class="sub">Quanto cada cliente deve e quanto pagou em ${esc(nomeMes(S.mes))}. “Fechar” marca todas as contas em aberto do cliente como recebidas.</p></div></div>
+    <div class="filtros"><label class="busca">${ico('busca')}<input class="campo" id="c-q" value="${esc(S.cq)}" placeholder="Buscar cliente…" aria-label="Buscar cliente" autocomplete="off"></label>
+      <select class="campo" id="c-status" aria-label="Filtro">${opcoes([['', 'Todos os clientes'], ['aberto', 'Com contas em aberto']], S.cstatus)}</select></div>
+    ${!cl.length ? vazio(S.cq || S.cstatus ? 'Nenhum cliente encontrado' : 'Nenhum cliente cadastrado') : `<ul class="cartoes">${cl.map(c => `<li>
+      <div class="cli"><div class="txt"><b class="semi">${esc(c.nome)}</b><small class="sm">${[c.documento, c.telefone, c.email].filter(Boolean).map(esc).join(' · ') || 'Sem contato cadastrado'}</small></div>
+        <div class="v"><small>Em aberto até este mês</small>${din(c.em_aberto, c.em_aberto > 0 ? 'ambar' : '', 'forte')}</div>
+        <div class="v"><small>Recebido em ${esc(mesNome)}</small>${din(c.recebido_mes, 'verde', 'forte')}</div>
+        <div class="v"><small>Total já recebido</small>${din(c.recebido_total, '', 'forte')}</div>
+        <div class="bts">${c.em_aberto > 0 ? `<button class="btn peq fant ok" type="button" data-act="fechar-cliente" data-id="${c.id}" title="Marcar todas as contas em aberto como recebidas">${ico('okok')} Fechar</button>` : ''}
+          <button class="btn peq fant ic" type="button" data-act="editar-cliente" data-id="${c.id}" title="Editar" aria-label="Editar">${ico('lapis')}</button>
+          <button class="btn peq fant ic perigo" type="button" data-act="excluir-cliente" data-id="${c.id}" title="Excluir" aria-label="Excluir">${ico('lixo')}</button></div></div>
+      ${c.pendentes.length ? `<ul class="cli-pend">${c.pendentes.map(p => `<li><span>${dataBR(p.vencimento)} · ${esc(p.titulo)}</span>${din(p.valor, 'ambar')}</li>`).join('')}</ul>` : ''}</li>`).join('')}</ul>`}
+  </section>`;
+}
+function telaEquipe() {
+  const ps = pessoasResumo(E, S.eq, S.etipo), filtrando = !!(S.eq || S.etipo);
+  return `<section class="cartao pad">
+    <div class="tit" style="flex-wrap:wrap"><span class="bola" style="background:var(--muted)">${ico('caminhao')}</span><div style="flex:1"><h2>Equipe e fornecedores <span class="fraco" style="font-weight:400;font-size:15px">(${ps.length})</span></h2>
+      <p class="sub">Editores, funcionários, freelancers e fornecedores. Eles aparecem na hora de distribuir um recebimento ou lançar uma despesa.</p></div>
+      <button class="btn prim" type="button" data-act="nova-pessoa">${ico('mais')} Novo</button></div>
+    <div class="filtros"><label class="busca">${ico('busca')}<input class="campo" id="e-q" value="${esc(S.eq)}" placeholder="Buscar por nome…" aria-label="Buscar por nome" autocomplete="off"></label>
+      <select class="campo" id="e-tipo" aria-label="Tipo">${opcoes([['', 'Todos os tipos'], ...Object.entries(TIPOS_PESSOA)], S.etipo)}</select></div>
+    ${!ps.length ? vazio(filtrando ? 'Ninguém encontrado' : 'Ninguém cadastrado ainda') : `<div class="rolagem"><table style="min-width:680px"><thead><tr><th>Nome</th><th>Tipo</th><th>PIX / contato</th><th class="dir">A pagar</th><th class="dir">Total já pago</th><th class="dir">Ações</th></tr></thead><tbody>
+      ${ps.map(p => `<tr><td class="semi">${esc(p.nome)}</td><td>${selo(TIPOS_PESSOA[p.tipo], p.tipo === 'fornecedor' ? '' : 'azul')}</td>
+        <td class="fraco">${[p.pix && 'PIX: ' + p.pix, p.telefone].filter(Boolean).map(esc).join(' · ') || '—'}</td>
+        <td class="dir">${din(p.em_aberto, p.em_aberto > 0 ? 'ambar' : '')}</td><td class="dir">${din(p.total_pago, 'vermelho')}</td>
+        <td><div class="bts"><button class="btn peq fant ic" type="button" data-act="editar-pessoa" data-id="${p.id}" title="Editar" aria-label="Editar">${ico('lapis')}</button>
+          <button class="btn peq fant ic perigo" type="button" data-act="excluir-pessoa" data-id="${p.id}" title="Excluir" aria-label="Excluir">${ico('lixo')}</button></div></td></tr>`).join('')}
+    </tbody></table></div>`}
+  </section>`;
+}
+
+// ------------------------------------------------------------ relatórios e gráficos
+const GRAFS = {};
+function figura(id, titulo, subtitulo, legenda, tabela, conteudo) {
+  const verTab = TABELA[id];
+  return `<figure class="cartao pad"><div class="fig-cab"><div><h3>${esc(titulo)}</h3>${subtitulo ? `<p class="fraco" style="font-size:13px">${esc(subtitulo)}</p>` : ''}</div>
+    <button class="btn peq fant" type="button" data-act="alternar-tabela" data-id="${id}" aria-pressed="${!!verTab}">${verTab ? ico('graf') + ' Ver gráfico' : ico('tabela') + ' Ver tabela'}</button></div>
+    ${verTab ? `<div class="rolagem"><table><thead><tr>${tabela.colunas.map(c => `<th class="${c.dir ? 'dir' : ''}">${esc(c.t)}</th>`).join('')}</tr></thead><tbody>${tabela.linhas.map(l => `<tr>${l.map((x, j) => `<td class="num ${tabela.colunas[j].dir ? 'dir' : ''}">${x}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`
+      : (legenda ? `<div class="legenda">${legenda}</div>` : '') + conteudo}</figure>`;
+}
+const leg = (cor, rotulo, claro) => `<span><i style="background:${cor};opacity:${claro ? .35 : 1}"></i>${esc(rotulo)}</span>`;
+const linhaDica = (cor, nome, valor, claro) => `<div><span><i style="display:inline-block;width:10px;height:3px;border-radius:2px;margin-right:6px;vertical-align:3px;background:${cor};opacity:${claro ? .4 : 1}"></i>${esc(nome)}</span><b class="valor">${esc(valor)}</b></div>`;
+function barraPath(x, yBase, yPonta, w, arredonda) {
+  const h = Math.abs(yBase - yPonta); if (h < .5) return '';
+  const r = arredonda ? Math.min(4, w / 2, h) : 0;
+  if (yPonta < yBase) return `M${x},${yBase} V${yPonta + r} Q${x},${yPonta} ${x + r},${yPonta} H${x + w - r} Q${x + w},${yPonta} ${x + w},${yPonta + r} V${yBase} Z`;
+  return `M${x},${yBase} V${yPonta - r} Q${x},${yPonta} ${x + r},${yPonta} H${x + w - r} Q${x + w},${yPonta} ${x + w},${yPonta - r} V${yBase} Z`;
+}
+function eixoY(ticks, y, m, w) {
+  return ticks.map(t => `<line x1="${m.l}" x2="${w - m.r}" y1="${y(t)}" y2="${y(t)}" stroke="${t === 0 ? COR.eixo : COR.grade}"/><text x="${m.l - 8}" y="${y(t)}" dy="0.32em" text-anchor="end">${esc(brlCurto(t))}</text>`).join('');
+}
+/** Colunas agrupadas: realizado (cheio) + previsto (claro, empilhado). */
+function svgColunas(g, w) {
+  const alt = 260, m = { t:10, r:8, b:26, l:64 }, iw = w - m.l - m.r, ih = alt - m.t - m.b, n = g.rotulos.length;
+  const max = Math.max(0, ...g.series.flatMap(s => s.real.map((v, i) => v + s.prev[i])));
+  const { fim, ticks } = escala(0, max), y = v => m.t + ih - (v / fim) * ih, banda = iw / n;
+  const bw = Math.max(4, Math.min(24, (banda * .62 - 2 * (g.series.length - 1)) / g.series.length)), grupo = bw * g.series.length + 2 * (g.series.length - 1);
+  let s = eixoY(ticks, y, m, w);
+  if (g.marcar >= 0 && g.marcar < n) s += `<rect x="${m.l + banda * g.marcar}" y="${m.t}" width="${banda * (n - g.marcar)}" height="${ih}" fill="${COR.previsto}" opacity=".6"/><text x="${m.l + banda * g.marcar + 6}" y="${m.t + 12}" style="font-weight:700;text-transform:uppercase;letter-spacing:.06em">Previsto</text>`;
+  g.rotulos.forEach((r, i) => {
+    const x0 = m.l + banda * i + (banda - grupo) / 2;
+    g.series.forEach((se, k) => {
+      const x = x0 + k * (bw + 2), real = se.real[i], prev = se.prev[i], yR = y(real);
+      s += `<path d="${barraPath(x, y(0), yR, bw, !(prev > 0))}" fill="${se.cor}"/>`;
+      if (prev > 0) s += `<path d="${barraPath(x, real > 0 ? yR - 2 : y(0), y(real + prev), bw, true)}" fill="${se.cor}" opacity=".35"/>`;
+    });
+    const dica = `<b>${esc(g.longos[i])}</b>` + g.series.map(se => linhaDica(se.cor, se.nome, brl(se.real[i])) + (se.prev[i] > 0 ? linhaDica(se.cor, se.nome + ' previsto', brl(se.prev[i]), true) : '')).join('');
+    s += `<text x="${m.l + banda * i + banda / 2}" y="${alt - 8}" text-anchor="middle">${esc(r)}</text>
+      <rect class="faixa" x="${m.l + banda * i}" y="${m.t}" width="${banda}" height="${ih + m.b}" tabindex="0" data-dica="${esc(dica)}" data-x="${m.l + banda * i + banda / 2}"
+        aria-label="${esc(g.longos[i] + ': ' + g.series.map(se => se.nome + ' ' + brl(se.real[i] + se.prev[i])).join(', '))}"/>`;
+  });
+  return `<svg width="${w}" height="${alt}" role="img" aria-label="${esc(g.titulo || 'Gráfico de colunas por mês')}">${s}</svg>`;
+}
+/** Resultado de cada mês: para cima (sobra) ou para baixo (falta). */
+function svgResultado(g, w) {
+  const alt = 200, m = { t:10, r:8, b:26, l:64 }, iw = w - m.l - m.r, ih = alt - m.t - m.b, n = g.rotulos.length;
+  const { ini, fim, ticks } = escala(Math.min(0, ...g.valores), Math.max(0, ...g.valores));
+  const y = v => m.t + ((fim - v) / (fim - ini)) * ih, banda = iw / n, bw = Math.min(24, banda * .5);
+  let s = eixoY(ticks, y, m, w);
+  g.rotulos.forEach((r, i) => {
+    const v = g.valores[i], x = m.l + banda * i + (banda - bw) / 2, cor = v >= 0 ? COR.positivo : COR.negativo;
+    const dica = `<b>${esc(g.longos[i] + (g.prev[i] ? ' (previsto)' : ''))}</b>` + linhaDica(cor, v >= 0 ? 'Sobra' : 'Falta', brl(v));
+    s += `<path d="${barraPath(x, y(0), y(v), bw, true)}" fill="${cor}" opacity="${g.prev[i] ? .4 : 1}"/><text x="${m.l + banda * i + banda / 2}" y="${alt - 8}" text-anchor="middle">${esc(r)}</text>
+      <rect class="faixa" x="${m.l + banda * i}" y="${m.t}" width="${banda}" height="${ih + m.b}" tabindex="0" data-dica="${esc(dica)}" data-x="${m.l + banda * i + banda / 2}"
+        aria-label="${esc(`${g.longos[i]}: ${v >= 0 ? 'sobra' : 'falta'} de ${brl(Math.abs(v))}${g.prev[i] ? ' (previsto)' : ''}`)}"/>`;
+  });
+  return `<svg width="${w}" height="${alt}" role="img" aria-label="Resultado de cada mês">${s}</svg>`;
+}
+/** Linha: saldo acumulado. */
+function svgLinha(g, w) {
+  const alt = 220, m = { t:14, r:92, b:26, l:64 }, iw = w - m.l - m.r, ih = alt - m.t - m.b, n = g.rotulos.length;
+  const { ini, fim, ticks } = escala(Math.min(0, ...g.valores), Math.max(0, ...g.valores));
+  const y = v => m.t + ((fim - v) / (fim - ini)) * ih, x = i => m.l + (n === 1 ? iw / 2 : (iw * i) / (n - 1));
+  const pts = g.valores.map((v, i) => `${x(i)},${y(v)}`).join(' '), u = n - 1, cor = g.valores[u] >= 0 ? COR.positivo : COR.negativo;
+  let s = eixoY(ticks, y, m, w) + `<polygon points="${x(0)},${y(0)} ${pts} ${x(u)},${y(0)}" fill="${cor}" opacity=".1"/>
+    <polyline points="${pts}" fill="none" stroke="${cor}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="${x(u)}" cy="${y(g.valores[u])}" r="4" fill="${cor}" stroke="#fff" stroke-width="2"/>
+    <text x="${x(u) + 10}" y="${y(g.valores[u])}" dy="0.32em" style="fill:var(--ink);font-size:12px;font-weight:700">${esc(brlCurto(g.valores[u]))}</text>`;
+  g.rotulos.forEach((r, i) => {
+    const largura = n === 1 ? iw : iw / (n - 1);
+    s += `<text x="${x(i)}" y="${alt - 8}" text-anchor="middle">${esc(r)}</text>
+      <rect class="faixa" x="${Math.max(m.l, x(i) - largura / 2)}" y="${m.t}" width="${largura}" height="${ih}" tabindex="0" data-x="${x(i)}"
+        data-dica="${esc(`<b>${esc(g.longos[i])}</b>` + linhaDica(cor, g.nome, brl(g.valores[i])))}" aria-label="${esc(g.longos[i] + ': ' + brl(g.valores[i]))}"/>`;
+  });
+  return `<svg width="${w}" height="${alt}" role="img" aria-label="${esc(g.nome)}">${s}</svg>`;
+}
+function grafico(id, spec) { GRAFS[id] = spec; return `<div class="graf" data-graf="${id}"></div>`; }
+function desenharGraficos() {
+  document.querySelectorAll('[data-graf]').forEach(el => {
+    const g = GRAFS[el.dataset.graf]; if (!g) return;
+    const w = Math.max(280, Math.floor(el.clientWidth));
+    el.innerHTML = (g.tipo === 'colunas' ? svgColunas(g, w) : g.tipo === 'resultado' ? svgResultado(g, w) : svgLinha(g, w)) + '<div class="dica" hidden></div>';
+  });
+}
+function barrasRanq(itens, cor, total) {
+  const max = Math.max(1, ...itens.map(i => i.valor));
+  return `<ul class="ranq">${itens.map(i => `<li><span class="nm">${esc(i.nome)}</span><span class="barra-h" aria-hidden="true"><i style="width:${i.valor / max * 100}%;background:${cor}"></i></span>
+    <span class="dir">${din(i.valor, '', 'semi')}${total > 0 ? `<small style="display:inline;margin-left:8px" class="fraco">${Math.round(i.valor / total * 100)}%</small>` : ''}</span></li>`).join('')}</ul>`;
+}
+function telaRelatorios() {
+  const ano = S.ano, serie = serieDoAno(E, ano, ATUAL);
+  const recebido = serie.reduce((s, p) => s + p.entradas, 0), pago = serie.reduce((s, p) => s + p.saidas, 0), resultado = recebido - pago;
+  const comDados = serie.filter(p => p.entradas || p.saidas).length, margem = recebido > 0 ? Math.round(resultado / recebido * 100) : null;
+  const resMes = serie.map(p => p.entradas + p.entradasPrev - p.saidas - p.saidasPrev), prevMes = serie.map(p => p.mes >= ATUAL);
+  const idx = serie.findIndex(p => p.mes === ATUAL);
+  const fut = proximosMeses(E, 6, ATUAL), fEnt = fut.reduce((s, p) => s + p.entradas + p.entradasPrev, 0), fSai = fut.reduce((s, p) => s + p.saidas + p.saidasPrev, 0);
+  let acc = 0; const acum = fut.map(p => (acc += p.entradas + p.entradasPrev - p.saidas - p.saidasPrev));
+  const eq = pontoDeEquilibrio(E, ATUAL), cob = eq.necessario > 0 ? Math.min(100, Math.round(eq.receitaMedia / eq.necessario * 100)) : 100;
+  const desp = despesasDoAno(E, ano), cls = receitaPorCliente(E, ano), anos = totaisPorAno(E, ATUAL).filter(a => a.meses > 0 || a.ano === ano);
+  const rot = serie.map(p => mesCurto(p.mes)), longos = serie.map(p => nomeMes(p.mes));
+  const bloco = (r, c) => indicador(r, c), nomeG = g => g.grupo ? GRUPOS_DESPESA[g.grupo] : 'Sem categoria', semDados = '<p class="fraco" style="text-align:center;padding:20px">Nenhum lançamento neste ano.</p>';
+  return `<div class="barra"><div class="mes"><button type="button" data-act="ano" data-d="-1" aria-label="Ano anterior">${ico('esq')}</button><label style="min-width:7rem;cursor:default">${ano}</label><button type="button" data-act="ano" data-d="1" aria-label="Próximo ano">${ico('dir')}</button></div>
+    <p class="intro">Valores realizados: o que entrou e saiu da conta. A parte clara das barras é o previsto.</p></div>
+  <div class="g g4">${bloco(`Recebido em ${ano}`, din(recebido, 'verde', 'grande'))}${bloco(`Pago em ${ano}`, din(pago, 'vermelho', 'grande'))}
+    ${bloco('Resultado do ano', din(resultado, resultado >= 0 ? 'verde' : 'vermelho', 'grande'))}
+    ${bloco('Margem', `<span class="grande">${margem === null ? '—' : margem + '%'}</span> <small class="fraco">${plural(comDados, 'mês', 'meses')} com lançamentos</small>`)}</div>
+  <h2 class="secao">Mês a mês</h2>
+  <div class="g">${figura('anual', `Entradas e saídas em ${ano}`, 'Por mês. Passe o mouse para ver os valores.', leg(COR.receita, 'Receitas') + leg(COR.despesa, 'Despesas') + leg('#746e68', 'Parte clara = previsto', true),
+      { colunas:[{ t:'Mês' }, { t:'Recebido', dir:1 }, { t:'A receber', dir:1 }, { t:'Pago', dir:1 }, { t:'A pagar', dir:1 }], linhas: serie.map(p => [nomeMes(p.mes), brl(p.entradas), brl(p.entradasPrev), brl(p.saidas), brl(p.saidasPrev)]) },
+      grafico('anual', { tipo:'colunas', rotulos:rot, longos, marcar: idx, series:[{ nome:'Receitas', cor:COR.receita, real:serie.map(p => p.entradas), prev:serie.map(p => p.entradasPrev) }, { nome:'Despesas', cor:COR.despesa, real:serie.map(p => p.saidas), prev:serie.map(p => p.saidasPrev) }] }))}
+    ${figura('resultado', 'Sobrou ou faltou?', 'Receitas menos despesas de cada mês (incluindo o previsto). Barras claras = meses ainda em aberto.', '',
+      { colunas:[{ t:'Mês' }, { t:'Resultado', dir:1 }, { t:'Situação' }], linhas: serie.map((p, i) => [nomeMes(p.mes), brl(resMes[i]), prevMes[i] ? 'Previsto' : 'Realizado']) },
+      grafico('resultado', { tipo:'resultado', rotulos:rot, longos, valores:resMes, prev:prevMes }))}</div>
+  <h2 class="secao">Prospecção · próximos 6 meses</h2>
+  <p class="secao-sub">Baseada no que já está lançado: recebimentos e contas em aberto, mais receitas e despesas recorrentes. Trabalhos novos ainda não lançados não entram.</p>
+  <div class="g g3">${bloco('Entradas previstas', din(fEnt, 'verde', 'grande'))}${bloco('Saídas previstas', din(fSai, 'vermelho', 'grande'))}${bloco('Resultado previsto', din(fEnt - fSai, fEnt - fSai >= 0 ? 'verde' : 'vermelho', 'grande'))}</div>
+  <div class="g g2">${figura('futuro', 'Entradas e saídas previstas', '', leg(COR.receita, 'Receitas') + leg(COR.despesa, 'Despesas'),
+      { colunas:[{ t:'Mês' }, { t:'Entradas', dir:1 }, { t:'Saídas', dir:1 }, { t:'Resultado', dir:1 }], linhas: fut.map(p => [nomeMes(p.mes), brl(p.entradas + p.entradasPrev), brl(p.saidas + p.saidasPrev), brl(p.entradas + p.entradasPrev - p.saidas - p.saidasPrev)]) },
+      grafico('futuro', { tipo:'colunas', rotulos:fut.map(p => mesCurto(p.mes)), longos:fut.map(p => nomeMes(p.mes)), marcar:-1, series:[{ nome:'Receitas', cor:COR.receita, real:fut.map(p => p.entradas), prev:fut.map(p => p.entradasPrev) }, { nome:'Despesas', cor:COR.despesa, real:fut.map(p => p.saidas), prev:fut.map(p => p.saidasPrev) }] }))}
+    ${figura('acumulado', 'Saldo acumulado previsto', 'Quanto sobra (ou falta) somando mês após mês, a partir deste mês.', '',
+      { colunas:[{ t:'Até' }, { t:'Acumulado', dir:1 }], linhas: fut.map((p, i) => [nomeMes(p.mes), brl(acum[i])]) },
+      grafico('acumulado', { tipo:'linha', rotulos:fut.map(p => mesCurto(p.mes)), longos:fut.map(p => nomeMes(p.mes)), valores:acum, nome:'Saldo acumulado' }))}</div>
+  <section class="cartao pad"><h3 style="font-size:15px">Quanto preciso faturar por mês para empatar?</h3>
+    <p class="fraco" style="font-size:13px;margin:4px 0 16px">Custo fixo (despesas recorrentes ativas) + média das despesas avulsas dos últimos ${eq.mesesBase || 3} meses.</p>
+    <div style="display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px 40px">
+      <div><p class="fraco" style="font-size:12px">Ponto de equilíbrio</p><span style="font-size:36px;letter-spacing:-.02em">${din(eq.necessario, '', 'forte')}</span></div>
+      ${[['Custo fixo', eq.fixo], ['Avulsas (média)', eq.variavelMedia], ['Receita média recente', eq.receitaMedia]].map(([r, v]) => `<div><p class="fraco" style="font-size:12px">${r}</p><span style="font-size:17px">${din(v, '', 'semi')}</span></div>`).join('')}
+    </div>
+    <div style="margin-top:18px"><div style="display:flex;justify-content:space-between;gap:12px;font-size:12px;margin-bottom:6px" class="fraco"><span>Receita média cobre ${cob}% do necessário</span>
+      ${eq.receitaMedia < eq.necessario ? `<span>faltam ${din(eq.necessario - eq.receitaMedia, '', 'semi')} por mês</span>` : ''}</div>
+      <div class="trilho" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${cob}" aria-label="Cobertura do ponto de equilíbrio"><i style="width:${cob}%;background:${cob >= 100 ? 'var(--ok)' : cob >= 85 ? '#b9800b' : 'var(--danger)'}"></i></div></div>
+  </section>
+  <h2 class="secao">Para onde vai e de onde vem · ${ano}</h2>
+  <div class="g g2">${figura('grupos', 'Despesas por grupo', 'Pagas no ano', '', { colunas:[{ t:'Grupo' }, { t:'Total', dir:1 }], linhas: desp.grupos.map(g => [esc(nomeG(g)), brl(g.total)]) },
+      desp.grupos.length ? barrasRanq(desp.grupos.map(g => ({ nome:nomeG(g), valor:g.total })), COR.despesa, pago) : semDados)}
+    ${figura('clientes', 'Receita por cliente', 'Recebido no ano', '', { colunas:[{ t:'Cliente' }, { t:'Lançamentos', dir:1 }, { t:'Total', dir:1 }], linhas: cls.map(c => [esc(c.nome || 'Sem cliente'), c.qtd, brl(c.total)]) },
+      cls.length ? barrasRanq(cls.map(c => ({ nome:c.nome || 'Sem cliente', valor:c.total })), COR.receita, recebido) : semDados)}</div>
+  <div class="g">${figura('categorias', 'Maiores despesas por categoria', `As 8 maiores de ${ano}`, '', { colunas:[{ t:'Categoria' }, { t:'Total', dir:1 }], linhas: desp.categorias.map(c => [esc(c.nome || 'Sem categoria'), brl(c.total)]) },
+      desp.categorias.length ? barrasRanq(desp.categorias.slice(0, 8).map(c => ({ nome:c.nome || 'Sem categoria', valor:c.total })), COR.despesa, pago) : semDados)}</div>
+  <h2 class="secao">Comparativo anual</h2>
+  <section class="cartao rolagem"><table style="min-width:560px"><thead><tr><th style="padding-left:20px">Ano</th><th class="dir">Recebido</th><th class="dir">Pago</th><th class="dir">Resultado</th><th class="dir" style="padding-right:20px">Média mensal</th></tr></thead><tbody>
+    ${anos.map(a => `<tr style="${a.ano === ano ? 'background:var(--hover)' : ''}"><td style="padding-left:20px"><button class="link" style="margin:0;font-weight:700;text-decoration:none;color:var(--ink)" type="button" data-act="ver-ano" data-id="${a.ano}">${a.ano}</button> <small style="display:inline" class="fraco">${plural(a.meses, 'mês', 'meses')}</small></td>
+      <td class="dir">${din(a.entradas, 'verde')}</td><td class="dir">${din(a.saidas, 'vermelho')}</td><td class="dir">${din(a.resultado, a.resultado >= 0 ? 'verde' : 'vermelho', 'semi')}</td>
+      <td class="dir" style="padding-right:20px">${din(a.meses ? Math.round(a.resultado / a.meses) : 0, a.resultado >= 0 ? 'verde' : 'vermelho')}</td></tr>`).join('')}
+  </tbody></table></section>`;
+}
+
+// ------------------------------------------------------------ desenhar
+function renderAbas() {
+  document.getElementById('abas').innerHTML = VIEWS.map(v => v.sep ? '<span class="sep" aria-hidden="true"></span>'
+    : `<button type="button" data-go="${v.id}" ${v.id === S.view ? 'aria-current="page"' : ''}>${ico(v.icon)}<span>${v.label}</span></button>`).join('')
+    + '<span class="sep" aria-hidden="true"></span><button type="button" data-act="categorias">' + ico('tags') + '<span>Categorias</span></button>';
+}
+function render() {
+  if (!E) return;
+  const ativo = document.activeElement, idFoco = ativo && ativo.id, pos = ativo && 'selectionStart' in ativo ? ativo.selectionStart : null;
+  document.getElementById('titulo').textContent = TITULOS[S.view];
+  document.title = TITULOS[S.view] + ' · Financeiro · Daime Filmes';
+  renderAbas();
+  const tela = { geral:telaGeral, receber:telaReceber, pagar:telaPagar, 'receitas-rec':telaReceitasRec, 'despesas-rec':telaDespesasRec, relatorios:telaRelatorios, clientes:telaClientes, equipe:telaEquipe }[S.view];
+  document.getElementById('conteudo').innerHTML = tela();
+  desenharGraficos();
+  if (idFoco && /^(f-q|c-q|e-q)$/.test(idFoco)) { const el = document.getElementById(idFoco); if (el) { el.focus(); if (pos !== null) el.setSelectionRange(pos, pos); } }
+  gravarHash();
+}
+function aplicarOcultar() {
+  document.documentElement.toggleAttribute('data-ocultar', ocultar);
+  const b = document.getElementById('bt-ocultar');
+  b.innerHTML = ico(ocultar ? 'olhoX' : 'olho'); b.title = b.ariaLabel = ocultar ? 'Mostrar valores' : 'Ocultar valores';
+}
+
+// ------------------------------------------------------------ formulários
+const dlg = document.getElementById('dlg');
+let aoFecharDlg = null;
+function abrirJanela(titulo, corpo, larga) {
+  document.getElementById('dlg-tit').textContent = titulo;
+  document.getElementById('dlg-corpo').innerHTML = corpo;
+  dlg.classList.toggle('larga', !!larga);
+  if (!dlg.open) dlg.showModal();
+  const f = dlg.querySelector('[autofocus]'); if (f) f.focus();
+}
+dlg.addEventListener('close', () => { const fn = aoFecharDlg; aoFecharDlg = null; if (fn) fn(); });
+dlg.addEventListener('mousedown', e => { if (e.target === dlg) dlg.close(); });
+
+class ErroForm extends Error {}
+const txt = (fd, c) => { const v = String(fd.get(c) ?? '').trim(); return v === '' ? null : v; };
+const obrig = (fd, c, r) => { const v = txt(fd, c); if (!v) throw new ErroForm(`Preencha ${r}.`); return v; };
+const dinheiro = fd => { const v = lerValor(txt(fd, 'valor') || ''); if (v === null || v <= 0) throw new ErroForm('Informe um valor maior que zero.'); return v; };
+const dataOk = (fd, c, r, opcional) => { const v = opcional ? txt(fd, c) : obrig(fd, c, r); if (v && !/^\d{4}-\d{2}-\d{2}$/.test(v)) throw new ErroForm(`Data inválida em ${r}.`); return v; };
+const mesOk = (fd, c, r, opcional) => { const v = opcional ? txt(fd, c) : obrig(fd, c, r); if (v && !/^\d{4}-\d{2}$/.test(v)) throw new ErroForm(`Mês inválido em ${r}.`); return v; };
+const diaOk = fd => { const d = Number(obrig(fd, 'dia', 'o dia do vencimento')); if (!Number.isInteger(d) || d < 1 || d > 31) throw new ErroForm('O dia deve ser entre 1 e 31.'); return d; };
+
+/** Liga o envio do formulário: valida, salva, recarrega. manterAberta = distribuição/categorias. */
+function ligarForm(salvar, { manterAberta, depois } = {}) {
+  const f = document.getElementById('form');
+  f.addEventListener('submit', async e => {
+    e.preventDefault();
+    const bt = f.querySelector('[type=submit]'), erro = f.querySelector('.erro'), rot = bt.textContent;
+    erro.hidden = true; bt.disabled = true; bt.textContent = 'Salvando…';
+    try {
+      await salvar(new FormData(f));
+      await recarregar();
+      if (manterAberta) { if (depois) depois(); else f.reset(); } else dlg.close();
+    } catch (err) {
+      erro.textContent = err instanceof ErroForm ? err.message : msgErro(err); erro.hidden = false;
+    } finally { if (bt.isConnected) { bt.disabled = false; bt.textContent = rot; } }
+  });
+  const st = f.querySelector('[name=status]');
+  if (st) st.addEventListener('change', () => { const q = f.querySelector('[data-quando]'); if (q) q.hidden = !['recebido', 'pago'].includes(st.value); });
+}
+const rodapeForm = (rotulo = 'Salvar') => `<p class="erro" role="alert" hidden></p><div class="rodape"><button class="btn prim" type="submit">${rotulo}</button></div>`;
+function opcaoRepetir(recorrente, view, nomeLink, texto) {
+  if (recorrente) return `<p class="aviso-rec">Este lançamento vem de uma recorrência. Mudanças aqui valem só para este mês. Para mudar os próximos meses, use <button class="link" style="margin:0;color:inherit;font-weight:700" type="button" data-go="${view}">${nomeLink}</button>.</p>`;
+  return `<label class="repetir"><input type="checkbox" name="repetir" value="sim"><span><b>${ico('repetir')} Repetir todo mês</b><small>${texto}</small></span></label>`;
+}
+
+async function rpc(nome, args) { return db(SB.rpc(nome, args)); }
+
+function formReceber(inicial, rapida) {
+  const st = inicial ? inicial.status : rapida ? 'recebido' : 'pendente';
+  abrirJanela(inicial ? 'Editar recebimento' : rapida ? 'Venda rápida' : 'Novo recebimento', `<form class="form" id="form" novalidate>
+    <label><span>Título / projeto</span><input class="campo" name="titulo" required autofocus value="${esc(inicial?.titulo)}" placeholder="Ex.: Vídeo institucional — Hotel X"></label>
+    <div class="duas">
+      <label><span>Cliente</span><select class="campo" name="cliente_id">${opcoesCliente(inicial?.cliente_id)}</select></label>
+      <label><span>Categoria</span><select class="campo" name="categoria_id">${opcoesCategoria('receita', inicial?.categoria_id)}</select></label>
+      <label><span>Valor (R$)</span><input class="campo" name="valor" inputmode="decimal" required placeholder="0,00" value="${inicial ? valorParaCampo(inicial.valor) : ''}"></label>
+      <label><span>Vencimento</span><input class="campo" type="date" name="vencimento" required value="${inicial?.vencimento || HOJE}"></label>
+      <label><span>Situação</span><select class="campo" name="status">${opcoes([['pendente', 'A receber'], ['recebido', 'Já recebido']], st)}</select></label>
+      <label data-quando ${st === 'recebido' ? '' : 'hidden'}><span>Recebido em</span><input class="campo" type="date" name="recebido_em" value="${inicial?.recebido_em || HOJE}"></label>
+    </div>
+    ${opcaoRepetir(!!inicial?.recorrente_id, 'receitas-rec', 'Receitas recorrentes', 'Vira uma receita recorrente: o recebimento é criado sozinho todo mês, no mesmo dia.')}
+    <label><span>Observações</span><textarea class="campo" name="obs" rows="2">${esc(inicial?.obs)}</textarea></label>
+    ${rodapeForm()}</form>`);
+  ligarForm(fd => {
+    const d = { id: inicial?.id ?? null, titulo: obrig(fd, 'titulo', 'o título'), cliente_id: txt(fd, 'cliente_id'), categoria_id: txt(fd, 'categoria_id'),
+      valor: dinheiro(fd), vencimento: dataOk(fd, 'vencimento', 'o vencimento'), status: txt(fd, 'status'),
+      recebido_em: dataOk(fd, 'recebido_em', 'recebido em', true), obs: txt(fd, 'obs'), repetir: txt(fd, 'repetir') === 'sim' };
+    return rpc('fin_salvar_receber', { d });
+  });
+}
+function formPagar(inicial) {
+  const st = inicial ? inicial.status : 'pendente';
+  abrirJanela(inicial ? 'Editar despesa' : 'Lançar despesa', `<form class="form" id="form" novalidate>
+    <label><span>Descrição</span><input class="campo" name="descricao" required autofocus value="${esc(inicial?.descricao)}" placeholder="Ex.: Aluguel do estúdio"></label>
+    <div class="duas">
+      <label><span>Pago a (equipe ou fornecedor)</span><select class="campo" name="pessoa_id">${opcoesPessoa(inicial?.pessoa_id)}</select></label>
+      <label><span>Categoria</span><select class="campo" name="categoria_id">${opcoesCategoria('despesa', inicial?.categoria_id)}</select></label>
+      <label><span>Valor (R$)</span><input class="campo" name="valor" inputmode="decimal" required placeholder="0,00" value="${inicial ? valorParaCampo(inicial.valor) : ''}"></label>
+      <label><span>Vencimento</span><input class="campo" type="date" name="vencimento" required value="${inicial?.vencimento || HOJE}"></label>
+      <label><span>Situação</span><select class="campo" name="status">${opcoes([['pendente', 'A pagar'], ['pago', 'Já pago']], st === 'cancelado' ? 'pendente' : st)}</select></label>
+      <label data-quando ${st === 'pago' ? '' : 'hidden'}><span>Pago em</span><input class="campo" type="date" name="pago_em" value="${inicial?.pago_em || HOJE}"></label>
+    </div>
+    ${opcaoRepetir(!!inicial?.recorrente_id, 'despesas-rec', 'Despesas recorrentes', 'Vira uma despesa recorrente: a conta é criada sozinha todo mês, no mesmo dia do vencimento.')}
+    <label><span>Observações</span><textarea class="campo" name="obs" rows="2">${esc(inicial?.obs)}</textarea></label>
+    ${rodapeForm()}</form>`);
+  ligarForm(fd => {
+    const d = { id: inicial?.id ?? null, descricao: obrig(fd, 'descricao', 'a descrição'), pessoa_id: txt(fd, 'pessoa_id'), categoria_id: txt(fd, 'categoria_id'),
+      valor: dinheiro(fd), vencimento: dataOk(fd, 'vencimento', 'o vencimento'), status: txt(fd, 'status'),
+      pago_em: dataOk(fd, 'pago_em', 'pago em', true), obs: txt(fd, 'obs'), repetir: txt(fd, 'repetir') === 'sim' };
+    return rpc('fin_salvar_pagar', { d });
+  });
+}
+function formDistribuir(id) {
+  const r = E.receber.find(x => x.id === id); if (!r) return dlg.close();
+  const partes = distribuicaoDe(E, id), dist = partes.reduce((s, l) => s + l.valor, 0), resto = r.valor - dist;
+  const caixa = (rot, v, tom) => `<div><p>${rot}</p>${din(v, tom)}</div>`;
+  abrirJanela(`Distribuir: ${r.titulo}`, `<div class="resumo3">${caixa('Valor recebido', r.valor, '')}${caixa('Distribuído', dist, 'vermelho')}${caixa(resto >= 0 ? 'Fica para a empresa' : 'Distribuído a mais', Math.abs(resto), resto >= 0 ? 'verde' : 'vermelho')}</div>
+    ${partes.length ? `<div class="partes">${partes.map(l => `<div><div class="txt"><b>${esc(l.pessoa_nome || l.descricao)}</b><small class="sm">${[l.categoria_nome, 'vence ' + dataBR(l.vencimento)].filter(Boolean).map(esc).join(' · ')}</small></div>
+      <span class="fraco num" style="font-size:12px">${Math.round(l.valor / r.valor * 100)}%</span>${l.status === 'pago' ? selo('Pago', 'verde') : selo('A pagar', 'ambar')}
+      <span style="width:7rem;text-align:right">${din(l.valor, 'vermelho', 'semi')}</span>
+      <button class="btn peq fant ic perigo" type="button" data-act="remover-parte" data-id="${l.id}" data-rec="${id}" ${l.status === 'pago' ? 'disabled' : ''} title="${l.status === 'pago' ? 'Já pago: edite em Pagar' : 'Remover'}" aria-label="Remover">${ico('lixo')}</button></div>`).join('')}</div>` : ''}
+    <h3 class="sub-tit">Adicionar parte</h3>
+    <form class="form" id="form" novalidate><div class="duas">
+      <label><span>Para quem</span><select class="campo" name="pessoa_id">${opcoesPessoa()}</select></label>
+      <label><span>Categoria</span><select class="campo" name="categoria_id">${opcoesCategoria('despesa')}</select></label>
+      <label><span>Valor</span><input class="campo" name="valor" required placeholder="1.500,00 ou 30%" autofocus><small>Em reais (1.500,00) ou percentual do recebimento (30%)</small></label>
+      <label><span>Vencimento</span><input class="campo" type="date" name="vencimento" value="${r.vencimento}"></label></div>
+      <label><span>Descrição (opcional)</span><input class="campo" name="descricao" placeholder="Ex.: Edição — ${esc(r.titulo)}"></label>
+      ${rodapeForm('Adicionar')}</form>
+    ${D.pessoas.length ? '' : '<p class="fraco" style="font-size:13px;margin-top:12px">Dica: cadastre editores e funcionários em “Equipe e fornecedores” para escolher aqui.</p>'}`, true);
+  ligarForm(fd => {
+    const valor = valorDistribuicao(obrig(fd, 'valor', 'o valor'), r.valor);
+    if (valor === null || valor <= 0) throw new ErroForm('Valor inválido. Use 1.500,00 ou 30%.');
+    const pid = txt(fd, 'pessoa_id'), pessoa = pid && D.pessoas.find(p => String(p.id) === pid);
+    const venc = dataOk(fd, 'vencimento', 'o vencimento', true) || r.vencimento;
+    return db(SB.from('fin_pagar').insert({ pessoa_id: pid ? Number(pid) : null, descricao: txt(fd, 'descricao') || (pessoa ? `${pessoa.nome} — ${r.titulo}` : r.titulo),
+      categoria_id: txt(fd, 'categoria_id') ? Number(txt(fd, 'categoria_id')) : null, valor, vencimento: venc, receber_id: r.id }));
+  }, { manterAberta: true, depois: () => formDistribuir(id) });
+}
+function formRecorrente(inicial) {
+  abrirJanela(inicial ? 'Editar despesa recorrente' : 'Nova despesa recorrente', `<form class="form" id="form" novalidate>
+    <label><span>Descrição</span><input class="campo" name="descricao" required autofocus value="${esc(inicial?.descricao)}" placeholder="Ex.: Adobe Creative Cloud"></label>
+    <div class="duas">
+      <label><span>Pago a</span><select class="campo" name="pessoa_id">${opcoesPessoa(inicial?.pessoa_id)}</select></label>
+      <label><span>Categoria</span><select class="campo" name="categoria_id">${opcoesCategoria('despesa', inicial?.categoria_id)}</select></label>
+      <label><span>Valor mensal (R$)</span><input class="campo" name="valor" inputmode="decimal" required placeholder="0,00" value="${inicial ? valorParaCampo(inicial.valor) : ''}"></label>
+      <label><span>Dia do vencimento</span><input class="campo" type="number" name="dia" min="1" max="31" required value="${inicial?.dia ?? 10}"></label>
+      <label><span>Começa em</span><input class="campo" type="month" name="inicio" required value="${inicial?.inicio || ATUAL}"><small>A conta é criada automaticamente todo mês a partir daqui.</small></label>
+    </div>${rodapeForm()}</form>`);
+  ligarForm(fd => rpc('fin_salvar_recorrente', { d: { id: inicial?.id ?? null, descricao: obrig(fd, 'descricao', 'a descrição'), pessoa_id: txt(fd, 'pessoa_id'),
+    categoria_id: txt(fd, 'categoria_id'), valor: dinheiro(fd), dia: diaOk(fd), inicio: mesOk(fd, 'inicio', 'o mês de início') } }));
+}
+function formReceitaRec(inicial) {
+  abrirJanela(inicial ? 'Editar receita recorrente' : 'Nova receita recorrente', `<form class="form" id="form" novalidate>
+    <label><span>Descrição</span><input class="campo" name="descricao" required autofocus value="${esc(inicial?.descricao)}" placeholder="Ex.: Bahia Homes — conteúdo mensal"></label>
+    <div class="duas">
+      <label><span>Cliente</span><select class="campo" name="cliente_id">${opcoesCliente(inicial?.cliente_id)}</select></label>
+      <label><span>Categoria</span><select class="campo" name="categoria_id">${opcoesCategoria('receita', inicial?.categoria_id)}</select></label>
+      <label><span>Valor mensal (R$)</span><input class="campo" name="valor" inputmode="decimal" required placeholder="0,00" value="${inicial ? valorParaCampo(inicial.valor) : ''}"></label>
+      <label><span>Dia do pagamento</span><input class="campo" type="number" name="dia" min="1" max="31" required value="${inicial?.dia ?? 5}"></label>
+      <label><span>Começa em</span><input class="campo" type="month" name="inicio" required value="${inicial?.inicio || ATUAL}"></label>
+      <label><span>Termina em (opcional)</span><input class="campo" type="month" name="fim" value="${inicial?.fim || ''}"><small>Vazio = até cancelar. Para um contrato de 12 meses, o último mês.</small></label>
+    </div>${rodapeForm()}</form>`);
+  ligarForm(fd => {
+    const inicio = mesOk(fd, 'inicio', 'o mês de início'), fim = mesOk(fd, 'fim', 'o mês final', true);
+    if (fim && fim < inicio) throw new ErroForm('O mês final não pode ser antes do início.');
+    return rpc('fin_salvar_receita_recorrente', { d: { id: inicial?.id ?? null, descricao: obrig(fd, 'descricao', 'a descrição'), cliente_id: txt(fd, 'cliente_id'),
+      categoria_id: txt(fd, 'categoria_id'), valor: dinheiro(fd), dia: diaOk(fd), inicio, fim } });
+  });
+}
+function formCliente(inicial) {
+  abrirJanela(inicial ? 'Editar cliente' : 'Novo cliente', `<form class="form" id="form" novalidate>
+    <label><span>Nome</span><input class="campo" name="nome" required autofocus value="${esc(inicial?.nome)}"></label>
+    <div class="duas"><label><span>CPF / CNPJ</span><input class="campo" name="documento" value="${esc(inicial?.documento)}"></label>
+      <label><span>Telefone</span><input class="campo" name="telefone" value="${esc(inicial?.telefone)}"></label></div>
+    <label><span>E-mail</span><input class="campo" type="email" name="email" value="${esc(inicial?.email)}"></label>
+    <label><span>Observações</span><textarea class="campo" name="obs" rows="2">${esc(inicial?.obs)}</textarea></label>${rodapeForm()}</form>`);
+  ligarForm(fd => {
+    const d = { nome: obrig(fd, 'nome', 'o nome'), documento: txt(fd, 'documento'), telefone: txt(fd, 'telefone'), email: txt(fd, 'email'), obs: txt(fd, 'obs') };
+    return db(inicial ? SB.from('fin_clientes').update(d).eq('id', inicial.id) : SB.from('fin_clientes').insert(d));
+  });
+}
+function formPessoa(inicial) {
+  abrirJanela(inicial ? 'Editar cadastro' : 'Novo cadastro', `<form class="form" id="form" novalidate>
+    <div class="duas"><label><span>Nome</span><input class="campo" name="nome" required autofocus value="${esc(inicial?.nome)}"></label>
+      <label><span>Tipo</span><select class="campo" name="tipo">${opcoes(Object.entries(TIPOS_PESSOA), inicial?.tipo || 'editor')}</select></label>
+      <label><span>Chave PIX</span><input class="campo" name="pix" value="${esc(inicial?.pix)}"></label>
+      <label><span>Telefone</span><input class="campo" name="telefone" value="${esc(inicial?.telefone)}"></label></div>
+    <label><span>E-mail</span><input class="campo" type="email" name="email" value="${esc(inicial?.email)}"></label>
+    <label><span>Observações</span><textarea class="campo" name="obs" rows="2">${esc(inicial?.obs)}</textarea></label>${rodapeForm()}</form>`);
+  ligarForm(fd => {
+    const d = { nome: obrig(fd, 'nome', 'o nome'), tipo: txt(fd, 'tipo') || 'fornecedor', pix: txt(fd, 'pix'), telefone: txt(fd, 'telefone'), email: txt(fd, 'email'), obs: txt(fd, 'obs') };
+    return db(inicial ? SB.from('fin_pessoas').update(d).eq('id', inicial.id) : SB.from('fin_pessoas').insert(d));
+  });
+}
+function formCategorias() {
+  const grupos = [['Receitas', D.categorias.filter(c => c.tipo === 'receita')],
+    ...Object.entries(GRUPOS_DESPESA).map(([g, n]) => [n, D.categorias.filter(c => c.tipo === 'despesa' && (c.grupo || 'variavel') === g)])];
+  abrirJanela('Categorias', `<div class="cats">${grupos.map(([n, l]) => `<div><p>${esc(n)}</p><ul>${l.map(c => `<li>${esc(c.nome)}<button class="btn peq fant ic perigo" type="button" data-act="excluir-categoria" data-id="${c.id}" aria-label="Excluir ${esc(c.nome)}">${ico('lixo')}</button></li>`).join('') || '<li class="fraco" style="background:none;padding-left:0">Nenhuma</li>'}</ul></div>`).join('')}</div>
+    <h3 class="sub-tit">Nova categoria</h3>
+    <form class="form" id="form" novalidate><div class="duas">
+      <label><span>Nome</span><input class="campo" name="nome" required></label>
+      <label><span>Tipo</span><select class="campo" name="tipo" id="cat-tipo">${opcoes([['despesa', 'Despesa'], ['receita', 'Receita']], 'despesa')}</select></label>
+      <label id="cat-grupo"><span>Grupo</span><select class="campo" name="grupo">${opcoes(Object.entries(GRUPOS_DESPESA), 'variavel')}</select></label></div>
+      ${rodapeForm('Adicionar')}</form>`, true);
+  document.getElementById('cat-tipo').addEventListener('change', e => { document.getElementById('cat-grupo').hidden = e.target.value !== 'despesa'; });
+  ligarForm(fd => {
+    const tipo = txt(fd, 'tipo') === 'receita' ? 'receita' : 'despesa';
+    return db(SB.from('fin_categorias').insert({ nome: obrig(fd, 'nome', 'o nome'), tipo, grupo: tipo === 'despesa' ? (txt(fd, 'grupo') || 'variavel') : null }));
+  }, { manterAberta: true, depois: formCategorias });
+}
+
+// ------------------------------------------------------------ ações
+const achar = (lista, id) => lista.find(x => String(x.id) === String(id));
+async function acao(a, id, t) {
+  const n = Number(id);
+  switch (a) {
+    case 'ocultar': ocultar = !ocultar; try { localStorage.setItem('fin-ocultar', ocultar ? '1' : '0'); } catch (e) {} return aplicarOcultar();
+    case 'fechar-dlg': return dlg.close();
+    case 'mes': { S.mes = somarMes(S.mes, Number(t.dataset.d)); SEL.clear(); return recarregar(); }
+    case 'ano': S.ano += Number(t.dataset.d); return render();
+    case 'ver-ano': S.ano = n; return render();
+    case 'ver-vencidos': S.view = t.dataset.view; S.f = { q:'', status:'vencido', categoria:'' }; window.scrollTo(0, 0); return render();
+    case 'alternar-tabela': TABELA[id] = !TABELA[id]; return render();
+    case 'venda-rapida': return formReceber(null, true);
+    case 'novo-receber': return formReceber(null, false);
+    case 'editar-receber': return formReceber(achar(E.receber, id));
+    case 'novo-pagar': return formPagar(null);
+    case 'editar-pagar': return formPagar(achar(E.pagar, id));
+    case 'distribuir': return formDistribuir(n);
+    case 'nova-recorrente': return formRecorrente(null);
+    case 'editar-recorrente': return formRecorrente(achar(D.recorrentes, id));
+    case 'nova-receita-rec': return formReceitaRec(null);
+    case 'editar-receita-rec': return formReceitaRec(achar(D.receitasRec, id));
+    case 'novo-cliente': return formCliente(null);
+    case 'editar-cliente': return formCliente(achar(D.clientes, id));
+    case 'nova-pessoa': return formPessoa(null);
+    case 'editar-pessoa': return formPessoa(achar(D.pessoas, id));
+    case 'categorias': return formCategorias();
+    case 'limpar-sel': SEL.clear(); return render();
+  }
+  // ações que gravam
+  t.disabled = true;
+  try {
+    if (a === 'recebido' || a === 'nao-recebido') await rpc('fin_marcar_recebido', { p_id: n, p_recebido: a === 'recebido' });
+    else if (a === 'pago' || a === 'nao-pago') await rpc('fin_marcar_pago', { p_id: n, p_pago: a === 'pago' });
+    else if (a === 'pagar-varios') { await rpc('fin_marcar_varios_pagos', { p_ids: [...SEL] }); SEL.clear(); }
+    else if (a === 'excluir-receber') { const r = achar(E.receber, id);
+      if (!await confirmar(`Excluir “${r.titulo}”?${r.distribuido > 0 ? ' A distribuição ainda não paga também será excluída.' : ''}`, 'Excluir')) return;
+      await rpc('fin_excluir_receber', { p_id: n }); }
+    else if (a === 'excluir-pagar') { const p = achar(E.pagar, id);
+      if (!await confirmar(p.recorrente_id ? `Cancelar “${p.descricao}” só neste mês?` : `Excluir “${p.descricao}”?`, p.recorrente_id ? 'Cancelar este mês' : 'Excluir')) return;
+      await rpc('fin_excluir_pagar', { p_id: n }); }
+    else if (a === 'remover-parte') { if (!await confirmar('Remover esta parte da distribuição?', 'Remover')) return;
+      await rpc('fin_excluir_pagar', { p_id: n }); await recarregar(); return formDistribuir(Number(t.dataset.rec)); }
+    else if (a === 'fechar-cliente') { const c = clientesResumo(E, S.mes, HOJE, '').find(x => x.id === n);
+      if (!await confirmar(`Marcar todas as contas em aberto de ${c.nome} (${brl(c.em_aberto)}) como recebidas hoje?`, 'Marcar como recebidas')) return;
+      await rpc('fin_fechar_cliente', { p_cliente: n }); }
+    else if (a === 'excluir-cliente') { const c = achar(D.clientes, id); if (!await confirmar(`Excluir ${c.nome}? Os lançamentos continuam, sem cliente.`, 'Excluir')) return;
+      await db(SB.from('fin_clientes').delete().eq('id', n)); }
+    else if (a === 'excluir-pessoa') { const p = achar(D.pessoas, id); if (!await confirmar(`Excluir ${p.nome}? Os lançamentos continuam, sem nome.`, 'Excluir')) return;
+      await db(SB.from('fin_pessoas').delete().eq('id', n)); }
+    else if (a === 'excluir-categoria') { const c = achar(D.categorias, id);
+      const aberta = dlg.open; if (aberta) dlg.close();
+      const okc = await confirmar(`Excluir a categoria “${c.nome}”? Os lançamentos ficam sem categoria.`, 'Excluir');
+      if (okc) await db(SB.from('fin_categorias').delete().eq('id', n));
+      if (okc) await recarregar();
+      return formCategorias(); }
+    else if (a === 'alternar-recorrente') { const r = achar(D.recorrentes, id);
+      if (r.ativo && !await confirmar(`Pausar “${r.descricao}”? As contas futuras não pagas serão removidas.`, 'Pausar')) return;
+      await rpc('fin_alternar_recorrente', { p_id: n, p_ativo: !r.ativo }); }
+    else if (a === 'excluir-recorrente') { const r = achar(D.recorrentes, id);
+      if (!await confirmar(`Excluir a recorrência “${r.descricao}”? As contas já pagas continuam no histórico.`, 'Excluir')) return;
+      await rpc('fin_excluir_recorrente', { p_id: n }); }
+    else if (a === 'alternar-receita-rec') { const r = achar(D.receitasRec, id);
+      if (r.ativo && !await confirmar(`Pausar “${r.descricao}”? Os próximos meses ainda não recebidos serão removidos.`, 'Pausar')) return;
+      await rpc('fin_alternar_receita_recorrente', { p_id: n, p_ativo: !r.ativo }); }
+    else if (a === 'excluir-receita-rec') { const r = achar(D.receitasRec, id);
+      if (!await confirmar(`Excluir a receita recorrente “${r.descricao}”? O que já foi recebido continua no histórico.`, 'Excluir')) return;
+      await rpc('fin_excluir_receita_recorrente', { p_id: n }); }
+    else return;
+    await recarregar();
+  } catch (e) { /* o aviso já foi mostrado */ } finally { if (t.isConnected) t.disabled = false; }
+}
+
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-act],[data-go]'); if (!t || t.dataset.act === 'sel-todas') return;
+  if (t.dataset.go) {
+    if (dlg.open) dlg.close();
+    S.view = t.dataset.go; S.f = { q:'', status:'', categoria:'' }; SEL.clear(); window.scrollTo(0, 0);
+    return recarregar();
+  }
+  acao(t.dataset.act, t.dataset.id, t);
+});
+let buscaT;
+document.addEventListener('input', e => {
+  const id = e.target.id, v = e.target.value;
+  const mapa = { 'f-q': () => S.f.q = v, 'c-q': () => S.cq = v, 'e-q': () => S.eq = v };
+  if (mapa[id]) { mapa[id](); clearTimeout(buscaT); buscaT = setTimeout(render, 250); }
+});
+document.addEventListener('change', e => {
+  const el = e.target, id = el.id;
+  if (id === 'in-mes' && el.value) { S.mes = el.value; SEL.clear(); return recarregar(); }
+  if (id === 'f-status') { S.f.status = el.value; return render(); }
+  if (id === 'f-cat') { S.f.categoria = el.value; return render(); }
+  if (id === 'f-tipo') { S.tipo = el.value; return render(); }
+  if (id === 'c-status') { S.cstatus = el.value; return render(); }
+  if (id === 'e-tipo') { S.etipo = el.value; return render(); }
+  if (el.dataset.sel) { const n = Number(el.dataset.sel); el.checked ? SEL.add(n) : SEL.delete(n); return render(); }
+  if (el.dataset.act === 'sel-todas') {
+    SEL.clear(); if (el.checked) filtrarPagar(E, S.mes, S.f, HOJE).filter(p => p.status === 'pendente').forEach(p => SEL.add(p.id));
+    return render();
+  }
+});
+// dica dos gráficos
+function mostrarDica(alvo) {
+  const g = alvo.closest('.graf'), d = g && g.querySelector('.dica'); if (!d) return;
+  d.innerHTML = alvo.dataset.dica; d.hidden = false;
+  d.style.left = Math.min(Math.max(Number(alvo.dataset.x) + 12, 0), g.clientWidth - 214) + 'px';
+}
+const esconderDica = alvo => { const d = alvo.closest('.graf')?.querySelector('.dica'); if (d) d.hidden = true; };
+document.addEventListener('mouseover', e => { const r = e.target.closest && e.target.closest('[data-dica]'); if (r) mostrarDica(r); });
+document.addEventListener('mouseout', e => { const r = e.target.closest && e.target.closest('[data-dica]'); if (r && !r.contains(e.relatedTarget)) esconderDica(r); });
+document.addEventListener('focusin', e => { if (e.target.dataset && e.target.dataset.dica) mostrarDica(e.target); });
+document.addEventListener('focusout', e => { if (e.target.dataset && e.target.dataset.dica) esconderDica(e.target); });
+let resizeT; addEventListener('resize', () => { clearTimeout(resizeT); resizeT = setTimeout(desenharGraficos, 120); });
+addEventListener('focus', () => { if (E && !dlg.open) recarregar().catch(() => {}); });
+
+// ------------------------------------------------------------ início
+async function iniciar() {
+  document.getElementById('voltar').innerHTML = ico('voltar') + ' Prospecção';
+  document.getElementById('bt-despesa').innerHTML = ico('desce') + ' Lançar despesa';
+  document.getElementById('bt-venda').innerHTML = ico('sobe') + ' Venda rápida';
+  document.getElementById('dlg-x').innerHTML = ico('x');
+  aplicarOcultar();
+  const { data: { session } } = await SB.auth.getSession();
+  if (!session) return location.replace('painel.html');
+  const dono = await SB.rpc('eh_dono');
+  if (dono.error || dono.data !== true) return location.replace('painel.html');
+  lerHash();
+  document.getElementById('app').hidden = false;
+  try { await recarregar(); }
+  catch (e) { document.getElementById('conteudo').innerHTML = `<div class="cartao pad"><p class="erro">Não foi possível carregar o financeiro: ${esc(msgErro(e))}</p></div>`; }
+}
+iniciar();
+</script>
+</body>
+</html>
