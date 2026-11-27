@@ -6,22 +6,32 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Financeiro · Daime Filmes</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="preload" href="fonts/OpenRunde-Semibold.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:"Open Runde";src:url(fonts/OpenRunde-Regular.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Open Runde";src:url(fonts/OpenRunde-Medium.woff2) format("woff2");font-weight:500;font-display:swap}
+@font-face{font-family:"Open Runde";src:url(fonts/OpenRunde-Semibold.woff2) format("woff2");font-weight:600;font-display:swap}
+@font-face{font-family:"Open Runde";src:url(fonts/OpenRunde-Bold.woff2) format("woff2");font-weight:700;font-display:swap}
+</style>
 <style>
 :root{
-  --canvas:#f3f2ef; --surface:#ffffff; --muted:#ebe9e4; --ink:#1d1c1a; --ink-2:#6b6862; --ink-3:#9a968e;
-  --line:#e1ded7; --hover:rgb(29 28 26 / .05); --accent:#1d1c1a; --accent-hover:#3a3835;
+  --canvas:#F7F6F4; --surface:#ffffff; --muted:#F1EDE9; --ink:#1C1917; --ink-2:#6B6460; --ink-3:#9C948E;
+  --line:#ECE8E4; --hover:rgb(28 25 23 / .05); --accent:#1C1917; --accent-hover:#3A3532;
   --ok:#17633b; --ok-soft:#eaf6ee; --ok-line:#b8ddc4;
   --warn:#825310; --warn-soft:#fff5dc; --warn-line:#f0d99f;
   --danger:#a52626; --danger-soft:#fff0ef; --danger-line:#f0c4c0;
-  --info:#2456b8; --info-soft:#eef3fd; --info-line:#c3d4f3;
-  --receita:#5e4590; --despesa:#b5652a;
-  --r-panel:1.25rem; --r-control:.875rem;
-  --shadow:0 1px 2px rgb(29 28 26 / .04), 0 10px 30px rgb(29 28 26 / .06);
+  --info:#2F6FE0; --info-soft:#EEF4FE; --info-line:#C6D9FA;
+  --receita:#2F6FE0; --despesa:#D9620B;
+  --display:"Open Runde","Inter",system-ui,-apple-system,sans-serif; --r-panel:1.25rem; --r-control:.875rem;
+  --shadow:0 1px 2px rgb(28 25 23 / .04), 0 10px 30px rgb(28 25 23 / .06);
 }
 *{box-sizing:border-box}
 html,body{margin:0}
 body{min-height:100dvh;background:var(--canvas);color:var(--ink);
-  font:14px/1.45 -apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  font:14px/1.5 "Inter",system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
 button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer}
 button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
@@ -40,7 +50,7 @@ html[data-ocultar] .valor{filter:blur(7px);user-select:none}
 
 /* topo */
 .topo{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;justify-content:space-between;margin:8px 0 16px}
-.topo h1{font-size:32px;line-height:1.1;letter-spacing:-.025em;font-weight:700}
+.topo h1{font-family:var(--display);font-size:32px;line-height:1.1;letter-spacing:-.025em;font-weight:700}
 .topo p{margin-top:6px;color:var(--ink-2);font-size:15px}
 .acoes{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:40px;padding:0 16px;border-radius:999px;border:1px solid var(--line);background:rgb(255 255 255 / .8);font-size:13px;font-weight:600;text-decoration:none;white-space:nowrap;transition:background-color .15s, transform .1s}
@@ -96,7 +106,7 @@ html[data-ocultar] .valor{filter:blur(7px);user-select:none}
 .nota{color:var(--ink-2);font-size:12px;margin-top:10px}
 .indic p{color:var(--ink-2);font-size:13px;margin-bottom:6px}
 .indic .grande{font-size:28px;font-weight:700;letter-spacing:-.02em}
-h2.secao{font-size:20px;font-weight:700;letter-spacing:-.015em;margin:26px 0 12px}
+h2.secao{font-family:var(--display);font-size:20px;font-weight:700;letter-spacing:-.015em;margin:26px 0 12px}
 .secao-sub{color:var(--ink-2);font-size:13px;margin:-6px 0 14px;max-width:46rem}
 .intro{color:var(--ink-2);font-size:13px;max-width:44rem}
 
@@ -257,8 +267,8 @@ h3.sub-tit{font-size:14px;font-weight:700;margin:0 0 12px}
 // Estes dois valores são públicos por natureza. Quem protege os dados é o login + as regras do banco (só o dono).
 const SB = supabase.createClient('https://prrqshhnhvehvyafitax.supabase.co', 'sb_publishable_25ymkT18mK9bmAnEo-t5gw_mzYqdUiT');
 
-const COR = { receita:'#5e4590', despesa:'#b5652a', positivo:'#17633b', negativo:'#a52626', grade:'#ece8e0', eixo:'#d9d2c8', superficie:'#ffffff', previsto:'#f3f0e9' };
-const COR_GRUPO = { pessoal:'#1d1c1a', fixa:'#2456b8', variavel:'#b5652a', imposto:'#b9800b' };
+const COR = { receita:'#2F6FE0', despesa:'#D9620B', positivo:'#17633b', negativo:'#a52626', grade:'#ECE8E4', eixo:'#DDD7D1', superficie:'#ffffff', previsto:'#F4F1EE' };
+const COR_GRUPO = { pessoal:'#1C1917', fixa:'#2F6FE0', variavel:'#D9620B', imposto:'#C28A00' };
 const ICO = {
   geral:'<rect x="3.5" y="3.5" width="7" height="8" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="5" rx="1.5"/><rect x="13.5" y="11.5" width="7" height="9" rx="1.5"/><rect x="3.5" y="14.5" width="7" height="6" rx="1.5"/>',
   sobe:'<path d="M3.5 17 9 11.5l4 4 7.5-8"/><path d="M15 7.5h5.5V13"/>', desce:'<path d="M3.5 7 9 12.5l4-4 7.5 8"/><path d="M15 16.5h5.5V11"/>',
@@ -703,7 +713,7 @@ function telaRelatorios() {
     ${bloco('Resultado do ano', din(resultado, resultado >= 0 ? 'verde' : 'vermelho', 'grande'))}
     ${bloco('Margem', `<span class="grande">${margem === null ? '—' : margem + '%'}</span> <small class="fraco">${plural(comDados, 'mês', 'meses')} com lançamentos</small>`)}</div>
   <h2 class="secao">Mês a mês</h2>
-  <div class="g">${figura('anual', `Entradas e saídas em ${ano}`, 'Por mês. Passe o mouse para ver os valores.', leg(COR.receita, 'Receitas') + leg(COR.despesa, 'Despesas') + leg('#746e68', 'Parte clara = previsto', true),
+  <div class="g">${figura('anual', `Entradas e saídas em ${ano}`, 'Por mês. Passe o mouse para ver os valores.', leg(COR.receita, 'Receitas') + leg(COR.despesa, 'Despesas') + leg('#6B6460', 'Parte clara = previsto', true),
       { colunas:[{ t:'Mês' }, { t:'Recebido', dir:1 }, { t:'A receber', dir:1 }, { t:'Pago', dir:1 }, { t:'A pagar', dir:1 }], linhas: serie.map(p => [nomeMes(p.mes), brl(p.entradas), brl(p.entradasPrev), brl(p.saidas), brl(p.saidasPrev)]) },
       grafico('anual', { tipo:'colunas', rotulos:rot, longos, marcar: idx, series:[{ nome:'Receitas', cor:COR.receita, real:serie.map(p => p.entradas), prev:serie.map(p => p.entradasPrev) }, { nome:'Despesas', cor:COR.despesa, real:serie.map(p => p.saidas), prev:serie.map(p => p.saidasPrev) }] }))}
     ${figura('resultado', 'Sobrou ou faltou?', 'Receitas menos despesas de cada mês (incluindo o previsto). Barras claras = meses ainda em aberto.', '',

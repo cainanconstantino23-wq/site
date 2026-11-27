@@ -14,7 +14,7 @@ if (existsSync(join(raiz, '.env.local'))) {
   }
 }
 const porta = Number(process.env.PORT) || 3005;
-const TIPOS = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.ico': 'image/x-icon', '.mp4': 'video/mp4', '.json': 'application/json', '.ttf': 'font/ttf' };
+const TIPOS = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.ico': 'image/x-icon', '.mp4': 'video/mp4', '.json': 'application/json', '.ttf': 'font/ttf', '.woff2': 'font/woff2' };
 
 async function funcao(caminho) {
   for (const arquivo of [`${caminho}.mjs`, join(caminho, 'index.mjs')]) {
